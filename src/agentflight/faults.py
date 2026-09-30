@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from enum import Enum
 from typing import Generic, TypeVar
+from copy import deepcopy
 
 T = TypeVar("T")
 
@@ -21,8 +22,10 @@ class Fault(Generic[T]):
     message: str = "injected fault"
 
     def __post_init__(self) -> None:
-        if self.at_call < 0:
+        if type(self.at_call) is not int or self.at_call < 0:
             raise ValueError("at_call must be non-negative")
+        if not isinstance(self.kind, FaultKind):
+            raise ValueError("kind must be a FaultKind")
         if self.kind is FaultKind.VALUE and self.value is None:
             raise ValueError("value fault requires a value")
 
@@ -32,12 +35,13 @@ class FaultPlan(Generic[T]):
     faults: tuple[Fault[T], ...]
 
     def __post_init__(self) -> None:
+        object.__setattr__(self, "faults", tuple(self.faults))
         calls = [fault.at_call for fault in self.faults]
         if len(calls) != len(set(calls)):
             raise ValueError("only one fault may be configured per call")
 
     def for_call(self, call_index: int) -> Fault[T] | None:
-        if call_index < 0:
+        if type(call_index) is not int or call_index < 0:
             raise ValueError("call_index must be non-negative")
         return next((fault for fault in self.faults if fault.at_call == call_index), None)
 
@@ -59,4 +63,5 @@ def inject(plan: FaultPlan[T], call_index: int, original: T) -> T:
         raise InjectedFault(fault.message)
     if fault.kind is FaultKind.TIMEOUT:
         raise InjectedTimeout(fault.message)
-    return fault.value  # type: ignore[return-value]
+    # A caller mutating a returned recorded value must not change later replays.
+    return deepcopy(fault.value)  # type: ignore[return-value]
