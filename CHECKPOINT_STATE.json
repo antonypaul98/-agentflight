@@ -1,0 +1,19 @@
+{
+  "repository": "antonypaul98/-agentflight",
+  "current_checkpoint": "AF-19 adversarial prompt injection",
+  "active_branch": "work/af19-adversarial-prompt-injection",
+  "main_sha_at_start": "87b1372f66efe00231c42aacfc6e49b2b95961ff",
+  "current_branch_sha": "d760d71f9b2f7ccc95e21034dda8fedccc92eb25",
+  "sha_semantics": "Observed pre-stabilization feature head; refresh with git rev-parse HEAD at session start. Never store a self-referential commit SHA.",
+  "branch_remote_status": "Observed present and ahead of main; infrastructure commit receipt is Git history. Refresh before coding.",
+  "local_test_status": "Not run in stabilization; no feature acceptance inferred.",
+  "pr_number": null,
+  "ci_status": "Existing exact-head run 36677669902 succeeded; local-only 63fcc3d was not covered.",
+  "merge_status": "Feature branch not merged by stabilization",
+  "external_acceptance_required": [],
+  "known_blocker": "Review unapplied recovery patches before future feature development; no current feature acceptance claimed.",
+  "next_action": "Run scripts/session_preflight.py; inspect recovery archive and current GitHub evidence; resume features only in a separately authorized feature run.",
+  "feature_checkpoint_advanced": false,
+  "diagnostic_import": "agentflight",
+  "diagnostic_postgres_variables": []
+}
