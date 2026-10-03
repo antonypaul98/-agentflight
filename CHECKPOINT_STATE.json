@@ -2,24 +2,24 @@
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-19 adversarial prompt injection",
   "active_branch": "work/af19-adversarial-prompt-injection",
-  "main_sha_at_start": "8de3d1a6672b61b1c0366787481a890ab7c8f784",
-  "current_branch_sha": "d45fcef7040f4a545bc52d5cfad7d1c7a20728bf",
+  "main_sha_at_start": "4dfc379d07954898cbb8720f0db14a3d595bfddb",
+  "current_branch_sha": "04bf9c04d71c0deecc5856f148189141804d3b53",
   "sha_semantics": "observed_* and current_branch_sha are immutable pre-edit observations, not the SHA of the containing commit. Resolve current_repository_sha at runtime with the command; preflight prints it. CI receipts apply only to their recorded SHA.",
   "branch_remote_status": "Present and synchronized at observation; 0 behind origin/main. Refresh live refs on every resume.",
-  "local_test_status": "Product tests not run in this infrastructure-only run.",
-  "pr_number": null,
-  "ci_status": "Run 37100836348: installation/diagnostics passed; 6 AF-19 test assertions failed on inspected_chars. Feature failure intentionally untouched.",
-  "merge_status": "Current checkpoint remains unmerged. This run must not merge/complete it.",
+  "local_test_status": "Python 3.11.16: python -m pytest: 54 passed, 0 skipped on 04bf9c04d71c0deecc5856f148189141804d3b53",
+  "pr_number": 4,
+  "ci_status": "Exact feature-head PR CI 37154422031 succeeded. This state revision requires its own exact-head CI before merge.",
+  "merge_status": "Unmerged; acceptance state update awaiting exact-head CI",
   "external_acceptance_required": [],
-  "known_blocker": "Shell git push dry-run fails: could not read Username; gh absent. Connector API preservation remains available. Separately, AF-19 has 6 feature-test failures; outside this run.",
-  "next_action": "python scripts/session_preflight.py (use the pinned interpreter; follow its exact branch/auth recovery action). No feature completion or merge authorized by this run.",
+  "known_blocker": null,
+  "next_action": "Check PR #4 exact-head CI; merge only if green, then verify merged-main CI. Stop at AF-19.",
   "feature_checkpoint_advanced": false,
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
   "schema_version": 2,
-  "observed_at_utc": "2026-10-03T15:53:16.654796+00:00",
-  "observed_branch_sha": "d45fcef7040f4a545bc52d5cfad7d1c7a20728bf",
-  "observed_feature_sha": "d45fcef7040f4a545bc52d5cfad7d1c7a20728bf",
+  "observed_at_utc": "2026-10-03T21:26:43.457797+00:00",
+  "observed_branch_sha": "04bf9c04d71c0deecc5856f148189141804d3b53",
+  "observed_feature_sha": "04bf9c04d71c0deecc5856f148189141804d3b53",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "prior_local_test_receipt": {
@@ -28,39 +28,30 @@
     "reexecuted_this_run": false
   },
   "pr_state": {
-    "state": "absent",
-    "meaning": "No PR observed; missing PR-event CI is expected, not failed."
+    "number": 4,
+    "state": "open",
+    "head_sha": "04bf9c04d71c0deecc5856f148189141804d3b53",
+    "url": "https://github.com/antonypaul98/-agentflight/pull/4"
   },
   "ci_state": {
     "observed_runs": [
       {
-        "id": 37100836348,
-        "sha": "d45fcef7040f4a545bc52d5cfad7d1c7a20728bf",
-        "event": "push",
+        "id": 37154422031,
+        "sha": "04bf9c04d71c0deecc5856f148189141804d3b53",
+        "event": "pull_request",
         "status": "completed",
-        "conclusion": "failure",
-        "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37100836348"
-      },
-      {
-        "id": 36677669902,
-        "sha": "d760d71f9b2f7ccc95e21034dda8fedccc92eb25",
-        "event": "push",
-        "status": "completed",
-        "conclusion": "success",
-        "url": "https://github.com/antonypaul98/-agentflight/actions/runs/36677669902"
+        "conclusion": "success"
       }
     ],
-    "infrastructure_revision": "not_run_intentional_skip",
-    "required_next_verification": "Next normal commit/PR event must run exact-head CI; historical success is not current-head validation."
+    "required_next_verification": "Require exact state-revision head CI, merge PR #4, verify merged main."
   },
-  "stabilization_scope": "Infrastructure only; flag describes this run, not prior feature work.",
+  "stabilization_scope": "Current AF-19 acceptance; no AF-20 work",
   "last_session_exit": {
-    "BLOCKED_LAYER": "auth",
-    "BLOCKER": "Shell Git write check failed: could not read Username for HTTPS; gh not installed. API permission and shell transport are separate.",
-    "SAFE_WORK_COMPLETED": "Infrastructure safeguards preserved through the connected GitHub route; no feature source/test changes.",
-    "REMOTE_SHA": "d45fcef7040f4a545bc52d5cfad7d1c7a20728bf",
-    "REMOTE_SHA_semantics": "Observed pre-edit remote SHA; resolve the published revision from the containing Git commit.",
-    "NEXT_ACTION": "python scripts/session_preflight.py; if shell auth is unavailable use AGENTS.md connector preservation path and record its actual remote receipt."
+    "BLOCKED_LAYER": null,
+    "BLOCKER": null,
+    "SAFE_WORK_COMPLETED": "Re-executed current AF-19/full suite: 54 passed; verified exact-head PR CI. Prior six inspected_chars failures are historical, corrected on current head.",
+    "REMOTE_SHA": "04bf9c04d71c0deecc5856f148189141804d3b53",
+    "NEXT_ACTION": "Check PR #4 exact-head CI; merge only if green, then verify merged-main CI. Stop at AF-19."
   },
   "infrastructure_validation": {
     "interpreter": "Python 3.12.14 (available audit runtime; not a full pinned-CI environment run)",
@@ -71,5 +62,7 @@
     "product_tests": "not_run",
     "physical_camera": "not_run",
     "new_head_CI": "intentionally_not_run"
-  }
+  },
+  "checkpoint_status": "AWAITING_FINAL_CI",
+  "shell_transport_limitation": "Shell push authentication unavailable; connected GitHub has push permission; publish through authorized API."
 }
