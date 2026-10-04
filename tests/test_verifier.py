@@ -59,3 +59,41 @@ def test_verify_call_propagates_name_mismatch() -> None:
     assert result.passed is False
     assert result.code == "name_mismatch"
     assert result.detail == "other"
+
+
+def test_verify_call_accepts_exact_argument_limit() -> None:
+    contract = CallContract(name="lookup", optional=frozenset({"a", "b"}))
+    result = verify_call(contract, "lookup", {"a": 1, "b": 2}, max_arguments=2)
+    assert result.passed is True
+    assert result.code == "ok"
+
+
+def test_verify_call_rejects_over_limit_deterministically() -> None:
+    contract = CallContract(name="lookup", optional=frozenset({"a", "b", "c"}))
+    first = verify_call(contract, "lookup", {"a": 1, "b": 2, "c": 3}, max_arguments=2)
+    second = verify_call(contract, "lookup", {"c": 3, "a": 1, "b": 2}, max_arguments=2)
+    assert first == second
+    assert first.passed is False
+    assert first.code == "too_many_arguments"
+    assert first.detail == "3>2"
+
+
+def test_verify_call_rejects_boolean_argument_bound() -> None:
+    import pytest
+
+    with pytest.raises(TypeError, match="max_arguments must be an integer"):
+        verify_call(CallContract(name="lookup"), "lookup", {}, max_arguments=True)
+
+
+def test_verify_call_rejects_non_integer_argument_bound() -> None:
+    import pytest
+
+    with pytest.raises(TypeError, match="max_arguments must be an integer"):
+        verify_call(CallContract(name="lookup"), "lookup", {}, max_arguments=1.5)
+
+
+def test_verify_call_rejects_negative_argument_bound() -> None:
+    import pytest
+
+    with pytest.raises(ValueError, match="max_arguments must be non-negative"):
+        verify_call(CallContract(name="lookup"), "lookup", {}, max_arguments=-1)
