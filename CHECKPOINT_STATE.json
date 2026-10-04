@@ -3,22 +3,22 @@
   "current_checkpoint": "AF-19 adversarial prompt injection",
   "active_branch": "main",
   "main_sha_at_start": "4dfc379d07954898cbb8720f0db14a3d595bfddb",
-  "current_branch_sha": "57bde8a2e343e425c019fe73eacb232d40a5ccc0",
+  "current_branch_sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
   "sha_semantics": "observed_* and current_branch_sha are immutable pre-edit observations, not the SHA of the containing commit. Resolve current_repository_sha at runtime with the command; preflight prints it. CI receipts apply only to their recorded SHA.",
   "branch_remote_status": "Merged main verified; no checkpoint branch work remains.",
   "local_test_status": "Python 3.11.16: 54 passed, zero skipped, rerun on merged main 57bde8a2e343e425c019fe73eacb232d40a5ccc0",
   "pr_number": 4,
-  "ci_status": "Exact PR-head 37155199677 and merged-main 37155388507 succeeded; completion receipt requires its own normal main CI.",
+  "ci_status": "AF-19 PR-head and merged-main success retained. Completion main 6918811421e0d9aad4cdffa0aef4111e92eed64f: push CI 37156155589 succeeded. This receipt needs its own normal CI.",
   "merge_status": "MERGED AND VERIFIED",
   "external_acceptance_required": [],
-  "known_blocker": null,
-  "next_action": "STOP. Current checkpoint complete; do not start the next checkpoint in this run.",
-  "feature_checkpoint_advanced": true,
+  "known_blocker": "AF-20 acceptance specification absent; AF-19 is complete and unblocked.",
+  "next_action": "Read CHECKPOINT_STATE.json next_checkpoint_readiness; define and record AF-20 acceptance scope from the intended crash-test product goal before creating its implementation branch. Do not redo AF-19.",
+  "feature_checkpoint_advanced": false,
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
   "schema_version": 2,
-  "observed_at_utc": "2026-10-03T21:43:48.008291+00:00",
-  "observed_branch_sha": "57bde8a2e343e425c019fe73eacb232d40a5ccc0",
+  "observed_at_utc": "2026-10-04T16:25:47.169319+00:00",
+  "observed_branch_sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
   "observed_feature_sha": "1abdedb7d7617f5fe3131ae7eff542ce7606257a",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
@@ -48,15 +48,23 @@
       "event": "push",
       "status": "completed",
       "conclusion": "success"
+    },
+    "completion_main_run": {
+      "id": 37156155589,
+      "sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37156155589"
     }
   },
-  "stabilization_scope": "Current AF-19 acceptance; no AF-20 work",
+  "stabilization_scope": "2026-10-04 live readiness reconciliation only; no product checkpoint advanced",
   "last_session_exit": {
-    "BLOCKED_LAYER": null,
-    "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "PR #4 merged after exact-head green CI; merged-main CI and 54 local tests passed. Completion receipt follows.",
-    "REMOTE_SHA": "57bde8a2e343e425c019fe73eacb232d40a5ccc0",
-    "NEXT_ACTION": "STOP. Current checkpoint complete; do not start the next checkpoint in this run."
+    "BLOCKED_LAYER": "checkpoint specification",
+    "BLOCKER": "AF-20 acceptance specification absent; AF-19 is complete and unblocked.",
+    "SAFE_WORK_COMPLETED": "Verified AF-19 PR #4 merged; completion-main CI 37156155589 success; persisted missing AF-20 definition. No product changes.",
+    "REMOTE_SHA": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
+    "NEXT_ACTION": "Read CHECKPOINT_STATE.json next_checkpoint_readiness; define and record AF-20 acceptance scope from the intended crash-test product goal before creating its implementation branch. Do not redo AF-19."
   },
   "infrastructure_validation": {
     "interpreter": "Python 3.12.14 (available audit runtime; not a full pinned-CI environment run)",
@@ -71,7 +79,14 @@
   "checkpoint_status": "COMPLETE",
   "shell_transport_limitation": "Shell push authentication unavailable; connected GitHub has push permission; publish through authorized API.",
   "checkpoint_branch": "work/af19-adversarial-prompt-injection",
-  "verified_main_sha": "57bde8a2e343e425c019fe73eacb232d40a5ccc0",
+  "verified_main_sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
   "merge_commit_sha": "57bde8a2e343e425c019fe73eacb232d40a5ccc0",
-  "final_pr_head": "1abdedb7d7617f5fe3131ae7eff542ce7606257a"
+  "final_pr_head": "1abdedb7d7617f5fe3131ae7eff542ce7606257a",
+  "next_checkpoint_readiness": {
+    "checkpoint": "AF-20",
+    "status": "NOT_SPECIFIED",
+    "evidence": "No AF-20 acceptance definition, PROJECT_STATE, or roadmap in current tracked files; live branches and all four historical PR/issues provide no AF-20 specification. No open PRs.",
+    "required_definition": "Define the next bounded crash-test capability, deterministic inputs/outputs, evidence and isolation boundaries, failure classification, and acceptance tests before implementation.",
+    "feature_work_this_session": "none; AF-19 remains complete; no completion percentage increase"
+  }
 }
