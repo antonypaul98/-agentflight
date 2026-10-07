@@ -97,3 +97,27 @@ def test_verify_call_rejects_negative_argument_bound() -> None:
 
     with pytest.raises(ValueError, match="max_arguments must be non-negative"):
         verify_call(CallContract(name="lookup"), "lookup", {}, max_arguments=-1)
+
+def test_verify_call_rejects_non_mapping_arguments_deterministically() -> None:
+    import pytest
+
+    contract = CallContract(name="lookup", required=frozenset({"query"}))
+    for malformed in ([], ["query"], (), ("query",), None, "query", 7):
+        result = verify_call(contract, "lookup", malformed)
+        assert result.passed is False
+        assert result.code == "invalid_arguments"
+        assert result.detail == "expected_mapping"
+
+
+def test_verify_call_preserves_name_mismatch_precedence_for_malformed_arguments() -> None:
+    result = verify_call(CallContract(name="lookup"), "other", ["not", "a", "mapping"])
+    assert result.passed is False
+    assert result.code == "name_mismatch"
+    assert result.detail == "other"
+
+
+def test_verify_call_preserves_bound_validation_precedence_for_malformed_arguments() -> None:
+    import pytest
+
+    with pytest.raises(TypeError, match="max_arguments must be an integer"):
+        verify_call(CallContract(name="lookup"), "lookup", [], max_arguments=True)
