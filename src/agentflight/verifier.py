@@ -24,6 +24,9 @@ def verify_call(contract: CallContract, name: str, arguments: Mapping[str, objec
     if not name_result.passed:
         return name_result
 
+    if not isinstance(arguments, Mapping):
+        return CheckResult(False, "invalid_arguments", "expected_mapping")
+
     argument_count = len(arguments)
     if argument_count > max_arguments:
         return CheckResult(False, "too_many_arguments", f"{argument_count}>{max_arguments}")
