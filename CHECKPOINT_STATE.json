@@ -2,10 +2,10 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-20 bounded tool-call argument envelope",
-  "checkpoint_status": "IMPLEMENTED_AWAITING_MERGE",
+  "checkpoint_status": "IMPLEMENTED_PR_GREEN_AWAITING_MERGE",
   "active_branch": "work/af20-bounded-tool-call-envelope",
   "verified_main_sha": "a021367e8c7115b412740c2f6ef84ed9bfb71300",
-  "observed_feature_sha": "9473fcb38452510c16aa86ff9ec0b84674d3d5d7",
+  "observed_feature_sha": "a949a3e32d52ff42e5ffc499e202f1c336428c5a",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
@@ -14,22 +14,22 @@
   "pr_state": {
     "number": 5,
     "state": "open",
-    "head_sha": "9473fcb38452510c16aa86ff9ec0b84674d3d5d7",
+    "head_sha": "a949a3e32d52ff42e5ffc499e202f1c336428c5a",
     "url": "https://github.com/antonypaul98/-agentflight/pull/5",
     "mergeable": true
   },
   "ci_state": {
     "pr_run": {
-      "id": 37702141791,
-      "sha": "9473fcb38452510c16aa86ff9ec0b84674d3d5d7",
+      "id": 37702334870,
+      "sha": "a949a3e32d52ff42e5ffc499e202f1c336428c5a",
       "event": "pull_request",
       "status": "completed",
       "conclusion": "success",
-      "tests": "62 passed",
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37702141791"
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37702334870",
+      "tests": "full suite green"
     },
     "merged_main_run": null,
-    "latest_head_run": {
+    "historical_failure": {
       "id": 37702259363,
       "sha": "e0c054948266e91a3c47c6007f7fbda203692ad3",
       "event": "pull_request",
@@ -78,8 +78,8 @@
   "last_session_exit": {
     "BLOCKED_LAYER": "execution/write path",
     "BLOCKER": "Merge mutation intercepted by safety layer; shell DNS unavailable. CI diagnostics regression from state reconciliation fixed by restoring required diagnostic keys.",
-    "SAFE_WORK_COMPLETED": "AF-20 verifier guard/regressions landed; CI 37702141791 passed 62 tests. New state/AGENTS reconciliation exposed missing ci_diagnostics keys; restored them.",
-    "REMOTE_SHA": "9473fcb38452510c16aa86ff9ec0b84674d3d5d7",
+    "SAFE_WORK_COMPLETED": "AF-20 malformed-container guard, regressions, AGENTS and checkpoint reconciliation synchronized to existing branch. Initial AF-20 code CI: 62 passed. Repaired transient ci_diagnostics missing keys; latest head a949a3e exact-head CI 37702334870 succeeded.",
+    "REMOTE_SHA": "a949a3e32d52ff42e5ffc499e202f1c336428c5a",
     "NEXT_ACTION": "Retry guarded merge of PR #5 at exact validated head; verify main CI; do not recreate branch."
   },
   "diagnostic_import": "agentflight",
