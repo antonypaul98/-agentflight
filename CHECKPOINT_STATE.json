@@ -1,92 +1,77 @@
 {
-  "repository": "antonypaul98/-agentflight",
-  "current_checkpoint": "AF-19 adversarial prompt injection",
-  "active_branch": "main",
-  "main_sha_at_start": "4dfc379d07954898cbb8720f0db14a3d595bfddb",
-  "current_branch_sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
-  "sha_semantics": "observed_* and current_branch_sha are immutable pre-edit observations, not the SHA of the containing commit. Resolve current_repository_sha at runtime with the command; preflight prints it. CI receipts apply only to their recorded SHA.",
-  "branch_remote_status": "Merged main verified; no checkpoint branch work remains.",
-  "local_test_status": "Python 3.11.16: 54 passed, zero skipped, rerun on merged main 57bde8a2e343e425c019fe73eacb232d40a5ccc0",
-  "pr_number": 4,
-  "ci_status": "AF-19 PR-head and merged-main success retained. Completion main 6918811421e0d9aad4cdffa0aef4111e92eed64f: push CI 37156155589 succeeded. This receipt needs its own normal CI.",
-  "merge_status": "MERGED AND VERIFIED",
-  "external_acceptance_required": [],
-  "known_blocker": "AF-20 acceptance specification absent; AF-19 is complete and unblocked.",
-  "next_action": "Read CHECKPOINT_STATE.json next_checkpoint_readiness; define and record AF-20 acceptance scope from the intended crash-test product goal before creating its implementation branch. Do not redo AF-19.",
-  "feature_checkpoint_advanced": false,
-  "diagnostic_import": "agentflight",
-  "diagnostic_postgres_variables": [],
   "schema_version": 2,
-  "observed_at_utc": "2026-10-04T16:25:47.169319+00:00",
-  "observed_branch_sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
-  "observed_feature_sha": "1abdedb7d7617f5fe3131ae7eff542ce7606257a",
+  "repository": "antonypaul98/-agentflight",
+  "current_checkpoint": "AF-20 bounded tool-call argument envelope",
+  "checkpoint_status": "IMPLEMENTED_AWAITING_MERGE",
+  "active_branch": "work/af20-bounded-tool-call-envelope",
+  "verified_main_sha": "a021367e8c7115b412740c2f6ef84ed9bfb71300",
+  "observed_feature_sha": "9473fcb38452510c16aa86ff9ec0b84674d3d5d7",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
-  "prior_local_test_receipt": {
-    "reported_result": "Not run in stabilization; no feature acceptance inferred.",
-    "reported_sha": "d760d71f9b2f7ccc95e21034dda8fedccc92eb25",
-    "reexecuted_this_run": false
-  },
+  "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
+  "branch_remote_status": "Existing AF-20 branch is ahead of main; preserve it, no replacement branch.",
+  "pr_number": 5,
   "pr_state": {
-    "number": 4,
-    "state": "merged",
-    "head_sha": "1abdedb7d7617f5fe3131ae7eff542ce7606257a",
-    "url": "https://github.com/antonypaul98/-agentflight/pull/4",
-    "merge_commit_sha": "57bde8a2e343e425c019fe73eacb232d40a5ccc0"
+    "number": 5,
+    "state": "open",
+    "head_sha": "9473fcb38452510c16aa86ff9ec0b84674d3d5d7",
+    "url": "https://github.com/antonypaul98/-agentflight/pull/5",
+    "mergeable": true
   },
   "ci_state": {
     "pr_run": {
-      "id": 37155199677,
-      "sha": "1abdedb7d7617f5fe3131ae7eff542ce7606257a",
+      "id": 37702141791,
+      "sha": "9473fcb38452510c16aa86ff9ec0b84674d3d5d7",
       "event": "pull_request",
       "status": "completed",
-      "conclusion": "success"
-    },
-    "merged_main_run": {
-      "id": 37155388507,
-      "sha": "57bde8a2e343e425c019fe73eacb232d40a5ccc0",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success"
-    },
-    "completion_main_run": {
-      "id": 37156155589,
-      "sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
-      "event": "push",
-      "status": "completed",
       "conclusion": "success",
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37156155589"
+      "tests": "62 passed",
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37702141791"
+    },
+    "merged_main_run": null
+  },
+  "local_test_status": "Not run in connector-only environment; exact-head GitHub CI passed 62 tests under Python 3.11.",
+  "merge_status": "NOT_MERGED",
+  "known_blocker": "GitHub PR merge mutation intercepted by execution safety layer; no code or CI failure. Shell clone/fetch DNS unavailable.",
+  "next_action": "Reverify live PR #5 head and exact-head CI, retry squash merge using expected_head_sha, then verify merged main CI and update this state on main.",
+  "feature_checkpoint_advanced": true,
+  "completed_checkpoints": [
+    {
+      "checkpoint": "AF-19 adversarial prompt injection",
+      "pr": 4,
+      "merge": "MERGED AND VERIFIED",
+      "verified_main_sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
+      "ci_state": {
+        "pr_run": {
+          "id": 37155199677,
+          "sha": "1abdedb7d7617f5fe3131ae7eff542ce7606257a",
+          "event": "pull_request",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        "merged_main_run": {
+          "id": 37155388507,
+          "sha": "57bde8a2e343e425c019fe73eacb232d40a5ccc0",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        "completion_main_run": {
+          "id": 37156155589,
+          "sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37156155589"
+        }
+      }
     }
-  },
-  "stabilization_scope": "2026-10-04 live readiness reconciliation only; no product checkpoint advanced",
+  ],
   "last_session_exit": {
-    "BLOCKED_LAYER": "checkpoint specification",
-    "BLOCKER": "AF-20 acceptance specification absent; AF-19 is complete and unblocked.",
-    "SAFE_WORK_COMPLETED": "Verified AF-19 PR #4 merged; completion-main CI 37156155589 success; persisted missing AF-20 definition. No product changes.",
-    "REMOTE_SHA": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
-    "NEXT_ACTION": "Read CHECKPOINT_STATE.json next_checkpoint_readiness; define and record AF-20 acceptance scope from the intended crash-test product goal before creating its implementation branch. Do not redo AF-19."
-  },
-  "infrastructure_validation": {
-    "interpreter": "Python 3.12.14 (available audit runtime; not a full pinned-CI environment run)",
-    "passed": 15,
-    "skipped": 1,
-    "skip_reason": "Memory-only source-layout regression is not applicable",
-    "yaml": "All existing workflow YAML parsed",
-    "product_tests": "not_run",
-    "physical_camera": "not_run",
-    "new_head_CI": "intentionally_not_run"
-  },
-  "checkpoint_status": "COMPLETE",
-  "shell_transport_limitation": "Shell push authentication unavailable; connected GitHub has push permission; publish through authorized API.",
-  "checkpoint_branch": "work/af19-adversarial-prompt-injection",
-  "verified_main_sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
-  "merge_commit_sha": "57bde8a2e343e425c019fe73eacb232d40a5ccc0",
-  "final_pr_head": "1abdedb7d7617f5fe3131ae7eff542ce7606257a",
-  "next_checkpoint_readiness": {
-    "checkpoint": "AF-20",
-    "status": "NOT_SPECIFIED",
-    "evidence": "No AF-20 acceptance definition, PROJECT_STATE, or roadmap in current tracked files; live branches and all four historical PR/issues provide no AF-20 specification. No open PRs.",
-    "required_definition": "Define the next bounded crash-test capability, deterministic inputs/outputs, evidence and isolation boundaries, failure classification, and acceptance tests before implementation.",
-    "feature_work_this_session": "none; AF-19 remains complete; no completion percentage increase"
+    "BLOCKED_LAYER": "execution/write path",
+    "BLOCKER": "Merge mutation did not reach GitHub; shell fetch DNS failed.",
+    "SAFE_WORK_COMPLETED": "Committed malformed argument-container guard and regressions to existing AF-20 branch; exact-head PR CI run 37702141791 succeeded (62 passed).",
+    "REMOTE_SHA": "9473fcb38452510c16aa86ff9ec0b84674d3d5d7",
+    "NEXT_ACTION": "Retry guarded merge of PR #5 at exact validated head; verify main CI; do not recreate branch."
   }
 }
