@@ -5,28 +5,28 @@
   "checkpoint_status": "IMPLEMENTED_CODE_HEAD_GREEN_AWAITING_MERGE",
   "active_branch": "work/af20-bounded-tool-call-envelope",
   "verified_main_sha": "a021367e8c7115b412740c2f6ef84ed9bfb71300",
-  "observed_feature_sha": "c1a5d5004f4a30702a38e9b349fb48ae26101571",
+  "observed_feature_sha": "0bdc5bc23857de24111001fae4369914bf6620a5",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "Existing AF-20 branch is ahead of main; preserve it, no replacement branch.",
+  "branch_remote_status": "AF-20 existing branch ahead 18 / behind 0 relative to main as verified on 2026-10-08; no replacement branch.",
   "pr_number": 5,
   "pr_state": {
     "number": 5,
     "state": "open",
-    "head_sha": "c1a5d5004f4a30702a38e9b349fb48ae26101571",
+    "head_sha": "0bdc5bc23857de24111001fae4369914bf6620a5",
     "url": "https://github.com/antonypaul98/-agentflight/pull/5",
-    "mergeable": true
+    "mergeable": "recheck before merge"
   },
   "ci_state": {
     "pr_run": {
-      "id": 37731926538,
-      "sha": "c1a5d5004f4a30702a38e9b349fb48ae26101571",
+      "id": 37749570982,
+      "sha": "0bdc5bc23857de24111001fae4369914bf6620a5",
       "event": "pull_request",
       "status": "completed",
       "conclusion": "success",
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37731926538",
-      "tests": "72 passed, Python 3.11.16"
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37749570982",
+      "tests": "76 passed, Python 3.11.16; infrastructure unittest OK (1 skipped)"
     },
     "merged_main_run": null,
     "historical_failure": {
@@ -38,19 +38,19 @@
       "cause": "ci_diagnostics.py KeyError diagnostic_import; state schema restored in following commit"
     },
     "push_run": {
-      "id": 37731920897,
-      "sha": "c1a5d5004f4a30702a38e9b349fb48ae26101571",
+      "id": null,
+      "sha": "0bdc5bc23857de24111001fae4369914bf6620a5",
       "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37731920897",
-      "tests": "72 passed, Python 3.11.16"
+      "status": "not verified",
+      "conclusion": null,
+      "url": null,
+      "tests": "not verified"
     }
   },
-  "local_test_status": "Four focused tests passed locally on Python 3.13; CI passed 72 tests on Python 3.11.16.",
+  "local_test_status": "Four name-boundary focused regressions passed in reconstructed Python 3.13.5 environment; exact code head CI passed 76 tests on Python 3.11.16.",
   "merge_status": "NOT_MERGED",
-  "known_blocker": "Merge mutation intercepted by safety checks; shell git fetch DNS unavailable. Product code and exact-head CI green.",
-  "next_action": "Merge PR #5 at validated head, verify main CI, finalize AF-20.",
+  "known_blocker": "Recoverable: guarded squash merge intercepted by execution safety checks; local git fetch DNS unavailable, pinned Python 3.11 not installed locally. Exact code head PR CI green.",
+  "next_action": "Merge PR #5 at exact validated head 0bdc5bc; verify merged-main CI; finalize AF-20 on main.",
   "feature_checkpoint_advanced": true,
   "completed_checkpoints": [
     {
@@ -85,11 +85,11 @@
     }
   ],
   "last_session_exit": {
-    "BLOCKED_LAYER": "recoverable external merge execution restriction",
-    "BLOCKER": "Merge intercepted; local DNS prevents git fetch.",
-    "SAFE_WORK_COMPLETED": "Reliability fix committed at ac7ad81d2b6260a412d33a4dd413c4a2752691ff; exact-head push and PR CI passed 68 tests.",
-    "REMOTE_SHA": "ac7ad81d2b6260a412d33a4dd413c4a2752691ff",
-    "NEXT_ACTION": "Retry guarded PR #5 squash merge after exact-head CI; verify merged main CI."
+    "BLOCKED_LAYER": "recoverable external merge execution restriction / shell environment",
+    "BLOCKER": "Guarded PR #5 squash merge intercepted by safety checks; shell Git cannot resolve github.com, so checkout-based preflight unavailable.",
+    "SAFE_WORK_COMPLETED": "Fast-forward synchronized existing AF-20 branch to 0bdc5bc with four name-boundary regressions; PR CI #37749570982 green (76 tests, Python 3.11.16).",
+    "REMOTE_SHA": "0bdc5bc23857de24111001fae4369914bf6620a5",
+    "NEXT_ACTION": "Merge PR #5 when allowed, validate merged-main CI and finalize AF-20."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": []
