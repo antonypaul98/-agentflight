@@ -156,3 +156,40 @@ def test_verify_call_rejects_mapping_that_raises_on_length_or_iteration() -> Non
             False, "invalid_arguments", "unreadable_mapping"
         )
         assert verify_call(contract, "other", malformed).code == "name_mismatch"
+
+
+def test_verify_call_bounds_inconsistent_mapping_iteration() -> None:
+    from collections.abc import Mapping
+    from itertools import repeat
+
+    class MisreportedMapping(Mapping):
+        def __init__(self, count, keys):
+            self.count = count
+            self.keys = keys
+
+        def __len__(self):
+            return self.count
+
+        def __iter__(self):
+            return iter(self.keys)
+
+        def __getitem__(self, key):
+            return "value"
+
+    contract = CallContract(name="lookup", optional=frozenset({"query", "extra"}))
+    for count, keys in (
+        (1, ("query", "extra")),
+        (2, ("query",)),
+        (1, repeat("query")),
+    ):
+        result = verify_call(contract, "lookup", MisreportedMapping(count, keys))
+        assert (result.passed, result.code, result.detail) == (
+            False, "invalid_arguments", "unreadable_mapping"
+        )
+
+    malformed = MisreportedMapping(1, repeat("query"))
+    assert verify_call(contract, "other", malformed).code == "name_mismatch"
+    assert verify_call(contract, "lookup", malformed, max_arguments=0).code == "too_many_arguments"
+
+    valid = verify_call(contract, "lookup", MisreportedMapping(1, ("query",)), max_arguments=1)
+    assert (valid.passed, valid.code) == (True, "ok")

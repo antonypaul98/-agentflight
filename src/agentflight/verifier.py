@@ -35,9 +35,16 @@ def verify_call(contract: CallContract, name: str, arguments: Mapping[str, objec
     if argument_count > max_arguments:
         return CheckResult(False, "too_many_arguments", f"{argument_count}>{max_arguments}")
 
+    # Never trust a custom Mapping length to bound key iteration.
     try:
-        keys = tuple(arguments)
+        keys = []
+        for key in arguments:
+            if len(keys) == argument_count:
+                return CheckResult(False, "invalid_arguments", "unreadable_mapping")
+            keys.append(key)
     except (TypeError, ValueError, RuntimeError):
+        return CheckResult(False, "invalid_arguments", "unreadable_mapping")
+    if len(keys) != argument_count:
         return CheckResult(False, "invalid_arguments", "unreadable_mapping")
 
     if any(not isinstance(key, str) for key in keys):
