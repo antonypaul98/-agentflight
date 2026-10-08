@@ -59,3 +59,137 @@ def test_verify_call_propagates_name_mismatch() -> None:
     assert result.passed is False
     assert result.code == "name_mismatch"
     assert result.detail == "other"
+
+
+def test_verify_call_accepts_exact_argument_limit() -> None:
+    contract = CallContract(name="lookup", optional=frozenset({"a", "b"}))
+    result = verify_call(contract, "lookup", {"a": 1, "b": 2}, max_arguments=2)
+    assert result.passed is True
+    assert result.code == "ok"
+
+
+def test_verify_call_rejects_over_limit_deterministically() -> None:
+    contract = CallContract(name="lookup", optional=frozenset({"a", "b", "c"}))
+    first = verify_call(contract, "lookup", {"a": 1, "b": 2, "c": 3}, max_arguments=2)
+    second = verify_call(contract, "lookup", {"c": 3, "a": 1, "b": 2}, max_arguments=2)
+    assert first == second
+    assert first.passed is False
+    assert first.code == "too_many_arguments"
+    assert first.detail == "3>2"
+
+
+def test_verify_call_rejects_boolean_argument_bound() -> None:
+    import pytest
+
+    with pytest.raises(TypeError, match="max_arguments must be an integer"):
+        verify_call(CallContract(name="lookup"), "lookup", {}, max_arguments=True)
+
+
+def test_verify_call_rejects_non_integer_argument_bound() -> None:
+    import pytest
+
+    with pytest.raises(TypeError, match="max_arguments must be an integer"):
+        verify_call(CallContract(name="lookup"), "lookup", {}, max_arguments=1.5)
+
+
+def test_verify_call_rejects_negative_argument_bound() -> None:
+    import pytest
+
+    with pytest.raises(ValueError, match="max_arguments must be non-negative"):
+        verify_call(CallContract(name="lookup"), "lookup", {}, max_arguments=-1)
+
+def test_verify_call_rejects_non_mapping_arguments_deterministically() -> None:
+    import pytest
+
+    contract = CallContract(name="lookup", required=frozenset({"query"}))
+    for malformed in ([], ["query"], (), ("query",), None, "query", 7):
+        result = verify_call(contract, "lookup", malformed)
+        assert result.passed is False
+        assert result.code == "invalid_arguments"
+        assert result.detail == "expected_mapping"
+
+
+def test_verify_call_preserves_name_mismatch_precedence_for_malformed_arguments() -> None:
+    result = verify_call(CallContract(name="lookup"), "other", ["not", "a", "mapping"])
+    assert result.passed is False
+    assert result.code == "name_mismatch"
+    assert result.detail == "other"
+
+
+def test_verify_call_preserves_bound_validation_precedence_for_malformed_arguments() -> None:
+    import pytest
+
+    with pytest.raises(TypeError, match="max_arguments must be an integer"):
+        verify_call(CallContract(name="lookup"), "lookup", [], max_arguments=True)
+
+
+def test_verify_call_rejects_non_string_mapping_keys_deterministically() -> None:
+    import pytest
+
+    contract = CallContract(name="lookup", required=frozenset({"query"}))
+    for malformed in ({"query": "ok", 1: True}, {"query": "ok", None: True}, {(1, 2): "ok"}):
+        result = verify_call(contract, "lookup", malformed)
+        assert result.passed is False
+        assert result.code == "invalid_arguments"
+        assert result.detail == "non_string_key"
+
+
+def test_verify_call_preserves_name_and_size_precedence_for_non_string_keys() -> None:
+    contract = CallContract(name="lookup")
+    assert verify_call(contract, "other", {1: "x"}).code == "name_mismatch"
+    over_limit = verify_call(contract, "lookup", {1: "x", 2: "y"}, max_arguments=1)
+    assert over_limit.code == "too_many_arguments"
+    assert over_limit.detail == "2>1"
+
+
+def test_verify_call_rejects_mapping_that_raises_on_length_or_iteration() -> None:
+    from collections.abc import Mapping
+    from unittest.mock import MagicMock
+
+    contract = CallContract(name="lookup")
+    for method, error in (("__len__", RuntimeError), ("__iter__", ValueError)):
+        malformed = MagicMock(spec=Mapping)
+        malformed.__len__.return_value = 1
+        getattr(malformed, method).side_effect = error("bad mapping")
+        result = verify_call(contract, "lookup", malformed)
+        assert (result.passed, result.code, result.detail) == (
+            False, "invalid_arguments", "unreadable_mapping"
+        )
+        assert verify_call(contract, "other", malformed).code == "name_mismatch"
+
+
+def test_verify_call_bounds_inconsistent_mapping_iteration() -> None:
+    from collections.abc import Mapping
+    from itertools import repeat
+
+    class MisreportedMapping(Mapping):
+        def __init__(self, count, keys):
+            self.count = count
+            self.keys = keys
+
+        def __len__(self):
+            return self.count
+
+        def __iter__(self):
+            return iter(self.keys)
+
+        def __getitem__(self, key):
+            return "value"
+
+    contract = CallContract(name="lookup", optional=frozenset({"query", "extra"}))
+    for count, keys in (
+        (1, ("query", "extra")),
+        (2, ("query",)),
+        (1, repeat("query")),
+    ):
+        result = verify_call(contract, "lookup", MisreportedMapping(count, keys))
+        assert (result.passed, result.code, result.detail) == (
+            False, "invalid_arguments", "unreadable_mapping"
+        )
+
+    malformed = MisreportedMapping(1, repeat("query"))
+    assert verify_call(contract, "other", malformed).code == "name_mismatch"
+    assert verify_call(contract, "lookup", malformed, max_arguments=0).code == "too_many_arguments"
+
+    valid = verify_call(contract, "lookup", MisreportedMapping(1, ("query",)), max_arguments=1)
+    assert (valid.passed, valid.code) == (True, "ok")
