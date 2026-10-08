@@ -82,6 +82,9 @@ def verify_call(contract: CallContract, name: str, arguments: Mapping[str, objec
     optional, optional_error = _contract_fields(contract.optional)
     if required_error or optional_error:
         return CheckResult(False, "invalid_contract", required_error or optional_error)
+    # Required and optional schemas must not declare the same normalized name.
+    if not required.isdisjoint(optional):
+        return CheckResult(False, "invalid_contract", "duplicate_argument_name")
 
     missing = sorted(required - provided)
     if missing:

@@ -48,3 +48,35 @@ def test_distinct_string_subclass_fields_remain_valid():
         optional=frozenset({AlternateHash("limit", 42)}),
     )
     assert verify_call(contract, "lookup", {"query": 1, "limit": 2}) == CheckResult(True, "ok")
+
+def test_required_optional_overlap_is_invalid_even_when_required_is_missing():
+    contract = CallContract("lookup", required=frozenset({"query"}), optional=frozenset({"query"}))
+    for arguments in ({}, {"query": 1}):
+        assert verify_call(contract, "lookup", arguments) == CheckResult(
+            False, "invalid_contract", "duplicate_argument_name"
+        )
+
+
+def test_required_optional_overlap_after_string_subclass_normalization():
+    contract = CallContract(
+        "lookup",
+        required=frozenset({AlternateHash("query", 41)}),
+        optional=frozenset({AlternateHash("query", 42)}),
+    )
+    assert verify_call(contract, "lookup", {"query": 1}) == CheckResult(
+        False, "invalid_contract", "duplicate_argument_name"
+    )
+
+
+def test_cross_schema_duplicate_preserves_earlier_validation_precedence():
+    contract = CallContract("lookup", required=frozenset({"query"}), optional=frozenset({"query"}))
+    assert verify_call(contract, "wrong", {}).code == "name_mismatch"
+    assert verify_call(contract, "lookup", []).detail == "expected_mapping"
+    assert verify_call(contract, "lookup", {"query": 1, "extra": 2}, max_arguments=1).code == "too_many_arguments"
+    assert verify_call(contract, "lookup", {1: 1}).detail == "non_string_key"
+
+
+def test_disjoint_required_optional_fields_remain_valid():
+    contract = CallContract("lookup", required=frozenset({"query"}), optional=frozenset({"limit"}))
+    assert verify_call(contract, "lookup", {"query": 1, "limit": 2}) == CheckResult(True, "ok")
+    assert verify_call(contract, "lookup", {}).code == "missing_required"
