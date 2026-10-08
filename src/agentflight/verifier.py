@@ -17,6 +17,8 @@ def verify_name(contract: CallContract, name: str) -> CheckResult:
 def verify_call(contract: CallContract, name: str, arguments: Mapping[str, object], *, max_arguments: int = DEFAULT_MAX_ARGUMENTS) -> CheckResult:
     if not isinstance(max_arguments, int) or isinstance(max_arguments, bool):
         raise TypeError("max_arguments must be an integer")
+    # Normalize int subclasses without invoking their custom hooks.
+    max_arguments = int.__int__(max_arguments)
     if max_arguments < 0:
         raise ValueError("max_arguments must be non-negative")
 
