@@ -5,28 +5,28 @@
   "checkpoint_status": "IMPLEMENTED_EXACT_HEAD_GREEN_AWAITING_MERGE",
   "active_branch": "work/af20-bounded-tool-call-envelope",
   "verified_main_sha": "a021367e8c7115b412740c2f6ef84ed9bfb71300",
-  "observed_feature_sha": "0c12ad4dcdc500906f083d2800fdd553978b3424",
+  "observed_feature_sha": "5ba6dff7e2666ebd39b6c1fcaf0f9a4424f5b487",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "Original AF-20 branch ahead 30, behind 0 relative to main at code head 0c12ad4dcdc500906f083d2800fdd553978b3424; no replacement branch.",
+  "branch_remote_status": "Original AF-20 branch ahead 32, behind 0 relative to main at implementation head 5ba6dff7e2666ebd39b6c1fcaf0f9a4424f5b487; no replacement branch.",
   "pr_number": 5,
   "pr_state": {
     "number": 5,
     "state": "open",
-    "head_sha": "0c12ad4dcdc500906f083d2800fdd553978b3424",
+    "head_sha": "5ba6dff7e2666ebd39b6c1fcaf0f9a4424f5b487",
     "url": "https://github.com/antonypaul98/-agentflight/pull/5",
     "mergeable": "true at code head; refresh after state receipt"
   },
   "ci_state": {
     "pr_run": {
-      "id": 37807897289,
-      "sha": "0c12ad4dcdc500906f083d2800fdd553978b3424",
+      "id": 37815773273,
+      "sha": "5ba6dff7e2666ebd39b6c1fcaf0f9a4424f5b487",
       "event": "pull_request",
       "status": "completed",
       "conclusion": "success",
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37807897289",
-      "tests": "103 passed; Python 3.11.17; infrastructure 16 run, 1 skipped"
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37815773273",
+      "tests": "108 passed; Python 3.11.17; infrastructure 16 run, 1 skipped"
     },
     "merged_main_run": null,
     "historical_failure": {
@@ -38,19 +38,19 @@
       "cause": "ci_diagnostics.py KeyError diagnostic_import; state schema restored in following commit"
     },
     "push_run": {
-      "id": 37807889177,
-      "sha": "0c12ad4dcdc500906f083d2800fdd553978b3424",
+      "id": 37815767032,
+      "sha": "5ba6dff7e2666ebd39b6c1fcaf0f9a4424f5b487",
       "event": "push",
       "status": "completed",
       "conclusion": "success",
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37807889177",
-      "tests": "103 passed; Python 3.11.17; infrastructure 16 run, 1 skipped"
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37815767032",
+      "tests": "108 passed; Python 3.11.17; infrastructure 16 run, 1 skipped"
     }
   },
-  "local_test_status": "Five schema-cardinality regressions passed locally under Python 3.13.5 in reconstructed environment; 103 product tests passed in Python 3.11.17 push and PR CI at 0c12ad4dcdc500906f083d2800fdd553978b3424",
+  "local_test_status": "Five bounded name-mismatch evidence regressions passed under Python 3.13.5 in reconstructed environment; 108 product tests passed on exact implementation head in Python 3.11.17 push and PR CI.",
   "merge_status": "NOT_MERGED",
-  "known_blocker": "Shell Git DNS unavailable, preventing canonical checkout-based preflight; connected GitHub branch synchronization and exact-head CI succeeded. Guarded PR #5 squash merge blocked by execution safety checks.",
-  "next_action": "Validate receipt-head CI, retry guarded squash merge PR #5 at exact green head, verify merged-main CI and finalize AF-20.",
+  "known_blocker": "Shell Git DNS unavailable; reconstructed session_preflight.py failed at git fetch. Connected GitHub branch synchronization and exact-head CI succeeded. PR #5 merge pending; previous guarded merge was restricted.",
+  "next_action": "Validate receipt-head CI, retry guarded squash merge PR #5 at exact green head, verify merged-main CI, and finalize AF-20.",
   "feature_checkpoint_advanced": true,
   "completed_checkpoints": [
     {
@@ -86,10 +86,10 @@
   ],
   "last_session_exit": {
     "BLOCKED_LAYER": "environment (shell Git DNS; guarded merge execution restriction)",
-    "BLOCKER": "Canonical checkout-based preflight unavailable; guarded squash merge intercepted. Source and regressions synchronized and CI green.",
-    "SAFE_WORK_COMPLETED": "Published AF-20 declared-contract-schema bound (1024 names per set) plus five regressions at 0c12ad4dcdc500906f083d2800fdd553978b3424; push CI #37807889177 and PR CI #37807897289 green (103 product tests; Python 3.11.17).",
-    "REMOTE_SHA": "0c12ad4dcdc500906f083d2800fdd553978b3424",
-    "NEXT_ACTION": "Validate receipt-head CI and retry guarded squash merge of PR #5."
+    "BLOCKER": "Canonical checkout-based preflight unavailable because GitHub DNS resolution fails. Prior guarded squash merge was intercepted.",
+    "SAFE_WORK_COMPLETED": "Published bounded tool-name mismatch evidence plus five regressions at 5ba6dff7e2666ebd39b6c1fcaf0f9a4424f5b487; push CI #37815767032 and PR CI #37815773273 green (108 product tests, Python 3.11.17).",
+    "REMOTE_SHA": "5ba6dff7e2666ebd39b6c1fcaf0f9a4424f5b487",
+    "NEXT_ACTION": "Verify receipt-head CI, then retry guarded squash merge PR #5."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": []
