@@ -29,7 +29,8 @@ def verify_call(contract: CallContract, name: str, arguments: Mapping[str, objec
 
     try:
         argument_count = len(arguments)
-    except (TypeError, ValueError, RuntimeError):
+    except Exception:
+        # Third-party Mapping hooks may raise arbitrary ordinary exceptions.
         return CheckResult(False, "invalid_arguments", "unreadable_mapping")
 
     if argument_count > max_arguments:
@@ -42,7 +43,7 @@ def verify_call(contract: CallContract, name: str, arguments: Mapping[str, objec
             if len(keys) == argument_count:
                 return CheckResult(False, "invalid_arguments", "unreadable_mapping")
             keys.append(key)
-    except (TypeError, ValueError, RuntimeError):
+    except Exception:
         return CheckResult(False, "invalid_arguments", "unreadable_mapping")
     if len(keys) != argument_count:
         return CheckResult(False, "invalid_arguments", "unreadable_mapping")
