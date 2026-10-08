@@ -121,3 +121,22 @@ def test_verify_call_preserves_bound_validation_precedence_for_malformed_argumen
 
     with pytest.raises(TypeError, match="max_arguments must be an integer"):
         verify_call(CallContract(name="lookup"), "lookup", [], max_arguments=True)
+
+
+def test_verify_call_rejects_non_string_mapping_keys_deterministically() -> None:
+    import pytest
+
+    contract = CallContract(name="lookup", required=frozenset({"query"}))
+    for malformed in ({"query": "ok", 1: True}, {"query": "ok", None: True}, {(1, 2): "ok"}):
+        result = verify_call(contract, "lookup", malformed)
+        assert result.passed is False
+        assert result.code == "invalid_arguments"
+        assert result.detail == "non_string_key"
+
+
+def test_verify_call_preserves_name_and_size_precedence_for_non_string_keys() -> None:
+    contract = CallContract(name="lookup")
+    assert verify_call(contract, "other", {1: "x"}).code == "name_mismatch"
+    over_limit = verify_call(contract, "lookup", {1: "x", 2: "y"}, max_arguments=1)
+    assert over_limit.code == "too_many_arguments"
+    assert over_limit.detail == "2>1"

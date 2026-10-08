@@ -31,6 +31,9 @@ def verify_call(contract: CallContract, name: str, arguments: Mapping[str, objec
     if argument_count > max_arguments:
         return CheckResult(False, "too_many_arguments", f"{argument_count}>{max_arguments}")
 
+    if any(not isinstance(key, str) for key in arguments):
+        return CheckResult(False, "invalid_arguments", "non_string_key")
+
     provided = frozenset(arguments)
     missing = sorted(contract.required - provided)
     if missing:
