@@ -49,7 +49,8 @@ def verify_call(contract: CallContract, name: str, arguments: Mapping[str, objec
         return CheckResult(False, "invalid_arguments", "expected_mapping")
 
     try:
-        argument_count = len(arguments)
+        # Built-in dict storage is authoritative even when subclasses lie about length.
+        argument_count = dict.__len__(arguments) if isinstance(arguments, dict) else len(arguments)
     except Exception:
         # Third-party Mapping hooks may raise arbitrary ordinary exceptions.
         return CheckResult(False, "invalid_arguments", "unreadable_mapping")
@@ -60,7 +61,9 @@ def verify_call(contract: CallContract, name: str, arguments: Mapping[str, objec
     # Never trust a custom Mapping length to bound key iteration.
     try:
         keys = []
-        for key in arguments:
+        # Avoid subclass iterator hooks that can fabricate or conceal real dict keys.
+        iterator = dict.__iter__(arguments) if isinstance(arguments, dict) else iter(arguments)
+        for key in iterator:
             if len(keys) == argument_count:
                 return CheckResult(False, "invalid_arguments", "unreadable_mapping")
             keys.append(key)
