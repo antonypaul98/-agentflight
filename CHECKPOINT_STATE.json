@@ -5,7 +5,7 @@
   "checkpoint_status": "IMPLEMENTED_CODE_HEAD_GREEN_AWAITING_MERGE",
   "active_branch": "work/af20-bounded-tool-call-envelope",
   "verified_main_sha": "a021367e8c7115b412740c2f6ef84ed9bfb71300",
-  "observed_feature_sha": "ac7ad81d2b6260a412d33a4dd413c4a2752691ff",
+  "observed_feature_sha": "c1a5d5004f4a30702a38e9b349fb48ae26101571",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
@@ -14,19 +14,19 @@
   "pr_state": {
     "number": 5,
     "state": "open",
-    "head_sha": "ac7ad81d2b6260a412d33a4dd413c4a2752691ff",
+    "head_sha": "c1a5d5004f4a30702a38e9b349fb48ae26101571",
     "url": "https://github.com/antonypaul98/-agentflight/pull/5",
     "mergeable": true
   },
   "ci_state": {
     "pr_run": {
-      "id": 37726940979,
-      "sha": "ac7ad81d2b6260a412d33a4dd413c4a2752691ff",
+      "id": 37731926538,
+      "sha": "c1a5d5004f4a30702a38e9b349fb48ae26101571",
       "event": "pull_request",
       "status": "completed",
       "conclusion": "success",
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37726940979",
-      "tests": "68 passed, Python 3.11"
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37731926538",
+      "tests": "72 passed, Python 3.11.16"
     },
     "merged_main_run": null,
     "historical_failure": {
@@ -38,19 +38,19 @@
       "cause": "ci_diagnostics.py KeyError diagnostic_import; state schema restored in following commit"
     },
     "push_run": {
-      "id": 37726936561,
-      "sha": "ac7ad81d2b6260a412d33a4dd413c4a2752691ff",
+      "id": 37731920897,
+      "sha": "c1a5d5004f4a30702a38e9b349fb48ae26101571",
       "event": "push",
       "status": "completed",
       "conclusion": "success",
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37726936561",
-      "tests": "68 passed, Python 3.11.16"
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37731920897",
+      "tests": "72 passed, Python 3.11.16"
     }
   },
-  "local_test_status": "Reconstructed Python 3.13 smoke: 2 passed. Shell preflight failed at git fetch DNS. Python 3.11.16 CI: 68 passed.",
+  "local_test_status": "Four focused tests passed locally on Python 3.13; CI passed 72 tests on Python 3.11.16.",
   "merge_status": "NOT_MERGED",
   "known_blocker": "Merge mutation intercepted by safety checks; shell git fetch DNS unavailable. Product code and exact-head CI green.",
-  "next_action": "Retry guarded PR #5 squash merge after exact-head CI; verify merged main CI.",
+  "next_action": "Merge PR #5 at validated head, verify main CI, finalize AF-20.",
   "feature_checkpoint_advanced": true,
   "completed_checkpoints": [
     {
