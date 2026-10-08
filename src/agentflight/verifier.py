@@ -8,6 +8,22 @@ from .result import CheckResult
 DEFAULT_MAX_ARGUMENTS = 64
 
 
+def _contract_fields(fields: object) -> frozenset[str] | None:
+    """Read declared argument names without invoking set-subclass or str hooks."""
+    if isinstance(fields, frozenset):
+        iterator = frozenset.__iter__(fields)
+    elif isinstance(fields, set):
+        iterator = set.__iter__(fields)
+    else:
+        return None
+    names = []
+    for field in iterator:
+        if not isinstance(field, str):
+            return None
+        names.append(str.__str__(field))
+    return frozenset(names)
+
+
 def verify_name(contract: CallContract, name: str) -> CheckResult:
     if isinstance(name, str) and isinstance(contract.name, str) and str.__str__(name) == str.__str__(contract.name):
         return CheckResult(True, "ok")
@@ -57,11 +73,18 @@ def verify_call(contract: CallContract, name: str, arguments: Mapping[str, objec
     provided = frozenset(str.__str__(key) for key in keys)
     if len(provided) != argument_count:
         return CheckResult(False, "invalid_arguments", "unreadable_mapping")
-    missing = sorted(contract.required - provided)
+    if not isinstance(contract.required, (set, frozenset)) or not isinstance(contract.optional, (set, frozenset)):
+        return CheckResult(False, "invalid_contract", "expected_argument_sets")
+    required = _contract_fields(contract.required)
+    optional = _contract_fields(contract.optional)
+    if required is None or optional is None:
+        return CheckResult(False, "invalid_contract", "non_string_argument_name")
+
+    missing = sorted(required - provided)
     if missing:
         return CheckResult(False, "missing_required", ",".join(missing))
 
-    allowed = contract.required | contract.optional
+    allowed = required | optional
     unexpected = sorted(provided - allowed)
     if unexpected:
         return CheckResult(False, "unexpected_argument", ",".join(unexpected))
