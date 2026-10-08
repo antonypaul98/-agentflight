@@ -7,6 +7,7 @@ from .result import CheckResult
 
 DEFAULT_MAX_ARGUMENTS = 64
 MAX_DECLARED_ARGUMENTS = 1024  # Hard ceiling for untrusted contract schemas.
+MAX_NAME_MISMATCH_DETAIL = 256  # Bound evidence from untrusted tool names.
 
 
 def _contract_fields(fields: object) -> tuple[frozenset[str] | None, str]:
@@ -35,7 +36,13 @@ def _contract_fields(fields: object) -> tuple[frozenset[str] | None, str]:
 def verify_name(contract: CallContract, name: str) -> CheckResult:
     if isinstance(name, str) and isinstance(contract.name, str) and str.__str__(name) == str.__str__(contract.name):
         return CheckResult(True, "ok")
-    return CheckResult(False, "name_mismatch", str.__str__(name) if isinstance(name, str) else "non_string_name")
+    if not isinstance(name, str):
+        return CheckResult(False, "name_mismatch", "non_string_name")
+    normalized = str.__str__(name)
+    if str.__len__(normalized) > MAX_NAME_MISMATCH_DETAIL:
+        marker = "<truncated>"
+        normalized = str.__getitem__(normalized, slice(0, MAX_NAME_MISMATCH_DETAIL - len(marker))) + marker
+    return CheckResult(False, "name_mismatch", normalized)
 
 
 def verify_call(contract: CallContract, name: str, arguments: Mapping[str, object], *, max_arguments: int = DEFAULT_MAX_ARGUMENTS) -> CheckResult:
