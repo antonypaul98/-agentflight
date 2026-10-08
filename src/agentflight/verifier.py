@@ -27,14 +27,23 @@ def verify_call(contract: CallContract, name: str, arguments: Mapping[str, objec
     if not isinstance(arguments, Mapping):
         return CheckResult(False, "invalid_arguments", "expected_mapping")
 
-    argument_count = len(arguments)
+    try:
+        argument_count = len(arguments)
+    except (TypeError, ValueError, RuntimeError):
+        return CheckResult(False, "invalid_arguments", "unreadable_mapping")
+
     if argument_count > max_arguments:
         return CheckResult(False, "too_many_arguments", f"{argument_count}>{max_arguments}")
 
-    if any(not isinstance(key, str) for key in arguments):
+    try:
+        keys = tuple(arguments)
+    except (TypeError, ValueError, RuntimeError):
+        return CheckResult(False, "invalid_arguments", "unreadable_mapping")
+
+    if any(not isinstance(key, str) for key in keys):
         return CheckResult(False, "invalid_arguments", "non_string_key")
 
-    provided = frozenset(arguments)
+    provided = frozenset(keys)
     missing = sorted(contract.required - provided)
     if missing:
         return CheckResult(False, "missing_required", ",".join(missing))

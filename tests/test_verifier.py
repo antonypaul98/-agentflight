@@ -140,3 +140,19 @@ def test_verify_call_preserves_name_and_size_precedence_for_non_string_keys() ->
     over_limit = verify_call(contract, "lookup", {1: "x", 2: "y"}, max_arguments=1)
     assert over_limit.code == "too_many_arguments"
     assert over_limit.detail == "2>1"
+
+
+def test_verify_call_rejects_mapping_that_raises_on_length_or_iteration() -> None:
+    from collections.abc import Mapping
+    from unittest.mock import MagicMock
+
+    contract = CallContract(name="lookup")
+    for method, error in (("__len__", RuntimeError), ("__iter__", ValueError)):
+        malformed = MagicMock(spec=Mapping)
+        malformed.__len__.return_value = 1
+        getattr(malformed, method).side_effect = error("bad mapping")
+        result = verify_call(contract, "lookup", malformed)
+        assert (result.passed, result.code, result.detail) == (
+            False, "invalid_arguments", "unreadable_mapping"
+        )
+        assert verify_call(contract, "other", malformed).code == "name_mismatch"
