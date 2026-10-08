@@ -8,6 +8,7 @@ from .result import CheckResult
 DEFAULT_MAX_ARGUMENTS = 64
 MAX_DECLARED_ARGUMENTS = 1024  # Hard ceiling for untrusted contract schemas.
 MAX_NAME_MISMATCH_DETAIL = 256  # Bound evidence from untrusted tool names.
+MAX_ARGUMENT_MISMATCH_DETAIL = 256  # Bound missing/unexpected field evidence.
 
 
 def _contract_fields(fields: object) -> tuple[frozenset[str] | None, str]:
@@ -31,6 +32,26 @@ def _contract_fields(fields: object) -> tuple[frozenset[str] | None, str]:
     if len(normalized) != len(names):
         return None, "duplicate_argument_name"
     return normalized, ""
+
+
+
+def _argument_mismatch_detail(names: set[str] | frozenset[str]) -> str:
+    """Join sorted names without building unbounded diagnostic strings."""
+    parts = []
+    size = 0
+    marker = "<truncated>"
+    for name in sorted(names):
+        separator = "," if parts else ""
+        chunk_size = len(separator) + len(name)
+        if size + chunk_size > MAX_ARGUMENT_MISMATCH_DETAIL:
+            prefix = "".join(parts)
+            keep = MAX_ARGUMENT_MISMATCH_DETAIL - len(marker)
+            if len(prefix) < keep:
+                prefix += (separator + name)[:keep - len(prefix)]
+            return prefix[:keep] + marker
+        parts.append(separator + name)
+        size += chunk_size
+    return "".join(parts)
 
 
 def verify_name(contract: CallContract, name: str) -> CheckResult:
@@ -101,13 +122,13 @@ def verify_call(contract: CallContract, name: str, arguments: Mapping[str, objec
     if not required.isdisjoint(optional):
         return CheckResult(False, "invalid_contract", "duplicate_argument_name")
 
-    missing = sorted(required - provided)
+    missing = required - provided
     if missing:
-        return CheckResult(False, "missing_required", ",".join(missing))
+        return CheckResult(False, "missing_required", _argument_mismatch_detail(missing))
 
     allowed = required | optional
-    unexpected = sorted(provided - allowed)
+    unexpected = provided - allowed
     if unexpected:
-        return CheckResult(False, "unexpected_argument", ",".join(unexpected))
+        return CheckResult(False, "unexpected_argument", _argument_mismatch_detail(unexpected))
 
     return CheckResult(True, "ok")
