@@ -9,9 +9,9 @@ DEFAULT_MAX_ARGUMENTS = 64
 
 
 def verify_name(contract: CallContract, name: str) -> CheckResult:
-    if name == contract.name:
+    if isinstance(name, str) and isinstance(contract.name, str) and str.__str__(name) == str.__str__(contract.name):
         return CheckResult(True, "ok")
-    return CheckResult(False, "name_mismatch", name)
+    return CheckResult(False, "name_mismatch", str.__str__(name) if isinstance(name, str) else "non_string_name")
 
 
 def verify_call(contract: CallContract, name: str, arguments: Mapping[str, object], *, max_arguments: int = DEFAULT_MAX_ARGUMENTS) -> CheckResult:
