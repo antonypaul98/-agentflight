@@ -6,13 +6,18 @@ from .contract import CallContract
 from .result import CheckResult
 
 DEFAULT_MAX_ARGUMENTS = 64
+MAX_DECLARED_ARGUMENTS = 1024  # Hard ceiling for untrusted contract schemas.
 
 
 def _contract_fields(fields: object) -> tuple[frozenset[str] | None, str]:
     """Read declared argument names without invoking set-subclass or str hooks."""
     if isinstance(fields, frozenset):
+        if frozenset.__len__(fields) > MAX_DECLARED_ARGUMENTS:
+            return None, "too_many_declared_arguments"
         iterator = frozenset.__iter__(fields)
     elif isinstance(fields, set):
+        if set.__len__(fields) > MAX_DECLARED_ARGUMENTS:
+            return None, "too_many_declared_arguments"
         iterator = set.__iter__(fields)
     else:
         return None, "expected_argument_sets"
