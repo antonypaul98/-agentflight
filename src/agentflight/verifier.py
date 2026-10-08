@@ -121,6 +121,9 @@ def verify_call(contract: CallContract, name: str, arguments: Mapping[str, objec
     # Required and optional schemas must not declare the same normalized name.
     if not required.isdisjoint(optional):
         return CheckResult(False, "invalid_contract", "duplicate_argument_name")
+    # The ceiling applies to the whole contract, not each declaration set alone.
+    if len(required) + len(optional) > MAX_DECLARED_ARGUMENTS:
+        return CheckResult(False, "invalid_contract", "too_many_declared_arguments")
 
     missing = required - provided
     if missing:
