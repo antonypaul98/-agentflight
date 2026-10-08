@@ -50,7 +50,10 @@ def verify_call(contract: CallContract, name: str, arguments: Mapping[str, objec
     if any(not isinstance(key, str) for key in keys):
         return CheckResult(False, "invalid_arguments", "non_string_key")
 
-    provided = frozenset(keys)
+    # Normalize str subclasses without invoking their custom hooks.
+    provided = frozenset(str.__str__(key) for key in keys)
+    if len(provided) != argument_count:
+        return CheckResult(False, "invalid_arguments", "unreadable_mapping")
     missing = sorted(contract.required - provided)
     if missing:
         return CheckResult(False, "missing_required", ",".join(missing))
