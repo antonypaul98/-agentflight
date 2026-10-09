@@ -138,3 +138,53 @@ def test_timeout_cleanup_is_not_limited_to_live_parent(monkeypatch):
     result = run_synthetic_case("orphan-again", "orphan_pipe", timeout_seconds=0.25)
     assert result["code"] == "timeout"
     assert len(calls) == 1 and calls[0][1] is not None
+
+
+def test_orphan_pipe_descendant_really_releases_pipes(monkeypatch):
+    """After the parent exits, group cleanup must close a living child's pipes."""
+    import os
+    import selectors
+    import agentflight.synthetic_subprocess as adapter
+
+    real_cleanup = adapter._kill_process_group
+    observed = []
+
+    def checked_cleanup(process):
+        assert process.poll() is not None  # parent has already exited
+        with selectors.DefaultSelector() as selector:
+            for stream in (process.stdout, process.stderr):
+                os.set_blocking(stream.fileno(), False)
+                selector.register(stream, selectors.EVENT_READ)
+            # The orphan is still holding both pipes open before cleanup.
+            assert selector.select(0) == []
+            real_cleanup(process)
+            ready = selector.select(0.8)
+            assert len(ready) == 2
+            for key, _ in ready:
+                assert os.read(key.fileobj.fileno(), 1) == b""
+        observed.append(True)
+
+    monkeypatch.setattr(adapter, "_kill_process_group", checked_cleanup)
+    result = run_synthetic_case("orphan-pipe-eof", "orphan_pipe", timeout_seconds=0.25)
+    assert result["code"] == "timeout"
+    assert observed == [True]
+
+
+def test_completed_parent_still_cleans_live_descendant(monkeypatch):
+    """A detached-from-pipes child must not survive a successful parent exit."""
+    import os
+    import agentflight.synthetic_subprocess as adapter
+
+    real_cleanup = adapter._kill_process_group
+    observed = []
+
+    def checked_cleanup(process):
+        assert process.poll() is not None
+        os.killpg(process.pid, 0)  # live descendant holds group open
+        real_cleanup(process)
+        observed.append(True)
+
+    monkeypatch.setattr(adapter, "_kill_process_group", checked_cleanup)
+    result = run_synthetic_case("orphan-closed", "orphan_closed_pipes", timeout_seconds=0.5)
+    assert result["status"] == "passed" and result["code"] == "ok"
+    assert observed == [True]

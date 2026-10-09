@@ -20,7 +20,7 @@ MAX_TIMEOUT_SECONDS = 2.0
 DEFAULT_TIMEOUT_SECONDS = 1.5
 MAX_OUTPUT_BYTES = 1024
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
-_MODES = frozenset({"pass", "fail", "timeout", "stdout_overflow", "stderr_overflow", "combined_boundary", "combined_overflow", "secret", "burst_overflow", "timeout_secret", "orphan_pipe"})
+_MODES = frozenset({"pass", "fail", "timeout", "stdout_overflow", "stderr_overflow", "combined_boundary", "combined_overflow", "secret", "burst_overflow", "timeout_secret", "orphan_pipe", "orphan_closed_pipes"})
 
 # Static worker, not a template. Untrusted values are never interpolated into code.
 _WORKER = """import os, subprocess, sys, time
@@ -52,6 +52,10 @@ elif mode == 'timeout_secret':
 elif mode == 'orphan_pipe':
     # A fixed child inherits both pipes after its short-lived parent exits.
     subprocess.Popen([sys.executable, '-I', '-S', '-c', 'import time; time.sleep(1.0)'])
+elif mode == 'orphan_closed_pipes':
+    # Descendant stays in the process group but does not hold output pipes.
+    subprocess.Popen([sys.executable, '-I', '-S', '-c', 'import time; time.sleep(1.0)'],
+                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 """
 
 
@@ -134,10 +138,8 @@ def run_synthetic_case(case_id: str, mode: str, *, timeout_seconds: float = DEFA
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                 start_new_session=True,
             )
-            cleanup_group = True  # Also clean descendants if their parent already exited.
             try:
                 outcome, (stdout_bytes, stderr_bytes) = _capture_bounded(process, timeout_seconds)
-                cleanup_group = outcome != "completed"
                 if outcome == "timeout":
                     status, code = "timeout", "timeout"
                 elif outcome == "output_limit":
@@ -147,8 +149,9 @@ def run_synthetic_case(case_id: str, mode: str, *, timeout_seconds: float = DEFA
                 else:
                     status, code = "passed", "ok"
             finally:
-                if cleanup_group or process.poll() is None:
-                    _kill_process_group(process)
+                # A completed parent can leave live descendants with closed pipes.
+                # Always terminate its isolated group, including after success.
+                _kill_process_group(process)
                 process.stdout.close()
                 process.stderr.close()
     except (OSError, subprocess.SubprocessError):
