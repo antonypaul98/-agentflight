@@ -1,6 +1,6 @@
 # AF-21 — Structured replay-suite reporting
 
-Status: IMPLEMENTED AND LOCALLY VERIFIED; exact-head CI pending. AF-20 remains merged and verified; no old primitive
+Status: MERGED AND VERIFIED. AF-20 remains merged and verified; no old primitive
 is reimplemented by this checkpoint.
 
 One capability: run a bounded suite of recorded synthetic tool exchanges and
@@ -62,5 +62,33 @@ Python 3.11.17: 34 new suite tests passed; all 160 product tests passed with
 zero failures. Infrastructure: 18 tests executed, 17 passed and one pre-existing
 skip. Environment diagnostics, package dependency checks, and diff whitespace
 checks passed. These are local feature-source results; exact-head and merged-main
-CI remain pending and will be recorded with their exact commits. No new
+CI confirmation follows below. No new
 dependencies or CI check changes.
+
+## Verified acceptance — 2026-10-09 UTC
+
+- Previous checkpoint: AF-20 was merged and verified; current baseline main
+  `8dc07a0b927a0c412a5595c6af08d43c523be94a` had successful CI `37878490104`
+  with 126 product tests. Historical AF-20 work was not reimplemented.
+- AF-21 exact source/PR head: `81d435cf6dd17253d5c9924537458b612f030c3a`.
+  PR #6: https://github.com/antonypaul98/-agentflight/pull/6
+- Exact push CI: https://github.com/antonypaul98/-agentflight/actions/runs/37880641379
+- Exact PR-head CI: https://github.com/antonypaul98/-agentflight/actions/runs/37880666599
+- Merge: `8066bbcc8127c12c528f4d355d1029f894355c95`; exact merged-main CI:
+  https://github.com/antonypaul98/-agentflight/actions/runs/37880827835
+- All three runs succeeded on Python 3.11.17: 160 product tests passed, zero
+  failures; infrastructure 18 executed, 17 passed and one unchanged baseline
+  skip; environment diagnostics passed. Product suite grew by 34 tests.
+- Local source commit `fa41cd86f56a292d9bd348c9c23432e1f7a65a3f`, remote
+  source and merged main share tree `14ee27b417525d209241c703eacf0bb32b20c21a`.
+  Local scope/implementation branches and historical remote branches remain.
+- No credentials, private user data, external project changes, destructive live
+  tests, new dependencies, or CI check changes were introduced.
+- Actual remaining Astra/Work allowance was inaccessible. This run was limited
+  to one capability, with validation and preservation completed.
+- No Antony intervention is required for AF-21. Shell Git credentials and gh
+  are unavailable; verified connector publication is the working route.
+
+Next smallest safe checkpoint: AF-22, one disposable synthetic subprocess
+adapter with bounded execution, timeout classification and sanitized diagnostics.
+Do not attach live project credentials or real project adapters yet.

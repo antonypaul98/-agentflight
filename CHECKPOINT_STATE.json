@@ -2,29 +2,62 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-21 structured replay-suite reporting",
-  "checkpoint_status": "IMPLEMENTED_LOCAL_VERIFIED",
-  "active_branch": "work/af21-replay-suite-reporting",
-  "verified_main_sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5",
-  "observed_feature_sha": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
+  "checkpoint_status": "MERGED_AND_VERIFIED",
+  "active_branch": "main",
+  "verified_main_sha": "8066bbcc8127c12c528f4d355d1029f894355c95",
+  "observed_feature_sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "New AF-21 scope branch based on live green main; AF-20 historical branch preserved",
-  "pr_number": null,
-  "pr_state": null,
+  "branch_remote_status": "AF-21 PR #6 merged; main active; work/af21-replay-suite-reporting and local preservation branches retained.",
+  "pr_number": 6,
+  "pr_state": {
+    "number": 6,
+    "state": "merged",
+    "head_sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
+    "url": "https://github.com/antonypaul98/-agentflight/pull/6",
+    "merge_commit_sha": "8066bbcc8127c12c528f4d355d1029f894355c95"
+  },
   "ci_state": {
     "push_run": {
-      "status": "not_run"
+      "id": 37880641379,
+      "sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "attempt": 1,
+      "job_id": 113659304972,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37880641379",
+      "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
     },
     "pr_run": {
-      "status": "not_run"
+      "id": 37880666599,
+      "sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "attempt": 1,
+      "job_id": 113659383793,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37880666599",
+      "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
+    },
+    "merged_main_run": {
+      "id": 37880827835,
+      "sha": "8066bbcc8127c12c528f4d355d1029f894355c95",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "attempt": 1,
+      "job_id": 113659884474,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37880827835",
+      "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
     }
   },
   "local_test_status": "Python 3.11.17: 34 new replay-suite tests passed; full product suite 160 passed, 0 failed; infrastructure 18 executed, 17 passed and 1 existing skip; environment diagnostics and git diff --check passed.",
-  "merge_status": "NOT_MERGED",
-  "known_blocker": "Shell Git push remains unavailable and gh is absent; actual connector publication verified at e405eb308cd8e9eab5604763d41c8e2fe5d87ab9. No product blocker; exact-head CI, merge and merged-main verification are pending.",
-  "next_action": "Publish the reviewed implementation tree, create or reuse the AF-21 PR, and verify exact-head CI before merge and exact merged-main verification.",
-  "feature_checkpoint_advanced": false,
+  "merge_status": "MERGED AND VERIFIED",
+  "known_blocker": null,
+  "next_action": "Refresh live main/CI and run pinned preflight using the verified connector fallback if shell authentication is still unavailable. Define AF-22: one disposable synthetic subprocess adapter with bounded execution, timeout classification and sanitized diagnostics; no live project integration.",
+  "feature_checkpoint_advanced": true,
   "completed_checkpoints": [
     {
       "checkpoint": "AF-19 adversarial prompt injection",
@@ -113,18 +146,68 @@
         "conclusion": "success",
         "tests": "126 product tests passed; 18 infrastructure tests executed including 1 skip"
       }
+    },
+    {
+      "checkpoint": "AF-21 structured replay-suite reporting",
+      "status": "MERGED_AND_VERIFIED",
+      "source_sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
+      "source_tree_sha": "14ee27b417525d209241c703eacf0bb32b20c21a",
+      "verified_main_sha": "8066bbcc8127c12c528f4d355d1029f894355c95",
+      "pr_state": {
+        "number": 6,
+        "state": "merged",
+        "head_sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
+        "url": "https://github.com/antonypaul98/-agentflight/pull/6",
+        "merge_commit_sha": "8066bbcc8127c12c528f4d355d1029f894355c95"
+      },
+      "ci_state": {
+        "push_run": {
+          "id": 37880641379,
+          "sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "attempt": 1,
+          "job_id": 113659304972,
+          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37880641379",
+          "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
+        },
+        "pr_run": {
+          "id": 37880666599,
+          "sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
+          "event": "pull_request",
+          "status": "completed",
+          "conclusion": "success",
+          "attempt": 1,
+          "job_id": 113659383793,
+          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37880666599",
+          "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
+        },
+        "merged_main_run": {
+          "id": 37880827835,
+          "sha": "8066bbcc8127c12c528f4d355d1029f894355c95",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "attempt": 1,
+          "job_id": 113659884474,
+          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37880827835",
+          "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
+        }
+      },
+      "limitations": "Recorded-call contract verification only; no return-value assertions, arbitrary project execution, sandboxing, real-project adapter or hardware acceptance."
     }
   ],
   "last_session_exit": {
-    "BLOCKED_LAYER": "external",
-    "BLOCKER": "GitHub API: gh unavailable; connector authorization must be checked separately; git push: authentication/authorization unavailable",
-    "SAFE_WORK_COMPLETED": "Clean clone and pinned Python 3.11.17 setup; scope and connector write remotely verified; bounded replay-suite implementation passed 160 product tests plus infrastructure and diagnostics. Feature publication and exact-head CI pending.",
-    "REMOTE_SHA": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
-    "NEXT_ACTION": "Publish the reviewed implementation tree, create or reuse the AF-21 PR, and verify exact-head CI before merge and exact merged-main verification."
+    "BLOCKED_LAYER": "none for AF-21",
+    "BLOCKER": "No product blocker; shell authentication remains separate and verified connector writes work.",
+    "SAFE_WORK_COMPLETED": "AF-21 source, 34 new tests, example and docs committed; PR #6 merged with exact tested tree; push, PR and exact merged-main CI passed all 160 product tests and infrastructure checks.",
+    "REMOTE_SHA": "8066bbcc8127c12c528f4d355d1029f894355c95",
+    "NEXT_ACTION": "Refresh live main/CI and run pinned preflight using the verified connector fallback if shell authentication is still unavailable. Define AF-22: one disposable synthetic subprocess adapter with bounded execution, timeout classification and sanitized diagnostics; no live project integration."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "e405eb308cd8e9eab5604763d41c8e2fe5d87ab9",
+  "observed_branch_sha": "8066bbcc8127c12c528f4d355d1029f894355c95",
   "historical_session_exits": [
     {
       "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
@@ -169,5 +252,27 @@
     "examples/replay-suite.json",
     "src/agentflight/suite.py",
     "tests/test_suite.py"
+  ],
+  "shell_preflight_receipt": {
+    "BLOCKED_LAYER": "external",
+    "BLOCKER": "GitHub API: gh unavailable; connector authorization must be checked separately; git push: authentication/authorization unavailable",
+    "SAFE_WORK_COMPLETED": "Clean clone and pinned Python 3.11.17 setup; scope and connector write remotely verified; bounded replay-suite implementation passed 160 product tests plus infrastructure and diagnostics. Feature publication and exact-head CI pending.",
+    "REMOTE_SHA": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
+    "NEXT_ACTION": "Publish the reviewed implementation tree, create or reuse the AF-21 PR, and verify exact-head CI before merge and exact merged-main verification."
+  },
+  "accepted_at": "2026-10-09T03:49:11.530699+00:00",
+  "source_tree_sha": "14ee27b417525d209241c703eacf0bb32b20c21a",
+  "preserved_local_commits": {
+    "scope": "f02efb5303e509f18247dffd6788c884bfb9c92e",
+    "implementation": "fa41cd86f56a292d9bd348c9c23432e1f7a65a3f",
+    "remote_implementation_tree_equals_local": true
+  },
+  "non_product_environment_issues": [
+    {
+      "issue": "gh absent and shell Git push authentication unavailable",
+      "workaround": "GitHub connector actual writes, exact trees, branch leases and changed-file lists verified",
+      "blocks_checkpoint": false,
+      "antony_intervention_required": false
+    }
   ]
 }
