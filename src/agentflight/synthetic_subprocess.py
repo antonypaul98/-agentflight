@@ -92,7 +92,12 @@ def _capture_bounded(process, timeout_seconds):
             for key, _ in selector.select(remaining):
                 # +1 makes an overflow observable without retaining its content.
                 allowance = MAX_OUTPUT_BYTES + 1 - sum(counts)
-                data = os.read(key.fileobj.fileno(), allowance)
+                try:
+                    data = os.read(key.fileobj.fileno(), allowance)
+                except InterruptedError:
+                    # A signal can interrupt a pipe read; retry only while the
+                    # existing capture deadline still permits it.
+                    continue
                 if not data:
                     selector.unregister(key.fileobj)
                 else:
