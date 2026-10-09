@@ -154,7 +154,8 @@ def run_synthetic_case(case_id: str, mode: str, *, timeout_seconds: float = DEFA
                 _kill_process_group(process)
                 process.stdout.close()
                 process.stderr.close()
-    except (OSError, subprocess.SubprocessError):
+    except (OSError, subprocess.SubprocessError, ValueError):
+        # Selector/pipe setup can raise ValueError for invalid descriptors.
         # Paths, interpreter errors and subprocess output may contain secrets.
         status, code = "error", "launch_error"
         stdout_bytes = stderr_bytes = 0
