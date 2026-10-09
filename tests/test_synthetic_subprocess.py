@@ -12,6 +12,8 @@ from agentflight.synthetic_subprocess import SyntheticCaseError, run_synthetic_c
     ("timeout", "timeout", "timeout"),
     ("stdout_overflow", "failed", "output_limit"),
     ("stderr_overflow", "failed", "output_limit"),
+    ("combined_boundary", "passed", "ok"),
+    ("combined_overflow", "failed", "output_limit"),
     ("secret", "passed", "ok"),
 ])
 def test_fixed_modes(mode, status, code):
@@ -52,3 +54,15 @@ def test_invalid_mode(mode):
 def test_invalid_timeout(timeout):
     with pytest.raises(SyntheticCaseError, match="invalid_timeout"):
         run_synthetic_case("case", "pass", timeout_seconds=timeout)
+
+
+def test_combined_output_budget_exact_boundary():
+    result = run_synthetic_case("both-exact", "combined_boundary")
+    assert result["status"] == "passed"
+    assert (result["stdout_bytes"], result["stderr_bytes"]) == (512, 512)
+
+
+def test_combined_output_budget_rejects_split_overflow():
+    result = run_synthetic_case("both-over", "combined_overflow")
+    assert result["status"] == "failed" and result["code"] == "output_limit"
+    assert (result["stdout_bytes"], result["stderr_bytes"]) == (512, 513)

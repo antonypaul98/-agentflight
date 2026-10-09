@@ -16,7 +16,7 @@ MAX_TIMEOUT_SECONDS = 2.0
 DEFAULT_TIMEOUT_SECONDS = 1.5
 MAX_OUTPUT_BYTES = 1024
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
-_MODES = frozenset({"pass", "fail", "timeout", "stdout_overflow", "stderr_overflow", "secret"})
+_MODES = frozenset({"pass", "fail", "timeout", "stdout_overflow", "stderr_overflow", "combined_boundary", "combined_overflow", "secret"})
 
 # Static worker, not a template. Untrusted values are never interpolated into code.
 _WORKER = """import sys, time
@@ -32,6 +32,12 @@ elif mode == 'stdout_overflow':
     sys.stdout.write('x' * 4096)
 elif mode == 'stderr_overflow':
     sys.stderr.write('y' * 4096)
+elif mode == 'combined_boundary':
+    sys.stdout.write('x' * 512)
+    sys.stderr.write('y' * 512)
+elif mode == 'combined_overflow':
+    sys.stdout.write('x' * 512)
+    sys.stderr.write('y' * 513)
 elif mode == 'secret':
     print('SYNTHETIC_PRIVATE_TOKEN_931')
 """
@@ -69,7 +75,7 @@ def run_synthetic_case(case_id: str, mode: str, *, timeout_seconds: float = DEFA
             )
             stdout_bytes = len(completed.stdout)
             stderr_bytes = len(completed.stderr)
-            if max(stdout_bytes, stderr_bytes) > MAX_OUTPUT_BYTES:
+            if stdout_bytes + stderr_bytes > MAX_OUTPUT_BYTES:
                 status, code = "failed", "output_limit"
             elif completed.returncode:
                 status, code = "failed", "nonzero_exit"
@@ -77,7 +83,7 @@ def run_synthetic_case(case_id: str, mode: str, *, timeout_seconds: float = DEFA
                 status, code = "passed", "ok"
     except subprocess.TimeoutExpired:
         status, code = "timeout", "timeout"
-    except OSError:
+    except (OSError, subprocess.SubprocessError):
         # Paths, interpreter errors, and subprocess stderr may contain secrets.
         status, code = "error", "launch_error"
 
