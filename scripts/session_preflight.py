@@ -63,6 +63,10 @@ def main():
     global REMOTE_SHA
     state = json.loads((ROOT / 'CHECKPOINT_STATE.json').read_text())
     repo, active = state['repository'], state['active_branch']
+    # Completed checkpoints must never resume a stale historical feature branch.
+    if state.get('checkpoint_status') == 'MERGED_AND_VERIFIED' and active != 'main':
+        fail('Git', 'MERGED_AND_VERIFIED checkpoint has stale active_branch',
+             'Reconcile the merged PR and set active_branch to main; preserve the historical branch')
     allowed = {f'https://github.com/{repo}.git', f'https://github.com/{repo}',
                f'git@github.com:{repo}.git', f'ssh://git@github.com/{repo}.git'}
     for direction in ([], ['--push']):
