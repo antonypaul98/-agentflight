@@ -1,15 +1,15 @@
 {
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
-  "current_checkpoint": "AF-21 structured replay-suite reporting",
-  "checkpoint_status": "MERGED_AND_VERIFIED",
+  "current_checkpoint": "AF-22 disposable synthetic subprocess adapter",
+  "checkpoint_status": "IN_PROGRESS",
   "active_branch": "main",
-  "verified_main_sha": "8066bbcc8127c12c528f4d355d1029f894355c95",
+  "verified_main_sha": "d8554e86aff448c37686a2cc32aeed3a9cdac5df",
   "observed_feature_sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-21 PR #6 merged; main active; work/af21-replay-suite-reporting and local preservation branches retained.",
+  "branch_remote_status": "AF-21 merged and verified; AF-22 defensive slice already on main, next bounded capture slice local-only pending publication.",
   "pr_number": 6,
   "pr_state": {
     "number": 6,
@@ -51,12 +51,21 @@
       "job_id": 113659884474,
       "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37880827835",
       "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
+    },
+    "af22_latest_verified_main_run": {
+      "id": 37904598741,
+      "sha": "d8554e86aff448c37686a2cc32aeed3a9cdac5df",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37904598741",
+      "tests": "204 product tests passed; 18 infrastructure tests executed with 1 existing skip; diagnostics passed on Python 3.11.17"
     }
   },
   "local_test_status": "Python 3.11.17: 34 new replay-suite tests passed; full product suite 160 passed, 0 failed; infrastructure 18 executed, 17 passed and 1 existing skip; environment diagnostics and git diff --check passed.",
-  "merge_status": "MERGED AND VERIFIED",
+  "merge_status": "AF-22 IN_PROGRESS; AF-21 MERGED AND VERIFIED",
   "known_blocker": null,
-  "next_action": "Refresh live main/CI and run pinned preflight using the verified connector fallback if shell authentication is still unavailable. Define AF-22: one disposable synthetic subprocess adapter with bounded execution, timeout classification and sanitized diagnostics; no live project integration.",
+  "next_action": "Publish AF-22 bounded capture/process cleanup implementation and 50 focused local regressions from preserved run-10 artifact through an approved write route; verify full Python 3.11 CI at exact published SHA before advancing acceptance.",
   "feature_checkpoint_advanced": true,
   "completed_checkpoints": [
     {
@@ -199,11 +208,11 @@
     }
   ],
   "last_session_exit": {
-    "BLOCKED_LAYER": "none for AF-21",
-    "BLOCKER": "No product blocker; shell authentication remains separate and verified connector writes work.",
-    "SAFE_WORK_COMPLETED": "AF-21 source, 34 new tests, example and docs committed; PR #6 merged with exact tested tree; push, PR and exact merged-main CI passed all 160 product tests and infrastructure checks.",
-    "REMOTE_SHA": "8066bbcc8127c12c528f4d355d1029f894355c95",
-    "NEXT_ACTION": "Refresh live main/CI and run pinned preflight using the verified connector fallback if shell authentication is still unavailable. Define AF-22: one disposable synthetic subprocess adapter with bounded execution, timeout classification and sanitized diagnostics; no live project integration."
+    "BLOCKED_LAYER": "shell environment and connected GitHub write safety",
+    "BLOCKER": "Canonical preflight git fetch failed on shell DNS; GitHub create_blob/update_file code publication rejected by safety checks. Existing main and CI remain healthy.",
+    "SAFE_WORK_COMPLETED": "Reconciled live main d8554e8; verified CI #37904598741 success; developed POSIX bounded capture and process-group cleanup slice; 50 focused tests passed locally on Python 3.13.5; source and tests preserved as a local artifact; no new code published.",
+    "REMOTE_SHA": "d8554e86aff448c37686a2cc32aeed3a9cdac5df",
+    "NEXT_ACTION": "Publish AF-22 bounded capture/process cleanup implementation and 50 focused local regressions from preserved run-10 artifact through an approved write route; verify full Python 3.11 CI at exact published SHA before advancing acceptance."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
