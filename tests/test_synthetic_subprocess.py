@@ -15,6 +15,8 @@ from agentflight.synthetic_subprocess import SyntheticCaseError, run_synthetic_c
     ("combined_boundary", "passed", "ok"),
     ("combined_overflow", "failed", "output_limit"),
     ("secret", "passed", "ok"),
+    ("burst_overflow", "failed", "output_limit"),
+    ("timeout_secret", "timeout", "timeout"),
 ])
 def test_fixed_modes(mode, status, code):
     result = run_synthetic_case("synthetic-case", mode, timeout_seconds=0.5)
@@ -66,3 +68,38 @@ def test_combined_output_budget_rejects_split_overflow():
     result = run_synthetic_case("both-over", "combined_overflow")
     assert result["status"] == "failed" and result["code"] == "output_limit"
     assert (result["stdout_bytes"], result["stderr_bytes"]) == (512, 513)
+
+
+def test_large_burst_is_stopped_at_capture_budget():
+    result = run_synthetic_case("streaming", "burst_overflow", timeout_seconds=0.5)
+    assert result["status"] == "failed" and result["code"] == "output_limit"
+    assert result["stdout_bytes"] == 1025
+    assert result["stderr_bytes"] == 0
+
+
+def test_timeout_discards_secret_partial_capture():
+    result = run_synthetic_case("partial", "timeout_secret", timeout_seconds=0.1)
+    assert result["status"] == "timeout" and result["code"] == "timeout"
+    assert (result["stdout_bytes"], result["stderr_bytes"]) == (0, 0)
+    assert "PRIVATE_TOKEN" not in json.dumps(result)
+
+
+@pytest.mark.parametrize("mode,expected", [
+    ("burst_overflow", "output_limit"),
+    ("timeout", "timeout"),
+])
+def test_early_exit_reaps_worker_process_group(monkeypatch, mode, expected):
+    import agentflight.synthetic_subprocess as adapter
+
+    real_cleanup = adapter._kill_process_group
+    cleaned = []
+
+    def observed_cleanup(process):
+        real_cleanup(process)
+        cleaned.append(process.poll())
+
+    monkeypatch.setattr(adapter, "_kill_process_group", observed_cleanup)
+    result = run_synthetic_case("cleanup", mode, timeout_seconds=0.2)
+    assert result["code"] == expected
+    assert len(cleaned) == 1
+    assert cleaned[0] is not None

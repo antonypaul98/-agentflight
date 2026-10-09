@@ -6,20 +6,24 @@ This is NOT an OS sandbox and never runs fixture-supplied code or commands.
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import re
+import selectors
+import signal
 import subprocess
 import sys
 import tempfile
+import time
 
 MAX_TIMEOUT_SECONDS = 2.0
 DEFAULT_TIMEOUT_SECONDS = 1.5
 MAX_OUTPUT_BYTES = 1024
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
-_MODES = frozenset({"pass", "fail", "timeout", "stdout_overflow", "stderr_overflow", "combined_boundary", "combined_overflow", "secret"})
+_MODES = frozenset({"pass", "fail", "timeout", "stdout_overflow", "stderr_overflow", "combined_boundary", "combined_overflow", "secret", "burst_overflow", "timeout_secret"})
 
 # Static worker, not a template. Untrusted values are never interpolated into code.
-_WORKER = """import sys, time
+_WORKER = """import os, sys, time
 mode = sys.argv[1]
 if mode == 'pass':
     print('synthetic-ok')
@@ -40,6 +44,11 @@ elif mode == 'combined_overflow':
     sys.stderr.write('y' * 513)
 elif mode == 'secret':
     print('SYNTHETIC_PRIVATE_TOKEN_931')
+elif mode == 'burst_overflow':
+    os.write(1, b'x' * 65536)
+elif mode == 'timeout_secret':
+    print('SYNTHETIC_PRIVATE_TOKEN_931', flush=True)
+    time.sleep(1.0)
 """
 
 
@@ -47,12 +56,57 @@ class SyntheticCaseError(ValueError):
     """Invalid synthetic-case input, not a subprocess test failure."""
 
 
-def run_synthetic_case(case_id: str, mode: str, *, timeout_seconds: float = DEFAULT_TIMEOUT_SECONDS) -> dict:
-    """Run a single allowlisted Python worker in a disposable directory.
+def _kill_process_group(process):
+    """Reap the fixed worker and any same-session descendants on POSIX."""
+    if os.name == "posix":
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        except OSError:
+            process.kill()
+    elif process.poll() is None:
+        process.kill()
+    process.wait()
 
-    Returns a deterministic redacted verdict, never worker output or exception
-    text. The fixed worker's output is intrinsically bounded to 4096 bytes.
-    The timeout is enforced by subprocess.run, which kills/reaps the child.
+
+def _capture_bounded(process, timeout_seconds):
+    """Read at most MAX_OUTPUT_BYTES+1 bytes TOTAL; never buffer worker text."""
+    counts = [0, 0]
+    deadline = time.monotonic() + timeout_seconds
+    with selectors.DefaultSelector() as selector:
+        for index, stream in enumerate((process.stdout, process.stderr)):
+            os.set_blocking(stream.fileno(), False)
+            selector.register(stream, selectors.EVENT_READ, index)
+        while selector.get_map():
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                return "timeout", (0, 0)
+            for key, _ in selector.select(remaining):
+                # +1 makes an overflow observable without retaining its content.
+                allowance = MAX_OUTPUT_BYTES + 1 - sum(counts)
+                data = os.read(key.fileobj.fileno(), allowance)
+                if not data:
+                    selector.unregister(key.fileobj)
+                else:
+                    counts[key.data] += len(data)
+                    if sum(counts) > MAX_OUTPUT_BYTES:
+                        return "output_limit", tuple(counts)
+        remaining = deadline - time.monotonic()
+        if remaining <= 0 and process.poll() is None:
+            return "timeout", (0, 0)
+        try:
+            process.wait(timeout=max(0.001, remaining))
+        except subprocess.TimeoutExpired:
+            return "timeout", (0, 0)
+    return "completed", tuple(counts)
+
+
+def run_synthetic_case(case_id: str, mode: str, *, timeout_seconds: float = DEFAULT_TIMEOUT_SECONDS) -> dict:
+    """Run a fixed Python worker with bounded pipe capture and redacted verdicts.
+
+    POSIX only: a new session allows timeout/output-limit cleanup of the worker
+    process group. This is not a security sandbox or an arbitrary-code runner.
     """
     if type(case_id) is not str or not _IDENTIFIER.fullmatch(case_id):
         raise SyntheticCaseError("invalid_case_id")
@@ -64,29 +118,41 @@ def run_synthetic_case(case_id: str, mode: str, *, timeout_seconds: float = DEFA
 
     status, code = "error", "launch_error"
     stdout_bytes = stderr_bytes = 0
+    process = None
     try:
+        if os.name != "posix":
+            raise OSError("POSIX subprocess isolation required")
         with tempfile.TemporaryDirectory(prefix="agentflight-synthetic-") as directory:
-            # A fixed executable and fixed script; no shell, user cwd, inherited
-            # environment, secrets, fixture commands, or project paths.
-            completed = subprocess.run(
+            # Fixed executable and script; no shell, inherited environment,
+            # fixture commands, user cwd or project paths.
+            process = subprocess.Popen(
                 [sys.executable, "-I", "-S", "-c", _WORKER, mode],
-                cwd=Path(directory), env={}, input=b"", capture_output=True,
-                timeout=timeout_seconds, check=False,
+                cwd=Path(directory), env={}, stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                start_new_session=True,
             )
-            stdout_bytes = len(completed.stdout)
-            stderr_bytes = len(completed.stderr)
-            if stdout_bytes + stderr_bytes > MAX_OUTPUT_BYTES:
-                status, code = "failed", "output_limit"
-            elif completed.returncode:
-                status, code = "failed", "nonzero_exit"
-            else:
-                status, code = "passed", "ok"
-    except subprocess.TimeoutExpired:
-        status, code = "timeout", "timeout"
+            try:
+                outcome, (stdout_bytes, stderr_bytes) = _capture_bounded(process, timeout_seconds)
+                if outcome == "timeout":
+                    status, code = "timeout", "timeout"
+                elif outcome == "output_limit":
+                    status, code = "failed", "output_limit"
+                elif process.returncode:
+                    status, code = "failed", "nonzero_exit"
+                else:
+                    status, code = "passed", "ok"
+            finally:
+                if process.poll() is None:
+                    _kill_process_group(process)
+                process.stdout.close()
+                process.stderr.close()
     except (OSError, subprocess.SubprocessError):
-        # Paths, interpreter errors, and subprocess stderr may contain secrets.
+        # Paths, interpreter errors and subprocess output may contain secrets.
         status, code = "error", "launch_error"
+        stdout_bytes = stderr_bytes = 0
 
+    if status == "timeout":
+        stdout_bytes = stderr_bytes = 0
     scoped = {"schema_version": 1, "case_id": case_id, "mode": mode,
               "status": status, "code": code}
     evidence_id = hashlib.sha256(json.dumps(scoped, sort_keys=True,
