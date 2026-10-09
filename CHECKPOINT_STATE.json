@@ -2,7 +2,7 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-21 structured replay-suite reporting",
-  "checkpoint_status": "ACCEPTANCE_DEFINED",
+  "checkpoint_status": "IMPLEMENTED_LOCAL_VERIFIED",
   "active_branch": "work/af21-replay-suite-reporting",
   "verified_main_sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5",
   "observed_feature_sha": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
@@ -20,10 +20,10 @@
       "status": "not_run"
     }
   },
-  "local_test_status": "AF-21 tests not run; baseline exact-main CI has 126 product passes, 18 infrastructure tests including one skip",
+  "local_test_status": "Python 3.11.17: 34 new replay-suite tests passed; full product suite 160 passed, 0 failed; infrastructure 18 executed, 17 passed and 1 existing skip; environment diagnostics and git diff --check passed.",
   "merge_status": "NOT_MERGED",
-  "known_blocker": "Shell Git push credentials unavailable and gh absent; connector write permission confirmed, actual write being verified before implementation",
-  "next_action": "Implement bounded data-only replay-suite reporting and meaningful synthetic regressions; run Python 3.11 checks and synchronize early",
+  "known_blocker": "Shell Git push remains unavailable and gh is absent; actual connector publication verified at e405eb308cd8e9eab5604763d41c8e2fe5d87ab9. No product blocker; exact-head CI, merge and merged-main verification are pending.",
+  "next_action": "Publish the reviewed implementation tree, create or reuse the AF-21 PR, and verify exact-head CI before merge and exact merged-main verification.",
   "feature_checkpoint_advanced": false,
   "completed_checkpoints": [
     {
@@ -118,13 +118,13 @@
   "last_session_exit": {
     "BLOCKED_LAYER": "external",
     "BLOCKER": "GitHub API: gh unavailable; connector authorization must be checked separately; git push: authentication/authorization unavailable",
-    "SAFE_WORK_COMPLETED": "No implementation changed by preflight; existing files preserved. Remote backup not inferred.",
+    "SAFE_WORK_COMPLETED": "Clean clone and pinned Python 3.11.17 setup; scope and connector write remotely verified; bounded replay-suite implementation passed 160 product tests plus infrastructure and diagnostics. Feature publication and exact-head CI pending.",
     "REMOTE_SHA": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
-    "NEXT_ACTION": "Use the connected-GitHub fallback in AGENTS.md to preserve current work; restore shell credentials before substantial implementation"
+    "NEXT_ACTION": "Publish the reviewed implementation tree, create or reuse the AF-21 PR, and verify exact-head CI before merge and exact merged-main verification."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
+  "observed_branch_sha": "e405eb308cd8e9eab5604763d41c8e2fe5d87ab9",
   "historical_session_exits": [
     {
       "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
@@ -134,5 +134,40 @@
       "NEXT_ACTION": "Publish preserved scripts/tests/test_preflight_legacy_status.py regression tests through an approved write route; verify exact-head CI, reconcile state, then define AF-21 acceptance criteria."
     }
   ],
-  "starting_main_sha": "8dc07a0b927a0c412a5595c6af08d43c523be94a"
+  "starting_main_sha": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
+  "local_validation": {
+    "python": "3.11.17",
+    "commands": [
+      {
+        "command": "python -m pytest tests/test_suite.py --tb=short",
+        "result": "34 passed, 0 failed"
+      },
+      {
+        "command": "python -m pytest",
+        "result": "160 passed, 0 failed"
+      },
+      {
+        "command": "python -m unittest discover -s scripts/tests -p 'test_*.py'",
+        "result": "18 executed, 17 passed, 1 existing skip"
+      },
+      {
+        "command": "python scripts/ci_diagnostics.py",
+        "result": "exit 0: pip check and package import passed"
+      },
+      {
+        "command": "git diff --check",
+        "result": "exit 0"
+      }
+    ],
+    "scope": "Verified final feature source before its containing commit; metadata-only receipt updates follow. Exact remote CI is recorded separately."
+  },
+  "usage_allowance": "Actual remaining Astra/Work allowance was not exposed by available tools; no numeric balance inferred. One AF-21 capability only, with validation and handoff reserved.",
+  "changed_files": [
+    "CHECKPOINT_STATE.json",
+    "README.md",
+    "docs/AF21_CHECKPOINT.md",
+    "examples/replay-suite.json",
+    "src/agentflight/suite.py",
+    "tests/test_suite.py"
+  ]
 }

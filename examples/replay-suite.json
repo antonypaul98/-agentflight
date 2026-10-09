@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "suite_id": "synthetic-foundation",
+  "cases": [
+    {
+      "case_id": "valid-call",
+      "contract": {"name": "lookup", "required": ["query"], "optional": ["limit"]},
+      "exchange": {"name": "lookup", "arguments": {"query": "synthetic", "limit": 2}, "result": {"value": 1}},
+      "expected": {"passed": true, "code": "ok"}
+    },
+    {
+      "case_id": "missing-required-rejected",
+      "contract": {"name": "lookup", "required": ["query"]},
+      "exchange": {"name": "lookup", "arguments": {}, "result": "not returned"},
+      "expected": {"passed": false, "code": "missing_required"}
+    }
+  ]
+}
