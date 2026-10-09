@@ -151,9 +151,13 @@ def run_synthetic_case(case_id: str, mode: str, *, timeout_seconds: float = DEFA
             finally:
                 # A completed parent can leave live descendants with closed pipes.
                 # Always terminate its isolated group, including after success.
-                _kill_process_group(process)
-                process.stdout.close()
-                process.stderr.close()
+                try:
+                    _kill_process_group(process)
+                finally:
+                    try:
+                        process.stdout.close()
+                    finally:
+                        process.stderr.close()
     except (OSError, subprocess.SubprocessError, ValueError):
         # Selector/pipe setup can raise ValueError for invalid descriptors.
         # Paths, interpreter errors and subprocess output may contain secrets.
