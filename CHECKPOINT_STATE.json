@@ -9,7 +9,7 @@
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "Original AF-20 branch 36 commits ahead, 0 behind main after bounded combined-schema-size hardening; no replacement branch.",
+  "branch_remote_status": "AF-20 PR #5 merged; current active branch main; historical work/af20-bounded-tool-call-envelope branch preserved.",
   "pr_number": 5,
   "pr_state": {
     "number": 5,
@@ -45,19 +45,19 @@
       "cause": "ci_diagnostics.py KeyError diagnostic_import; state schema restored in following commit"
     },
     "push_run": {
-      "id": null,
-      "sha": "84e5be80e394d6a0e84cd7a4cd8b1a95125e4709",
+      "id": 37874203999,
+      "sha": "a4673b136e5eddc7792036f77681c3556742d99b",
       "event": "push",
-      "status": "pending",
-      "conclusion": null,
-      "url": null,
-      "tests": "not yet verified"
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37874203999",
+      "tests": "126 product tests passed; infrastructure 18 executed, 1 skipped (prior run evidence)"
     }
   },
   "local_test_status": "Four new combined-declaration regressions and five existing schema-size tests passed locally on Python 3.13.5 in reconstructed environment; full Python 3.11 suite pending CI.",
   "merge_status": "MERGED AND VERIFIED",
-  "known_blocker": "Shell Git DNS unavailable; connected GitHub reads and writes remain separate.",
-  "next_action": "AF-20 merged and CI verified. Define AF-21 acceptance before starting its implementation.",
+  "known_blocker": "Shell Git cannot resolve github.com, so canonical session_preflight.py cannot complete; connected GitHub read works, but regression file publication was rejected by write safety checks. Do not label product blocked.",
+  "next_action": "Publish preserved scripts/tests/test_preflight_legacy_status.py regression tests through an approved write route; verify exact-head CI, reconcile state, then define AF-21 acceptance criteria.",
   "feature_checkpoint_advanced": true,
   "completed_checkpoints": [
     {
@@ -92,13 +92,13 @@
     }
   ],
   "last_session_exit": {
-    "BLOCKED_LAYER": "environment (shell Git DNS)",
-    "BLOCKER": "Canonical checkout preflight cannot fetch GitHub due to DNS; connected GitHub integration successfully synchronized source and regressions.",
-    "SAFE_WORK_COMPLETED": "Published combined 1024-name contract declaration cap and four regressions at 84e5be80e394d6a0e84cd7a4cd8b1a95125e4709; local 9 focused tests passed under Python 3.13.5; CI pending.",
-    "REMOTE_SHA": "84e5be80e394d6a0e84cd7a4cd8b1a95125e4709",
-    "NEXT_ACTION": "Verify exact-head CI for receipt, then obtain approved squash merge PR #5 and verify merged-main CI."
+    "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
+    "BLOCKER": "Shell Git fetch cannot resolve github.com; create_file for prepared regression tests was rejected by safety checks.",
+    "SAFE_WORK_COMPLETED": "Read live main, AGENTS.md and checkpoint state; confirmed source commit a4673b1 and exact-head CI #37874203999 success; regression patch preserved but not published.",
+    "REMOTE_SHA": "a4673b136e5eddc7792036f77681c3556742d99b",
+    "NEXT_ACTION": "Publish preserved scripts/tests/test_preflight_legacy_status.py regression tests through an approved write route; verify exact-head CI, reconcile state, then define AF-21 acceptance criteria."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5"
+  "observed_branch_sha": "a4673b136e5eddc7792036f77681c3556742d99b"
 }
