@@ -89,7 +89,12 @@ def _capture_bounded(process, timeout_seconds):
             remaining = deadline - time.monotonic()
             if remaining <= 0:
                 return "timeout", (0, 0)
-            for key, _ in selector.select(remaining):
+            try:
+                ready = selector.select(remaining)
+            except InterruptedError:
+                # EINTR is recoverable; the monotonic deadline is unchanged.
+                continue
+            for key, _ in ready:
                 # +1 makes an overflow observable without retaining its content.
                 allowance = MAX_OUTPUT_BYTES + 1 - sum(counts)
                 try:
