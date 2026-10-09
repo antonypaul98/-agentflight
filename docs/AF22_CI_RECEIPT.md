@@ -22,3 +22,15 @@ Infrastructure: 18 executed, 1 existing skip; diagnostics passed
 Local isolated focused tests: 44 passed (Python 3.13.5)
 Scope: combined stdout/stderr reporting budget, sanitized launch errors,
 redacted timeout output, deterministic failure evidence. AF-22 remains open.
+
+## AF-22 completed-parent process-group cleanup — 2026-10-09
+
+Published source commit: 02c28dfd38b5d522c96bd710362aaf986087b3bc
+CI: https://github.com/antonypaul98/-agentflight/actions/runs/37943589019
+Result: success, push, exact source SHA, Python 3.11.17.
+Product tests: 215 passed, 0 failed (+2 versus previous 213).
+Infrastructure: 18 executed, 1 baseline skip; diagnostics passed.
+Local focused: 46 passed, repeated three times on Python 3.13.5.
+Scope: clean up isolated process groups even after a successful parent exit;
+regressions verify orphaned-pipe EOF and completed-parent cleanup.
+AF-22 remains IN_PROGRESS; no untrusted-code sandbox acceptance.
