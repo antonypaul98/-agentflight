@@ -1,41 +1,49 @@
-# AF-22 — Disposable synthetic subprocess adapter (first bounded slice)
+# AF-22 — Disposable synthetic subprocess adapter
 
-Status: DEFENSIVE_SLICE_VERIFIED_ON_MAIN. AF-22 remains IN_PROGRESS; AF-21 is merged and verified.
+Status: **IN_PROGRESS**. AF-21 remains merged and verified.
 
-One isolated synthetic adapter, not a general command runner: `run_synthetic_case`
-executes only eight fixed, checked-in worker modes using the current Python
-interpreter in isolated mode (`-I -S`) and a temporary working directory.
-The caller supplies a bounded case ID, an allowlisted mode and a timeout.
-No caller-supplied code, shell, command, project path, or environment is executed.
+This adapter runs only twelve fixed, checked-in synthetic worker modes. It
+validates a 1–64 character ASCII case identifier, an allowlisted mode, and a
+finite 0.05–2.0 second timeout before spawning anything. No caller-supplied
+code, shell command, environment, project path, or external project is run.
 
-Acceptance for this first slice:
+## Verified defensive boundaries
 
-1. Pass, nonzero exit, timeout, stdout/stderr output limit and interpreter
-   launch errors are classified with fixed codes and no exception text.
-2. Only 1–64 character ASCII case identifiers and eight fixed modes are allowed;
-   timeout must be finite and between 0.05 and 2 seconds. Reject invalid input
-   before spawning any subprocess.
-3. Subprocess uses `-I -S`, no shell, an empty environment, and a disposable
-   directory. It does not run against external projects or access credentials.
-4. Reports contain a stable, case-scoped evidence ID, fixed verdict codes and
-   clamped output lengths, never stdout/stderr bytes or exception text.
-5. Regressions cover boundaries, deterministic evidence, sanitization, real
-   process exit/timeout behavior. Launch-failure and timeout-partial-output sanitization regressions
-   are included. Exact-commit Python 3.11 CI passed for this defensive slice.
+- Worker invocation uses the current Python interpreter with `-I -S`, an
+  empty environment, a temporary working directory, closed stdin, and
+  an isolated POSIX process session.
+- Combined stdout/stderr capture is bounded to 1,025 bytes to detect a
+  1,024-byte budget overflow without buffering arbitrary worker output.
+- Timeouts and oversized output return fixed verdict codes and bounded counts;
+  partial timeout output and exception text are never included in reports.
+- The isolated process group is terminated on success, failure, timeout,
+  and capture exceptions, including after the parent exits but descendants
+  remain alive. POSIX-specific regressions verify orphaned-pipe EOF.
+- Selector ValueError and subprocess/OS failures are sanitized to a fixed
+  `launch_error` verdict, with deterministic case-scoped evidence.
+- Invalid inputs are rejected before subprocess creation.
 
-Limits: this is **not** an OS sandbox or secure runner for untrusted Python
-code. The fixed synthetic worker is statically limited to 4096 bytes output;
-`subprocess.run` still captures bytes in memory before checking the 1024-byte
-report limit. Never replace it with arbitrary commands or live project inputs.
-No project integration, filesystem/network isolation guarantee, concurrency,
-process-tree isolation, real-project crash tests or hardware acceptance.
+## Exact-commit verification
 
-Defensive slice: combined stdout+stderr reporting budget is 1024 bytes;
-subprocess setup failures return fixed `launch_error` without exception text.
-Verified commit: `b15df8360993645b40076598854f44268514cb2c`.
-Exact-commit push CI: https://github.com/antonypaul98/-agentflight/actions/runs/37904427569
-(204 product tests passed; infrastructure and diagnostics succeeded).
+Implementation: `9a3dffaa2a12e358f7323d1f0a58ed226dd841fd`.
+GitHub Actions push CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/37951723157
 
-Next: implement a separately scoped hard output-capture/process-tree boundary.
-The current 1024-byte budget applies to reported results, NOT to bytes held
-in memory by `subprocess.run`; this is not an untrusted-code sandbox.
+Python 3.11.17: **217 product tests passed**, 0 failed; infrastructure
+18 executed with 1 baseline skip; environment diagnostics passed.
+Local isolated Python 3.13.5: **57 focused tests passed**, including two
+new regressions that failed against the pre-fix selector exception path.
+
+Earlier implementation and CI receipts remain in `docs/AF22_CI_RECEIPT.md`.
+
+## Remaining limits and next work
+
+**Not an OS sandbox or safe runner for untrusted code.** The fixed worker is
+allowlisted and does not establish filesystem, network, or credential
+isolation guarantees. No arbitrary project execution, real-project crash
+testing, hardware acceptance, or cross-platform process-tree isolation is
+claimed. AF-22 acceptance remains open.
+
+Next: strengthen Linux descendant-termination assertions, cover additional
+exceptional cleanup paths, and review AF-22 acceptance without expanding
+the runner to untrusted inputs.
