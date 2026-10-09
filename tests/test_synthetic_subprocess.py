@@ -103,3 +103,38 @@ def test_early_exit_reaps_worker_process_group(monkeypatch, mode, expected):
     assert result["code"] == expected
     assert len(cleaned) == 1
     assert cleaned[0] is not None
+
+
+def test_timeout_kills_orphaned_pipe_holding_descendant(monkeypatch):
+    """An exited parent must not prevent killing its still-running process group."""
+    import agentflight.synthetic_subprocess as adapter
+
+    real_cleanup = adapter._kill_process_group
+    parent_exited_before_cleanup = []
+
+    def observed_cleanup(process):
+        parent_exited_before_cleanup.append(process.poll() is not None)
+        real_cleanup(process)
+
+    monkeypatch.setattr(adapter, "_kill_process_group", observed_cleanup)
+    result = run_synthetic_case("orphan-pipe", "orphan_pipe", timeout_seconds=0.25)
+    assert result["status"] == "timeout" and result["code"] == "timeout"
+    assert (result["stdout_bytes"], result["stderr_bytes"]) == (0, 0)
+    assert parent_exited_before_cleanup == [True]
+
+
+def test_timeout_cleanup_is_not_limited_to_live_parent(monkeypatch):
+    """The group cleanup is invoked even when a parent exited before timeout."""
+    import agentflight.synthetic_subprocess as adapter
+
+    calls = []
+    real_cleanup = adapter._kill_process_group
+
+    def observed_cleanup(process):
+        calls.append((process.pid, process.poll()))
+        real_cleanup(process)
+
+    monkeypatch.setattr(adapter, "_kill_process_group", observed_cleanup)
+    result = run_synthetic_case("orphan-again", "orphan_pipe", timeout_seconds=0.25)
+    assert result["code"] == "timeout"
+    assert len(calls) == 1 and calls[0][1] is not None
