@@ -1,64 +1,30 @@
 {
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
-  "current_checkpoint": "AF-20 bounded tool-call argument envelope",
-  "checkpoint_status": "MERGED_AND_VERIFIED",
-  "active_branch": "main",
+  "current_checkpoint": "AF-21 structured replay-suite reporting",
+  "checkpoint_status": "IMPLEMENTED_LOCAL_VERIFIED",
+  "active_branch": "work/af21-replay-suite-reporting",
   "verified_main_sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5",
-  "observed_feature_sha": "18c01d2e06d2b68173e31fda5c4e4c837a4b45cc",
+  "observed_feature_sha": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-20 PR #5 merged; current active branch main; historical work/af20-bounded-tool-call-envelope branch preserved.",
-  "pr_number": 5,
-  "pr_state": {
-    "number": 5,
-    "state": "merged",
-    "head_sha": "18c01d2e06d2b68173e31fda5c4e4c837a4b45cc",
-    "url": "https://github.com/antonypaul98/-agentflight/pull/5",
-    "merge_commit_sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5"
-  },
+  "branch_remote_status": "New AF-21 scope branch based on live green main; AF-20 historical branch preserved",
+  "pr_number": null,
+  "pr_state": null,
   "ci_state": {
-    "pr_run": {
-      "id": null,
-      "sha": "84e5be80e394d6a0e84cd7a4cd8b1a95125e4709",
-      "event": "pull_request",
-      "status": "pending",
-      "conclusion": null,
-      "url": null,
-      "tests": "not yet verified"
-    },
-    "merged_main_run": {
-      "id": 37860434918,
-      "sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37860434918"
-    },
-    "historical_failure": {
-      "id": 37702259363,
-      "sha": "e0c054948266e91a3c47c6007f7fbda203692ad3",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "failure",
-      "cause": "ci_diagnostics.py KeyError diagnostic_import; state schema restored in following commit"
-    },
     "push_run": {
-      "id": 37874203999,
-      "sha": "a4673b136e5eddc7792036f77681c3556742d99b",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37874203999",
-      "tests": "126 product tests passed; infrastructure 18 executed, 1 skipped (prior run evidence)"
+      "status": "not_run"
+    },
+    "pr_run": {
+      "status": "not_run"
     }
   },
-  "local_test_status": "Four new combined-declaration regressions and five existing schema-size tests passed locally on Python 3.13.5 in reconstructed environment; full Python 3.11 suite pending CI.",
-  "merge_status": "MERGED AND VERIFIED",
-  "known_blocker": "Shell Git cannot resolve github.com, so canonical session_preflight.py cannot complete; connected GitHub read works, but regression file publication was rejected by write safety checks. Do not label product blocked.",
-  "next_action": "Publish preserved scripts/tests/test_preflight_legacy_status.py regression tests through an approved write route; verify exact-head CI, reconcile state, then define AF-21 acceptance criteria.",
-  "feature_checkpoint_advanced": true,
+  "local_test_status": "Python 3.11.17: 34 new replay-suite tests passed; full product suite 160 passed, 0 failed; infrastructure 18 executed, 17 passed and 1 existing skip; environment diagnostics and git diff --check passed.",
+  "merge_status": "NOT_MERGED",
+  "known_blocker": "Shell Git push remains unavailable and gh is absent; actual connector publication verified at e405eb308cd8e9eab5604763d41c8e2fe5d87ab9. No product blocker; exact-head CI, merge and merged-main verification are pending.",
+  "next_action": "Publish the reviewed implementation tree, create or reuse the AF-21 PR, and verify exact-head CI before merge and exact merged-main verification.",
+  "feature_checkpoint_advanced": false,
   "completed_checkpoints": [
     {
       "checkpoint": "AF-19 adversarial prompt injection",
@@ -89,16 +55,119 @@
           "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37156155589"
         }
       }
+    },
+    {
+      "current_checkpoint": "AF-20 bounded tool-call argument envelope",
+      "checkpoint_status": "MERGED_AND_VERIFIED",
+      "verified_main_sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5",
+      "observed_feature_sha": "18c01d2e06d2b68173e31fda5c4e4c837a4b45cc",
+      "pr_number": 5,
+      "pr_state": {
+        "number": 5,
+        "state": "merged",
+        "head_sha": "18c01d2e06d2b68173e31fda5c4e4c837a4b45cc",
+        "url": "https://github.com/antonypaul98/-agentflight/pull/5",
+        "merge_commit_sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5"
+      },
+      "ci_state": {
+        "pr_run": {
+          "id": 37859607596,
+          "sha": "18c01d2e06d2b68173e31fda5c4e4c837a4b45cc",
+          "event": "pull_request",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37859607596"
+        },
+        "merged_main_run": {
+          "id": 37860434918,
+          "sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37860434918"
+        },
+        "historical_failure": {
+          "id": 37702259363,
+          "sha": "e0c054948266e91a3c47c6007f7fbda203692ad3",
+          "event": "pull_request",
+          "status": "completed",
+          "conclusion": "failure",
+          "cause": "ci_diagnostics.py KeyError diagnostic_import; state schema restored in following commit"
+        },
+        "push_run": {
+          "id": 37874203999,
+          "sha": "a4673b136e5eddc7792036f77681c3556742d99b",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37874203999",
+          "tests": "126 product tests passed; infrastructure 18 executed, 1 skipped (prior run evidence)"
+        }
+      },
+      "checkpoint": "AF-20 bounded tool-call argument envelope",
+      "completion_main_run": {
+        "id": 37878490104,
+        "sha": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
+        "event": "push",
+        "status": "completed",
+        "conclusion": "success",
+        "tests": "126 product tests passed; 18 infrastructure tests executed including 1 skip"
+      }
     }
   ],
   "last_session_exit": {
-    "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
-    "BLOCKER": "Shell Git fetch cannot resolve github.com; create_file for prepared regression tests was rejected by safety checks.",
-    "SAFE_WORK_COMPLETED": "Read live main, AGENTS.md and checkpoint state; confirmed source commit a4673b1 and exact-head CI #37874203999 success; regression patch preserved but not published.",
-    "REMOTE_SHA": "a4673b136e5eddc7792036f77681c3556742d99b",
-    "NEXT_ACTION": "Publish preserved scripts/tests/test_preflight_legacy_status.py regression tests through an approved write route; verify exact-head CI, reconcile state, then define AF-21 acceptance criteria."
+    "BLOCKED_LAYER": "external",
+    "BLOCKER": "GitHub API: gh unavailable; connector authorization must be checked separately; git push: authentication/authorization unavailable",
+    "SAFE_WORK_COMPLETED": "Clean clone and pinned Python 3.11.17 setup; scope and connector write remotely verified; bounded replay-suite implementation passed 160 product tests plus infrastructure and diagnostics. Feature publication and exact-head CI pending.",
+    "REMOTE_SHA": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
+    "NEXT_ACTION": "Publish the reviewed implementation tree, create or reuse the AF-21 PR, and verify exact-head CI before merge and exact merged-main verification."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "a4673b136e5eddc7792036f77681c3556742d99b"
+  "observed_branch_sha": "e405eb308cd8e9eab5604763d41c8e2fe5d87ab9",
+  "historical_session_exits": [
+    {
+      "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
+      "BLOCKER": "Shell Git fetch cannot resolve github.com; create_file for prepared regression tests was rejected by safety checks.",
+      "SAFE_WORK_COMPLETED": "Read live main, AGENTS.md and checkpoint state; confirmed source commit a4673b1 and exact-head CI #37874203999 success; regression patch preserved but not published.",
+      "REMOTE_SHA": "a4673b136e5eddc7792036f77681c3556742d99b",
+      "NEXT_ACTION": "Publish preserved scripts/tests/test_preflight_legacy_status.py regression tests through an approved write route; verify exact-head CI, reconcile state, then define AF-21 acceptance criteria."
+    }
+  ],
+  "starting_main_sha": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
+  "local_validation": {
+    "python": "3.11.17",
+    "commands": [
+      {
+        "command": "python -m pytest tests/test_suite.py --tb=short",
+        "result": "34 passed, 0 failed"
+      },
+      {
+        "command": "python -m pytest",
+        "result": "160 passed, 0 failed"
+      },
+      {
+        "command": "python -m unittest discover -s scripts/tests -p 'test_*.py'",
+        "result": "18 executed, 17 passed, 1 existing skip"
+      },
+      {
+        "command": "python scripts/ci_diagnostics.py",
+        "result": "exit 0: pip check and package import passed"
+      },
+      {
+        "command": "git diff --check",
+        "result": "exit 0"
+      }
+    ],
+    "scope": "Verified final feature source before its containing commit; metadata-only receipt updates follow. Exact remote CI is recorded separately."
+  },
+  "usage_allowance": "Actual remaining Astra/Work allowance was not exposed by available tools; no numeric balance inferred. One AF-21 capability only, with validation and handoff reserved.",
+  "changed_files": [
+    "CHECKPOINT_STATE.json",
+    "README.md",
+    "docs/AF21_CHECKPOINT.md",
+    "examples/replay-suite.json",
+    "src/agentflight/suite.py",
+    "tests/test_suite.py"
+  ]
 }
