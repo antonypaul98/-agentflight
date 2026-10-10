@@ -4,12 +4,12 @@
   "current_checkpoint": "AF-22 disposable synthetic subprocess adapter",
   "checkpoint_status": "IN_PROGRESS",
   "active_branch": "main",
-  "verified_main_sha": "dfce2bb6a9d07b74ba88437e760977e26f58542b",
-  "observed_feature_sha": "dfce2bb6a9d07b74ba88437e760977e26f58542b",
+  "verified_main_sha": "9f3e8c9f9f1dfe9e5bac633747f3649ea0e143de",
+  "observed_feature_sha": "9f3e8c9f9f1dfe9e5bac633747f3649ea0e143de",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-22 Linux orphan-termination regressions published on main; exact-commit CI succeeded; checkpoint remains IN_PROGRESS.",
+  "branch_remote_status": "AF-22 ProcessLookupError live-worker cleanup fix published on main; exact-commit push CI succeeded; checkpoint IN_PROGRESS.",
   "pr_number": 6,
   "pr_state": {
     "number": 6,
@@ -53,21 +53,21 @@
       "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
     },
     "af22_latest_verified_main_run": {
-      "id": 38024076449,
-      "sha": "dfce2bb6a9d07b74ba88437e760977e26f58542b",
+      "id": 38034229520,
+      "sha": "9f3e8c9f9f1dfe9e5bac633747f3649ea0e143de",
       "event": "push",
       "status": "completed",
       "conclusion": "success",
       "attempt": 1,
-      "job_id": 114131071126,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38024076449",
-      "tests": "229 product tests passed, 0 failed; 18 infrastructure tests executed, 1 existing skip; diagnostics passed on Python 3.11.17"
+      "job_id": 114161235330,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38034229520",
+      "tests": "233 product tests passed, 0 failed; 18 infrastructure tests executed, 1 existing skip; diagnostics passed on Python 3.11.17"
     }
   },
-  "local_test_status": "2026-10-10: 2 Linux /proc descendant-termination regressions and 2 selector regressions passed on Python 3.13.5 in a reconstructed checkout; 5 repeated Linux regression runs passed. Exact-commit Python 3.11.17 CI #38024076449: 229 product tests passed.",
+  "local_test_status": "2026-10-10: preserved implementation/test files matched published Git blobs; 4 focused tests passed on Python 3.13.5; exact-commit Python 3.11.17 CI #38034229520: 233 product tests passed.",
   "merge_status": "AF-22 IN_PROGRESS; AF-21 MERGED AND VERIFIED",
   "known_blocker": null,
-  "next_action": "Review remaining AF-22 acceptance criteria and exceptional cleanup paths; do not claim secure sandboxing, descendant reaping, or arbitrary project execution.",
+  "next_action": "Review AF-22 remaining acceptance criteria and strengthen exceptional cleanup failure paths; do not claim secure sandboxing or complete descendant reaping.",
   "feature_checkpoint_advanced": true,
   "completed_checkpoints": [
     {
@@ -211,10 +211,10 @@
   ],
   "last_session_exit": {
     "BLOCKED_LAYER": "none; shell Git DNS recovered through connected GitHub publication",
-    "BLOCKER": "Shell Git fetch could not resolve github.com; connected GitHub publication and exact-commit CI succeeded.",
-    "SAFE_WORK_COMPLETED": "Read AGENTS.md and CHECKPOINT_STATE.json; fetched live refs; ran canonical preflight in reconstructed checkout; added 2 Linux real-descendant termination regressions; 4 focused tests passed, 5 repeated Linux runs passed; published dfce2bb6; exact-commit CI #38024076449 passed with 229 product tests.",
-    "REMOTE_SHA": "dfce2bb6a9d07b74ba88437e760977e26f58542b",
-    "NEXT_ACTION": "Review remaining AF-22 acceptance criteria and exceptional cleanup paths; do not claim secure sandboxing, descendant reaping, or arbitrary project execution."
+    "BLOCKER": "Shell git fetch cannot resolve github.com; authorized GitHub integration published preserved commit and exact-commit CI succeeded.",
+    "SAFE_WORK_COMPLETED": "Read AGENTS.md, CHECKPOINT_STATE.json and workflow instructions; refreshed live refs; executed canonical preflight in reconstructed checkout; published existing prepared ProcessLookupError cleanup fix with 2 regressions; 4 focused tests passed; exact-commit CI #38034229520 passed with 233 product tests.",
+    "REMOTE_SHA": "9f3e8c9f9f1dfe9e5bac633747f3649ea0e143de",
+    "NEXT_ACTION": "Review AF-22 remaining acceptance criteria and strengthen exceptional cleanup failure paths; do not claim secure sandboxing or complete descendant reaping."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
