@@ -66,13 +66,21 @@ class SyntheticCaseError(ValueError):
 def _kill_process_group(process):
     """Reap the fixed worker and any same-session descendants on POSIX."""
     def kill_live_parent():
-        if process.poll() is None:
+        # A parent-only fallback can itself be interrupted by a signal.
+        # Recheck liveness between bounded retries to avoid signaling an
+        # already-exited worker, and never wait if no kill was delivered.
+        for _ in range(3):
+            if process.poll() is not None:
+                return
             try:
                 process.kill()
             except ProcessLookupError:
-                # The worker can exit between poll() and kill(). wait() below
-                # still reaps it; only this expected race is recoverable.
-                pass
+                # The worker exited after poll(); wait() below reaps it.
+                return
+            except InterruptedError:
+                continue
+            return
+        raise InterruptedError("parent termination repeatedly interrupted")
 
     if os.name == "posix":
         # EINTR does not establish whether the signal reached the group.
