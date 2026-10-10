@@ -65,6 +65,15 @@ class SyntheticCaseError(ValueError):
 
 def _kill_process_group(process):
     """Reap the fixed worker and any same-session descendants on POSIX."""
+    def kill_live_parent():
+        if process.poll() is None:
+            try:
+                process.kill()
+            except ProcessLookupError:
+                # The worker can exit between poll() and kill(). wait() below
+                # still reaps it; only this expected race is recoverable.
+                pass
+
     if os.name == "posix":
         # EINTR does not establish whether the signal reached the group.
         # Retry a bounded number of times before falling back to the parent.
@@ -76,20 +85,17 @@ def _kill_process_group(process):
             except ProcessLookupError:
                 # An absent group does not prove the worker exited. Avoid an
                 # unbounded wait if the worker is still alive.
-                if process.poll() is None:
-                    process.kill()
+                kill_live_parent()
                 break
             except OSError:
-                if process.poll() is None:
-                    process.kill()
+                kill_live_parent()
                 break
             else:
                 break
         else:
-            if process.poll() is None:
-                process.kill()
-    elif process.poll() is None:
-        process.kill()
+            kill_live_parent()
+    else:
+        kill_live_parent()
     process.wait()
 
 
