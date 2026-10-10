@@ -3,21 +3,15 @@
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-22 disposable synthetic subprocess adapter",
   "checkpoint_status": "IN_PROGRESS",
-  "active_branch": "main",
-  "verified_main_sha": "9ac3b8ae71aec06b52338a16f4755f2629af57ed",
-  "observed_feature_sha": "9ac3b8ae71aec06b52338a16f4755f2629af57ed",
+  "active_branch": "work/af22-wait-eintr-repair",
+  "verified_main_sha": "36913ae7ff1d7aaae2e179bc675f1f0be248dd2c",
+  "observed_feature_sha": "36913ae7ff1d7aaae2e179bc675f1f0be248dd2c",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-22 parent-termination EINTR reliability implementation published at 9ac3b8ae; exact-commit push CI #38059118699 SUCCESS (240 product tests, 0 failed). Next wait-EINTR slice tested locally but source/test publication pending.",
-  "pr_number": 6,
-  "pr_state": {
-    "number": 6,
-    "state": "merged",
-    "head_sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
-    "url": "https://github.com/antonypaul98/-agentflight/pull/6",
-    "merge_commit_sha": "8066bbcc8127c12c528f4d355d1029f894355c95"
-  },
+  "branch_remote_status": "Bounded existing-AF-22 wait-EINTR repair based on latest main, source publication and exact-head CI pending",
+  "pr_number": null,
+  "pr_state": null,
   "ci_state": {
     "push_run": {
       "id": 37880641379,
@@ -63,11 +57,11 @@
       "tests": "240 product tests passed, 0 failed; infrastructure and diagnostics steps successful on Python 3.11.17."
     }
   },
-  "local_test_status": "2026-10-10: canonical session_preflight.py (Git blob SHA 8f817a8a) executed in reconstructed partial checkout, exited 1 at git fetch due to DNS. Focused reconstructed _capture_bounded regression: 3 expected failures before wait-EINTR patch, 3 passes after (Python 3.13.5); not full canonical repository. Source and regression publication rejected by connected GitHub safety checks. No CI for pending slice.",
+  "local_test_status": "Python 3.11.17: all 3 new focused regressions failed on untouched implementation and pass after the wait-EINTR repair. Full canonical suite: 241 passed, 2 existing /proc descendant-observation failures; the same two fail on untouched baseline in this execution environment. No full local pass is claimed. Infrastructure: 17 passed, 1 baseline skip; pip check/import diagnostics passed. Exact GitHub Linux full suite remains required.",
   "merge_status": "AF-22 IN_PROGRESS; AF-21 MERGED AND VERIFIED",
   "known_blocker": null,
-  "next_action": "Use an authorized source-code publication path to apply the preserved wait-EINTR patch and 3 regressions to existing main; run full Python 3.11 suite and verify exact-commit CI.",
-  "feature_checkpoint_advanced": true,
+  "next_action": "Publish this bounded repair through the authorized GitHub connector with exact tree/ref verification; require complete exact-head CI, guarded PR merge and exact merged-main CI before accepting the slice. Do not bypass any safety rejection.",
+  "feature_checkpoint_advanced": false,
   "completed_checkpoints": [
     {
       "checkpoint": "AF-19 adversarial prompt injection",
@@ -209,15 +203,15 @@
     }
   ],
   "last_session_exit": {
-    "BLOCKED_LAYER": "shell DNS and connected source/test write safety",
-    "BLOCKER": "Canonical preflight git fetch cannot resolve github.com; connected create_blob rejected source and regression contents.",
-    "SAFE_WORK_COMPLETED": "Verified current main and exact-head CI (240 passed), executed canonical preflight, independently reproduced red/green wait-EINTR tests (3 red/3 green), preserved source patch and tests; pending source remains unpublished.",
-    "REMOTE_SHA": "9ac3b8ae71aec06b52338a16f4755f2629af57ed",
-    "NEXT_ACTION": "Use an authorized source-code publication path to apply the preserved wait-EINTR patch and 3 regressions to existing main; run full Python 3.11 suite and verify exact-commit CI."
+    "BLOCKED_LAYER": "shell Git credentials",
+    "BLOCKER": "Non-mutating shell push dry-run has no GitHub username credentials; connector preservation remains separately authorized and pending.",
+    "SAFE_WORK_COMPLETED": "Canonical wait-EINTR defect reproduced with 3 failures, repaired with deadline-preserving bounded retry, 3 focused passes. Full CI and publication pending; existing local /proc failures independently reproduced on untouched baseline.",
+    "REMOTE_SHA": "36913ae7ff1d7aaae2e179bc675f1f0be248dd2c",
+    "NEXT_ACTION": "Publish this bounded repair through the authorized GitHub connector with exact tree/ref verification; require complete exact-head CI, guarded PR merge and exact merged-main CI before accepting the slice. Do not bypass any safety rejection."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "8066bbcc8127c12c528f4d355d1029f894355c95",
+  "observed_branch_sha": "36913ae7ff1d7aaae2e179bc675f1f0be248dd2c",
   "historical_session_exits": [
     {
       "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
@@ -225,23 +219,46 @@
       "SAFE_WORK_COMPLETED": "Read live main, AGENTS.md and checkpoint state; confirmed source commit a4673b1 and exact-head CI #37874203999 success; regression patch preserved but not published.",
       "REMOTE_SHA": "a4673b136e5eddc7792036f77681c3556742d99b",
       "NEXT_ACTION": "Publish preserved scripts/tests/test_preflight_legacy_status.py regression tests through an approved write route; verify exact-head CI, reconcile state, then define AF-21 acceptance criteria."
+    },
+    {
+      "BLOCKED_LAYER": "shell DNS and connected source/test write safety",
+      "BLOCKER": "Canonical preflight git fetch cannot resolve github.com; connected create_blob rejected source and regression contents.",
+      "SAFE_WORK_COMPLETED": "Verified current main and exact-head CI (240 passed), executed canonical preflight, independently reproduced red/green wait-EINTR tests (3 red/3 green), preserved source patch and tests; pending source remains unpublished.",
+      "REMOTE_SHA": "9ac3b8ae71aec06b52338a16f4755f2629af57ed",
+      "NEXT_ACTION": "Use an authorized source-code publication path to apply the preserved wait-EINTR patch and 3 regressions to existing main; run full Python 3.11 suite and verify exact-commit CI."
     }
   ],
   "starting_main_sha": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
   "local_validation": {
     "python": "3.11.17",
+    "focused_before_fix": "3 failed",
+    "focused_after_fix": "3 passed, 0 failed",
+    "full_suite": {
+      "passed": 241,
+      "failed": 2,
+      "skipped": 0,
+      "environment_issue": "Execution environment PID versus /proc identity mismatch; both existing descendant tests reproduce on baseline 36913ae7",
+      "baseline_reproduced": true
+    },
+    "infrastructure": {
+      "passed": 17,
+      "skipped": 1,
+      "failed": 0
+    },
+    "diagnostics": "passed",
+    "scope": "Canonical full repository, not reconstructed function; final remote CI pending",
     "commands": [
       {
-        "command": "python -m pytest tests/test_suite.py --tb=short",
-        "result": "34 passed, 0 failed"
+        "command": "python -m pytest tests/test_capture_wait_interruptions.py --tb=short",
+        "result": "3 failed before fix; 3 passed after fix"
       },
       {
-        "command": "python -m pytest",
-        "result": "160 passed, 0 failed"
+        "command": "python -m pytest --tb=short",
+        "result": "241 passed, 2 failed, 0 skipped; both failures reproduced on untouched baseline due to local PID/proc mismatch"
       },
       {
         "command": "python -m unittest discover -s scripts/tests -p 'test_*.py'",
-        "result": "18 executed, 17 passed, 1 existing skip"
+        "result": "18 executed, 17 passed, 1 baseline skip"
       },
       {
         "command": "python scripts/ci_diagnostics.py",
@@ -251,10 +268,9 @@
         "command": "git diff --check",
         "result": "exit 0"
       }
-    ],
-    "scope": "Verified final feature source before its containing commit; metadata-only receipt updates follow. Exact remote CI is recorded separately."
+    ]
   },
-  "usage_allowance": "Actual remaining Astra/Work allowance was not exposed by available tools; no numeric balance inferred. One AF-21 capability only, with validation and handoff reserved.",
+  "usage_allowance": "BUDGET UNKNOWN: actual remaining Astra/Work allowance is not exposed. Repair scope is bounded; capacity is reserved for exact-head CI, canonical records and writer handoff.",
   "changed_files": [
     "src/agentflight/synthetic_subprocess.py",
     "tests/test_capture_wait_interruptions.py",
@@ -284,6 +300,16 @@
   ],
   "pending_af22_slice": {
     "title": "Interrupted process.wait after pipe EOF",
+    "source_patch": "Canonical existing _capture_bounded wait retry against the original monotonic deadline; original archived ZIP unavailable through accessible workspace/Library",
+    "new_test": "tests/test_capture_wait_interruptions.py",
+    "published": false,
+    "local_test_scope": "canonical repository and Python 3.11.17",
+    "local_test_result": "3 red before fix, 3 green after; full suite 241 passed and 2 baseline environment failures",
+    "remote_ci": "pending",
+    "base_sha": "36913ae7ff1d7aaae2e179bc675f1f0be248dd2c"
+  },
+  "prior_wait_eintr_recovery_record": {
+    "title": "Interrupted process.wait after pipe EOF",
     "source_patch": "source.patch in agentflight-run39-wait-eintr-handoff.zip",
     "new_test": "tests/test_capture_wait_interruptions.py",
     "published": false,
@@ -291,5 +317,33 @@
     "local_test_result": "3 failed before patch, 3 passed after patch",
     "remote_ci": "not triggered",
     "base_sha": "9ac3b8ae71aec06b52338a16f4755f2629af57ed"
+  },
+  "writer_handoff": {
+    "owner": "Interactive active-build repair mission",
+    "ownership_id": "AF22-REPAIR-20261010",
+    "status": "active",
+    "hourly_mode": "read_only",
+    "next_owner": "AgentFlight Hourly Build",
+    "release_requirement": "Explicit release after this bounded repair exact-head and merged-main CI/records, or a precise blocked patch handoff",
+    "budget": "BUDGET UNKNOWN"
+  },
+  "recorded_at_utc": "2026-10-10T20:13:14.045126+00:00",
+  "preflight_receipt": {
+    "command": "python scripts/session_preflight.py",
+    "exit_code": 1,
+    "current_repository_sha": "28389364d5760fb7d18e594c9a09544a775c69d9",
+    "remote_sha": "36913ae7ff1d7aaae2e179bc675f1f0be248dd2c",
+    "dirty": false,
+    "local_only": 1,
+    "remote_only": 0,
+    "behind_main": 0,
+    "BLOCKED_LAYER": "Git",
+    "BLOCKER": "One coherent local repair commit awaits authorized publication; no divergent or newer remote work."
+  },
+  "shell_git_write_probe": {
+    "command": "GIT_TERMINAL_PROMPT=0 git push --dry-run origin HEAD:refs/heads/work/af22-wait-eintr-repair",
+    "exit_code": 128,
+    "result": "could not read Username for https://github.com: terminal prompts disabled",
+    "recovery": "AGENTS.md authorized connected-integration preservation with observed parent/base tree, force=false, exact tree/ref and file-list verification. Native repository permissions report push=true."
   }
 }
