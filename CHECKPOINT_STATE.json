@@ -4,12 +4,12 @@
   "current_checkpoint": "AF-22 disposable synthetic subprocess adapter",
   "checkpoint_status": "IN_PROGRESS",
   "active_branch": "main",
-  "verified_main_sha": "9f3e8c9f9f1dfe9e5bac633747f3649ea0e143de",
-  "observed_feature_sha": "9f3e8c9f9f1dfe9e5bac633747f3649ea0e143de",
+  "verified_main_sha": "e5bb46c3d19dd5c9edaf6377f1397877c3fe13c4",
+  "observed_feature_sha": "e5bb46c3d19dd5c9edaf6377f1397877c3fe13c4",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-22 existing main published checkpoint-only commit 3337306; CI #38051614636 SUCCESS on exact SHA (233 existing tests). Parent-exit race fix and 2 new OSError fallback tests remain unpublished.",
+  "branch_remote_status": "AF-22 implementation and 4 regression tests published on existing main at e5bb46c3; exact-commit push CI #38055266238 SUCCESS (237 product tests, 0 failed).",
   "pr_number": 6,
   "pr_state": {
     "number": 6,
@@ -53,20 +53,20 @@
       "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
     },
     "af22_latest_verified_main_run": {
-      "id": 38051614636,
-      "sha": "333730619dd7e2fa62efe6457350711e4c3d72e8",
+      "id": 38055266238,
+      "sha": "e5bb46c3d19dd5c9edaf6377f1397877c3fe13c4",
       "event": "push",
       "status": "completed",
       "conclusion": "success",
-      "job_id": 114211727419,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38051614636",
-      "tests": "233 product tests passed, 0 failed; 18 infrastructure executed with 1 existing skip; environment diagnostics passed on Python 3.11.17. Checkpoint-only change, not pending source/test fix."
+      "job_id": 114222313829,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38055266238",
+      "tests": "237 product tests passed, 0 failed; 18 infrastructure executed, 1 existing skip; environment diagnostics passed on Python 3.11."
     }
   },
-  "local_test_status": "2026-10-10: canonical preflight SHA 8f817a8... matched and executed in reconstructed checkout; shell git fetch DNS failed. Preserved parent-exit race patch remains unpublished; prior 2 regressions fail before fix and 6 focused pass after fix (Python 3.13.5, earlier receipt). This run added 2 local POSIX group-signal OSError fallback coverage tests, both passed against published baseline Python 3.13.5. New tests not published. Full Python 3.11 suite and exact-new-code CI not run. Published main 821cacfe CI #38044600376 green with 233 tests on previous source.",
+  "local_test_status": "2026-10-10: byte-identical canonical preflight script executed in reconstructed checkout; shell git fetch failed DNS, recovered through connected GitHub. Previously preserved parent-exit race fix plus 2 regressions, and 2 additional OSError fallback regressions verified locally (4 passed, 0 failed, Python 3.13.5). 12 fixed-workload smoke modes passed; Python compileall passed. Published e5bb46c3 exact-commit CI passed 237 product tests on Python 3.11.",
   "merge_status": "AF-22 IN_PROGRESS; AF-21 MERGED AND VERIFIED",
   "known_blocker": null,
-  "next_action": "Use an authorized GitHub code-write path to publish preserved AF-22 parent-exit race patch and regressions on existing main after fresh source/ref check; run Python 3.11 full suite and exact-commit CI; update checkpoint. Do not bypass code-write safety checks.",
+  "next_action": "Review remaining AF-22 acceptance criteria and strengthen exceptional subprocess cleanup only in one bounded tested slice; preserve POSIX-only fixed-workload scope and verify exact-commit CI.",
   "feature_checkpoint_advanced": true,
   "completed_checkpoints": [
     {
@@ -209,11 +209,11 @@
     }
   ],
   "last_session_exit": {
-    "BLOCKED_LAYER": "shell Git DNS; connected GitHub code-write safety",
-    "BLOCKER": "Shell git fetch cannot resolve github.com; connected create_blob source and create_file test writes rejected by execution safety checks.",
-    "SAFE_WORK_COMPLETED": "Read live refs, AGENTS.md, CHECKPOINT_STATE.json and workflow docs; ran byte-identical canonical preflight in reconstructed checkout; confirmed previous source blob; added 2 local POSIX OSError fallback regressions, both passed on Python 3.13.5; preserved prior parent-exit race patch and test files.",
-    "REMOTE_SHA": "821cacfea17a2b06ed8b82b2f344470ad9a03dfe",
-    "NEXT_ACTION": "Use an authorized GitHub code-write path to publish preserved AF-22 parent-exit race patch and regressions on existing main after fresh source/ref check; run Python 3.11 full suite and exact-commit CI; update checkpoint. Do not bypass code-write safety checks."
+    "BLOCKED_LAYER": null,
+    "BLOCKER": null,
+    "SAFE_WORK_COMPLETED": "Published recovered AF-22 subprocess cleanup race fix plus 4 regressions on existing main; local 4 focused and 12 smoke passed; exact implementation CI #38055266238 succeeded with 237 product tests.",
+    "REMOTE_SHA": "e5bb46c3d19dd5c9edaf6377f1397877c3fe13c4",
+    "NEXT_ACTION": "Review remaining AF-22 acceptance criteria and strengthen exceptional subprocess cleanup only in one bounded tested slice; preserve POSIX-only fixed-workload scope and verify exact-commit CI."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
@@ -256,12 +256,10 @@
   },
   "usage_allowance": "Actual remaining Astra/Work allowance was not exposed by available tools; no numeric balance inferred. One AF-21 capability only, with validation and handoff reserved.",
   "changed_files": [
-    "CHECKPOINT_STATE.json",
-    "README.md",
-    "docs/AF21_CHECKPOINT.md",
-    "examples/replay-suite.json",
-    "src/agentflight/suite.py",
-    "tests/test_suite.py"
+    "src/agentflight/synthetic_subprocess.py",
+    "tests/test_kill_race.py",
+    "tests/test_killpg_oserror_fallback.py",
+    "CHECKPOINT_STATE.json"
   ],
   "shell_preflight_receipt": {
     "BLOCKED_LAYER": "external",
