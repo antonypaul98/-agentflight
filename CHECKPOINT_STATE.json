@@ -4,12 +4,12 @@
   "current_checkpoint": "AF-22 disposable synthetic subprocess adapter",
   "checkpoint_status": "IN_PROGRESS",
   "active_branch": "main",
-  "verified_main_sha": "e5bb46c3d19dd5c9edaf6377f1397877c3fe13c4",
-  "observed_feature_sha": "e5bb46c3d19dd5c9edaf6377f1397877c3fe13c4",
+  "verified_main_sha": "9ac3b8ae71aec06b52338a16f4755f2629af57ed",
+  "observed_feature_sha": "9ac3b8ae71aec06b52338a16f4755f2629af57ed",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-22 implementation and 4 regression tests published on existing main at e5bb46c3; exact-commit push CI #38055266238 SUCCESS (237 product tests, 0 failed).",
+  "branch_remote_status": "AF-22 parent-termination EINTR reliability implementation published at 9ac3b8ae; exact-commit push CI #38059118699 SUCCESS (240 product tests, 0 failed). Next wait-EINTR slice tested locally but source/test publication pending.",
   "pr_number": 6,
   "pr_state": {
     "number": 6,
@@ -53,20 +53,20 @@
       "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
     },
     "af22_latest_verified_main_run": {
-      "id": 38055266238,
-      "sha": "e5bb46c3d19dd5c9edaf6377f1397877c3fe13c4",
+      "id": 38059118699,
+      "sha": "9ac3b8ae71aec06b52338a16f4755f2629af57ed",
       "event": "push",
       "status": "completed",
       "conclusion": "success",
-      "job_id": 114222313829,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38055266238",
-      "tests": "237 product tests passed, 0 failed; 18 infrastructure executed, 1 existing skip; environment diagnostics passed on Python 3.11."
+      "job_id": 114233578057,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38059118699",
+      "tests": "240 product tests passed, 0 failed; infrastructure and diagnostics steps successful on Python 3.11.17."
     }
   },
-  "local_test_status": "2026-10-10: byte-identical canonical preflight script executed in reconstructed checkout; shell git fetch failed DNS, recovered through connected GitHub. Previously preserved parent-exit race fix plus 2 regressions, and 2 additional OSError fallback regressions verified locally (4 passed, 0 failed, Python 3.13.5). 12 fixed-workload smoke modes passed; Python compileall passed. Published e5bb46c3 exact-commit CI passed 237 product tests on Python 3.11.",
+  "local_test_status": "2026-10-10: canonical session_preflight.py (Git blob SHA 8f817a8a) executed in reconstructed partial checkout, exited 1 at git fetch due to DNS. Focused reconstructed _capture_bounded regression: 3 expected failures before wait-EINTR patch, 3 passes after (Python 3.13.5); not full canonical repository. Source and regression publication rejected by connected GitHub safety checks. No CI for pending slice.",
   "merge_status": "AF-22 IN_PROGRESS; AF-21 MERGED AND VERIFIED",
   "known_blocker": null,
-  "next_action": "Review remaining AF-22 acceptance criteria and strengthen exceptional subprocess cleanup only in one bounded tested slice; preserve POSIX-only fixed-workload scope and verify exact-commit CI.",
+  "next_action": "Use an authorized source-code publication path to apply the preserved wait-EINTR patch and 3 regressions to existing main; run full Python 3.11 suite and verify exact-commit CI.",
   "feature_checkpoint_advanced": true,
   "completed_checkpoints": [
     {
@@ -209,11 +209,11 @@
     }
   ],
   "last_session_exit": {
-    "BLOCKED_LAYER": null,
-    "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "Published recovered AF-22 subprocess cleanup race fix plus 4 regressions on existing main; local 4 focused and 12 smoke passed; exact implementation CI #38055266238 succeeded with 237 product tests.",
-    "REMOTE_SHA": "e5bb46c3d19dd5c9edaf6377f1397877c3fe13c4",
-    "NEXT_ACTION": "Review remaining AF-22 acceptance criteria and strengthen exceptional subprocess cleanup only in one bounded tested slice; preserve POSIX-only fixed-workload scope and verify exact-commit CI."
+    "BLOCKED_LAYER": "shell DNS and connected source/test write safety",
+    "BLOCKER": "Canonical preflight git fetch cannot resolve github.com; connected create_blob rejected source and regression contents.",
+    "SAFE_WORK_COMPLETED": "Verified current main and exact-head CI (240 passed), executed canonical preflight, independently reproduced red/green wait-EINTR tests (3 red/3 green), preserved source patch and tests; pending source remains unpublished.",
+    "REMOTE_SHA": "9ac3b8ae71aec06b52338a16f4755f2629af57ed",
+    "NEXT_ACTION": "Use an authorized source-code publication path to apply the preserved wait-EINTR patch and 3 regressions to existing main; run full Python 3.11 suite and verify exact-commit CI."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
@@ -257,8 +257,7 @@
   "usage_allowance": "Actual remaining Astra/Work allowance was not exposed by available tools; no numeric balance inferred. One AF-21 capability only, with validation and handoff reserved.",
   "changed_files": [
     "src/agentflight/synthetic_subprocess.py",
-    "tests/test_kill_race.py",
-    "tests/test_killpg_oserror_fallback.py",
+    "tests/test_capture_wait_interruptions.py",
     "CHECKPOINT_STATE.json"
   ],
   "shell_preflight_receipt": {
@@ -282,5 +281,15 @@
       "blocks_checkpoint": false,
       "antony_intervention_required": false
     }
-  ]
+  ],
+  "pending_af22_slice": {
+    "title": "Interrupted process.wait after pipe EOF",
+    "source_patch": "source.patch in agentflight-run39-wait-eintr-handoff.zip",
+    "new_test": "tests/test_capture_wait_interruptions.py",
+    "published": false,
+    "local_test_scope": "focused reconstructed function only",
+    "local_test_result": "3 failed before patch, 3 passed after patch",
+    "remote_ci": "not triggered",
+    "base_sha": "9ac3b8ae71aec06b52338a16f4755f2629af57ed"
+  }
 }
