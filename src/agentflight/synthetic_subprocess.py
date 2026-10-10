@@ -74,6 +74,10 @@ def _kill_process_group(process):
             except InterruptedError:
                 continue
             except ProcessLookupError:
+                # An absent group does not prove the worker exited. Avoid an
+                # unbounded wait if the worker is still alive.
+                if process.poll() is None:
+                    process.kill()
                 break
             except OSError:
                 if process.poll() is None:
