@@ -34,3 +34,38 @@ Local focused: 46 passed, repeated three times on Python 3.13.5.
 Scope: clean up isolated process groups even after a successful parent exit;
 regressions verify orphaned-pipe EOF and completed-parent cleanup.
 AF-22 remains IN_PROGRESS; no untrusted-code sandbox acceptance.
+
+## Accepted wait-EINTR repair — 2026-10-10 UTC
+
+Source commit: `16365db581f9ed1019f466575187685d2b97a481`.
+PR: https://github.com/antonypaul98/-agentflight/pull/7
+Exact source push CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38083240626
+Exact source PR-event CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38083268347
+Merged main: `a2195a74fc49de43eadbc468c73e4c77d5e926aa`.
+Exact merged-main CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38083310755
+
+All three runs succeeded on Python 3.11.17: **243 product tests passed,
+0 failed, 0 skipped**. Infrastructure: 18 executed, 17 passed and 1 existing
+Memory-only skip; dependency/import diagnostics passed.
+
+After pipe EOF, interrupted `process.wait()` now retries within the original
+monotonic deadline. Three synthetic regressions cover transient recovery,
+repeated interruptions exhausting that deadline, and a later TimeoutExpired
+with redacted counts. Existing worker modes, security boundaries and Linux
+descendant assertions remain unchanged. The prior recovery ZIP was unavailable
+in accessible storage; the defect was reproduced against the canonical source.
+
+Local canonical Python 3.11.17 results: 3 focused failures before the fix and
+3 passes after it. The full local suite reported 241 passed and 2 existing
+descendant-observation failures. Both also fail on unchanged baseline
+`36913ae7ff1d7aaae2e179bc675f1f0be248dd2c`: this execution environment's
+reported child PID maps to a different `/proc` entry. GitHub Linux CI runs and
+passes those unchanged tests. A full local pass is not claimed.
+
+This accepts only the existing wait-EINTR reliability repair. Overall AF-22
+remains IN_PROGRESS; no arbitrary-code sandbox or physical acceptance is claimed.
+The next hourly writer reviews existing AF-22 acceptance after the records
+PR/main CI and explicit release, without repeating accepted slices.
