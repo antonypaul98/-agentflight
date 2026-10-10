@@ -139,13 +139,21 @@ def _capture_bounded(process, timeout_seconds):
                     counts[key.data] += len(data)
                     if sum(counts) > MAX_OUTPUT_BYTES:
                         return "output_limit", tuple(counts)
-        remaining = deadline - time.monotonic()
-        if remaining <= 0 and process.poll() is None:
-            return "timeout", (0, 0)
-        try:
-            process.wait(timeout=max(0.001, remaining))
-        except subprocess.TimeoutExpired:
-            return "timeout", (0, 0)
+        while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0 and process.poll() is None:
+                return "timeout", (0, 0)
+            try:
+                process.wait(timeout=max(0.001, remaining))
+            except InterruptedError:
+                # Pipe EOF does not make wait immune to EINTR. Retry within
+                # the original deadline, including when the parent exited.
+                if time.monotonic() >= deadline:
+                    return "timeout", (0, 0)
+                continue
+            except subprocess.TimeoutExpired:
+                return "timeout", (0, 0)
+            break
     return "completed", tuple(counts)
 
 
