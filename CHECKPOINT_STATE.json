@@ -9,7 +9,7 @@
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-22 main remains at verified source 9f3e8c9 with checkpoint commit 5e73da4; next defensive parent-exit race patch is locally verified but unpublished.",
+  "branch_remote_status": "Live main 821cacfea17a2b06ed8b82b2f344470ad9a03dfe; AF-22 remains IN_PROGRESS. Prepared parent-exit race fix and new OSError fallback tests unpublished; code publication rejected by safety checks.",
   "pr_number": 6,
   "pr_state": {
     "number": 6,
@@ -64,10 +64,10 @@
       "tests": "233 product tests passed, 0 failed; 18 infrastructure tests executed, 1 existing skip; diagnostics passed on Python 3.11.17"
     }
   },
-  "local_test_status": "2026-10-10: canonical preflight SHA matched repository, executed in reconstructed checkout and failed shell git fetch DNS. Preserved parent-exit race patch: 2 new tests failed before fix; 6 focused tests passed after fix on Python 3.13.5. Python 3.11 full suite/CI for patch not run. Latest published exact-head CI #38034289310 passed previous code with 233 product tests.",
+  "local_test_status": "2026-10-10: canonical preflight SHA 8f817a8... matched and executed in reconstructed checkout; shell git fetch DNS failed. Preserved parent-exit race patch remains unpublished; prior 2 regressions fail before fix and 6 focused pass after fix (Python 3.13.5, earlier receipt). This run added 2 local POSIX group-signal OSError fallback coverage tests, both passed against published baseline Python 3.13.5. New tests not published. Full Python 3.11 suite and exact-new-code CI not run. Published main 821cacfe CI #38044600376 green with 233 tests on previous source.",
   "merge_status": "AF-22 IN_PROGRESS; AF-21 MERGED AND VERIFIED",
   "known_blocker": null,
-  "next_action": "Publish preserved AF-22 parent-exit race patch from run33 handoff on existing main via authorized GitHub write path; run Python 3.11 full suite and exact-commit CI; reconcile checkpoint. Do not claim patch published before ref verification.",
+  "next_action": "Use an authorized GitHub code-write path to publish preserved AF-22 parent-exit race patch and regressions on existing main after fresh source/ref check; run Python 3.11 full suite and exact-commit CI; update checkpoint. Do not bypass code-write safety checks.",
   "feature_checkpoint_advanced": true,
   "completed_checkpoints": [
     {
@@ -210,11 +210,11 @@
     }
   ],
   "last_session_exit": {
-    "BLOCKED_LAYER": "shell environment DNS and connected GitHub code-write safety",
-    "BLOCKER": "git fetch cannot resolve github.com; authorized create_blob of reviewed source change was rejected by execution safety checks; existing main remains unchanged.",
-    "SAFE_WORK_COMPLETED": "Read live AGENTS.md, CHECKPOINT_STATE.json, reliability docs, branch refs and CI; executed byte-identical preflight in reconstructed checkout; reproduced 2 failing regressions on baseline; applied preserved bounded parent-exit race fix; 6 focused tests passed, Python compilation and commit-message validation passed on Python 3.13.5. Patch preserved locally, not published.",
-    "REMOTE_SHA": "5e73da492b0306a28c344160427d65dcdbe069d4",
-    "NEXT_ACTION": "Publish preserved AF-22 parent-exit race patch from run33 handoff on existing main via authorized GitHub write path; run Python 3.11 full suite and exact-commit CI; reconcile checkpoint. Do not claim patch published before ref verification."
+    "BLOCKED_LAYER": "shell Git DNS; connected GitHub code-write safety",
+    "BLOCKER": "Shell git fetch cannot resolve github.com; connected create_blob source and create_file test writes rejected by execution safety checks.",
+    "SAFE_WORK_COMPLETED": "Read live refs, AGENTS.md, CHECKPOINT_STATE.json and workflow docs; ran byte-identical canonical preflight in reconstructed checkout; confirmed previous source blob; added 2 local POSIX OSError fallback regressions, both passed on Python 3.13.5; preserved prior parent-exit race patch and test files.",
+    "REMOTE_SHA": "821cacfea17a2b06ed8b82b2f344470ad9a03dfe",
+    "NEXT_ACTION": "Use an authorized GitHub code-write path to publish preserved AF-22 parent-exit race patch and regressions on existing main after fresh source/ref check; run Python 3.11 full suite and exact-commit CI; update checkpoint. Do not bypass code-write safety checks."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
