@@ -4,12 +4,12 @@
   "current_checkpoint": "AF-22 disposable synthetic subprocess adapter",
   "checkpoint_status": "IN_PROGRESS",
   "active_branch": "main",
-  "verified_main_sha": "9a3dffaa2a12e358f7323d1f0a58ed226dd841fd",
-  "observed_feature_sha": "9a3dffaa2a12e358f7323d1f0a58ed226dd841fd",
+  "verified_main_sha": "5488b3ef336d0d8b9216d4ac09c045afffee8fc9",
+  "observed_feature_sha": "5488b3ef336d0d8b9216d4ac09c045afffee8fc9",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-22 selector-error sanitization and worker cleanup verified on main; checkpoint remains IN_PROGRESS. Exact implementation CI recorded below.",
+  "branch_remote_status": "AF-22 EAGAIN nonblocking pipe-read retry published on main; exact-commit CI succeeded; checkpoint remains IN_PROGRESS.",
   "pr_number": 6,
   "pr_state": {
     "number": 6,
@@ -53,21 +53,21 @@
       "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
     },
     "af22_latest_verified_main_run": {
-      "id": 37951723157,
-      "sha": "9a3dffaa2a12e358f7323d1f0a58ed226dd841fd",
+      "id": 38020441914,
+      "sha": "5488b3ef336d0d8b9216d4ac09c045afffee8fc9",
       "event": "push",
       "status": "completed",
       "conclusion": "success",
       "attempt": 1,
-      "job_id": 113891916912,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37951723157",
-      "tests": "217 product tests passed, 0 failed; 18 infrastructure tests executed with 1 baseline skip; diagnostics passed on Python 3.11.17"
+      "job_id": 114120052858,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38020441914",
+      "tests": "227 product tests passed, 0 failed; 18 infrastructure tests executed, 1 existing skip; diagnostics passed on Python 3.11.17"
     }
   },
-  "local_test_status": "2026-10-09: 57 focused synthetic subprocess tests passed on Python 3.13.5 against exact source/test blobs published in 9a3dffaa; 2 new ValueError regressions failed before fix and passed afterward. Full suite 217 passed in Python 3.11.17 GitHub Actions at exact source SHA.",
+  "local_test_status": "2026-10-09: 2 new EAGAIN regressions failed before fix and passed after; 4 focused tests passed on Python 3.13.5 in a reconstructed source checkout. Exact-head CI #38020441914: 227 product tests passed on Python 3.11.17.",
   "merge_status": "AF-22 IN_PROGRESS; AF-21 MERGED AND VERIFIED",
   "known_blocker": null,
-  "next_action": "Strengthen Linux descendant termination assertions and review AF-22 acceptance boundaries without treating synthetic subprocess isolation as a secure sandbox. Resume existing main and verify exact-head CI for each bounded change.",
+  "next_action": "Review AF-22 acceptance boundaries and add an isolated Linux descendant-termination assertion where deterministic, without claiming full process-tree reaping or secure sandboxing.",
   "feature_checkpoint_advanced": true,
   "completed_checkpoints": [
     {
@@ -210,11 +210,11 @@
     }
   ],
   "last_session_exit": {
-    "BLOCKED_LAYER": "shell Git DNS only; recovered via authorized GitHub integration",
-    "BLOCKER": "Canonical preflight git fetch cannot resolve github.com in this shell; connected GitHub writes and exact-head CI succeeded.",
-    "SAFE_WORK_COMPLETED": "Read AGENTS.md and checkpoint state; fetched current refs; ran exact preflight in reconstructed checkout; added 2 regression tests and selector ValueError sanitization; 57 focused tests passed; published 9a3dffaa; exact-commit Python 3.11 CI #37951723157 succeeded with 217 product tests.",
-    "REMOTE_SHA": "9a3dffaa2a12e358f7323d1f0a58ed226dd841fd",
-    "NEXT_ACTION": "Strengthen Linux descendant termination assertions and review AF-22 acceptance boundaries without treating synthetic subprocess isolation as a secure sandbox. Resume existing main and verify exact-head CI for each bounded change."
+    "BLOCKED_LAYER": "shell Git DNS only; connected GitHub publication recovered",
+    "BLOCKER": "Canonical preflight could not resolve github.com in the reconstructed checkout; connected GitHub commit and exact-head CI succeeded.",
+    "SAFE_WORK_COMPLETED": "Read AGENTS.md and CHECKPOINT_STATE.json; fetched refs; ran canonical preflight; published 5488b3ef with two EAGAIN regressions; 4 local focused tests passed; exact-head Python 3.11 CI #38020441914 passed with 227 product tests.",
+    "REMOTE_SHA": "5488b3ef336d0d8b9216d4ac09c045afffee8fc9",
+    "NEXT_ACTION": "Review AF-22 acceptance boundaries and add an isolated Linux descendant-termination assertion where deterministic, without claiming full process-tree reaping or secure sandboxing."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
