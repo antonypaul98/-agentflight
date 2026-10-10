@@ -9,7 +9,7 @@
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "Live main 821cacfea17a2b06ed8b82b2f344470ad9a03dfe; AF-22 remains IN_PROGRESS. Prepared parent-exit race fix and new OSError fallback tests unpublished; code publication rejected by safety checks.",
+  "branch_remote_status": "AF-22 existing main published checkpoint-only commit 3337306; CI #38051614636 SUCCESS on exact SHA (233 existing tests). Parent-exit race fix and 2 new OSError fallback tests remain unpublished.",
   "pr_number": 6,
   "pr_state": {
     "number": 6,
@@ -53,15 +53,14 @@
       "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
     },
     "af22_latest_verified_main_run": {
-      "id": 38034229520,
-      "sha": "9f3e8c9f9f1dfe9e5bac633747f3649ea0e143de",
+      "id": 38051614636,
+      "sha": "333730619dd7e2fa62efe6457350711e4c3d72e8",
       "event": "push",
       "status": "completed",
       "conclusion": "success",
-      "attempt": 1,
-      "job_id": 114161235330,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38034229520",
-      "tests": "233 product tests passed, 0 failed; 18 infrastructure tests executed, 1 existing skip; diagnostics passed on Python 3.11.17"
+      "job_id": 114211727419,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38051614636",
+      "tests": "233 product tests passed, 0 failed; 18 infrastructure executed with 1 existing skip; environment diagnostics passed on Python 3.11.17. Checkpoint-only change, not pending source/test fix."
     }
   },
   "local_test_status": "2026-10-10: canonical preflight SHA 8f817a8... matched and executed in reconstructed checkout; shell git fetch DNS failed. Preserved parent-exit race patch remains unpublished; prior 2 regressions fail before fix and 6 focused pass after fix (Python 3.13.5, earlier receipt). This run added 2 local POSIX group-signal OSError fallback coverage tests, both passed against published baseline Python 3.13.5. New tests not published. Full Python 3.11 suite and exact-new-code CI not run. Published main 821cacfe CI #38044600376 green with 233 tests on previous source.",
