@@ -99,9 +99,9 @@ def _capture_bounded(process, timeout_seconds):
                 allowance = MAX_OUTPUT_BYTES + 1 - sum(counts)
                 try:
                     data = os.read(key.fileobj.fileno(), allowance)
-                except InterruptedError:
-                    # A signal can interrupt a pipe read; retry only while the
-                    # existing capture deadline still permits it.
+                except (InterruptedError, BlockingIOError):
+                    # EINTR or a spurious EAGAIN on a nonblocking pipe is
+                    # recoverable; keep the original monotonic deadline.
                     continue
                 if not data:
                     selector.unregister(key.fileobj)
