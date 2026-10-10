@@ -66,12 +66,24 @@ class SyntheticCaseError(ValueError):
 def _kill_process_group(process):
     """Reap the fixed worker and any same-session descendants on POSIX."""
     if os.name == "posix":
-        try:
-            os.killpg(process.pid, signal.SIGKILL)
-        except ProcessLookupError:
-            pass
-        except OSError:
-            process.kill()
+        # EINTR does not establish whether the signal reached the group.
+        # Retry a bounded number of times before falling back to the parent.
+        for _ in range(3):
+            try:
+                os.killpg(process.pid, signal.SIGKILL)
+            except InterruptedError:
+                continue
+            except ProcessLookupError:
+                break
+            except OSError:
+                if process.poll() is None:
+                    process.kill()
+                break
+            else:
+                break
+        else:
+            if process.poll() is None:
+                process.kill()
     elif process.poll() is None:
         process.kill()
     process.wait()
