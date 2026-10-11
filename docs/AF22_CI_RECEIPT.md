@@ -99,3 +99,34 @@ baseline. GitHub Linux passed all 245 tests at the exact source and merge SHAs.
 This accepts only the cleanup-reap EINTR reliability repair. Overall AF-22
 remains IN_PROGRESS; the worker allowlist and isolation boundaries are unchanged,
 and no arbitrary-code sandbox or physical acceptance is claimed.
+
+## Accepted parent-liveness poll EINTR repair — 2026-10-11 UTC
+
+Source commit: `d99ff70c8e10d3eccbdbab00d57c848595b0db7c`.
+PR: https://github.com/antonypaul98/-agentflight/pull/11
+Exact source push CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38131721751
+Exact source PR-event CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38131730706
+Merged main: `141be6b41cbd8d64842617ca66c96fe6dd039fe8`.
+Exact merged-main CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38147173127
+
+All three runs succeeded on Python 3.11.17: **247 product tests passed,
+0 failed, 0 skipped**. Infrastructure: 18 executed, 17 passed and 1 existing
+Memory-only skip; dependency/import diagnostics passed.
+
+When process-group signaling reports the group absent, the parent fallback now
+retries an interrupted nonblocking liveness poll at most three times. It never
+signals or waits on the parent while liveness is unknown, and persistent
+interruptions expose only a fixed redacted error. Two synthetic regressions
+failed against untouched main and pass after the repair; 28 related cleanup,
+signal and race tests pass.
+
+The local Python 3.11.17 full suite reported 245 passed and the same 2 existing
+`/proc` descendant-observation failures previously reproduced on untouched
+baseline. GitHub Linux passed all 247 tests at the exact source and merge SHAs.
+
+This accepts only the parent-liveness poll EINTR reliability repair. Overall
+AF-22 remains IN_PROGRESS; the worker allowlist and isolation boundaries are
+unchanged, and no arbitrary-code sandbox or physical acceptance is claimed.
