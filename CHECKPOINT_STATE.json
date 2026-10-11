@@ -307,19 +307,19 @@
     }
   ],
   "current_af22_slice": {
-    "title": "Interrupted parent liveness poll during fallback cleanup",
+    "title": "Interrupted captured-pipe close during final cleanup",
     "status": "SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
-    "base_sha": "ffaaa39daa8db1fb241883014086c65abcc773a5",
-    "source_sha": "d99ff70c8e10d3eccbdbab00d57c848595b0db7c",
-    "source_tree_sha": "e79e2d7da1a451f5aca8adf07788c5a1ddad2629",
-    "pr": 11,
-    "merge_sha": "141be6b41cbd8d64842617ca66c96fe6dd039fe8",
-    "push_ci_run": 38131721751,
-    "pr_ci_run": 38131730706,
-    "merged_main_ci_run": 38147173127,
-    "remote_test_result": "Each exact-sha Python 3.11.17 run passed 247 product tests, 0 failed, 0 skipped; 18 infrastructure executed with 1 existing Memory-only skip; diagnostics passed",
-    "local_test_result": "2 focused failures before the fix and 2 passes after; 28 related tests pass; full suite 245 passed plus 2 baseline /proc observation failures",
-    "scope": "Retry nonblocking parent poll at most three times during group-missing fallback; never signal or wait while liveness is unknown; persistent interruption raises a fixed redacted error; worker allowlist and isolation boundaries unchanged"
+    "base_sha": "1f754d50681017ad4c31d253e714c01a604d03da",
+    "source_sha": "a8d1440d9b1ff1daf06fae085f8a911f0e28ddb6",
+    "source_tree_sha": "1edd9cd35f8a32c215cb2897c4c3287a2a321230",
+    "pr": 13,
+    "merge_sha": "427428b22b638ea517ad340d6d47741c5f24723f",
+    "push_ci_run": 38151299109,
+    "pr_ci_run": 38151317133,
+    "merged_main_ci_run": 38151372219,
+    "remote_test_result": "Each exact-sha Python 3.11.17 run passed 249 product tests, 0 failed, 0 skipped; 18 infrastructure executed with 1 existing Memory-only skip; diagnostics passed",
+    "local_test_result": "8 focused tests passed; 247 product tests passed when excluding 2 unchanged /proc observation failures; full suite otherwise passed on Python 3.11.17",
+    "scope": "Retry stdout and stderr pipe close at most three times; transient EINTR preserves the completed verdict; persistent interruption remains bounded and redacted while the second pipe still closes; worker allowlist and isolation boundaries unchanged"
   },
   "pending_af22_slice": {
     "title": "Interrupted process.wait after pipe EOF",
@@ -346,22 +346,22 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF22-PARENT-POLL-EINTR-20261011",
+    "ownership_id": "AF22-PIPE-CLOSE-EINTR-20261011",
     "status": "records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
     "release_requirement": "Exact records PR and merged-main CI, followed by an explicit bounded-slice release receipt",
     "source_repair_accepted": true,
     "prior_release": {
-      "ownership_id": "AF22-CLEANUP-REAP-EINTR-20261011",
+      "ownership_id": "AF22-PARENT-POLL-EINTR-20261011",
       "owner": "AgentFlight Hourly Build",
       "status": "released",
-      "receipt": "https://github.com/antonypaul98/-agentflight/pull/10#issuecomment-6107614646",
-      "released_at": "2026-10-11T09:34:00Z"
+      "receipt": "https://github.com/antonypaul98/-agentflight/pull/12#issuecomment-6110059848",
+      "released_at": "2026-10-11T14:29:00Z"
     },
     "release_record": "Prior bounded slices are historical and fulfilled. Current hourly slice remains owned until its records CI and explicit release receipt."
   },
-  "recorded_at_utc": "2026-10-11T14:28:00Z",
+  "recorded_at_utc": "2026-10-11T15:29:00Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py",
     "exit_code": 1,
@@ -457,7 +457,7 @@
     },
     {
       "title": "Interrupted parent liveness poll during fallback cleanup",
-      "status": "SOURCE_ACCEPTED_RECORDS_PENDING",
+      "status": "ACCEPTED",
       "source_sha": "d99ff70c8e10d3eccbdbab00d57c848595b0db7c",
       "pr": 11,
       "merge_sha": "141be6b41cbd8d64842617ca66c96fe6dd039fe8",
@@ -468,6 +468,20 @@
       "product_failures": 0,
       "product_skips": 0,
       "scope": "Bounded parent poll retry before fallback signaling; two synthetic regressions; no signal or wait while liveness is unknown; no allowlist expansion, test weakening or sandbox claim"
+    },
+    {
+      "title": "Interrupted captured-pipe close during final cleanup",
+      "status": "SOURCE_ACCEPTED_RECORDS_PENDING",
+      "source_sha": "a8d1440d9b1ff1daf06fae085f8a911f0e28ddb6",
+      "pr": 13,
+      "merge_sha": "427428b22b638ea517ad340d6d47741c5f24723f",
+      "push_ci_run": 38151299109,
+      "pr_ci_run": 38151317133,
+      "merged_main_ci_run": 38151372219,
+      "product_tests": 249,
+      "product_failures": 0,
+      "product_skips": 0,
+      "scope": "Bounded pipe-close retry after subprocess cleanup; transient interruption preserves the verdict and persistent interruption remains deterministic while the second pipe closes; two synthetic regressions; no allowlist expansion, test weakening or sandbox claim"
     }
   ]
 }
