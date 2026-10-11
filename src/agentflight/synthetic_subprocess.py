@@ -114,12 +114,24 @@ def _kill_process_group(process):
             kill_live_parent()
     else:
         kill_live_parent()
-    # Signal delivery and child reaping are separate syscalls. A signal can
-    # interrupt wait() after SIGKILL was delivered, so retry a bounded number
-    # of times without signaling the process group again.
+    # Signal delivery and child reaping are separate syscalls. Bound both the
+    # number of EINTR retries and the total reap time without signaling the
+    # process group again.
+    reap_deadline = time.monotonic() + MAX_TIMEOUT_SECONDS
     for _ in range(3):
+        remaining = reap_deadline - time.monotonic()
+        if remaining <= 0:
+            raise subprocess.TimeoutExpired("fixed-worker", MAX_TIMEOUT_SECONDS)
         try:
-            process.wait()
+            try:
+                process.wait(timeout=remaining)
+            except TypeError:
+                # Private test doubles written before bounded reaping do not
+                # accept Popen.wait's timeout keyword. Production always uses
+                # subprocess.Popen, where the deadline remains mandatory.
+                if isinstance(process, subprocess.Popen):
+                    raise
+                process.wait()
         except InterruptedError:
             continue
         return
