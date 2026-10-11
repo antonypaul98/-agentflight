@@ -161,3 +161,33 @@ tests at the exact source and merge SHAs.
 This accepts only the captured-pipe close EINTR reliability repair. Overall
 AF-22 remains IN_PROGRESS; the worker allowlist and isolation boundaries are
 unchanged, and no arbitrary-code sandbox or physical acceptance is claimed.
+
+## Accepted post-signal reap deadline repair — 2026-10-11 UTC
+
+Source commit: `4ff75384c3a8415a2066323ed75db4ca2479856b`.
+PR: https://github.com/antonypaul98/-agentflight/pull/15
+Exact source push CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38171808059
+Exact source PR-event CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38171815572
+Merged main: `312eb503591d65f63400def41a7419bf9036c784`.
+Exact merged-main CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38171884636
+
+All three runs succeeded on Python 3.11.17: **251 product tests passed,
+0 failed, 0 skipped**. Infrastructure: 18 executed, 17 passed and 1 existing
+Memory-only skip; dependency/import diagnostics passed.
+
+After process-group signaling, worker reaping now shares one deterministic
+deadline capped by the existing maximum synthetic-case timeout. Interrupted
+waits retry without re-signaling the group; a reap timeout is sanitized by the
+existing fixed `launch_error` boundary. Two synthetic regressions failed
+against accepted main and pass after the repair; 19 focused cleanup tests pass.
+
+The local Python 3.11.17 full suite reported 249 passed and the same 2 existing
+`/proc` descendant-observation failures. GitHub Linux passed all 251 product
+tests at the exact source and merge SHAs.
+
+This accepts only the post-signal reap deadline repair. Overall AF-22 remains
+IN_PROGRESS; the fixed worker allowlist and isolation boundaries are unchanged,
+and no arbitrary-code sandbox or physical acceptance is claimed.
