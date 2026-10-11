@@ -4,61 +4,61 @@
   "current_checkpoint": "AF-22 disposable synthetic subprocess adapter",
   "checkpoint_status": "IN_PROGRESS",
   "active_branch": "work/af22-wait-eintr-repair",
-  "verified_main_sha": "4540d22005a7d5a7ff464089af364a56134a36b6",
-  "observed_feature_sha": "f238100a09109c432050c90decec9f8c1d14a557",
+  "verified_main_sha": "141be6b41cbd8d64842617ca66c96fe6dd039fe8",
+  "observed_feature_sha": "d99ff70c8e10d3eccbdbab00d57c848595b0db7c",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "Cleanup-reap EINTR source and two regressions published, PR #9 merged; exact source push, PR and merged-main CI all pass 245 product tests. Acceptance records are the only pending write.",
-  "pr_number": 9,
+  "branch_remote_status": "Parent-liveness poll EINTR source and two regressions published, PR #11 merged; exact source push, PR and merged-main CI all pass 247 product tests. Acceptance records are the only pending write.",
+  "pr_number": 11,
   "pr_state": {
-    "number": 9,
+    "number": 11,
     "state": "merged",
-    "head_sha": "f238100a09109c432050c90decec9f8c1d14a557",
-    "url": "https://github.com/antonypaul98/-agentflight/pull/9",
-    "merge_commit_sha": "4540d22005a7d5a7ff464089af364a56134a36b6"
+    "head_sha": "d99ff70c8e10d3eccbdbab00d57c848595b0db7c",
+    "url": "https://github.com/antonypaul98/-agentflight/pull/11",
+    "merge_commit_sha": "141be6b41cbd8d64842617ca66c96fe6dd039fe8"
   },
   "ci_state": {
     "source_push_run": {
-      "id": 38128419013,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38128419013",
-      "head_sha": "f238100a09109c432050c90decec9f8c1d14a557",
+      "id": 38131721751,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38131721751",
+      "head_sha": "d99ff70c8e10d3eccbdbab00d57c848595b0db7c",
       "head_branch": "work/af22-wait-eintr-repair",
       "event": "push",
       "status": "completed",
       "conclusion": "success",
       "python": "3.11.17",
-      "product_tests": 245,
+      "product_tests": 247,
       "product_failures": 0,
       "product_skips": 0,
       "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
       "diagnostics": "passed"
     },
     "source_pr_run": {
-      "id": 38128432122,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38128432122",
-      "head_sha": "f238100a09109c432050c90decec9f8c1d14a557",
+      "id": 38131730706,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38131730706",
+      "head_sha": "d99ff70c8e10d3eccbdbab00d57c848595b0db7c",
       "head_branch": "work/af22-wait-eintr-repair",
       "event": "pull_request",
       "status": "completed",
       "conclusion": "success",
       "python": "3.11.17",
-      "product_tests": 245,
+      "product_tests": 247,
       "product_failures": 0,
       "product_skips": 0,
       "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
       "diagnostics": "passed"
     },
     "source_merged_main_run": {
-      "id": 38128463396,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38128463396",
-      "head_sha": "4540d22005a7d5a7ff464089af364a56134a36b6",
+      "id": 38147173127,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38147173127",
+      "head_sha": "141be6b41cbd8d64842617ca66c96fe6dd039fe8",
       "head_branch": "main",
       "event": "push",
       "status": "completed",
       "conclusion": "success",
       "python": "3.11.17",
-      "product_tests": 245,
+      "product_tests": 247,
       "product_failures": 0,
       "product_skips": 0,
       "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
@@ -66,10 +66,10 @@
     },
     "records_ci": "pending; require exact records PR and merged-main CI before explicit release"
   },
-  "local_test_status": "Python 3.11.17: both cleanup-reap EINTR regressions failed on untouched main and pass after the repair; 27 related cleanup/signal/wait tests pass. Full canonical suite: 243 passed, 2 existing /proc descendant-observation failures previously reproduced on untouched baseline. No full local pass is claimed. Infrastructure: 17 passed, 1 baseline skip; pip check/import diagnostics passed. Exact GitHub Linux source push, PR and merged-main suites each pass 245 product tests.",
-  "merge_status": "AF-22 cleanup-reap EINTR repair MERGED AND VERIFIED; overall AF-22 remains IN_PROGRESS; prior AF-22 repairs remain accepted",
+  "local_test_status": "Python 3.11.17: both parent-poll EINTR regressions failed on untouched main and pass after the repair; 28 related cleanup/signal/race tests pass. Full canonical suite: 245 passed, 2 existing /proc descendant-observation failures previously reproduced on untouched baseline. No full local pass is claimed. Infrastructure: 17 passed, 1 baseline skip; pip check/import diagnostics passed. Exact GitHub Linux source push, PR and merged-main suites each pass 247 product tests.",
+  "merge_status": "AF-22 parent-liveness poll EINTR repair MERGED AND VERIFIED; overall AF-22 remains IN_PROGRESS; prior AF-22 repairs remain accepted",
   "known_blocker": null,
-  "next_action": "Publish and verify this acceptance-record update, then explicitly release this bounded writer slice. On the next run, refresh ownership and review the next smallest remaining AF-22 acceptance gap without repeating accepted wait or cleanup slices.",
+  "next_action": "Publish and verify this acceptance-record update, then explicitly release this bounded writer slice. On the next run, refresh ownership and review the next smallest remaining AF-22 acceptance gap without repeating accepted wait, cleanup-reap or parent-poll slices.",
   "feature_checkpoint_advanced": false,
   "completed_checkpoints": [
     {
@@ -214,13 +214,13 @@
   "last_session_exit": {
     "BLOCKED_LAYER": null,
     "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "Cleanup-reap EINTR repair and two regressions published through the authorized connector; PR #9 merged; 245 product tests pass on exact source push, PR and merged main with zero product skips. Infrastructure and diagnostics pass. Local full suite retains two baseline PID/proc environment failures; no test was disabled. Canonical acceptance records await their own CI before writer-slice release.",
-    "REMOTE_SHA": "4540d22005a7d5a7ff464089af364a56134a36b6",
-    "NEXT_ACTION": "Publish and verify this acceptance-record update, then explicitly release this bounded writer slice. On the next run, refresh ownership and review the next smallest remaining AF-22 acceptance gap without repeating accepted wait or cleanup slices."
+    "SAFE_WORK_COMPLETED": "Parent-liveness poll EINTR repair and two regressions published through the authorized connector; PR #11 merged; 247 product tests pass on exact source push, PR and merged main with zero product skips. Infrastructure and diagnostics pass. Local full suite retains two baseline PID/proc environment failures; no test was disabled. Canonical acceptance records await their own CI before writer-slice release.",
+    "REMOTE_SHA": "141be6b41cbd8d64842617ca66c96fe6dd039fe8",
+    "NEXT_ACTION": "Publish and verify this acceptance-record update, then explicitly release this bounded writer slice. On the next run, refresh ownership and review the next smallest remaining AF-22 acceptance gap without repeating accepted wait, cleanup-reap or parent-poll slices."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "4540d22005a7d5a7ff464089af364a56134a36b6",
+  "observed_branch_sha": "d99ff70c8e10d3eccbdbab00d57c848595b0db7c",
   "historical_session_exits": [
     {
       "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
@@ -237,7 +237,7 @@
       "NEXT_ACTION": "Use an authorized source-code publication path to apply the preserved wait-EINTR patch and 3 regressions to existing main; run full Python 3.11 suite and verify exact-commit CI."
     }
   ],
-  "starting_main_sha": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
+  "starting_main_sha": "ffaaa39daa8db1fb241883014086c65abcc773a5",
   "local_validation": {
     "python": "3.11.17",
     "focused_before_fix": "3 failed",
@@ -307,19 +307,19 @@
     }
   ],
   "current_af22_slice": {
-    "title": "Interrupted cleanup reaping after group termination",
+    "title": "Interrupted parent liveness poll during fallback cleanup",
     "status": "SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
-    "base_sha": "b0bd2af8d98b6ed03c085285b832162693b7ee61",
-    "source_sha": "f238100a09109c432050c90decec9f8c1d14a557",
-    "source_tree_sha": "142110c1132c72b8c84a5c34adffbb3ad8a8c6b8",
-    "pr": 9,
-    "merge_sha": "4540d22005a7d5a7ff464089af364a56134a36b6",
-    "push_ci_run": 38128419013,
-    "pr_ci_run": 38128432122,
-    "merged_main_ci_run": 38128463396,
-    "remote_test_result": "Each exact-sha Python 3.11.17 run passed 245 product tests, 0 failed, 0 skipped; 18 infrastructure executed with 1 existing Memory-only skip; diagnostics passed",
-    "local_test_result": "2 focused failures before the fix and 2 passes after; 27 related tests pass; full suite 243 passed plus 2 baseline /proc observation failures",
-    "scope": "Retry cleanup process.wait after delivered group SIGKILL at most three times without re-signaling; persistent interruption raises a fixed redacted error; worker allowlist and isolation boundaries unchanged"
+    "base_sha": "ffaaa39daa8db1fb241883014086c65abcc773a5",
+    "source_sha": "d99ff70c8e10d3eccbdbab00d57c848595b0db7c",
+    "source_tree_sha": "e79e2d7da1a451f5aca8adf07788c5a1ddad2629",
+    "pr": 11,
+    "merge_sha": "141be6b41cbd8d64842617ca66c96fe6dd039fe8",
+    "push_ci_run": 38131721751,
+    "pr_ci_run": 38131730706,
+    "merged_main_ci_run": 38147173127,
+    "remote_test_result": "Each exact-sha Python 3.11.17 run passed 247 product tests, 0 failed, 0 skipped; 18 infrastructure executed with 1 existing Memory-only skip; diagnostics passed",
+    "local_test_result": "2 focused failures before the fix and 2 passes after; 28 related tests pass; full suite 245 passed plus 2 baseline /proc observation failures",
+    "scope": "Retry nonblocking parent poll at most three times during group-missing fallback; never signal or wait while liveness is unknown; persistent interruption raises a fixed redacted error; worker allowlist and isolation boundaries unchanged"
   },
   "pending_af22_slice": {
     "title": "Interrupted process.wait after pipe EOF",
@@ -346,22 +346,22 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF22-CLEANUP-REAP-EINTR-20261011",
+    "ownership_id": "AF22-PARENT-POLL-EINTR-20261011",
     "status": "records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
     "release_requirement": "Exact records PR and merged-main CI, followed by an explicit bounded-slice release receipt",
     "source_repair_accepted": true,
     "prior_release": {
-      "ownership_id": "AF22-REPAIR-20261010",
-      "owner": "Interactive active-build repair mission",
+      "ownership_id": "AF22-CLEANUP-REAP-EINTR-20261011",
+      "owner": "AgentFlight Hourly Build",
       "status": "released",
-      "receipt": "https://github.com/antonypaul98/-agentflight/pull/8#issuecomment-6105473791",
-      "released_at": "2026-10-11T04:34:12Z"
+      "receipt": "https://github.com/antonypaul98/-agentflight/pull/10#issuecomment-6107614646",
+      "released_at": "2026-10-11T09:34:00Z"
     },
-    "release_record": "The prior interactive hold is historical and fulfilled. Current hourly slice remains owned until its records CI and explicit release receipt."
+    "release_record": "Prior bounded slices are historical and fulfilled. Current hourly slice remains owned until its records CI and explicit release receipt."
   },
-  "recorded_at_utc": "2026-10-11T09:28:00Z",
+  "recorded_at_utc": "2026-10-11T14:28:00Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py",
     "exit_code": 1,
@@ -443,7 +443,7 @@
     },
     {
       "title": "Interrupted cleanup reaping after group termination",
-      "status": "SOURCE_ACCEPTED_RECORDS_PENDING",
+      "status": "ACCEPTED",
       "source_sha": "f238100a09109c432050c90decec9f8c1d14a557",
       "pr": 9,
       "merge_sha": "4540d22005a7d5a7ff464089af364a56134a36b6",
@@ -454,6 +454,20 @@
       "product_failures": 0,
       "product_skips": 0,
       "scope": "Bounded cleanup wait retry after group termination; two synthetic regressions; no group re-signal, allowlist expansion, test weakening or sandbox claim"
+    },
+    {
+      "title": "Interrupted parent liveness poll during fallback cleanup",
+      "status": "SOURCE_ACCEPTED_RECORDS_PENDING",
+      "source_sha": "d99ff70c8e10d3eccbdbab00d57c848595b0db7c",
+      "pr": 11,
+      "merge_sha": "141be6b41cbd8d64842617ca66c96fe6dd039fe8",
+      "push_ci_run": 38131721751,
+      "pr_ci_run": 38131730706,
+      "merged_main_ci_run": 38147173127,
+      "product_tests": 247,
+      "product_failures": 0,
+      "product_skips": 0,
+      "scope": "Bounded parent poll retry before fallback signaling; two synthetic regressions; no signal or wait while liveness is unknown; no allowlist expansion, test weakening or sandbox claim"
     }
   ]
 }
