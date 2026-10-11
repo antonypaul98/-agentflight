@@ -130,3 +130,34 @@ baseline. GitHub Linux passed all 247 tests at the exact source and merge SHAs.
 This accepts only the parent-liveness poll EINTR reliability repair. Overall
 AF-22 remains IN_PROGRESS; the worker allowlist and isolation boundaries are
 unchanged, and no arbitrary-code sandbox or physical acceptance is claimed.
+
+## Accepted captured-pipe close EINTR repair — 2026-10-11 UTC
+
+Source commit: `a8d1440d9b1ff1daf06fae085f8a911f0e28ddb6`.
+PR: https://github.com/antonypaul98/-agentflight/pull/13
+Exact source push CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38151299109
+Exact source PR-event CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38151317133
+Merged main: `427428b22b638ea517ad340d6d47741c5f24723f`.
+Exact merged-main CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38151372219
+
+All three runs succeeded on Python 3.11.17: **249 product tests passed,
+0 failed, 0 skipped**. Infrastructure: 18 executed, 17 passed and 1 existing
+Memory-only skip; dependency/import diagnostics passed.
+
+Final stdout and stderr closure now retries `InterruptedError` at most three
+times per pipe. A transient interruption preserves the completed verdict;
+persistent interruption is bounded and sanitized to fixed `launch_error`
+evidence, while nested cleanup still closes the second pipe. Two synthetic
+regressions cover both paths.
+
+Local Python 3.11.17 verification passed 8 focused tests and 247 product tests
+when excluding the same 2 unchanged `/proc` descendant-observation failures.
+The full local suite otherwise passed. GitHub Linux passed all 249 product
+tests at the exact source and merge SHAs.
+
+This accepts only the captured-pipe close EINTR reliability repair. Overall
+AF-22 remains IN_PROGRESS; the worker allowlist and isolation boundaries are
+unchanged, and no arbitrary-code sandbox or physical acceptance is claimed.
