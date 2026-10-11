@@ -104,7 +104,16 @@ def _kill_process_group(process):
             kill_live_parent()
     else:
         kill_live_parent()
-    process.wait()
+    # Signal delivery and child reaping are separate syscalls. A signal can
+    # interrupt wait() after SIGKILL was delivered, so retry a bounded number
+    # of times without signaling the process group again.
+    for _ in range(3):
+        try:
+            process.wait()
+        except InterruptedError:
+            continue
+        return
+    raise InterruptedError("process reaping repeatedly interrupted")
 
 
 def _capture_bounded(process, timeout_seconds):
