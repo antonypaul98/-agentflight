@@ -176,6 +176,17 @@ def _capture_bounded(process, timeout_seconds):
     return "completed", tuple(counts)
 
 
+def _close_pipe(stream):
+    """Close one captured pipe, retrying a bounded number of interruptions."""
+    for _ in range(3):
+        try:
+            stream.close()
+        except InterruptedError:
+            continue
+        return
+    raise InterruptedError("pipe close repeatedly interrupted")
+
+
 def run_synthetic_case(case_id: str, mode: str, *, timeout_seconds: float = DEFAULT_TIMEOUT_SECONDS) -> dict:
     """Run a fixed Python worker with bounded pipe capture and redacted verdicts.
 
@@ -222,9 +233,9 @@ def run_synthetic_case(case_id: str, mode: str, *, timeout_seconds: float = DEFA
                     _kill_process_group(process)
                 finally:
                     try:
-                        process.stdout.close()
+                        _close_pipe(process.stdout)
                     finally:
-                        process.stderr.close()
+                        _close_pipe(process.stderr)
     except (OSError, subprocess.SubprocessError, ValueError):
         # Selector/pipe setup can raise ValueError for invalid descriptors.
         # Paths, interpreter errors and subprocess output may contain secrets.
