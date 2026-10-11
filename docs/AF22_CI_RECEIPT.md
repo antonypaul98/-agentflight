@@ -69,3 +69,33 @@ This accepts only the existing wait-EINTR reliability repair. Overall AF-22
 remains IN_PROGRESS; no arbitrary-code sandbox or physical acceptance is claimed.
 The next hourly writer reviews existing AF-22 acceptance after the records
 PR/main CI and explicit release, without repeating accepted slices.
+
+## Accepted cleanup-reap EINTR repair — 2026-10-11 UTC
+
+Source commit: `f238100a09109c432050c90decec9f8c1d14a557`.
+PR: https://github.com/antonypaul98/-agentflight/pull/9
+Exact source push CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38128419013
+Exact source PR-event CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38128432122
+Merged main: `4540d22005a7d5a7ff464089af364a56134a36b6`.
+Exact merged-main CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38128463396
+
+All three runs succeeded on Python 3.11.17: **245 product tests passed,
+0 failed, 0 skipped**. Infrastructure: 18 executed, 17 passed and 1 existing
+Memory-only skip; dependency/import diagnostics passed.
+
+After process-group termination, an interrupted cleanup `process.wait()` now
+retries at most three times without re-signaling the group. Persistent
+interruptions remain bounded and surface only a fixed redacted error. Two new
+synthetic regressions failed against untouched main and pass after the repair.
+Twenty-seven related cleanup, signal, redaction and wait-deadline tests pass.
+
+The local Python 3.11.17 full suite reported 243 passed and the same 2 existing
+`/proc` descendant-observation failures previously reproduced on untouched
+baseline. GitHub Linux passed all 245 tests at the exact source and merge SHAs.
+
+This accepts only the cleanup-reap EINTR reliability repair. Overall AF-22
+remains IN_PROGRESS; the worker allowlist and isolation boundaries are unchanged,
+and no arbitrary-code sandbox or physical acceptance is claimed.
