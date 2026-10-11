@@ -65,12 +65,22 @@ class SyntheticCaseError(ValueError):
 
 def _kill_process_group(process):
     """Reap the fixed worker and any same-session descendants on POSIX."""
+    def poll_parent():
+        # A nonblocking liveness check is still a waitpid operation and may be
+        # interrupted. Bound retries and replace arbitrary exception text.
+        for _ in range(3):
+            try:
+                return process.poll()
+            except InterruptedError:
+                continue
+        raise InterruptedError("parent liveness check repeatedly interrupted")
+
     def kill_live_parent():
         # A parent-only fallback can itself be interrupted by a signal.
         # Recheck liveness between bounded retries to avoid signaling an
         # already-exited worker, and never wait if no kill was delivered.
         for _ in range(3):
-            if process.poll() is not None:
+            if poll_parent() is not None:
                 return
             try:
                 process.kill()
