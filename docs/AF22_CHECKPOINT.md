@@ -44,6 +44,7 @@ isolation guarantees. No arbitrary project execution, real-project crash
 testing, hardware acceptance, or cross-platform process-tree isolation is
 claimed. AF-22 acceptance remains open.
 
-Next: strengthen Linux descendant-termination assertions, cover additional
-exceptional cleanup paths, and review AF-22 acceptance without expanding
-the runner to untrusted inputs.
+Linux descendant observations now require both the fixed worker's process group
+and isolated session, while retaining PID start-time continuity to reject reused
+identities. Next: cover additional exceptional cleanup paths and review AF-22
+acceptance without expanding the runner to untrusted inputs.

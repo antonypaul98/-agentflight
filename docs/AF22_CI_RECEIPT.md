@@ -191,3 +191,30 @@ tests at the exact source and merge SHAs.
 This accepts only the post-signal reap deadline repair. Overall AF-22 remains
 IN_PROGRESS; the fixed worker allowlist and isolation boundaries are unchanged,
 and no arbitrary-code sandbox or physical acceptance is claimed.
+
+## Accepted Linux descendant identity evidence — 2026-10-11 UTC
+
+Source commit: `f94fa0b223293ac2976dde750c00df9421432a57`.
+PR: https://github.com/antonypaul98/-agentflight/pull/17
+Exact source push CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38175727976
+Exact source PR-event CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38175734396
+Merged main: `72b7619f7f614592b7c38ceca97a591d076bd8f1`.
+Exact merged-main CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38180015727
+
+All three runs succeeded on Python 3.11.17: **251 product tests passed,
+0 failed, 0 skipped**. Infrastructure: 18 executed, 17 passed and 1 existing
+Memory-only skip; dependency/import diagnostics passed.
+
+Linux `/proc` descendant observations now require both the fixed worker's
+process-group ID and isolated-session ID to match the worker PID. PID start-time
+continuity remains required, preventing a recycled group ID in another session
+from satisfying termination evidence. Both normal-EOF and timeout cleanup paths
+retain real orphan termination assertions.
+
+This is acceptance hardening only; runtime behavior and the twelve fixed worker
+modes are unchanged. Overall AF-22 remains IN_PROGRESS. No arbitrary-code
+sandbox, real-project execution, private data or cross-platform process-tree
+isolation is claimed.

@@ -4,25 +4,25 @@
   "current_checkpoint": "AF-22 disposable synthetic subprocess adapter",
   "checkpoint_status": "IN_PROGRESS",
   "active_branch": "work/af22-wait-eintr-repair",
-  "verified_main_sha": "312eb503591d65f63400def41a7419bf9036c784",
-  "observed_feature_sha": "4ff75384c3a8415a2066323ed75db4ca2479856b",
+  "verified_main_sha": "72b7619f7f614592b7c38ceca97a591d076bd8f1",
+  "observed_feature_sha": "f94fa0b223293ac2976dde750c00df9421432a57",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "Post-signal reap deadline source and two regressions published, PR #15 merged; exact source push, PR and merged-main CI all pass 251 product tests. Acceptance records are the only pending write.",
-  "pr_number": 15,
+  "branch_remote_status": "Linux descendant identity assertions now require both the isolated process group and session plus PID start-time continuity. PR #17 merged; exact source push, PR and merged-main CI all pass 251 product tests. Acceptance records are the only pending write.",
+  "pr_number": 17,
   "pr_state": {
-    "number": 15,
+    "number": 17,
     "state": "merged",
-    "head_sha": "4ff75384c3a8415a2066323ed75db4ca2479856b",
-    "url": "https://github.com/antonypaul98/-agentflight/pull/15",
-    "merge_commit_sha": "312eb503591d65f63400def41a7419bf9036c784"
+    "head_sha": "f94fa0b223293ac2976dde750c00df9421432a57",
+    "url": "https://github.com/antonypaul98/-agentflight/pull/17",
+    "merge_commit_sha": "72b7619f7f614592b7c38ceca97a591d076bd8f1"
   },
   "ci_state": {
     "source_push_run": {
-      "id": 38171808059,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38171808059",
-      "head_sha": "4ff75384c3a8415a2066323ed75db4ca2479856b",
+      "id": 38175727976,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38175727976",
+      "head_sha": "f94fa0b223293ac2976dde750c00df9421432a57",
       "head_branch": "work/af22-wait-eintr-repair",
       "event": "push",
       "status": "completed",
@@ -35,9 +35,9 @@
       "diagnostics": "passed"
     },
     "source_pr_run": {
-      "id": 38171815572,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38171815572",
-      "head_sha": "4ff75384c3a8415a2066323ed75db4ca2479856b",
+      "id": 38175734396,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38175734396",
+      "head_sha": "f94fa0b223293ac2976dde750c00df9421432a57",
       "head_branch": "work/af22-wait-eintr-repair",
       "event": "pull_request",
       "status": "completed",
@@ -50,9 +50,9 @@
       "diagnostics": "passed"
     },
     "source_merged_main_run": {
-      "id": 38171884636,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38171884636",
-      "head_sha": "312eb503591d65f63400def41a7419bf9036c784",
+      "id": 38180015727,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38180015727",
+      "head_sha": "72b7619f7f614592b7c38ceca97a591d076bd8f1",
       "head_branch": "main",
       "event": "push",
       "status": "completed",
@@ -66,10 +66,10 @@
     },
     "records_ci": "pending; require exact records PR and merged-main CI before explicit release"
   },
-  "local_test_status": "Python 3.11.17: both post-signal reap deadline regressions failed on accepted main and pass after the repair; 19 focused cleanup tests pass. Full canonical suite: 249 passed, 2 existing /proc descendant-observation failures. No full local pass is claimed. Compilation and whitespace checks passed. Exact GitHub Linux source push, PR and merged-main suites each pass 251 product tests.",
-  "merge_status": "AF-22 post-signal reap deadline repair MERGED AND VERIFIED; overall AF-22 remains IN_PROGRESS; prior AF-22 repairs remain accepted",
+  "local_test_status": "No local product-test result is claimed for this acceptance-only slice. Exact GitHub Linux source push, PR and merged-main suites each pass 251 product tests with zero product skips; infrastructure and diagnostics pass.",
+  "merge_status": "AF-22 Linux descendant identity acceptance MERGED AND VERIFIED; overall AF-22 remains IN_PROGRESS; prior AF-22 repairs remain accepted",
   "known_blocker": null,
-  "next_action": "Publish and verify this acceptance-record update, then explicitly release this bounded writer slice. On the next run, refresh ownership and review the next smallest remaining AF-22 acceptance gap without repeating accepted wait, reap, poll, pipe-close or reap-deadline slices.",
+  "next_action": "Publish and verify this acceptance-record update, then explicitly release this bounded writer slice. On the next run, refresh ownership and review additional exceptional cleanup paths and AF-22 completion criteria without repeating accepted cleanup or descendant-identity slices.",
   "feature_checkpoint_advanced": false,
   "completed_checkpoints": [
     {
@@ -214,13 +214,13 @@
   "last_session_exit": {
     "BLOCKED_LAYER": null,
     "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "Post-signal process reaping is bounded by the original cleanup deadline; two regressions published through the authorized connector; PR #15 merged; 251 product tests pass on exact source push, PR and merged main with zero product skips. Infrastructure and diagnostics pass. Local full suite retains two baseline PID/proc environment failures; no test was disabled. Canonical acceptance records await their own CI before writer-slice release.",
-    "REMOTE_SHA": "312eb503591d65f63400def41a7419bf9036c784",
+    "SAFE_WORK_COMPLETED": "Linux descendant observations now require the fixed worker's process group and isolated session, retaining PID start-time continuity. PR #17 merged; 251 product tests pass on exact source push, PR and merged main with zero product skips. Infrastructure and diagnostics pass. Canonical acceptance records await their own CI before writer-slice release.",
+    "REMOTE_SHA": "72b7619f7f614592b7c38ceca97a591d076bd8f1",
     "NEXT_ACTION": "Publish and verify this acceptance-record update, then explicitly release this bounded writer slice."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "4ff75384c3a8415a2066323ed75db4ca2479856b",
+  "observed_branch_sha": "f94fa0b223293ac2976dde750c00df9421432a57",
   "historical_session_exits": [
     {
       "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
