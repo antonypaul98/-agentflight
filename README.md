@@ -17,5 +17,7 @@ caller to store privately.
 
 This runner verifies recorded calls using existing AgentFlight primitives. JSON
 fixtures never execute commands or access the project's tools, network, or other
-repositories. Project subprocess adapters and isolation are future checkpoints.
-See [AF-21](docs/AF21_CHECKPOINT.md) for bounds, schema, and acceptance evidence.
+repositories. AF-22 adds a separate fixed-workload synthetic subprocess adapter;
+it is not an OS sandbox or an arbitrary project runner. See
+[AF-21](docs/AF21_CHECKPOINT.md) and [AF-22](docs/AF22_CHECKPOINT.md) for bounds,
+schemas, acceptance evidence, and explicit exclusions.
