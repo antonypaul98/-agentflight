@@ -218,3 +218,26 @@ This is acceptance hardening only; runtime behavior and the twelve fixed worker
 modes are unchanged. Overall AF-22 remains IN_PROGRESS. No arbitrary-code
 sandbox, real-project execution, private data or cross-platform process-tree
 isolation is claimed.
+
+## Final scoped acceptance review — 2026-10-12 UTC
+
+Accepted baseline main: `eb070d2e150dbadaa8f393a0d5f72e15711a18a5`.
+Exact baseline merged-main CI:
+https://github.com/antonypaul98/-agentflight/actions/runs/38191409187
+
+Python 3.11.17: **251 product tests passed, 0 failed, 0 skipped**.
+Infrastructure: 18 executed, 17 passed and 1 established Memory-only skip;
+dependency/import diagnostics passed.
+
+Reviewing the original AF-22 criteria against the accepted implementation and
+PR #7–#18 evidence found the fixed adapter complete: strict allowlisted inputs,
+bounded combined capture and time, deterministic redacted evidence, cleanup on
+every verdict, bounded exceptional/EINTR handling, and real Linux descendant
+identity/termination evidence. No additional runtime repair is required for the
+defined scope.
+
+AF-22 is **MERGED_AND_VERIFIED** subject to this records-only closure receiving
+exact-head PR CI and exact merged-main CI. This acceptance does not convert the
+adapter into a sandbox and does not authorize arbitrary code, commands, external
+projects, credentials, network access, private data, hardware, or production
+execution. Those remain separately scoped future work.

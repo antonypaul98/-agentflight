@@ -2,21 +2,21 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-22 disposable synthetic subprocess adapter",
-  "checkpoint_status": "IN_PROGRESS",
-  "active_branch": "work/af22-wait-eintr-repair",
-  "verified_main_sha": "72b7619f7f614592b7c38ceca97a591d076bd8f1",
+  "checkpoint_status": "MERGED_AND_VERIFIED",
+  "active_branch": "main",
+  "verified_main_sha": "eb070d2e150dbadaa8f393a0d5f72e15711a18a5",
   "observed_feature_sha": "f94fa0b223293ac2976dde750c00df9421432a57",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "Linux descendant identity assertions now require both the isolated process group and session plus PID start-time continuity. PR #17 merged; exact source push, PR and merged-main CI all pass 251 product tests. Acceptance records are the only pending write.",
-  "pr_number": 17,
+  "branch_remote_status": "AF-22 source and defensive slices are merged and verified through PR #17; PR #18 records descendant-identity acceptance. Final scoped acceptance review found no remaining fixed-adapter invariant and leaves untrusted execution, real projects, hardware and cross-platform process trees outside AF-22.",
+  "pr_number": 18,
   "pr_state": {
-    "number": 17,
+    "number": 18,
     "state": "merged",
-    "head_sha": "f94fa0b223293ac2976dde750c00df9421432a57",
-    "url": "https://github.com/antonypaul98/-agentflight/pull/17",
-    "merge_commit_sha": "72b7619f7f614592b7c38ceca97a591d076bd8f1"
+    "head_sha": "1f44a4873fc842ae6f286e8cf08c91e4b2b2c087",
+    "url": "https://github.com/antonypaul98/-agentflight/pull/18",
+    "merge_commit_sha": "eb070d2e150dbadaa8f393a0d5f72e15711a18a5"
   },
   "ci_state": {
     "source_push_run": {
@@ -64,13 +64,34 @@
       "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
       "diagnostics": "passed"
     },
-    "records_ci": "pending; require exact records PR and merged-main CI before explicit release"
+    "records_pr_run": {
+      "id": 38191352599,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38191352599",
+      "head_sha": "1f44a4873fc842ae6f286e8cf08c91e4b2b2c087",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "product_tests": 251,
+      "product_failures": 0,
+      "product_skips": 0
+    },
+    "records_merged_main_run": {
+      "id": 38191409187,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38191409187",
+      "head_sha": "eb070d2e150dbadaa8f393a0d5f72e15711a18a5",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "product_tests": 251,
+      "product_failures": 0,
+      "product_skips": 0
+    }
   },
-  "local_test_status": "No local product-test result is claimed for this acceptance-only slice. Exact GitHub Linux source push, PR and merged-main suites each pass 251 product tests with zero product skips; infrastructure and diagnostics pass.",
-  "merge_status": "AF-22 Linux descendant identity acceptance MERGED AND VERIFIED; overall AF-22 remains IN_PROGRESS; prior AF-22 repairs remain accepted",
+  "local_test_status": "Pinned Python 3.11.17 acceptance review: 249 passed and 2 established container-specific /proc observation failures; exact GitHub Linux main CI passes all 251 product tests with zero product skips. Infrastructure and diagnostics pass.",
+  "merge_status": "MERGED_AND_VERIFIED",
   "known_blocker": null,
-  "next_action": "Publish and verify this acceptance-record update, then explicitly release this bounded writer slice. On the next run, refresh ownership and review additional exceptional cleanup paths and AF-22 completion criteria without repeating accepted cleanup or descendant-identity slices.",
-  "feature_checkpoint_advanced": false,
+  "next_action": "Publish this records-only AF-22 closure through exact-head PR CI and guarded merge, verify merged-main CI, then record an explicit writer release. Any untrusted execution, real-project adapter, hardware or cross-platform process-tree work requires a separately authorized checkpoint.",
+  "feature_checkpoint_advanced": true,
   "completed_checkpoints": [
     {
       "checkpoint": "AF-19 adversarial prompt injection",
@@ -308,7 +329,7 @@
   ],
   "current_af22_slice": {
     "title": "Bounded post-signal process reaping",
-    "status": "SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
+    "status": "ACCEPTED",
     "base_sha": "63a06647cce660635f01705d7d361d7e525a64fe",
     "source_sha": "4ff75384c3a8415a2066323ed75db4ca2479856b",
     "source_tree_sha": "1249b8f945dccb3dcc2fe5b23310a97a5c6243b9",
@@ -346,11 +367,11 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF22-REAP-DEADLINE-20261011",
-    "status": "records_pending",
+    "ownership_id": "AF22-FINAL-ACCEPTANCE-20261012",
+    "status": "acceptance_records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
-    "release_requirement": "Exact records PR and merged-main CI, followed by an explicit bounded-slice release receipt",
+    "release_requirement": "Exact AF-22 closure PR and merged-main CI, followed by an explicit bounded-slice release receipt",
     "source_repair_accepted": true,
     "prior_release": {
       "ownership_id": "AF22-PIPE-CLOSE-EINTR-20261011",
@@ -359,7 +380,7 @@
       "receipt": "https://github.com/antonypaul98/-agentflight/pull/14#issuecomment-6110621659",
       "released_at": "2026-10-11T15:31:07Z"
     },
-    "release_record": "Prior bounded slices are historical and fulfilled. Current hourly slice remains owned until its records CI and explicit release receipt."
+    "release_record": "Prior bounded slices and release receipts are historical and fulfilled. Final AF-22 acceptance ownership remains with the hourly task until closure CI and an explicit release receipt."
   },
   "recorded_at_utc": "2026-10-11T20:23:00Z",
   "preflight_receipt": {
@@ -485,7 +506,7 @@
     },
     {
       "title": "Bounded post-signal process reaping",
-      "status": "SOURCE_ACCEPTED_RECORDS_PENDING",
+      "status": "ACCEPTED",
       "source_sha": "4ff75384c3a8415a2066323ed75db4ca2479856b",
       "source_tree_sha": "1249b8f945dccb3dcc2fe5b23310a97a5c6243b9",
       "pr": 15,
