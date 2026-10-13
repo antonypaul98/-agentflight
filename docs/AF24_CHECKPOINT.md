@@ -14,3 +14,20 @@ The verifier retains metadata and hashes only. It does not inspect or
 dereference state, prompts, tool arguments or results; import frameworks; read
 projects; execute agents, tools or commands; use credentials or networks; or
 claim process/OS isolation. This is one source slice, not AF-24 acceptance.
+
+## Verified first-source receipt
+
+- Source PR: #27
+- Exact source: `5c5b2ebdad8e6c87c81eb44a81b3b938df14b3bd`
+- Exact source tree: `59979a02cd3721b0cfa10439888ed9fa31e6d841`
+- Source PR CI: `38477794522` — Python 3.11.17, 314 product tests
+  passed, zero failed, zero skipped; infrastructure 17 passed with the one
+  established memory-only skip.
+- Guarded merge: `ab6584369ae381201caed15941bdc719c28adc61`
+- Exact merged-main CI: `38477919301` — Python 3.11.17, 314 product
+  tests passed, zero failed, zero skipped; infrastructure 17 passed with the
+  one established memory-only skip.
+
+This receipt accepts only the bounded source slice above. AF-24 remains
+**IN_PROGRESS**, roadmap progress remains 1/12, and no execution or isolation
+authority is added.
