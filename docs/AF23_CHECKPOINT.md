@@ -93,3 +93,22 @@ passed. This receipt verifies the bounded recorded-adapter registry and exact
 contract/run binding only. It grants no live adapter, framework import, project
 access, credential, network, execution, or sandbox authority, and AF-23 remains
 in progress.
+
+## Third source slice verified — 2026-10-13
+
+Source head `fa395214e5494737116ca6b47d9c2c1d775bb2bf`, exact tree
+`caa5270ee2264d9c5a7169e017172ed4e88d0ce7`, passed exact PR-event CI
+[#38437879753](https://github.com/antonypaul98/-agentflight/actions/runs/38437879753).
+Python 3.11.17 reported 305 product tests passed, zero failed, and zero skipped;
+infrastructure passed 17 tests with one established Memory-only skip, and
+diagnostics passed. Guarded PR #24 merge
+`2551f8e61e5ad378e6b65fb8d7e403a1c516b3c2` passed exact merged-main CI
+[#38438010128](https://github.com/antonypaul98/-agentflight/actions/runs/38438010128)
+with the same 305/0/0 product result.
+
+Pinned local Python 3.11.17 validation passed 54 focused AF-23 tests and 303
+product tests with the two established container-specific `/proc` observation
+cases excluded; dependency, diagnostics, compilation and whitespace checks
+passed. This verifies metadata-only conformance evidence, not live framework or
+project compatibility, arbitrary execution, or isolation. AF-23 remains in
+progress pending its remaining acceptance review.
