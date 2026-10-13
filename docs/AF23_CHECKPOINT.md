@@ -19,6 +19,26 @@ Later AF-23 slices must define authorized adapter registration and verify
 adapter conformance without weakening these boundaries before the checkpoint
 can be accepted.
 
+## Authorized recorded-adapter registry
+
+The second bounded slice adds a fail-closed registry for metadata-only recorded
+adapters. Each entry binds an adapter identifier and framework to a versioned,
+externally reviewed contract SHA-256 digest and the sole supported mode
+`recorded_fixture`. Registries are deterministically ordered, limited to 32
+unique adapters, and carry their own stable evidence identity.
+
+`normalize_authorized_recorded_run` requires the recorded fixture's adapter and
+framework to match an exact registry entry, then binds the registry evidence,
+contract version/hash, and normalized recorded-run evidence into one stable
+report. Registry fields for modules, entry points, commands, paths, callbacks,
+credentials, configuration, or other runtime objects fail closed.
+
+This remains an offline conformance boundary. It does not resolve the contract
+digest, import a framework, access a project, execute an agent/tool, use a
+network or credential, or claim process/OS isolation. AF-23 remains in progress;
+versioned conformance fixtures and adversarial compatibility evidence are still
+required before checkpoint acceptance.
+
 ## First source slice verified — 2026-10-13
 
 Source head `e527f30390c6ca2f0fdf9455fee2048d4198066e`, exact tree
