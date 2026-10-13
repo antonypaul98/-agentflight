@@ -1,6 +1,6 @@
 # AF-23 — Framework-neutral agent adapter
 
-Status: **IN_PROGRESS**.
+Status: **MERGED_AND_VERIFIED** for the bounded recorded/mock adapter scope.
 
 The first bounded slice validates and normalizes metadata-only recorded agent
 runs. It accepts one exact schema shared by recorded fixtures from different
@@ -112,3 +112,26 @@ cases excluded; dependency, diagnostics, compilation and whitespace checks
 passed. This verifies metadata-only conformance evidence, not live framework or
 project compatibility, arbitrary execution, or isolation. AF-23 remains in
 progress pending its remaining acceptance review.
+
+## Final scoped acceptance review — 2026-10-13
+
+The roadmap requires AF-23 to normalize bounded recorded/mock trajectories
+without importing frameworks or executing tools. The accepted implementation
+now supplies all independently necessary evidence for that scope: a shared
+metadata-only trajectory contract, a fail-closed authorized recorded-adapter
+registry with exact contract/run binding, and versioned positive/adversarial
+conformance evidence. The three source slices passed exact PR-head and
+merged-main CI at 267, 288, and 305 product tests respectively, with zero
+product failures or skips; each canonical records PR and final-main run also
+passed before its writer release.
+
+No additional AF-23 runtime work is justified. Live framework/project adapters,
+arbitrary agent/tool execution, credentials, network access, filesystem or
+process isolation, resource enforcement, hardware, and production use remain
+explicitly outside this acceptance. They require the later roadmap checkpoints
+and, where specified, separate authorization and isolation review.
+
+AF-23 is **MERGED_AND_VERIFIED** subject to this records-only closure passing
+exact PR-head and merged-main CI. Roadmap progress is 1/12 accepted. The next
+checkpoint is AF-24 multi-step trajectory verification using synthetic,
+recorded evidence only.

@@ -1,22 +1,22 @@
 {
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
-  "current_checkpoint": "AF-23 framework-neutral agent adapter",
-  "checkpoint_status": "IN_PROGRESS",
+  "current_checkpoint": "AF-24 multi-step trajectory verification",
+  "checkpoint_status": "READY_AFTER_AF23_CLOSURE_CI",
   "active_branch": "work/af23-framework-neutral-adapter",
-  "verified_main_sha": "2551f8e61e5ad378e6b65fb8d7e403a1c516b3c2",
+  "verified_main_sha": "a04bde73ee7e5f6ccb728135c55b4e59fa88969f",
   "observed_feature_sha": "fa395214e5494737116ca6b47d9c2c1d775bb2bf",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-23 third bounded source slice passed exact PR-event CI and merged through PR #24. It adds versioned positive/adversarial conformance evidence bound to the exact registry, adapter version and contract without framework import, project access, credentials, execution, or sandbox authority; canonical receipt publication is pending.",
-  "pr_number": 24,
+  "branch_remote_status": "AF-23 source PRs #20, #22 and #24 and records PRs #21, #23 and #25 are merged and verified. The final scoped acceptance review finds the recorded/mock adapter, authorized registry and adversarial conformance requirements complete; this records-only closure requires exact PR and merged-main CI before AF-24 begins.",
+  "pr_number": 25,
   "pr_state": {
-    "number": 24,
+    "number": 25,
     "state": "merged",
-    "head_sha": "fa395214e5494737116ca6b47d9c2c1d775bb2bf",
-    "url": "https://github.com/antonypaul98/-agentflight/pull/24",
-    "merge_commit_sha": "2551f8e61e5ad378e6b65fb8d7e403a1c516b3c2"
+    "head_sha": "ec4ea0941e0e300684c81fac274ad882dcc9b9d4",
+    "url": "https://github.com/antonypaul98/-agentflight/pull/25",
+    "merge_commit_sha": "a04bde73ee7e5f6ccb728135c55b4e59fa88969f"
   },
   "ci_state": {
     "af23_source_pr_run": {
@@ -101,6 +101,30 @@
       "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
       "diagnostics": "passed"
     },
+    "af23_conformance_records_pr_run": {
+      "id": 38438470593,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38438470593",
+      "head_sha": "ec4ea0941e0e300684c81fac274ad882dcc9b9d4",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 305,
+      "product_failures": 0,
+      "product_skips": 0
+    },
+    "af23_conformance_records_merged_main_run": {
+      "id": 38438610938,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38438610938",
+      "head_sha": "a04bde73ee7e5f6ccb728135c55b4e59fa88969f",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 305,
+      "product_failures": 0,
+      "product_skips": 0
+    },
     "source_push_run": {
       "id": 38175727976,
       "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38175727976",
@@ -170,11 +194,34 @@
     }
   },
   "local_test_status": "Pinned Python 3.11.17: 54 focused AF-23 tests passed; 303 product tests passed with the 2 established container-specific /proc observations excluded. Exact GitHub Linux CI passed all 305 product tests with zero failures or skips. Infrastructure passed 17 tests with 1 baseline Memory-only skip; diagnostics, dependency, compilation and whitespace checks passed.",
-  "merge_status": "SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
+  "merge_status": "AF23_MERGED_AND_VERIFIED_CLOSURE_RECORDS_PENDING",
   "known_blocker": null,
-  "next_action": "Publish this AF-23 conformance receipt through exact-head records PR CI and guarded merge, verify merged-main CI, release the bounded writer slice, then review remaining AF-23 acceptance evidence without executing frameworks or tools.",
+  "next_action": "Publish this AF-23 records-only acceptance closure, require exact PR-head and merged-main CI, release the bounded writer slice, then create or reuse the canonical AF-24 branch for synthetic multi-step trajectory verification.",
   "feature_checkpoint_advanced": true,
+  "roadmap_expansion": {
+    "authorized_at": "2026-10-12",
+    "checkpoint_range": "AF-23..AF-34",
+    "accepted": 1,
+    "total": 12,
+    "roadmap": "docs/COMPETITIVE_ROADMAP.md",
+    "arbitrary_execution_authorized": false,
+    "af23_scope": "MERGED_AND_VERIFIED recorded/mock framework-neutral adapter, authorized registry and adversarial conformance only"
+  },
   "completed_checkpoints": [
+    {
+      "checkpoint": "AF-23 framework-neutral agent adapter",
+      "status": "MERGED_AND_VERIFIED",
+      "accepted_scope": "Bounded metadata-only recorded/mock trajectories, fail-closed authorized recorded-adapter registry, and versioned positive/adversarial conformance evidence",
+      "source_prs": [20, 22, 24],
+      "records_prs": [21, 23, 25],
+      "final_source_sha": "fa395214e5494737116ca6b47d9c2c1d775bb2bf",
+      "final_source_tree_sha": "caa5270ee2264d9c5a7169e017172ed4e88d0ce7",
+      "accepted_main_sha": "a04bde73ee7e5f6ccb728135c55b4e59fa88969f",
+      "final_product_tests": 305,
+      "product_failures": 0,
+      "product_skips": 0,
+      "limitations": "No live framework/project adapter, arbitrary agent/tool execution, credentials, network, filesystem/process isolation, resource enforcement, hardware or production authority."
+    },
     {
       "checkpoint": "AF-19 adversarial prompt injection",
       "pr": 4,
@@ -449,22 +496,22 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF23-RECORDED-CONFORMANCE-20261013",
-    "status": "acceptance_records_pending",
+    "ownership_id": "AF23-FINAL-ACCEPTANCE-20261013",
+    "status": "closure_records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
-    "release_requirement": "Exact AF-23 records PR and merged-main CI, followed by an explicit bounded-slice release receipt",
+    "release_requirement": "Exact AF-23 closure PR and merged-main CI, followed by an explicit bounded-slice release receipt before AF-24 source work",
     "source_repair_accepted": true,
     "prior_release": {
-      "ownership_id": "AF23-RECORDED-REGISTRY-20261013",
+      "ownership_id": "AF23-RECORDED-CONFORMANCE-20261013",
       "owner": "AgentFlight Hourly Build",
       "status": "released",
-      "receipt": "https://github.com/antonypaul98/-agentflight/pull/23#issuecomment-6150292683",
-      "released_at": "2026-10-13T16:31:58Z"
+      "receipt": "https://github.com/antonypaul98/-agentflight/pull/25#issuecomment-6151292692",
+      "released_at": "2026-10-13T17:27:00Z"
     },
-    "release_record": "The AF-23 recorded-adapter registry slice is accepted and released. The hourly task owns only the bounded AF-23 recorded-conformance receipt until records CI and explicit release."
+    "release_record": "The AF-23 recorded-conformance slice is accepted and released. The hourly task owns only the records-only final AF-23 acceptance closure until exact closure CI and explicit release."
   },
-  "recorded_at_utc": "2026-10-13T11:27:00Z",
+  "recorded_at_utc": "2026-10-13T21:23:00Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py",
     "exit_code": 1,
