@@ -18,3 +18,20 @@ project, dereference a digest, access a network, or provide an OS sandbox.
 Later AF-23 slices must define authorized adapter registration and verify
 adapter conformance without weakening these boundaries before the checkpoint
 can be accepted.
+
+## First source slice verified — 2026-10-13
+
+Source head `e527f30390c6ca2f0fdf9455fee2048d4198066e`, exact tree
+`d07a115d3f285fdfc32aecff41661a8e39e4d574`, passed exact PR-event CI
+[#38390138733](https://github.com/antonypaul98/-agentflight/actions/runs/38390138733).
+Python 3.11.17 reported 267 product tests passed, zero failed, and zero skipped;
+infrastructure passed 17 tests with one established Memory-only skip, and
+diagnostics passed. Guarded PR #20 merge
+`a4471303d92047ed027c46a223e48f0a1747336a` passed exact merged-main CI
+[#38390222096](https://github.com/antonypaul98/-agentflight/actions/runs/38390222096)
+with the same 267/0/0 product result.
+
+Pinned local Python 3.11.17 validation passed 16 focused AF-23 tests and 265
+product tests with the two established container-specific `/proc` observation
+cases excluded; dependency, diagnostics, compilation and whitespace checks
+passed. This receipt verifies one bounded source slice, not AF-23 completion.
