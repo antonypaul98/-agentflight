@@ -21,3 +21,9 @@ repositories. AF-22 adds a separate fixed-workload synthetic subprocess adapter;
 it is not an OS sandbox or an arbitrary project runner. See
 [AF-21](docs/AF21_CHECKPOINT.md) and [AF-22](docs/AF22_CHECKPOINT.md) for bounds,
 schemas, acceptance evidence, and explicit exclusions.
+
+AF-23 begins the separately authorized competitive roadmap with a
+framework-neutral, metadata-only recorded-run adapter. It validates exact
+content hashes and bounded step metadata but never imports frameworks or runs
+agents/tools. See [the roadmap](docs/COMPETITIVE_ROADMAP.md) and
+[AF-23](docs/AF23_CHECKPOINT.md).
