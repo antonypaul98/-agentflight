@@ -11,9 +11,14 @@ from collections.abc import Mapping
 
 
 SCHEMA_VERSION = 1
+REGISTRY_SCHEMA_VERSION = 1
 MAX_STEPS = 64
+MAX_REGISTERED_ADAPTERS = 32
 MAX_FIXTURE_BYTES = 32_768
+MAX_REGISTRY_BYTES = 32_768
 AUTHORITY = "recorded_fixture_only"
+REGISTRY_AUTHORITY = "authorized_registry_metadata_only_no_execution"
+AUTHORIZED_AUTHORITY = "authorized_recorded_fixture_only_no_execution"
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -23,6 +28,10 @@ _STATUSES = frozenset({"passed", "failed", "rejected"})
 
 class RecordedAdapterError(ValueError):
     """The recorded fixture is outside the bounded adapter contract."""
+
+
+def _canonical(value: object) -> str:
+    return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
 
 def _exact_keys(value: object, expected: frozenset[str], code: str) -> dict:
@@ -109,8 +118,107 @@ def normalize_recorded_run(fixture: Mapping[str, object]) -> dict:
         "steps": normalized_steps,
         "authority": AUTHORITY,
     }
-    canonical = json.dumps(report, sort_keys=True, separators=(",", ":"))
+    canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_FIXTURE_BYTES:
         raise RecordedAdapterError("fixture_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def normalize_adapter_registry(registry: Mapping[str, object]) -> dict:
+    """Validate an explicit registry of metadata-only recorded adapters.
+
+    Registration describes identity and an externally reviewed contract digest.
+    There is deliberately no module, entry point, command, callback, path,
+    credential, configuration, or runtime object in this schema.
+    """
+
+    root = _exact_keys(
+        registry,
+        frozenset({"schema_version", "registry_id", "adapters"}),
+        "invalid_registry_shape",
+    )
+    if (type(root["schema_version"]) is not int
+            or root["schema_version"] != REGISTRY_SCHEMA_VERSION):
+        raise RecordedAdapterError("unsupported_registry_schema_version")
+    registry_id = _identifier(root["registry_id"], "invalid_registry_id")
+    adapters = root["adapters"]
+    if (type(adapters) is not list
+            or not 1 <= len(adapters) <= MAX_REGISTERED_ADAPTERS):
+        raise RecordedAdapterError("invalid_registered_adapter_count")
+
+    adapter_keys = frozenset(
+        {"adapter_id", "framework", "adapter_version", "contract_sha256", "mode"}
+    )
+    normalized = []
+    seen = set()
+    for item in adapters:
+        adapter = _exact_keys(item, adapter_keys, "invalid_registered_adapter_shape")
+        adapter_id = _identifier(adapter["adapter_id"], "invalid_registered_adapter_id")
+        if adapter_id in seen:
+            raise RecordedAdapterError("duplicate_registered_adapter_id")
+        seen.add(adapter_id)
+        if type(adapter["mode"]) is not str or adapter["mode"] != "recorded_fixture":
+            raise RecordedAdapterError("unsupported_adapter_mode")
+        normalized.append(
+            {
+                "adapter_id": adapter_id,
+                "framework": _identifier(adapter["framework"], "invalid_registered_framework"),
+                "adapter_version": _identifier(
+                    adapter["adapter_version"], "invalid_adapter_version"
+                ),
+                "contract_sha256": _digest(
+                    adapter["contract_sha256"], "invalid_contract_hash"
+                ),
+                "mode": "recorded_fixture",
+            }
+        )
+
+    normalized.sort(key=lambda item: item["adapter_id"])
+    report = {
+        "registry_schema_version": REGISTRY_SCHEMA_VERSION,
+        "registry_id": registry_id,
+        "adapters": normalized,
+        "authority": REGISTRY_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REGISTRY_BYTES:
+        raise RecordedAdapterError("registry_too_large")
+    report["registry_evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def normalize_authorized_recorded_run(
+    registry: Mapping[str, object], fixture: Mapping[str, object]
+) -> dict:
+    """Bind one recorded run to an exact authorized registry entry.
+
+    This function only validates metadata.  It does not import the named
+    framework, resolve the contract digest, read a project, or execute anything.
+    """
+
+    normalized_registry = normalize_adapter_registry(registry)
+    normalized_run = normalize_recorded_run(fixture)
+    matched = [
+        adapter for adapter in normalized_registry["adapters"]
+        if adapter["adapter_id"] == normalized_run["adapter_id"]
+    ]
+    if not matched:
+        raise RecordedAdapterError("adapter_not_authorized")
+    adapter = matched[0]
+    if adapter["framework"] != normalized_run["framework"]:
+        raise RecordedAdapterError("authorized_framework_mismatch")
+
+    report = {
+        "registry_schema_version": REGISTRY_SCHEMA_VERSION,
+        "registry_id": normalized_registry["registry_id"],
+        "registry_evidence_id": normalized_registry["registry_evidence_id"],
+        "adapter": adapter,
+        "recorded_run": normalized_run,
+        "authority": AUTHORIZED_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_FIXTURE_BYTES + MAX_REGISTRY_BYTES:
+        raise RecordedAdapterError("authorized_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report
