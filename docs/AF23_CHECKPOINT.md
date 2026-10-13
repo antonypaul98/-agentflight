@@ -39,6 +39,24 @@ network or credential, or claim process/OS isolation. AF-23 remains in progress;
 versioned conformance fixtures and adversarial compatibility evidence are still
 required before checkpoint acceptance.
 
+## Versioned conformance evidence
+
+The third bounded slice validates versioned positive and adversarial fixtures
+against one exact registered adapter contract. A conformance suite binds the
+registry evidence identifier, adapter version, contract digest, case order and
+expected rejection code. Accepted cases retain only normalized evidence IDs;
+rejected cases retain only the stable validation code, never the rejected
+fixture payload. Counts and suite evidence are deterministic and bounded to 64
+cases.
+
+Expectation mismatches, unexpected acceptance, changed validation errors,
+duplicate cases, reordered cases, registry drift, adapter-version drift and
+contract drift all fail closed. This is compatibility evidence for the local
+metadata validator only. It does not load a framework or project, resolve a
+contract digest, use credentials or a network, execute an agent/tool, or prove
+OS/process isolation. AF-23 remains in progress pending the broader acceptance
+review and any additional independently necessary adapter-bound evidence.
+
 ## First source slice verified — 2026-10-13
 
 Source head `e527f30390c6ca2f0fdf9455fee2048d4198066e`, exact tree

@@ -12,13 +12,16 @@ from collections.abc import Mapping
 
 SCHEMA_VERSION = 1
 REGISTRY_SCHEMA_VERSION = 1
+CONFORMANCE_SCHEMA_VERSION = 1
 MAX_STEPS = 64
 MAX_REGISTERED_ADAPTERS = 32
+MAX_CONFORMANCE_CASES = 64
 MAX_FIXTURE_BYTES = 32_768
 MAX_REGISTRY_BYTES = 32_768
 AUTHORITY = "recorded_fixture_only"
 REGISTRY_AUTHORITY = "authorized_registry_metadata_only_no_execution"
 AUTHORIZED_AUTHORITY = "authorized_recorded_fixture_only_no_execution"
+CONFORMANCE_AUTHORITY = "conformance_evidence_only_no_execution"
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -220,5 +223,142 @@ def normalize_authorized_recorded_run(
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_FIXTURE_BYTES + MAX_REGISTRY_BYTES:
         raise RecordedAdapterError("authorized_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def normalize_conformance_suite(
+    registry: Mapping[str, object], suite: Mapping[str, object]
+) -> dict:
+    """Verify versioned positive and adversarial recorded-fixture cases.
+
+    A conformance suite can prove only that metadata fixtures satisfy or fail
+    the local validator as declared. It cannot load the named framework,
+    resolve a contract digest, inspect a project, or execute an agent or tool.
+    Rejected fixture content is never copied into the returned evidence.
+    """
+
+    normalized_registry = normalize_adapter_registry(registry)
+    root = _exact_keys(
+        suite,
+        frozenset(
+            {
+                "schema_version",
+                "suite_id",
+                "registry_evidence_id",
+                "adapter_id",
+                "adapter_version",
+                "contract_sha256",
+                "cases",
+            }
+        ),
+        "invalid_conformance_suite_shape",
+    )
+    if (type(root["schema_version"]) is not int
+            or root["schema_version"] != CONFORMANCE_SCHEMA_VERSION):
+        raise RecordedAdapterError("unsupported_conformance_schema_version")
+    suite_id = _identifier(root["suite_id"], "invalid_conformance_suite_id")
+    registry_evidence_id = _digest(
+        root["registry_evidence_id"], "invalid_registry_evidence_id"
+    )
+    if registry_evidence_id != normalized_registry["registry_evidence_id"]:
+        raise RecordedAdapterError("conformance_registry_mismatch")
+
+    adapter_id = _identifier(root["adapter_id"], "invalid_conformance_adapter_id")
+    matches = [
+        item for item in normalized_registry["adapters"]
+        if item["adapter_id"] == adapter_id
+    ]
+    if not matches:
+        raise RecordedAdapterError("conformance_adapter_not_authorized")
+    adapter = matches[0]
+    adapter_version = _identifier(
+        root["adapter_version"], "invalid_conformance_adapter_version"
+    )
+    contract_sha256 = _digest(
+        root["contract_sha256"], "invalid_conformance_contract_hash"
+    )
+    if adapter_version != adapter["adapter_version"]:
+        raise RecordedAdapterError("conformance_adapter_version_mismatch")
+    if contract_sha256 != adapter["contract_sha256"]:
+        raise RecordedAdapterError("conformance_contract_mismatch")
+
+    cases = root["cases"]
+    if type(cases) is not list or not 1 <= len(cases) <= MAX_CONFORMANCE_CASES:
+        raise RecordedAdapterError("invalid_conformance_case_count")
+    case_keys = frozenset(
+        {"sequence", "case_id", "expectation", "expected_error", "fixture"}
+    )
+    normalized_cases = []
+    seen = set()
+    accepted = rejected = 0
+    for expected_sequence, item in enumerate(cases):
+        case = _exact_keys(item, case_keys, "invalid_conformance_case_shape")
+        if type(case["sequence"]) is not int or case["sequence"] != expected_sequence:
+            raise RecordedAdapterError("invalid_conformance_case_sequence")
+        case_id = _identifier(case["case_id"], "invalid_conformance_case_id")
+        if case_id in seen:
+            raise RecordedAdapterError("duplicate_conformance_case_id")
+        seen.add(case_id)
+        expectation = case["expectation"]
+        expected_error = case["expected_error"]
+        if expectation == "accept":
+            if expected_error is not None:
+                raise RecordedAdapterError("invalid_conformance_expectation")
+        elif expectation == "reject":
+            expected_error = _identifier(
+                expected_error, "invalid_conformance_expected_error"
+            )
+        else:
+            raise RecordedAdapterError("invalid_conformance_expectation")
+
+        try:
+            authorized = normalize_authorized_recorded_run(registry, case["fixture"])
+        except RecordedAdapterError as exc:
+            actual_error = str(exc)
+            if expectation != "reject":
+                raise RecordedAdapterError("conformance_acceptance_failed") from exc
+            if actual_error != expected_error:
+                raise RecordedAdapterError("conformance_error_mismatch") from exc
+            rejected += 1
+            normalized_cases.append(
+                {
+                    "sequence": expected_sequence,
+                    "case_id": case_id,
+                    "expectation": "reject",
+                    "observed_error": actual_error,
+                    "status": "passed",
+                }
+            )
+        else:
+            if expectation != "accept":
+                raise RecordedAdapterError("conformance_rejection_not_observed")
+            accepted += 1
+            normalized_cases.append(
+                {
+                    "sequence": expected_sequence,
+                    "case_id": case_id,
+                    "expectation": "accept",
+                    "recorded_run_evidence_id": authorized["evidence_id"],
+                    "status": "passed",
+                }
+            )
+
+    report = {
+        "conformance_schema_version": CONFORMANCE_SCHEMA_VERSION,
+        "suite_id": suite_id,
+        "registry_evidence_id": registry_evidence_id,
+        "adapter": adapter,
+        "cases": normalized_cases,
+        "coverage": {
+            "total": len(normalized_cases),
+            "accepted": accepted,
+            "rejected": rejected,
+        },
+        "authority": CONFORMANCE_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_FIXTURE_BYTES + MAX_REGISTRY_BYTES:
+        raise RecordedAdapterError("conformance_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report
