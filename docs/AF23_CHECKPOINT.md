@@ -55,3 +55,23 @@ Pinned local Python 3.11.17 validation passed 16 focused AF-23 tests and 265
 product tests with the two established container-specific `/proc` observation
 cases excluded; dependency, diagnostics, compilation and whitespace checks
 passed. This receipt verifies one bounded source slice, not AF-23 completion.
+
+## Second source slice verified — 2026-10-13
+
+Source head `3adf61f11bd3d216703f06eac28b33932b64d5f4`, exact tree
+`be57f590aec92552cfb481998b707a0045f09f7d`, passed exact PR-event CI
+[#38430295837](https://github.com/antonypaul98/-agentflight/actions/runs/38430295837).
+Python 3.11.17 reported 288 product tests passed, zero failed, and zero skipped;
+infrastructure passed 17 tests with one established Memory-only skip, and
+diagnostics passed. Guarded PR #22 merge
+`06ca355b85c56a54c725b05e38d0de9a3de05bbf` passed exact merged-main CI
+[#38430473722](https://github.com/antonypaul98/-agentflight/actions/runs/38430473722)
+with the same 288/0/0 product result.
+
+Pinned local Python 3.11.17 validation passed 37 focused AF-23 tests and 286
+product tests with the two established container-specific `/proc` observation
+cases excluded; dependency, diagnostics, compilation and whitespace checks
+passed. This receipt verifies the bounded recorded-adapter registry and exact
+contract/run binding only. It grants no live adapter, framework import, project
+access, credential, network, execution, or sandbox authority, and AF-23 remains
+in progress.
