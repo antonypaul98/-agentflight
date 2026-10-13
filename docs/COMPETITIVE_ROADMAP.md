@@ -1,6 +1,7 @@
 # AgentFlight competitive roadmap — AF-23 through AF-34
 
-Status: **AUTHORIZED, 0/12 ACCEPTED**. The 13–18 week range is a planning
+Status: **AUTHORIZED, 1/12 ACCEPTED**. AF-23 is merged and verified for its
+recorded/mock adapter scope; AF-24 is next. The 13–18 week range is a planning
 estimate and will be recalibrated from measured checkpoint throughput.
 
 Each checkpoint requires synthetic regressions, exact-head PR CI, guarded
