@@ -25,11 +25,12 @@ schemas, acceptance evidence, and explicit exclusions.
 AF-23 is merged and verified for its bounded framework-neutral, metadata-only
 recorded/mock adapter scope, including an authorized registry and adversarial
 conformance evidence. It validates exact content hashes and bounded step
-metadata but never imports frameworks or runs agents/tools. AF-24 multi-step
-trajectory verification is next. See [the roadmap](docs/COMPETITIVE_ROADMAP.md)
+metadata but never imports frameworks or runs agents/tools. See
+[the roadmap](docs/COMPETITIVE_ROADMAP.md)
 and [AF-23](docs/AF23_CHECKPOINT.md).
 
-AF-24 is in progress with recorded-only multi-step trajectory verification.
-Its first slice verifies exact hash-linked state continuity and terminal
-partial-failure semantics without executing any agent, tool, or framework. See
-[AF-24](docs/AF24_CHECKPOINT.md).
+AF-24 is merged and verified for recorded-only multi-step trajectory
+verification. It covers exact hash-linked state continuity, terminal
+partial-failure semantics and deterministic exact-evidence replay without
+executing any agent, tool, or framework. AF-25 reproducible synthetic
+environments and fixtures is next. See [AF-24](docs/AF24_CHECKPOINT.md).

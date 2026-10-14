@@ -1,6 +1,6 @@
 # AF-24 — Multi-step trajectory verification
 
-Status: **IN_PROGRESS**.
+Status: **MERGED_AND_VERIFIED** for bounded recorded multi-step verification.
 
 The first bounded slice verifies ordered state transitions in an AF-23
 authorized recorded run. Every step after the first must consume the exact
@@ -56,6 +56,28 @@ claim process/OS isolation.
   tests passed, zero failed, zero skipped; infrastructure 17 passed with the
   one established memory-only skip; diagnostics passed.
 
-The source is merged and verified. Canonical records CI, merge verification,
-and explicit bounded-slice release remain pending, so AF-24 stays
-**IN_PROGRESS** and roadmap progress stays 1/12.
+The source and canonical records are merged and verified, and the bounded
+writer slice is explicitly released. AF-24 remained **IN_PROGRESS** until the
+final scoped acceptance review below.
+
+## Final scoped acceptance review — 2026-10-14
+
+The roadmap requires AF-24 to verify ordered state and evidence transitions,
+partial failures, and deterministic replay across multiple steps. The accepted
+implementation supplies each required invariant: adjacent steps require exact
+SHA-256 state continuity, failed or rejected steps are terminal and reported as
+explicit partial-failure evidence, and replay revalidates the full authorized
+recorded fixture from scratch against one exact prior evidence identifier.
+
+Source PRs #27 and #29 and records PRs #28 and #30 passed exact-head and
+merged-main Linux CI. The final accepted main `0c074fd7356de1ed6313e1d6b7bb36c3573cda8c`
+passed 322 product tests with zero failures or product skips. No additional
+AF-24 runtime work is justified for this bounded recorded-evidence scope.
+
+AF-24 does not execute agents, tools, commands, frameworks or payloads; access
+projects, credentials, networks or hardware; or establish filesystem, process
+or OS isolation. Those remain separately gated by later checkpoints.
+
+AF-24 is **MERGED_AND_VERIFIED** subject to this records-only closure passing
+exact PR-head and merged-main CI. Roadmap progress is 2/12 accepted. AF-25
+reproducible environments and fixtures is next.
