@@ -50,3 +50,20 @@ logs, environment values, credentials, or callbacks. It proves only the
 consistency of recorded metadata; it does not prove that setup or cleanup ran,
 that a host is isolated, or that arbitrary fixture execution is safe. AF-25
 remains in progress pending exact-head CI and its remaining acceptance review.
+
+## Verified lifecycle-source receipt — 2026-10-14
+
+- Source PR: #34
+- Exact source: `2982797a4112681e3a53c82b46e80311e668d416`
+- Exact source tree: `ecc701860154181252a2a72dd215497ce2a134a9`
+- Source PR CI: `38535427969` — Python 3.11.17, 354 product tests
+  passed, zero failed, zero skipped; infrastructure 17 passed with the one
+  established Memory-only skip, and diagnostics passed.
+- Guarded merge: `ab4f1478ed53feab510f043fd20e3c2471f0e781`
+- Exact merged-main CI: `38535509996` — Python 3.11.17, 354 product
+  tests passed, zero failed, zero skipped; infrastructure and diagnostics
+  passed.
+
+This receipt accepts only the recorded lifecycle-evidence source slice. AF-25
+remains **IN_PROGRESS**, roadmap progress remains 2/12, and no setup/cleanup
+execution or isolation authority is added.
