@@ -6,6 +6,7 @@ tool, framework, command, or recorded payload and does not provide isolation.
 
 import hashlib
 import json
+import re
 from collections.abc import Mapping
 
 from .agent_adapter import normalize_authorized_recorded_run
@@ -14,6 +15,8 @@ from .agent_adapter import normalize_authorized_recorded_run
 TRAJECTORY_SCHEMA_VERSION = 1
 TRAJECTORY_AUTHORITY = "recorded_trajectory_verification_only_no_execution"
 MAX_TRAJECTORY_REPORT_BYTES = 32_768
+
+_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
 
 class TrajectoryVerificationError(ValueError):
@@ -84,4 +87,28 @@ def verify_recorded_trajectory(
     if len(canonical.encode("utf-8")) > MAX_TRAJECTORY_REPORT_BYTES:
         raise TrajectoryVerificationError("trajectory_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def verify_recorded_trajectory_replay(
+    registry: Mapping[str, object],
+    fixture: Mapping[str, object],
+    expected_evidence_id: str,
+) -> dict:
+    """Replay verification and fail closed unless exact evidence is reproduced.
+
+    The expected value is only the SHA-256 evidence identifier from an earlier
+    verified trajectory. The fixture is revalidated from scratch; no prior
+    report, recorded payload, framework, or executable object is accepted.
+    """
+
+    if type(expected_evidence_id) is not str or not _SHA256.fullmatch(
+        expected_evidence_id
+    ):
+        raise TrajectoryVerificationError(
+            "invalid_expected_trajectory_evidence_id"
+        )
+    report = verify_recorded_trajectory(registry, fixture)
+    if report["evidence_id"] != expected_evidence_id:
+        raise TrajectoryVerificationError("trajectory_replay_mismatch")
     return report
