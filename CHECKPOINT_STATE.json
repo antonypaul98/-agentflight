@@ -1,16 +1,16 @@
 {
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
-  "current_checkpoint": "AF-24 multi-step trajectory verification",
-  "checkpoint_status": "IN_PROGRESS",
+  "current_checkpoint": "AF-25 reproducible environments and fixtures",
+  "checkpoint_status": "READY_AFTER_AF24_CLOSURE_CI",
   "active_branch": "work/af24-multi-step-trajectory",
-  "verified_main_sha": "2a505c674082144800ab3b0ccf301060037cde05",
+  "verified_main_sha": "0c074fd7356de1ed6313e1d6b7bb36c3573cda8c",
   "observed_feature_sha": "f0dfda043dd222faac95f9d8501f54ecaa6e5d9d",
-  "current_repository_sha": "2a505c674082144800ab3b0ccf301060037cde05",
+  "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-24 exact-evidence replay-gate source f0dfda043dd222faac95f9d8501f54ecaa6e5d9d was published with exact tree b3adc7d4d54d51623af4c72b28d0dd9f6f912c0d, passed PR #29 exact-head CI, merged by expected-head lease at 2a505c674082144800ab3b0ccf301060037cde05, and passed exact merged-main CI. Canonical records and bounded-slice release are pending.",
-  "pr_number": 29,
+  "branch_remote_status": "AF-24 source PRs #27 and #29 and records PRs #28 and #30 are merged, verified and explicitly released. The final scoped acceptance review finds ordered state/evidence transitions, terminal partial-failure semantics and deterministic exact-evidence replay complete; this records-only closure requires exact PR and merged-main CI before AF-25 begins.",
+  "pr_number": 30,
   "pr_state": "merged",
   "ci_state": {
     "af23_source_pr_run": {
@@ -199,6 +199,32 @@
       "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
       "diagnostics": "passed"
     },
+    "af24_replay_gate_records_pr_run": {
+      "id": 38501622421,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38501622421",
+      "head_sha": "3ba79a6cb3723e02833eb5f5cfbab6e1ee3a40b5",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 322,
+      "product_failures": 0,
+      "product_skips": 0
+    },
+    "af24_replay_gate_records_merged_main_run": {
+      "id": 38501684738,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38501684738",
+      "head_sha": "0c074fd7356de1ed6313e1d6b7bb36c3573cda8c",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 322,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
     "source_push_run": {
       "id": 38175727976,
       "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38175727976",
@@ -267,21 +293,36 @@
       "product_skips": 0
     }
   },
-  "local_test_status": "Pinned Python 3.11.17: 54 focused AF-23/AF-24 tests passed; full local suite reported 320 passed and the 2 established container-specific /proc observation failures; exclusion run passed 320. Infrastructure passed 17 tests with 1 baseline Memory-only skip; diagnostics, dependency, compilation, JSON and whitespace checks passed. PR #29 and exact merged-main CI each passed 322 product tests with zero failures and zero product skips.",
-  "merge_status": "AF24_SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
+  "local_test_status": "Pinned Python 3.11.17 acceptance review: 71 focused AF-23/AF-24 tests passed; 320 product tests passed with only the 2 established container-specific /proc observations excluded. Infrastructure passed 17 tests with 1 baseline Memory-only skip; diagnostics, dependency, compilation, JSON and whitespace checks passed. Exact PR and merged-main Linux CI passed all 322 product tests with zero failures or product skips.",
+  "merge_status": "AF24_MERGED_AND_VERIFIED_CLOSURE_RECORDS_PENDING",
   "known_blocker": null,
-  "next_action": "Publish this replay-gate records-only receipt, require exact PR-head CI, guarded merge and exact merged-main CI, then explicitly release the bounded AF-24 replay slice and review remaining checkpoint acceptance evidence.",
-  "feature_checkpoint_advanced": false,
+  "next_action": "Publish this AF-24 records-only acceptance closure, require exact PR-head and merged-main CI, release the bounded writer slice, then begin AF-25 with one synthetic versioned-fixture invariant.",
+  "feature_checkpoint_advanced": true,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
     "checkpoint_range": "AF-23..AF-34",
-    "accepted": 1,
+    "accepted": 2,
     "total": 12,
     "roadmap": "docs/COMPETITIVE_ROADMAP.md",
     "arbitrary_execution_authorized": false,
-    "af23_scope": "MERGED_AND_VERIFIED recorded/mock framework-neutral adapter, authorized registry and adversarial conformance only"
+    "af23_scope": "MERGED_AND_VERIFIED recorded/mock framework-neutral adapter, authorized registry and adversarial conformance only",
+    "af24_scope": "MERGED_AND_VERIFIED metadata-only multi-step state/evidence continuity, terminal partial-failure semantics and exact-evidence deterministic replay"
   },
   "completed_checkpoints": [
+    {
+      "checkpoint": "AF-24 multi-step trajectory verification",
+      "status": "MERGED_AND_VERIFIED",
+      "accepted_scope": "Bounded metadata-only ordered state/evidence transitions, terminal partial-failure semantics and deterministic exact-evidence replay",
+      "source_prs": [27, 29],
+      "records_prs": [28, 30],
+      "final_source_sha": "f0dfda043dd222faac95f9d8501f54ecaa6e5d9d",
+      "final_source_tree_sha": "b3adc7d4d54d51623af4c72b28d0dd9f6f912c0d",
+      "accepted_main_sha": "0c074fd7356de1ed6313e1d6b7bb36c3573cda8c",
+      "final_product_tests": 322,
+      "product_failures": 0,
+      "product_skips": 0,
+      "limitations": "No live agent/tool execution, framework or project access, credentials, network, payload inspection, filesystem/process isolation, hardware or production authority."
+    },
     {
       "checkpoint": "AF-23 framework-neutral agent adapter",
       "status": "MERGED_AND_VERIFIED",
@@ -570,22 +611,22 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF24-RECORDED-TRAJECTORY-20261013",
-    "status": "records_pending",
+    "ownership_id": "AF24-FINAL-ACCEPTANCE-20261014",
+    "status": "closure_records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
-    "release_requirement": "Exact AF-24 source and records PR CI, guarded merges, exact merged-main CI, then explicit bounded-slice release",
+    "release_requirement": "Exact AF-24 closure PR and merged-main CI, followed by explicit bounded-slice release before AF-25 source work",
     "source_repair_accepted": true,
     "prior_release": {
-      "ownership_id": "AF23-FINAL-ACCEPTANCE-20261013",
+      "ownership_id": "AF24-REPLAY-GATE-20261013",
       "owner": "AgentFlight Hourly Build",
       "status": "released",
-      "receipt": "https://github.com/antonypaul98/-agentflight/pull/26#issuecomment-6155517975",
-      "released_at": "2026-10-13T21:24:55Z"
+      "receipt": "https://github.com/antonypaul98/-agentflight/pull/30#issuecomment-6159609669",
+      "released_at": "2026-10-14T02:34:49Z"
     },
-    "release_record": "AF-24 source PR #27 and exact merged-main CI are accepted for this bounded slice. The hourly task retains ownership until the records PR and exact merged-main CI pass and an explicit bounded-slice release is recorded."
+    "release_record": "Both bounded AF-24 source slices and their canonical records are accepted and explicitly released. The hourly task owns only this records-only final AF-24 acceptance closure until exact closure CI and explicit release."
   },
-  "recorded_at_utc": "2026-10-13T22:29:00Z",
+  "recorded_at_utc": "2026-10-14T03:24:00Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
     "exit_code": 1,
