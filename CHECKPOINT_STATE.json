@@ -4,13 +4,13 @@
   "current_checkpoint": "AF-24 multi-step trajectory verification",
   "checkpoint_status": "IN_PROGRESS",
   "active_branch": "work/af24-multi-step-trajectory",
-  "verified_main_sha": "ab6584369ae381201caed15941bdc719c28adc61",
-  "observed_feature_sha": "5c5b2ebdad8e6c87c81eb44a81b3b938df14b3bd",
-  "current_repository_sha": "ab6584369ae381201caed15941bdc719c28adc61",
+  "verified_main_sha": "2a505c674082144800ab3b0ccf301060037cde05",
+  "observed_feature_sha": "f0dfda043dd222faac95f9d8501f54ecaa6e5d9d",
+  "current_repository_sha": "2a505c674082144800ab3b0ccf301060037cde05",
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-24 bounded recorded-trajectory source commit 5c5b2ebdad8e6c87c81eb44a81b3b938df14b3bd was published with exact tree 59979a02cd3721b0cfa10439888ed9fa31e6d841, passed PR #27 exact-head CI, merged by expected-head lease at ab6584369ae381201caed15941bdc719c28adc61, and passed exact merged-main CI. Canonical records and bounded-slice release are pending.",
-  "pr_number": 27,
+  "branch_remote_status": "AF-24 exact-evidence replay-gate source f0dfda043dd222faac95f9d8501f54ecaa6e5d9d was published with exact tree b3adc7d4d54d51623af4c72b28d0dd9f6f912c0d, passed PR #29 exact-head CI, merged by expected-head lease at 2a505c674082144800ab3b0ccf301060037cde05, and passed exact merged-main CI. Canonical records and bounded-slice release are pending.",
+  "pr_number": 29,
   "pr_state": "merged",
   "ci_state": {
     "af23_source_pr_run": {
@@ -171,6 +171,34 @@
       "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
       "diagnostics": "passed"
     },
+    "af24_replay_gate_source_pr_run": {
+      "id": 38501273784,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38501273784",
+      "head_sha": "f0dfda043dd222faac95f9d8501f54ecaa6e5d9d",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 322,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
+    "af24_replay_gate_source_merged_main_run": {
+      "id": 38501378546,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38501378546",
+      "head_sha": "2a505c674082144800ab3b0ccf301060037cde05",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 322,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
     "source_push_run": {
       "id": 38175727976,
       "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38175727976",
@@ -239,10 +267,10 @@
       "product_skips": 0
     }
   },
-  "local_test_status": "Pinned Python 3.11.17: 63 focused AF-23/AF-24 tests passed; full local suite reported 312 passed and the 2 established container-specific /proc observation failures; exclusion run passed 312. Infrastructure passed 17 tests with 1 baseline Memory-only skip; diagnostics, dependency, compilation, JSON and whitespace checks passed. PR #27 and exact merged-main CI each passed 314 product tests with zero failures and zero product skips.",
+  "local_test_status": "Pinned Python 3.11.17: 54 focused AF-23/AF-24 tests passed; full local suite reported 320 passed and the 2 established container-specific /proc observation failures; exclusion run passed 320. Infrastructure passed 17 tests with 1 baseline Memory-only skip; diagnostics, dependency, compilation, JSON and whitespace checks passed. PR #29 and exact merged-main CI each passed 322 product tests with zero failures and zero product skips.",
   "merge_status": "AF24_SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
   "known_blocker": null,
-  "next_action": "Publish this records-only receipt, require exact PR-head CI, guarded merge and exact merged-main CI, then explicitly release the bounded AF-24 source slice and continue the next independently testable AF-24 requirement.",
+  "next_action": "Publish this replay-gate records-only receipt, require exact PR-head CI, guarded merge and exact merged-main CI, then explicitly release the bounded AF-24 replay slice and review remaining checkpoint acceptance evidence.",
   "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
@@ -410,9 +438,9 @@
   "last_session_exit": {
     "BLOCKED_LAYER": null,
     "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "Linux descendant observations now require the fixed worker's process group and isolated session, retaining PID start-time continuity. PR #17 merged; 251 product tests pass on exact source push, PR and merged main with zero product skips. Infrastructure and diagnostics pass. Canonical acceptance records await their own CI before writer-slice release.",
-    "REMOTE_SHA": "72b7619f7f614592b7c38ceca97a591d076bd8f1",
-    "NEXT_ACTION": "Publish and verify this acceptance-record update, then explicitly release this bounded writer slice."
+    "SAFE_WORK_COMPLETED": "AF-24 exact-evidence replay gate merged at 2a505c674082144800ab3b0ccf301060037cde05 after PR #29 exact-head CI; exact merged-main CI passed 322 product tests with zero failures and zero product skips. Infrastructure and diagnostics pass. Canonical acceptance records await their own CI before writer-slice release.",
+    "REMOTE_SHA": "2a505c674082144800ab3b0ccf301060037cde05",
+    "NEXT_ACTION": "Publish and verify this replay-gate acceptance-record update, then explicitly release this bounded writer slice."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
@@ -478,7 +506,7 @@
   "usage_allowance": "BUDGET UNKNOWN: actual remaining Astra/Work allowance is not exposed. Repair scope is bounded; capacity is reserved for exact-head CI, canonical records and writer handoff.",
   "changed_files": [
     "CHECKPOINT_STATE.json",
-    "docs/AF22_CI_RECEIPT.md"
+    "docs/AF24_CHECKPOINT.md"
   ],
   "shell_preflight_receipt": {
     "BLOCKED_LAYER": "external",
