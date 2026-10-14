@@ -1,16 +1,16 @@
 {
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
-  "current_checkpoint": "AF-25 reproducible environments and fixtures",
-  "checkpoint_status": "IN_PROGRESS",
+  "current_checkpoint": "AF-26 controlled failure injection",
+  "checkpoint_status": "READY_AFTER_AF25_CLOSURE_CI",
   "active_branch": "work/af25-reproducible-fixtures",
-  "verified_main_sha": "ab4f1478ed53feab510f043fd20e3c2471f0e781",
-  "observed_feature_sha": "c19c81f3c44cbb14b6516570002a5a30c460899d",
+  "verified_main_sha": "6847a346c8249d6d4620613576ba92aef0b5201b",
+  "observed_feature_sha": "2982797a4112681e3a53c82b46e80311e668d416",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-25 lifecycle source PR #34 is merged at exact head 2982797a4112681e3a53c82b46e80311e668d416. Exact PR-event and merged-main CI each passed 354 product tests with zero failures or product skips. Canonical records CI, merge, final-main verification and explicit release are pending.",
-  "pr_number": 34,
+  "branch_remote_status": "AF-25 source PRs #32 and #34 and records PRs #33 and #35 are merged, verified and explicitly released. The final scoped acceptance review finds versioned synthetic fixtures, deterministic metadata-only setup/cleanup, provenance and environment-drift evidence complete; this records-only closure requires exact PR and merged-main CI before AF-26 begins.",
+  "pr_number": 35,
   "pr_state": "merged",
   "ci_state": {
     "af23_source_pr_run": {
@@ -305,6 +305,32 @@
       "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
       "diagnostics": "passed"
     },
+    "af25_lifecycle_records_pr_run": {
+      "id": 38535834193,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38535834193",
+      "head_sha": "534ac2c19b5150b6618987b5fc858ee78cf33a39",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 354,
+      "product_failures": 0,
+      "product_skips": 0
+    },
+    "af25_lifecycle_records_merged_main_run": {
+      "id": 38535949222,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38535949222",
+      "head_sha": "6847a346c8249d6d4620613576ba92aef0b5201b",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 354,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
     "source_push_run": {
       "id": 38175727976,
       "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38175727976",
@@ -374,21 +400,36 @@
     }
   },
   "local_test_status": "Pinned Python 3.11.17: 32 focused fixture-environment tests passed; broader local suite passed 351 tests with the established container-specific /proc observation file excluded after reproducing its 2 known failures. Infrastructure passed 17 tests with 1 baseline Memory-only skip; diagnostics, dependency and whitespace checks passed. Exact source PR and merged-main Linux CI each passed all 354 product tests with zero failures or product skips.",
-  "merge_status": "AF25_LIFECYCLE_SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
+  "merge_status": "AF25_MERGED_AND_VERIFIED_CLOSURE_RECORDS_PENDING",
   "known_blocker": null,
-  "next_action": "Publish this records-only AF-25 lifecycle receipt, require exact PR-head CI, guarded merge and exact merged-main CI, then explicitly release the bounded writer slice and review remaining AF-25 acceptance evidence.",
-  "feature_checkpoint_advanced": false,
+  "next_action": "Publish this AF-25 records-only acceptance closure, require exact PR-head and merged-main CI, release the bounded writer slice, then begin AF-26 with one bounded synthetic failure-injection invariant.",
+  "feature_checkpoint_advanced": true,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
     "checkpoint_range": "AF-23..AF-34",
-    "accepted": 2,
+    "accepted": 3,
     "total": 12,
     "roadmap": "docs/COMPETITIVE_ROADMAP.md",
     "arbitrary_execution_authorized": false,
     "af23_scope": "MERGED_AND_VERIFIED recorded/mock framework-neutral adapter, authorized registry and adversarial conformance only",
-    "af24_scope": "MERGED_AND_VERIFIED metadata-only multi-step state/evidence continuity, terminal partial-failure semantics and exact-evidence deterministic replay"
+    "af24_scope": "MERGED_AND_VERIFIED metadata-only multi-step state/evidence continuity, terminal partial-failure semantics and exact-evidence deterministic replay",
+    "af25_scope": "MERGED_AND_VERIFIED metadata-only versioned synthetic fixtures, deterministic recorded setup/cleanup, provenance and environment-drift evidence"
   },
   "completed_checkpoints": [
+    {
+      "checkpoint": "AF-25 reproducible environments and fixtures",
+      "status": "MERGED_AND_VERIFIED",
+      "accepted_scope": "Bounded metadata-only versioned synthetic fixtures, deterministic recorded setup/cleanup, exact provenance and environment-drift evidence",
+      "source_prs": [32, 34],
+      "records_prs": [33, 35],
+      "final_source_sha": "2982797a4112681e3a53c82b46e80311e668d416",
+      "final_source_tree_sha": "ecc701860154181252a2a72dd215497ce2a134a9",
+      "accepted_main_sha": "6847a346c8249d6d4620613576ba92aef0b5201b",
+      "final_product_tests": 354,
+      "product_failures": 0,
+      "product_skips": 0,
+      "limitations": "No setup/cleanup command execution, live project access, host inspection, credentials, network, arbitrary agent/tool execution, filesystem/process/OS isolation, hardware or production authority."
+    },
     {
       "checkpoint": "AF-24 multi-step trajectory verification",
       "status": "MERGED_AND_VERIFIED",
@@ -691,22 +732,22 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF25-LIFECYCLE-EVIDENCE-20261014",
-    "status": "records_pending",
+    "ownership_id": "AF25-FINAL-ACCEPTANCE-20261014",
+    "status": "closure_records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
-    "release_requirement": "Exact AF-25 source and records PR CI, guarded merges, exact merged-main CI, then explicit bounded-slice release",
+    "release_requirement": "Exact AF-25 closure PR and merged-main CI, followed by explicit bounded-slice release before AF-26 source work",
     "source_repair_accepted": true,
     "prior_release": {
-      "ownership_id": "AF24-FINAL-ACCEPTANCE-20261014",
+      "ownership_id": "AF25-LIFECYCLE-EVIDENCE-20261014",
       "owner": "AgentFlight Hourly Build",
       "status": "released",
-      "receipt": "https://github.com/antonypaul98/-agentflight/pull/31#issuecomment-6160175022",
-      "released_at": "2026-10-14T03:24:29Z"
+      "receipt": "https://github.com/antonypaul98/-agentflight/pull/35#issuecomment-6164294710",
+      "released_at": "2026-10-14T08:34:24Z"
     },
-    "release_record": "AF-25 lifecycle source PR #34 and exact merged-main CI are accepted. The hourly task owns only the records-only receipt until exact records CI, final-main verification and explicit release."
+    "release_record": "Both bounded AF-25 source slices and their canonical records are accepted and explicitly released. The hourly task owns only this records-only final AF-25 acceptance closure until exact closure CI and explicit release."
   },
-  "recorded_at_utc": "2026-10-14T08:31:00Z",
+  "recorded_at_utc": "2026-10-14T13:25:00Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
     "exit_code": 1,

@@ -1,6 +1,6 @@
 # AF-25 — Reproducible environments and fixtures
 
-Status: **IN_PROGRESS**.
+Status: **MERGED_AND_VERIFIED** for bounded recorded fixture environments.
 
 The first bounded slice defines a versioned, metadata-only manifest for a
 synthetic fixture environment. It binds the exact Python version, platform,
@@ -67,3 +67,26 @@ remains in progress pending exact-head CI and its remaining acceptance review.
 This receipt accepts only the recorded lifecycle-evidence source slice. AF-25
 remains **IN_PROGRESS**, roadmap progress remains 2/12, and no setup/cleanup
 execution or isolation authority is added.
+
+## Final scoped acceptance review — 2026-10-14
+
+The roadmap requires versioned synthetic fixtures, deterministic setup/cleanup,
+provenance, and environment-drift evidence. The accepted implementation supplies
+each required invariant for the bounded recorded-only scope: exact version and
+SHA-256 provenance binding, deterministic manifest normalization and drift
+classification, plus ordered and complete setup/cleanup outcome evidence bound
+to one exact normalized environment.
+
+Source PRs #32 and #34 and records PRs #33 and #35 passed exact-head and
+merged-main Linux CI. Final accepted main `6847a346c8249d6d4620613576ba92aef0b5201b`
+passed 354 product tests with zero failures or product skips. No additional
+AF-25 runtime work is justified for this metadata-only recorded-evidence scope.
+
+AF-25 does not execute setup or cleanup commands, read host state, install
+dependencies, run agents or tools, access projects, credentials, networks or
+hardware, or establish filesystem, process or OS isolation. Those capabilities
+remain separately gated by later checkpoints and specific authorization.
+
+AF-25 is **MERGED_AND_VERIFIED** subject to this records-only closure passing
+exact PR-head and merged-main CI. Roadmap progress is 3/12 accepted. AF-26
+controlled failure injection is next.
