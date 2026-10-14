@@ -36,3 +36,17 @@ This receipt accepts only the bounded metadata-manifest and drift-evidence
 source slice. AF-25 remains **IN_PROGRESS**, roadmap progress remains 2/12, and
 no setup/cleanup execution, live project access, or isolation authority is
 added.
+
+## Recorded lifecycle evidence slice
+
+`verify_fixture_lifecycle` binds caller-supplied setup and cleanup outcome
+metadata to one exact normalized environment evidence ID. It requires contiguous
+sequence numbers, setup-before-cleanup ordering, both phases, unique phase/step
+identities, bounded event counts, exact operation hashes, and explicit success
+or failure outcomes. Failures remain redacted to phase and step identifiers.
+
+The verifier executes nothing and accepts no commands, paths, URLs, payloads,
+logs, environment values, credentials, or callbacks. It proves only the
+consistency of recorded metadata; it does not prove that setup or cleanup ran,
+that a host is isolated, or that arbitrary fixture execution is safe. AF-25
+remains in progress pending exact-head CI and its remaining acceptance review.

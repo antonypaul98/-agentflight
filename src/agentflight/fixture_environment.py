@@ -13,9 +13,11 @@ from collections.abc import Mapping
 SCHEMA_VERSION = 1
 MAX_DEPENDENCIES = 64
 MAX_FIXTURES = 128
+MAX_LIFECYCLE_EVENTS = 128
 MAX_MANIFEST_BYTES = 65_536
 AUTHORITY = "synthetic_fixture_metadata_only_no_environment_execution"
 DRIFT_AUTHORITY = "synthetic_environment_drift_evidence_only_no_execution"
+LIFECYCLE_AUTHORITY = "recorded_fixture_lifecycle_evidence_only_no_execution"
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _VERSION = re.compile(r"[0-9][A-Za-z0-9_.+-]{0,31}\Z")
@@ -179,6 +181,92 @@ def compare_fixture_environments(
                      "fixtures": len(expected["fixtures"]),
                      "scope": "caller_supplied_metadata_only"},
         "authority": DRIFT_AUTHORITY,
+    }
+    report["evidence_id"] = hashlib.sha256(_canonical(report).encode("utf-8")).hexdigest()
+    return report
+
+
+def verify_fixture_lifecycle(
+    manifest: Mapping[str, object], lifecycle: Mapping[str, object]
+) -> dict:
+    """Verify recorded setup/cleanup metadata against one exact environment.
+
+    The caller supplies identifiers, operation digests, and outcomes only. This
+    function does not execute operations or retain commands, paths, payloads,
+    environment values, logs, or credentials.
+    """
+
+    environment = normalize_fixture_environment(manifest)
+    root = _exact_keys(
+        lifecycle,
+        frozenset({"schema_version", "lifecycle_id", "environment_evidence_id", "events"}),
+        "invalid_lifecycle_shape",
+    )
+    if type(root["schema_version"]) is not int or root["schema_version"] != SCHEMA_VERSION:
+        raise FixtureEnvironmentError("unsupported_lifecycle_schema_version")
+    environment_evidence_id = _text(
+        root["environment_evidence_id"], _SHA256, "invalid_environment_evidence_id"
+    )
+    if environment_evidence_id != environment["evidence_id"]:
+        raise FixtureEnvironmentError("environment_evidence_mismatch")
+
+    events = []
+    seen_steps = set()
+    cleanup_started = False
+    event_keys = frozenset(
+        {"sequence", "phase", "step_id", "operation_sha256", "status"}
+    )
+    for expected_sequence, item in enumerate(
+        _bounded_list(root["events"], MAX_LIFECYCLE_EVENTS, "invalid_lifecycle_event_count"),
+        start=1,
+    ):
+        event = _exact_keys(item, event_keys, "invalid_lifecycle_event_shape")
+        if type(event["sequence"]) is not int or event["sequence"] != expected_sequence:
+            raise FixtureEnvironmentError("invalid_lifecycle_sequence")
+        if event["phase"] not in ("setup", "cleanup"):
+            raise FixtureEnvironmentError("invalid_lifecycle_phase")
+        if event["status"] not in ("succeeded", "failed"):
+            raise FixtureEnvironmentError("invalid_lifecycle_status")
+        if event["phase"] == "cleanup":
+            cleanup_started = True
+        elif cleanup_started:
+            raise FixtureEnvironmentError("setup_after_cleanup")
+        step_id = _text(event["step_id"], _IDENTIFIER, "invalid_lifecycle_step_id")
+        identity = (event["phase"], step_id)
+        if identity in seen_steps:
+            raise FixtureEnvironmentError("duplicate_lifecycle_step")
+        seen_steps.add(identity)
+        events.append({
+            "sequence": expected_sequence,
+            "phase": event["phase"],
+            "step_id": step_id,
+            "operation_sha256": _text(
+                event["operation_sha256"], _SHA256, "invalid_lifecycle_operation_hash"
+            ),
+            "status": event["status"],
+        })
+
+    phases = {event["phase"] for event in events}
+    if phases != {"setup", "cleanup"}:
+        raise FixtureEnvironmentError("incomplete_lifecycle_phases")
+    failed = [
+        {"phase": event["phase"], "step_id": event["step_id"]}
+        for event in events if event["status"] == "failed"
+    ]
+    report = {
+        "lifecycle_schema_version": SCHEMA_VERSION,
+        "lifecycle_id": _text(root["lifecycle_id"], _IDENTIFIER, "invalid_lifecycle_id"),
+        "environment_id": environment["environment_id"],
+        "environment_evidence_id": environment_evidence_id,
+        "events": events,
+        "verdict": "lifecycle_verified" if not failed else "lifecycle_failed",
+        "failed_steps": failed,
+        "coverage": {
+            "setup_events": sum(event["phase"] == "setup" for event in events),
+            "cleanup_events": sum(event["phase"] == "cleanup" for event in events),
+            "scope": "caller_supplied_recorded_metadata_only",
+        },
+        "authority": LIFECYCLE_AUTHORITY,
     }
     report["evidence_id"] = hashlib.sha256(_canonical(report).encode("utf-8")).hexdigest()
     return report

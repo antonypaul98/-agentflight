@@ -6,6 +6,7 @@ from agentflight.fixture_environment import (
     FixtureEnvironmentError,
     compare_fixture_environments,
     normalize_fixture_environment,
+    verify_fixture_lifecycle,
 )
 
 
@@ -27,6 +28,20 @@ def manifest():
              "content_sha256": H2, "size_bytes": 384},
             {"fixture_id": "trajectory-failure", "version": "1.0.0",
              "content_sha256": H3, "size_bytes": 512},
+        ],
+    }
+
+
+def lifecycle(environment_evidence_id):
+    return {
+        "schema_version": 1,
+        "lifecycle_id": "trajectory-fixture-lifecycle",
+        "environment_evidence_id": environment_evidence_id,
+        "events": [
+            {"sequence": 1, "phase": "setup", "step_id": "seed-state",
+             "operation_sha256": H0, "status": "succeeded"},
+            {"sequence": 2, "phase": "cleanup", "step_id": "remove-state",
+             "operation_sha256": H1, "status": "succeeded"},
         ],
     }
 
@@ -145,3 +160,75 @@ def test_comparison_rejects_different_environment_identity():
     observed["environment_id"] = "other-lab"
     with pytest.raises(FixtureEnvironmentError, match="environment_identity_mismatch"):
         compare_fixture_environments(manifest(), observed)
+
+
+def test_lifecycle_binds_exact_environment_and_is_deterministic():
+    environment_id = normalize_fixture_environment(manifest())["evidence_id"]
+    source = lifecycle(environment_id)
+    original = copy.deepcopy(source)
+    first = verify_fixture_lifecycle(manifest(), source)
+    assert first == verify_fixture_lifecycle(copy.deepcopy(manifest()), copy.deepcopy(source))
+    assert source == original
+    assert first["environment_evidence_id"] == environment_id
+    assert first["verdict"] == "lifecycle_verified"
+    assert first["failed_steps"] == []
+    assert first["coverage"] == {
+        "setup_events": 1,
+        "cleanup_events": 1,
+        "scope": "caller_supplied_recorded_metadata_only",
+    }
+    assert first["authority"] == "recorded_fixture_lifecycle_evidence_only_no_execution"
+
+
+def test_lifecycle_failure_is_redacted_and_cleanup_is_still_required():
+    environment_id = normalize_fixture_environment(manifest())["evidence_id"]
+    source = lifecycle(environment_id)
+    source["events"][0]["status"] = "failed"
+    report = verify_fixture_lifecycle(manifest(), source)
+    assert report["verdict"] == "lifecycle_failed"
+    assert report["failed_steps"] == [{"phase": "setup", "step_id": "seed-state"}]
+    assert "command" not in repr(report)
+
+
+@pytest.mark.parametrize(
+    ("change", "code"),
+    [
+        (lambda value: value.update(environment_evidence_id=H3),
+         "environment_evidence_mismatch"),
+        (lambda value: value.update(environment_evidence_id="A" * 64),
+         "invalid_environment_evidence_id"),
+        (lambda value: value["events"][1].update(sequence=3),
+         "invalid_lifecycle_sequence"),
+        (lambda value: value["events"].reverse(),
+         "invalid_lifecycle_sequence"),
+        (lambda value: value["events"].pop(),
+         "incomplete_lifecycle_phases"),
+        (lambda value: value["events"].append(copy.deepcopy(value["events"][1])),
+         "invalid_lifecycle_sequence"),
+        (lambda value: value["events"][1].update(phase="setup", step_id="seed-state"),
+         "duplicate_lifecycle_step"),
+        (lambda value: value["events"][0].update(status="skipped"),
+         "invalid_lifecycle_status"),
+        (lambda value: value["events"][0].update(operation_sha256="A" * 64),
+         "invalid_lifecycle_operation_hash"),
+        (lambda value: value["events"][0].update(command="rm -rf fixture"),
+         "invalid_lifecycle_event_shape"),
+    ],
+)
+def test_invalid_lifecycle_evidence_fails_closed(change, code):
+    environment_id = normalize_fixture_environment(manifest())["evidence_id"]
+    item = lifecycle(environment_id)
+    change(item)
+    with pytest.raises(FixtureEnvironmentError, match=code):
+        verify_fixture_lifecycle(manifest(), item)
+
+
+def test_setup_cannot_resume_after_cleanup():
+    environment_id = normalize_fixture_environment(manifest())["evidence_id"]
+    item = lifecycle(environment_id)
+    item["events"].append({
+        "sequence": 3, "phase": "setup", "step_id": "late-setup",
+        "operation_sha256": H2, "status": "succeeded",
+    })
+    with pytest.raises(FixtureEnvironmentError, match="setup_after_cleanup"):
+        verify_fixture_lifecycle(manifest(), item)
