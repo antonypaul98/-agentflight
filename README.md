@@ -33,4 +33,6 @@ AF-24 is merged and verified for recorded-only multi-step trajectory
 verification. It covers exact hash-linked state continuity, terminal
 partial-failure semantics and deterministic exact-evidence replay without
 executing any agent, tool, or framework. AF-25 reproducible synthetic
-environments and fixtures is next. See [AF-24](docs/AF24_CHECKPOINT.md).
+environments and fixtures is in progress with a metadata-only versioned
+manifest and deterministic drift-evidence foundation. See
+[AF-24](docs/AF24_CHECKPOINT.md) and [AF-25](docs/AF25_CHECKPOINT.md).
