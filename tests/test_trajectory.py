@@ -3,7 +3,11 @@ import copy
 import pytest
 
 from agentflight.agent_adapter import RecordedAdapterError
-from agentflight.trajectory import TrajectoryVerificationError, verify_recorded_trajectory
+from agentflight.trajectory import (
+    TrajectoryVerificationError,
+    verify_recorded_trajectory,
+    verify_recorded_trajectory_replay,
+)
 from test_agent_adapter import H0, H1, fixture
 from test_agent_adapter_registry import registry
 
@@ -110,3 +114,58 @@ def test_does_not_mutate_inputs_or_retain_payload_fields():
     serialized = str(report)
     for forbidden in ("prompt", "arguments", "result", "command", "credentials"):
         assert forbidden not in serialized
+
+
+def test_replay_requires_exact_prior_trajectory_evidence():
+    registered, value = registry(), trajectory()
+    expected = verify_recorded_trajectory(registered, value)
+    replayed = verify_recorded_trajectory_replay(
+        copy.deepcopy(registered), copy.deepcopy(value), expected["evidence_id"]
+    )
+    assert replayed == expected
+
+
+def test_replay_fails_closed_when_terminal_state_drifts():
+    registered, value = registry(), trajectory()
+    expected_evidence_id = verify_recorded_trajectory(
+        registered, value
+    )["evidence_id"]
+    value["steps"][-1]["output_sha256"] = H0
+    with pytest.raises(TrajectoryVerificationError, match="trajectory_replay_mismatch"):
+        verify_recorded_trajectory_replay(
+            registered, value, expected_evidence_id
+        )
+
+
+@pytest.mark.parametrize("expected", [None, True, "A" * 64, "0" * 63, "0" * 65])
+def test_replay_rejects_invalid_expected_evidence_id(expected):
+    with pytest.raises(
+        TrajectoryVerificationError,
+        match="invalid_expected_trajectory_evidence_id",
+    ):
+        verify_recorded_trajectory_replay(registry(), trajectory(), expected)
+
+
+def test_partial_failure_replay_is_deterministic_and_redacted():
+    registered, value = registry(), trajectory("failed")
+    expected = verify_recorded_trajectory(registered, value)
+    replayed = verify_recorded_trajectory_replay(
+        registered, value, expected["evidence_id"]
+    )
+    assert replayed["verdict"] == "partial_failure"
+    assert replayed == expected
+    assert set(replayed) == {
+        "trajectory_schema_version",
+        "registry_evidence_id",
+        "recorded_run_evidence_id",
+        "adapter_id",
+        "run_id",
+        "initial_state_sha256",
+        "terminal_state_sha256",
+        "transitions",
+        "terminal",
+        "verdict",
+        "coverage",
+        "authority",
+        "evidence_id",
+    }

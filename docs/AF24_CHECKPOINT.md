@@ -31,3 +31,17 @@ claim process/OS isolation. This is one source slice, not AF-24 acceptance.
 This receipt accepts only the bounded source slice above. AF-24 remains
 **IN_PROGRESS**, roadmap progress remains 1/12, and no execution or isolation
 authority is added.
+
+## Current bounded replay-gate slice
+
+The next independently testable slice adds an exact-evidence replay gate. A
+caller may provide only the SHA-256 evidence identifier from an earlier
+verified trajectory; AgentFlight revalidates the registry and fixture from
+scratch and fails closed if the reproduced trajectory evidence differs. This
+detects recorded state, registry, ordering, terminal-status, and other evidence
+drift without retaining or dereferencing payloads.
+
+This slice remains metadata-only. It does not accept prior reports as trusted
+input, execute agents or tools, read projects, use credentials or networks, or
+claim process/OS isolation. It is not accepted until its own exact-head PR CI,
+guarded merge, merged-main CI, canonical receipt, and writer release complete.
