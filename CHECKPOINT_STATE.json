@@ -2,17 +2,45 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-26 controlled failure injection",
-  "checkpoint_status": "IN_PROGRESS_FIRST_SOURCE_SLICE_MERGED_AND_VERIFIED",
-  "active_branch": "work/af26-record-source-receipt",
-  "verified_main_sha": "b90e0ea063e8ca7204d1f5f543ade18858b87161",
-  "observed_feature_sha": "4ecadd26898f06e161322777a7b6f52c778468da",
-  "current_repository_sha": null,
+  "checkpoint_status": "IN_PROGRESS_RETRY_SEQUENCE_SLICE_MERGED_AND_VERIFIED",
+  "active_branch": "work/af26-retry-records",
+  "verified_main_sha": "e89a1afd4ad2998854cfd6c6387234c794134863",
+  "observed_feature_sha": "02beb959f5357168cdf4a04bdeaf0a90e26cbf21",
+  "current_repository_sha": "e89a1afd4ad2998854cfd6c6387234c794134863",
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-26 first bounded source slice merged through PR #37. Exact-head pull_request CI and exact merged-main push CI passed on Python 3.11.17 with 374 product tests and zero product skips. This records-only receipt is pending its own CI; AF-26 remains in progress.",
-  "pr_number": 37,
+  "branch_remote_status": "AF-26 bounded recorded retry/outage-sequence slice merged through PR #39. Exact-head pull_request CI and exact merged-main push CI passed on Python 3.11.17 with 385 product tests and zero product skips. This records-only receipt is pending its own exact CI; AF-26 remains in progress.",
+  "pr_number": 39,
   "pr_state": "merged",
   "ci_state": {
+    "af26_retry_sequence_source_pr_run": {
+      "id": 38734703918,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38734703918",
+      "head_sha": "02beb959f5357168cdf4a04bdeaf0a90e26cbf21",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 385,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
+    "af26_retry_sequence_merged_main_run": {
+      "id": 38734820602,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38734820602",
+      "head_sha": "e89a1afd4ad2998854cfd6c6387234c794134863",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 385,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
     "af26_first_source_pr_run": {
       "id": 38698230914,
       "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38698230914",
@@ -427,10 +455,10 @@
       "product_skips": 0
     }
   },
-  "local_test_status": "Local Python 3.12.14: 20 focused AF-26 tests passed and 372 broader product tests passed with the established container-specific /proc observation file excluded after reproducing its 2 known failures. Exact source PR and merged-main Linux CI on Python 3.11.17 each passed all 374 product tests with zero failures or product skips.",
-  "merge_status": "AF26_FIRST_SOURCE_SLICE_MERGED_AND_VERIFIED_RECORDS_PENDING",
+  "local_test_status": "Source PR #39 reported local Python 3.11.17: 31 focused tests passed and 383 broader product tests passed with only the two established container-specific /proc observations excluded after reproduction. Exact source PR and merged-main Linux CI on Python 3.11.17 each passed all 385 product tests with zero failures or product skips.",
+  "merge_status": "AF26_RETRY_SEQUENCE_SLICE_MERGED_AND_VERIFIED_RECORDS_PENDING",
   "known_blocker": null,
-  "next_action": "Publish and verify this AF-26 first-source receipt, explicitly release the bounded writer slice, then implement one bounded recorded retry/outage-sequence invariant without external execution.",
+  "next_action": "Publish and verify this AF-26 retry-sequence receipt, explicitly release the bounded writer slice, then review AF-26 acceptance and implement only the smallest remaining controlled-failure gap if one exists.",
   "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
@@ -760,11 +788,11 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF26-FIRST-SOURCE-RECEIPT-20261015",
+    "ownership_id": "AF26-RETRY-SEQUENCE-RECEIPT-20261015",
     "status": "records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
-    "release_requirement": "Exact AF-26 records PR and merged-main CI, followed by explicit bounded-slice release before the next AF-26 source slice",
+    "release_requirement": "Exact AF-26 retry-sequence records PR and merged-main CI, followed by explicit bounded-slice release before any further AF-26 source slice",
     "source_repair_accepted": true,
     "prior_release": {
       "ownership_id": "AF25-LIFECYCLE-EVIDENCE-20261014",
@@ -773,9 +801,9 @@
       "receipt": "https://github.com/antonypaul98/-agentflight/pull/35#issuecomment-6164294710",
       "released_at": "2026-10-14T08:34:24Z"
     },
-    "release_record": "AF-25 is accepted and released. AF-26 first bounded source slice is merged and verified; the hourly task owns only its records-only receipt until exact records CI and explicit release."
+    "release_record": "AF-25 is accepted and released. AF-26 bounded recorded failure-plan and retry-sequence source slices are merged and verified; the hourly task owns only this records receipt until exact records CI and explicit release."
   },
-  "recorded_at_utc": "2026-10-15T07:23:05Z",
+  "recorded_at_utc": "2026-10-15T17:23:17Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
     "exit_code": 1,
