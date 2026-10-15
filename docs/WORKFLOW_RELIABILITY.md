@@ -120,3 +120,19 @@ failures and zero product skips. Guarded merge
 38734820602 with the same 385/0/0 result. The canonical records change must
 itself pass exact-head PR CI and merged-main CI before the writer slice is
 released or this evidence is used to advance checkpoint acceptance.
+
+## AF-26 bounded-scope acceptance closure (2026-10-15)
+
+AF-26 is accepted only for deterministic recorded metadata. Source PRs #37 and
+#39 cover all four roadmap fault kinds and exact plan/environment/trajectory
+bindings, including ordered retries and a fixed four-attempt ceiling. Records
+PRs #38 and #40 passed exact-head and merged-main CI and were explicitly
+released. The final source tree is
+`595c08d6bf25d6f93bcf6941013a8c29b0e9b977`; the latest accepted main before
+this closure is `833495376f75ea8606b078fd27737b7dd987283c`.
+
+No accepted path performs network calls, DNS, sleeping, retries, recovery,
+agent/tool/command execution, project access, or credential/payload handling.
+It claims no filesystem, process, network, or OS isolation. This closure must
+pass its own exact-head PR and merged-main CI before the 4/12 acceptance record
+is canonical and AF-27 work may begin.

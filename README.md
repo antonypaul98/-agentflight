@@ -33,6 +33,9 @@ AF-24 is merged and verified for recorded-only multi-step trajectory
 verification. AF-25 is merged and verified for bounded metadata-only versioned
 synthetic fixtures, deterministic recorded setup/cleanup, provenance and
 environment-drift evidence. Neither checkpoint executes agents, tools,
-frameworks, fixture commands or host operations. AF-26 controlled synthetic
-failure injection is next. See [AF-24](docs/AF24_CHECKPOINT.md) and
-[AF-25](docs/AF25_CHECKPOINT.md).
+frameworks, fixture commands or host operations. AF-26 is merged and verified
+for bounded metadata-only synthetic network, timeout, rate-limit and API faults
+plus deterministic recorded retry/outage evidence. It performs no external or
+recovery action. AF-27 recovery, retry and state consistency is next. See
+[AF-24](docs/AF24_CHECKPOINT.md), [AF-25](docs/AF25_CHECKPOINT.md), and
+[AF-26](docs/AF26_CHECKPOINT.md).
