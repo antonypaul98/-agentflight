@@ -103,3 +103,20 @@ commit/synchronize it, and verify remote SHA. .git/session-preflight.json alone
 is ephemeral. Missing API/shell credentials, Actions service outages, quotas,
 runner availability, the external hourly scheduler and a physical Mac cannot
 be repaired solely by repository code. Report that exact external layer.
+
+## AF-26 recorded retry-sequence receipt (2026-10-15)
+
+AF-26 remains in progress. Source PR #39 added deterministic, fail-closed
+verification for bounded recorded retry and outage sequences. It binds the
+exact failure-plan evidence, environment evidence, trajectory evidence,
+ordered attempts, observed hashes, outcomes and a fixed four-attempt ceiling.
+It performs no network calls, sleeping, agent/tool execution, recovery action,
+credential or payload handling, and makes no process or OS-isolation claim.
+
+Exact pull-request head `02beb959f5357168cdf4a04bdeaf0a90e26cbf21`
+passed CI run 38734703918 on Python 3.11.17 with 385 product tests, zero
+failures and zero product skips. Guarded merge
+`e89a1afd4ad2998854cfd6c6387234c794134863` passed merged-main CI run
+38734820602 with the same 385/0/0 result. The canonical records change must
+itself pass exact-head PR CI and merged-main CI before the writer slice is
+released or this evidence is used to advance checkpoint acceptance.
