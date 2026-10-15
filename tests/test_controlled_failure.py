@@ -6,6 +6,7 @@ from agentflight.controlled_failure import (
     AUTHORITY,
     ControlledFailureError,
     evaluate_recorded_call,
+    evaluate_recorded_sequence,
     normalize_failure_plan,
 )
 
@@ -104,5 +105,74 @@ def test_invalid_observed_hash_fails_closed():
 def test_result_contains_no_external_target_or_payload_fields():
     result = evaluate_recorded_call(plan(), 0, H1)
     rendered = repr(result)
+    for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
+        assert forbidden not in rendered
+
+
+def attempts():
+    return [
+        {"sequence": 1, "call_index": 0, "attempt": 1,
+         "observed_sha256": H1, "outcome_code": "connection_reset",
+         "trajectory_evidence_id": H0},
+        {"sequence": 2, "call_index": 0, "attempt": 2,
+         "observed_sha256": H1, "outcome_code": "ok",
+         "trajectory_evidence_id": H0},
+        {"sequence": 3, "call_index": 2, "attempt": 1,
+         "observed_sha256": H1, "outcome_code": "deadline_exceeded",
+         "trajectory_evidence_id": H0},
+    ]
+
+
+def test_recorded_retry_and_outage_sequence_is_deterministic_and_bound():
+    source = attempts()
+    first = evaluate_recorded_sequence(plan(), source)
+    assert first == evaluate_recorded_sequence(copy.deepcopy(plan()), copy.deepcopy(source))
+    assert first["calls"] == [
+        {"call_index": 0, "attempts": 2, "verdict": "recovered"},
+        {"call_index": 2, "attempts": 1, "verdict": "incomplete"},
+    ]
+    assert first["attempts"][0]["decision"] == "retry_permitted"
+    assert first["attempts"][1]["decision"] == "stop_retrying"
+    assert first["trajectory_evidence_id"] == H0
+    assert first["coverage"]["scope"] == "bounded_recorded_retry_and_outage_metadata_only"
+    assert first["authority"] == AUTHORITY
+
+
+def test_four_failed_attempts_exhaust_the_fixed_budget():
+    rows = [
+        {"sequence": index, "call_index": 0, "attempt": index,
+         "observed_sha256": H1, "outcome_code": "connection_reset",
+         "trajectory_evidence_id": H0}
+        for index in range(1, 5)
+    ]
+    report = evaluate_recorded_sequence(plan(), rows)
+    assert report["calls"] == [{"call_index": 0, "attempts": 4, "verdict": "exhausted"}]
+    assert report["attempts"][-1]["decision"] == "retry_budget_exhausted"
+
+
+@pytest.mark.parametrize(
+    "change,code",
+    [
+        (lambda rows: rows[0].update(payload="secret"), "invalid_recorded_attempt_shape"),
+        (lambda rows: rows[1].update(sequence=7), "invalid_recorded_attempt_sequence"),
+        (lambda rows: rows[0].update(call_index=1), "attempt_not_bound_to_planned_fault"),
+        (lambda rows: rows[1].update(attempt=3), "invalid_retry_attempt"),
+        (lambda rows: rows[1].update(outcome_code="http_503"),
+         "invalid_recorded_retry_outcome"),
+        (lambda rows: rows[0].update(outcome_code="ok"), "initial_outcome_plan_mismatch"),
+        (lambda rows: rows[1].update(trajectory_evidence_id=H1),
+         "trajectory_binding_mismatch"),
+        (lambda rows: rows.reverse(), "invalid_recorded_attempt_sequence"),
+    ],
+)
+def test_invalid_retry_or_outage_metadata_fails_closed(change, code):
+    rows = attempts()
+    change(rows)
+    with pytest.raises(ControlledFailureError, match=code):
+        evaluate_recorded_sequence(plan(), rows)
+
+
+def test_recorded_sequence_retains_no_payload_or_external_target():
+    rendered = repr(evaluate_recorded_sequence(plan(), attempts()))
     for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
         assert forbidden not in rendered

@@ -15,6 +15,7 @@ SCHEMA_VERSION = 1
 MAX_SCENARIOS = 64
 MAX_DELAY_MS = 300_000
 MAX_REPORT_BYTES = 32_768
+MAX_ATTEMPTS_PER_CALL = 4
 AUTHORITY = "recorded_failure_injection_only_no_external_execution"
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
@@ -145,3 +146,97 @@ def evaluate_recorded_call(
     }
     result["evidence_id"] = hashlib.sha256(_canonical(result).encode("utf-8")).hexdigest()
     return result
+
+
+def evaluate_recorded_sequence(
+    plan: Mapping[str, object], attempts: list[Mapping[str, object]]
+) -> dict:
+    """Verify bounded recorded retry/outage metadata without executing anything."""
+
+    normalized = normalize_failure_plan(plan)
+    if type(attempts) is not list or not 1 <= len(attempts) <= MAX_SCENARIOS:
+        raise ControlledFailureError("invalid_recorded_attempt_count")
+    scenarios = {item["call_index"]: item for item in normalized["scenarios"]}
+    expected_keys = frozenset(
+        {"sequence", "call_index", "attempt", "observed_sha256",
+         "outcome_code", "trajectory_evidence_id"}
+    )
+    rows = []
+    previous_call = -1
+    next_attempt = 1
+    trajectory_id = None
+    terminal_calls = set()
+    for sequence, item in enumerate(attempts, start=1):
+        row = _exact_dict(item, expected_keys, "invalid_recorded_attempt_shape")
+        if type(row["sequence"]) is not int or row["sequence"] != sequence:
+            raise ControlledFailureError("invalid_recorded_attempt_sequence")
+        call_index = row["call_index"]
+        if type(call_index) is not int or call_index not in scenarios:
+            raise ControlledFailureError("attempt_not_bound_to_planned_fault")
+        if call_index < previous_call or call_index in terminal_calls:
+            raise ControlledFailureError("invalid_retry_order")
+        if call_index != previous_call:
+            next_attempt = 1
+        attempt = row["attempt"]
+        if type(attempt) is not int or attempt != next_attempt or attempt > MAX_ATTEMPTS_PER_CALL:
+            raise ControlledFailureError("invalid_retry_attempt")
+        scenario = scenarios[call_index]
+        outcome = row["outcome_code"]
+        allowed = _OUTCOMES[scenario["kind"]] | {"ok"}
+        if type(outcome) is not str or outcome not in allowed:
+            raise ControlledFailureError("invalid_recorded_retry_outcome")
+        if attempt == 1 and outcome != scenario["outcome_code"]:
+            raise ControlledFailureError("initial_outcome_plan_mismatch")
+        current_trajectory = _text(
+            row["trajectory_evidence_id"], _SHA256, "invalid_trajectory_evidence_id")
+        if trajectory_id is None:
+            trajectory_id = current_trajectory
+        elif current_trajectory != trajectory_id:
+            raise ControlledFailureError("trajectory_binding_mismatch")
+        rows.append({
+            "sequence": sequence,
+            "call_index": call_index,
+            "attempt": attempt,
+            "observed_sha256": _text(
+                row["observed_sha256"], _SHA256, "invalid_observed_call_hash"),
+            "outcome_code": outcome,
+            "fault_id": scenario["fault_id"],
+            "decision": "stop_retrying" if outcome == "ok" else (
+                "retry_budget_exhausted" if attempt == MAX_ATTEMPTS_PER_CALL
+                else "retry_permitted"),
+        })
+        if outcome == "ok" or attempt == MAX_ATTEMPTS_PER_CALL:
+            terminal_calls.add(call_index)
+        previous_call = call_index
+        next_attempt = attempt + 1
+
+    calls = []
+    for call_index in sorted({row["call_index"] for row in rows}):
+        call_rows = [row for row in rows if row["call_index"] == call_index]
+        calls.append({
+            "call_index": call_index,
+            "attempts": len(call_rows),
+            "verdict": (
+                "recovered" if call_rows[-1]["outcome_code"] == "ok"
+                else "exhausted" if len(call_rows) == MAX_ATTEMPTS_PER_CALL
+                else "incomplete"
+            ),
+        })
+    report = {
+        "failure_plan_evidence_id": normalized["evidence_id"],
+        "environment_evidence_id": normalized["environment_evidence_id"],
+        "trajectory_evidence_id": trajectory_id,
+        "attempts": rows,
+        "calls": calls,
+        "coverage": {
+            "recorded_attempts": len(rows),
+            "recorded_calls": len(calls),
+            "scope": "bounded_recorded_retry_and_outage_metadata_only",
+        },
+        "authority": AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise ControlledFailureError("failure_sequence_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
