@@ -2,17 +2,45 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-27 recovery, retry, and state consistency",
-  "checkpoint_status": "IN_PROGRESS_RECORDED_RECOVERY_SOURCE_PENDING_CI",
-  "active_branch": "work/af27-recorded-recovery",
-  "verified_main_sha": "c0f06a9fe8303b4fef799e3a5aa3ed2083289407",
-  "observed_feature_sha": "02beb959f5357168cdf4a04bdeaf0a90e26cbf21",
+  "checkpoint_status": "IN_PROGRESS_RECORDED_RECOVERY_SOURCE_MERGED_AND_VERIFIED",
+  "active_branch": "work/af27-recorded-recovery-records",
+  "verified_main_sha": "234678fe214f86336832d1a901a9c5be8a5581aa",
+  "observed_feature_sha": "ca4bd35a1e5557ee9a48ecd18145b7d9ddeb7301",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-26 is merged, verified and explicitly released through PR #41. AF-27 first bounded recorded recovery/state-consistency source slice is local and requires publication plus exact PR-head CI.",
-  "pr_number": null,
-  "pr_state": "not_created",
+  "branch_remote_status": "AF-27 first bounded recorded recovery/state-consistency source slice merged through PR #42. Exact pull_request and merged-main push CI passed on Python 3.11.17 with 401 product tests and zero product skips. This canonical records change requires its own exact PR and merged-main CI before release.",
+  "pr_number": 42,
+  "pr_state": "merged",
   "ci_state": {
+    "af27_recorded_recovery_source_pr_run": {
+      "id": 38850492412,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38850492412",
+      "head_sha": "ca4bd35a1e5557ee9a48ecd18145b7d9ddeb7301",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 401,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
+    "af27_recorded_recovery_merged_main_run": {
+      "id": 38850574375,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38850574375",
+      "head_sha": "234678fe214f86336832d1a901a9c5be8a5581aa",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 401,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
     "af26_retry_sequence_source_pr_run": {
       "id": 38734703918,
       "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38734703918",
@@ -481,11 +509,11 @@
       "product_skips": 0
     }
   },
-  "local_test_status": "Source PR #39 reported local Python 3.11.17: 31 focused tests passed and 383 broader product tests passed with only the two established container-specific /proc observations excluded after reproduction. Exact source PR and merged-main Linux CI on Python 3.11.17 each passed all 385 product tests with zero failures or product skips.",
-  "merge_status": "AF26_MERGED_AND_VERIFIED_CLOSURE_RECORDS_PENDING",
+  "local_test_status": "AF-27 first source slice: local Python 3.12.14 passed 47 focused AF-26/AF-27 tests and 399 broader product tests excluding only two established container-specific /proc observations. Exact PR and merged-main Linux CI on pinned Python 3.11.17 each passed all 401 product tests with zero failures and zero product skips.",
+  "merge_status": "AF27_RECORDED_RECOVERY_SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
   "known_blocker": null,
-  "next_action": "Publish this AF-26 records-only acceptance closure, require exact PR-head and merged-main CI, release the bounded writer slice, then begin AF-27 with one bounded recorded recovery/state-consistency invariant.",
-  "feature_checkpoint_advanced": true,
+  "next_action": "Publish and verify this AF-27 recorded-recovery CI receipt, explicitly release the records slice, then implement only the smallest remaining AF-27 crash-recovery or durable-state invariant.",
+  "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
     "checkpoint_range": "AF-23..AF-34",
@@ -503,8 +531,14 @@
       "checkpoint": "AF-26 controlled failure injection",
       "status": "MERGED_AND_VERIFIED",
       "accepted_scope": "Bounded metadata-only synthetic network, timeout, rate-limit and API faults with exact environment, plan and trajectory bindings plus deterministic recorded retry/outage evidence",
-      "source_prs": [37, 39],
-      "records_prs": [38, 40],
+      "source_prs": [
+        37,
+        39
+      ],
+      "records_prs": [
+        38,
+        40
+      ],
       "final_source_sha": "02beb959f5357168cdf4a04bdeaf0a90e26cbf21",
       "final_source_tree_sha": "595c08d6bf25d6f93bcf6941013a8c29b0e9b977",
       "accepted_main_sha": "833495376f75ea8606b078fd27737b7dd987283c",
@@ -517,8 +551,14 @@
       "checkpoint": "AF-25 reproducible environments and fixtures",
       "status": "MERGED_AND_VERIFIED",
       "accepted_scope": "Bounded metadata-only versioned synthetic fixtures, deterministic recorded setup/cleanup, exact provenance and environment-drift evidence",
-      "source_prs": [32, 34],
-      "records_prs": [33, 35],
+      "source_prs": [
+        32,
+        34
+      ],
+      "records_prs": [
+        33,
+        35
+      ],
       "final_source_sha": "2982797a4112681e3a53c82b46e80311e668d416",
       "final_source_tree_sha": "ecc701860154181252a2a72dd215497ce2a134a9",
       "accepted_main_sha": "6847a346c8249d6d4620613576ba92aef0b5201b",
@@ -531,8 +571,14 @@
       "checkpoint": "AF-24 multi-step trajectory verification",
       "status": "MERGED_AND_VERIFIED",
       "accepted_scope": "Bounded metadata-only ordered state/evidence transitions, terminal partial-failure semantics and deterministic exact-evidence replay",
-      "source_prs": [27, 29],
-      "records_prs": [28, 30],
+      "source_prs": [
+        27,
+        29
+      ],
+      "records_prs": [
+        28,
+        30
+      ],
       "final_source_sha": "f0dfda043dd222faac95f9d8501f54ecaa6e5d9d",
       "final_source_tree_sha": "b3adc7d4d54d51623af4c72b28d0dd9f6f912c0d",
       "accepted_main_sha": "0c074fd7356de1ed6313e1d6b7bb36c3573cda8c",
@@ -545,8 +591,16 @@
       "checkpoint": "AF-23 framework-neutral agent adapter",
       "status": "MERGED_AND_VERIFIED",
       "accepted_scope": "Bounded metadata-only recorded/mock trajectories, fail-closed authorized recorded-adapter registry, and versioned positive/adversarial conformance evidence",
-      "source_prs": [20, 22, 24],
-      "records_prs": [21, 23, 25],
+      "source_prs": [
+        20,
+        22,
+        24
+      ],
+      "records_prs": [
+        21,
+        23,
+        25
+      ],
       "final_source_sha": "fa395214e5494737116ca6b47d9c2c1d775bb2bf",
       "final_source_tree_sha": "caa5270ee2264d9c5a7169e017172ed4e88d0ce7",
       "accepted_main_sha": "8684d979355ecc20a4958ba92534d6af59d4f614",
@@ -697,13 +751,13 @@
   "last_session_exit": {
     "BLOCKED_LAYER": null,
     "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "AF-24 exact-evidence replay gate merged at 2a505c674082144800ab3b0ccf301060037cde05 after PR #29 exact-head CI; exact merged-main CI passed 322 product tests with zero failures and zero product skips. Infrastructure and diagnostics pass. Canonical acceptance records await their own CI before writer-slice release.",
-    "REMOTE_SHA": "2a505c674082144800ab3b0ccf301060037cde05",
-    "NEXT_ACTION": "Publish and verify this replay-gate acceptance-record update, then explicitly release this bounded writer slice."
+    "SAFE_WORK_COMPLETED": "AF-27 first bounded recorded recovery/state-consistency slice merged through PR #42 after exact-head CI; merged-main CI passed 401 product tests with zero failures or product skips. Canonical records are prepared for independent CI.",
+    "REMOTE_SHA": "234678fe214f86336832d1a901a9c5be8a5581aa",
+    "NEXT_ACTION": "Publish and verify the AF-27 records-only receipt, then explicitly release this records slice."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "f94fa0b223293ac2976dde750c00df9421432a57",
+  "observed_branch_sha": "ca4bd35a1e5557ee9a48ecd18145b7d9ddeb7301",
   "historical_session_exits": [
     {
       "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
@@ -775,7 +829,7 @@
     "NEXT_ACTION": "Publish the reviewed implementation tree, create or reuse the AF-21 PR, and verify exact-head CI before merge and exact merged-main verification."
   },
   "accepted_at": "2026-10-09T03:49:11.530699+00:00",
-  "source_tree_sha": "14ee27b417525d209241c703eacf0bb32b20c21a",
+  "source_tree_sha": "9b4135caafe4a752c1b4d4af57d76ed77fa32a8c",
   "preserved_local_commits": {
     "scope": "f02efb5303e509f18247dffd6788c884bfb9c92e",
     "implementation": "fa41cd86f56a292d9bd348c9c23432e1f7a65a3f",
@@ -829,22 +883,22 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF26-FINAL-ACCEPTANCE-20261015",
-    "status": "closure_records_pending",
+    "ownership_id": "AF27-RECORDED-RECOVERY-RECEIPT-20261016",
+    "status": "records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
-    "release_requirement": "Exact AF-26 closure PR and merged-main CI, followed by explicit bounded-slice release before AF-27 source work",
+    "release_requirement": "Exact AF-27 records PR and merged-main CI, followed by explicit records-slice release before further AF-27 source work",
     "source_repair_accepted": true,
     "prior_release": {
-      "ownership_id": "AF26-RETRY-SEQUENCE-RECEIPT-20261015",
+      "ownership_id": "AF27-RECORDED-RECOVERY-20261016",
       "owner": "AgentFlight Hourly Build",
       "status": "released",
-      "receipt": "https://github.com/antonypaul98/-agentflight/pull/40#issuecomment-6198189596",
-      "released_at": "2026-10-15T17:31:00Z"
+      "receipt": "https://github.com/antonypaul98/-agentflight/pull/42#issuecomment-6208068774",
+      "released_at": "2026-10-16T04:27:00Z"
     },
-    "release_record": "Both bounded AF-26 source slices and their canonical records are accepted and explicitly released. The hourly task owns only this records-only final AF-26 acceptance closure until exact closure CI and explicit release."
+    "release_record": "The first bounded AF-27 source slice is merged, verified and explicitly released. The hourly task owns only this canonical records receipt until exact records CI and release."
   },
-  "recorded_at_utc": "2026-10-15T22:38:00Z",
+  "recorded_at_utc": "2026-10-16T09:19:00Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
     "exit_code": 1,
@@ -1046,5 +1100,19 @@
       "product_skips": 0,
       "scope": "Bound post-signal process.wait to the existing maximum synthetic-case timeout and preserve one deadline across interrupted retries; two synthetic regressions; no process-group re-signal, allowlist expansion, test weakening or sandbox claim"
     }
-  ]
+  ],
+  "af27_recorded_recovery_source_receipt": {
+    "source_pr": 42,
+    "source_head_sha": "ca4bd35a1e5557ee9a48ecd18145b7d9ddeb7301",
+    "source_tree_sha": "9b4135caafe4a752c1b4d4af57d76ed77fa32a8c",
+    "pr_ci_run": 38850492412,
+    "merged_main_sha": "234678fe214f86336832d1a901a9c5be8a5581aa",
+    "merged_main_ci_run": 38850574375,
+    "python": "3.11.17",
+    "product_tests": 401,
+    "product_failures": 0,
+    "product_skips": 0,
+    "scope": "Bounded recorded recovery metadata with exact failure-plan, trajectory, operation and idempotency bindings; contiguous state chain; at most one commit; failed and duplicate attempts do not mutate state.",
+    "limitations": "No retries, recovery action, agent/tool/command execution, durable-state or project access, credentials, payloads, network calls, or isolation claim."
+  }
 }
