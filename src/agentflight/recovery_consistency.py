@@ -12,8 +12,10 @@ from collections.abc import Mapping
 
 SCHEMA_VERSION = 1
 MAX_EVENTS = 32
+MAX_RETRY_ATTEMPTS = 8
 MAX_REPORT_BYTES = 32_768
 AUTHORITY = "recorded_recovery_consistency_only_no_execution"
+RETRY_BUDGET_AUTHORITY = "recorded_retry_budget_only_no_retry_or_execution"
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -131,3 +133,99 @@ def evaluate_recorded_recovery(record: Mapping[str, object]) -> dict:
         raise RecoveryConsistencyError("recovery_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report
+
+
+def evaluate_recorded_retry_budget(
+    recovery_report: Mapping[str, object], budget: Mapping[str, object]
+) -> dict:
+    """Bind one fixed retry budget to an exact recorded recovery report."""
+
+    report = _exact_dict(
+        recovery_report,
+        frozenset({
+            "recovery_schema_version", "recovery_id", "failure_plan_evidence_id",
+            "trajectory_evidence_id", "operation_evidence_id",
+            "idempotency_key_sha256", "events", "verdict",
+            "committed_state_sha256", "coverage", "authority", "evidence_id",
+        }),
+        "invalid_recovery_report_shape",
+    )
+    supplied_evidence_id = _text(
+        report["evidence_id"], _SHA256, "invalid_recovery_evidence_id")
+    unsigned = {key: value for key, value in report.items() if key != "evidence_id"}
+    expected_evidence_id = hashlib.sha256(
+        _canonical(unsigned).encode("utf-8")
+    ).hexdigest()
+    if supplied_evidence_id != expected_evidence_id:
+        raise RecoveryConsistencyError("recovery_evidence_mismatch")
+    source_record = {
+        "schema_version": report["recovery_schema_version"],
+        "recovery_id": report["recovery_id"],
+        "failure_plan_evidence_id": report["failure_plan_evidence_id"],
+        "trajectory_evidence_id": report["trajectory_evidence_id"],
+        "operation_evidence_id": report["operation_evidence_id"],
+        "idempotency_key_sha256": report["idempotency_key_sha256"],
+        "events": report["events"],
+    }
+    try:
+        recomputed = evaluate_recorded_recovery(source_record)
+    except RecoveryConsistencyError:
+        raise RecoveryConsistencyError("invalid_recovery_report") from None
+    if recomputed != report:
+        raise RecoveryConsistencyError("invalid_recovery_report")
+    events = report["events"]
+
+    root = _exact_dict(
+        budget,
+        frozenset({
+            "schema_version", "budget_id", "recovery_evidence_id", "max_attempts"
+        }),
+        "invalid_retry_budget_shape",
+    )
+    if type(root["schema_version"]) is not int or root["schema_version"] != SCHEMA_VERSION:
+        raise RecoveryConsistencyError("unsupported_retry_budget_schema_version")
+    budget_id = _text(root["budget_id"], _IDENTIFIER, "invalid_retry_budget_id")
+    bound_evidence_id = _text(
+        root["recovery_evidence_id"], _SHA256, "invalid_recovery_evidence_id")
+    if bound_evidence_id != supplied_evidence_id:
+        raise RecoveryConsistencyError("retry_budget_evidence_mismatch")
+    max_attempts = root["max_attempts"]
+    if (type(max_attempts) is not int
+            or not 1 <= max_attempts <= MAX_RETRY_ATTEMPTS):
+        raise RecoveryConsistencyError("invalid_max_attempts")
+    used_attempts = len(events)
+    if used_attempts > max_attempts:
+        raise RecoveryConsistencyError("retry_budget_exceeded")
+
+    remaining_attempts = max_attempts - used_attempts
+    if report["verdict"] == "recovered":
+        disposition = "closed_recovered"
+        retry_permitted = False
+    elif remaining_attempts == 0:
+        disposition = "closed_exhausted"
+        retry_permitted = False
+    else:
+        disposition = "retry_permitted_by_recorded_budget"
+        retry_permitted = True
+    result = {
+        "retry_budget_schema_version": SCHEMA_VERSION,
+        "budget_id": budget_id,
+        "recovery_evidence_id": supplied_evidence_id,
+        "max_attempts": max_attempts,
+        "used_attempts": used_attempts,
+        "remaining_attempts": remaining_attempts,
+        "recovery_verdict": report["verdict"],
+        "disposition": disposition,
+        "retry_permitted": retry_permitted,
+        "coverage": {
+            "budget_bound": True,
+            "recovery_report_verified": True,
+            "scope": "bounded_recorded_retry_budget_metadata_only",
+        },
+        "authority": RETRY_BUDGET_AUTHORITY,
+    }
+    canonical = _canonical(result)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise RecoveryConsistencyError("retry_budget_report_too_large")
+    result["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return result
