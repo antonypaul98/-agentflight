@@ -136,3 +136,19 @@ agent/tool/command execution, project access, or credential/payload handling.
 It claims no filesystem, process, network, or OS isolation. This closure must
 pass its own exact-head PR and merged-main CI before the 4/12 acceptance record
 is canonical and AF-27 work may begin.
+
+## AF-27 recorded recovery/state-consistency receipt (2026-10-16)
+
+Source PR #42 introduced deterministic, fail-closed verification of bounded
+recorded recovery metadata. The evidence binds exact failure-plan, trajectory,
+operation and idempotency hashes, enforces a contiguous state chain and one
+commit at most, and proves that failed or duplicate replay records do not change
+state. Source tree `9b4135caafe4a752c1b4d4af57d76ed77fa32a8c` passed exact-head PR CI
+38850492412 and merged-main CI 38850574375 on Python 3.11.17 with 401 product
+tests, zero failures and zero product skips. Main was
+`234678fe214f86336832d1a901a9c5be8a5581aa`.
+
+This is recorded-metadata verification only. It performs no retry, recovery,
+agent/tool/command execution, project or durable-state access, external call,
+credential/payload handling, or filesystem/process/network/OS isolation. This
+records change requires its own exact PR and merged-main CI before release.
