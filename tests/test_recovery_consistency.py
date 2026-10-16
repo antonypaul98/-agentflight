@@ -4,8 +4,10 @@ import pytest
 
 from agentflight.recovery_consistency import (
     AUTHORITY,
+    RETRY_BUDGET_AUTHORITY,
     RecoveryConsistencyError,
     evaluate_recorded_recovery,
+    evaluate_recorded_retry_budget,
 )
 
 
@@ -99,5 +101,75 @@ def test_event_count_is_bounded(events):
 
 def test_report_contains_no_external_target_or_payload_fields():
     rendered = repr(evaluate_recorded_recovery(record()))
+    for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
+        assert forbidden not in rendered
+
+
+def budget(report, max_attempts=4):
+    return {
+        "schema_version": 1,
+        "budget_id": "retry-budget-1",
+        "recovery_evidence_id": report["evidence_id"],
+        "max_attempts": max_attempts,
+    }
+
+
+def test_recorded_retry_budget_is_exactly_bound_and_deterministic():
+    recovery = evaluate_recorded_recovery(record())
+    source = budget(recovery)
+    first = evaluate_recorded_retry_budget(recovery, source)
+    assert first == evaluate_recorded_retry_budget(
+        copy.deepcopy(recovery), copy.deepcopy(source))
+    assert first["used_attempts"] == 3
+    assert first["remaining_attempts"] == 1
+    assert first["disposition"] == "closed_recovered"
+    assert first["retry_permitted"] is False
+    assert first["authority"] == RETRY_BUDGET_AUTHORITY
+    assert len(first["evidence_id"]) == 64
+
+
+def test_incomplete_recovery_is_permitted_only_with_budget_remaining():
+    source = record()
+    source["events"] = source["events"][:1]
+    recovery = evaluate_recorded_recovery(source)
+    permitted = evaluate_recorded_retry_budget(recovery, budget(recovery, 2))
+    assert permitted["disposition"] == "retry_permitted_by_recorded_budget"
+    assert permitted["retry_permitted"] is True
+    assert permitted["remaining_attempts"] == 1
+
+    exhausted = evaluate_recorded_retry_budget(recovery, budget(recovery, 1))
+    assert exhausted["disposition"] == "closed_exhausted"
+    assert exhausted["retry_permitted"] is False
+    assert exhausted["remaining_attempts"] == 0
+
+
+@pytest.mark.parametrize(
+    "change,code",
+    [
+        (lambda recovery, source: source.update(command="retry"),
+         "invalid_retry_budget_shape"),
+        (lambda recovery, source: source.update(max_attempts=9),
+         "invalid_max_attempts"),
+        (lambda recovery, source: source.update(recovery_evidence_id=H0),
+         "retry_budget_evidence_mismatch"),
+        (lambda recovery, source: recovery.update(verdict="incomplete"),
+         "recovery_evidence_mismatch"),
+        (lambda recovery, source: recovery.update(authority="execute_retry"),
+         "recovery_evidence_mismatch"),
+    ],
+)
+def test_forged_or_payload_bearing_retry_budget_fails_closed(change, code):
+    recovery = evaluate_recorded_recovery(record())
+    source = budget(recovery)
+    change(recovery, source)
+    with pytest.raises(RecoveryConsistencyError, match=code):
+        evaluate_recorded_retry_budget(recovery, source)
+
+
+def test_retry_budget_rejects_attempts_beyond_bound_and_leaks_no_payload():
+    recovery = evaluate_recorded_recovery(record())
+    with pytest.raises(RecoveryConsistencyError, match="retry_budget_exceeded"):
+        evaluate_recorded_retry_budget(recovery, budget(recovery, 2))
+    rendered = repr(evaluate_recorded_retry_budget(recovery, budget(recovery, 3)))
     for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
         assert forbidden not in rendered

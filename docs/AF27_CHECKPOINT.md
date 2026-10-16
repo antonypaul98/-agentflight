@@ -23,3 +23,16 @@ Arbitrary untrusted execution remains outside the authorized scope.
 
 This accepts only the first bounded source slice. AF-27 remains in progress and
 the roadmap remains 4/12 accepted.
+
+## Recorded retry-budget slice
+
+The second bounded slice binds a fixed retry budget to the exact content hash
+of a validated recovery report. It caps recorded attempts at eight, rejects a
+budget smaller than the already-recorded attempt count, and distinguishes
+recovered, exhausted, and retry-permitted metadata states. A completed recovery
+never permits another retry, even if nominal budget remains.
+
+The budget result is itself deterministic and content-addressed. It performs no
+retry, recovery, sleeping, command or tool execution, project access, durable
+state access, external call, or isolation. `retry_permitted` describes only the
+caller-supplied recorded budget; it does not authorize execution.
