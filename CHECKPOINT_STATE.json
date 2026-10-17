@@ -2,17 +2,45 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-27 recovery, retry, and state consistency",
-  "checkpoint_status": "IN_PROGRESS_RECORDED_RECOVERY_SOURCE_MERGED_AND_VERIFIED",
-  "active_branch": "work/af27-recorded-recovery-records",
-  "verified_main_sha": "234678fe214f86336832d1a901a9c5be8a5581aa",
-  "observed_feature_sha": "ca4bd35a1e5557ee9a48ecd18145b7d9ddeb7301",
+  "checkpoint_status": "IN_PROGRESS_RECORDED_RETRY_BUDGET_SOURCE_MERGED_AND_VERIFIED",
+  "active_branch": "work/af27-recorded-retry-budget-records",
+  "verified_main_sha": "8992aa0e7dbbab05c73848694c972b3dac799a7b",
+  "observed_feature_sha": "fd71cf0f1597931ed575e165a8a0b9fb76c35e39",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-27 first bounded recorded recovery/state-consistency source slice merged through PR #42. Exact pull_request and merged-main push CI passed on Python 3.11.17 with 401 product tests and zero product skips. This canonical records change requires its own exact PR and merged-main CI before release.",
-  "pr_number": 42,
+  "branch_remote_status": "AF-27 recorded retry-budget source slice merged through PR #44. Exact pull_request and merged-main push CI passed on Python 3.11.17 with 409 product tests and zero product skips. This canonical records change requires its own exact PR and merged-main CI before release.",
+  "pr_number": 44,
   "pr_state": "merged",
   "ci_state": {
+    "af27_retry_budget_source_pr_run": {
+      "id": 38886756075,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38886756075",
+      "head_sha": "fd71cf0f1597931ed575e165a8a0b9fb76c35e39",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 409,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
+    "af27_retry_budget_merged_main_run": {
+      "id": 38886830294,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38886830294",
+      "head_sha": "8992aa0e7dbbab05c73848694c972b3dac799a7b",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 409,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
     "af27_recorded_recovery_source_pr_run": {
       "id": 38850492412,
       "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38850492412",
@@ -509,10 +537,10 @@
       "product_skips": 0
     }
   },
-  "local_test_status": "AF-27 first source slice: local Python 3.12.14 passed 47 focused AF-26/AF-27 tests and 399 broader product tests excluding only two established container-specific /proc observations. Exact PR and merged-main Linux CI on pinned Python 3.11.17 each passed all 401 product tests with zero failures and zero product skips.",
-  "merge_status": "AF27_RECORDED_RECOVERY_SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
+  "local_test_status": "AF-27 retry-budget records slice revalidated on local Python 3.11.17: dependency/import diagnostics passed, all 24 focused recovery/retry tests passed, and 407 broader product tests passed when excluding only the two established container-specific /proc descendant observations. The unfiltered local suite was 407 passed and 2 failed at those observations. Exact source PR and merged-main Linux CI on Python 3.11.17 each passed all 409 product tests with zero failures and zero product skips; records-head CI remains required.",
+  "merge_status": "AF27_RETRY_BUDGET_SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
   "known_blocker": null,
-  "next_action": "Publish and verify this AF-27 recorded-recovery CI receipt, explicitly release the records slice, then implement only the smallest remaining AF-27 crash-recovery or durable-state invariant.",
+  "next_action": "Publish and verify this AF-27 retry-budget CI receipt, explicitly release the records slice, then implement only the smallest remaining AF-27 durable-state invariant.",
   "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
@@ -751,13 +779,13 @@
   "last_session_exit": {
     "BLOCKED_LAYER": null,
     "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "AF-27 first bounded recorded recovery/state-consistency slice merged through PR #42 after exact-head CI; merged-main CI passed 401 product tests with zero failures or product skips. Canonical records are prepared for independent CI.",
-    "REMOTE_SHA": "234678fe214f86336832d1a901a9c5be8a5581aa",
-    "NEXT_ACTION": "Publish and verify the AF-27 records-only receipt, then explicitly release this records slice."
+    "SAFE_WORK_COMPLETED": "AF-27 recorded retry-budget slice merged through PR #44 after exact-head CI; merged-main CI passed 409 product tests with zero failures or product skips. Canonical records are prepared for independent CI.",
+    "REMOTE_SHA": "8992aa0e7dbbab05c73848694c972b3dac799a7b",
+    "NEXT_ACTION": "Publish and verify the AF-27 retry-budget records-only receipt, then explicitly release this records slice."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "ca4bd35a1e5557ee9a48ecd18145b7d9ddeb7301",
+  "observed_branch_sha": "fd71cf0f1597931ed575e165a8a0b9fb76c35e39",
   "historical_session_exits": [
     {
       "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
@@ -883,11 +911,11 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF27-RECORDED-RECOVERY-RECEIPT-20261016",
+    "ownership_id": "AF27-RECORDED-RETRY-BUDGET-RECEIPT-20261016",
     "status": "records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
-    "release_requirement": "Exact AF-27 records PR and merged-main CI, followed by explicit records-slice release before further AF-27 source work",
+    "release_requirement": "Exact AF-27 retry-budget records PR and merged-main CI, followed by explicit records-slice release before further AF-27 source work",
     "source_repair_accepted": true,
     "prior_release": {
       "ownership_id": "AF27-RECORDED-RECOVERY-20261016",
@@ -896,9 +924,9 @@
       "receipt": "https://github.com/antonypaul98/-agentflight/pull/42#issuecomment-6208068774",
       "released_at": "2026-10-16T04:27:00Z"
     },
-    "release_record": "The first bounded AF-27 source slice is merged, verified and explicitly released. The hourly task owns only this canonical records receipt until exact records CI and release."
+    "release_record": "The AF-27 recorded retry-budget source slice is merged and verified. The hourly task owns only this canonical records receipt until exact records CI and release."
   },
-  "recorded_at_utc": "2026-10-16T09:19:00Z",
+  "recorded_at_utc": "2026-10-17T21:31:00Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
     "exit_code": 1,
@@ -1114,5 +1142,32 @@
     "product_skips": 0,
     "scope": "Bounded recorded recovery metadata with exact failure-plan, trajectory, operation and idempotency bindings; contiguous state chain; at most one commit; failed and duplicate attempts do not mutate state.",
     "limitations": "No retries, recovery action, agent/tool/command execution, durable-state or project access, credentials, payloads, network calls, or isolation claim."
+  },
+  "af27_recorded_recovery_records_receipt": {
+    "records_pr": 43,
+    "records_head_sha": "c68c3c5af7821386e0b36d3a2563e7ba270c64da",
+    "records_tree_sha": "17034f92bcd6a8b98805a857c2aecdb22ee3890a",
+    "pr_ci_run": 38879692754,
+    "merged_main_sha": "4045888be212e805e8dea7654df776f4f6c5196e",
+    "merged_main_ci_run": 38879807047,
+    "python": "3.11.17",
+    "product_tests": 401,
+    "product_failures": 0,
+    "product_skips": 0,
+    "release_receipt": "https://github.com/antonypaul98/-agentflight/pull/43#issuecomment-6212328098"
+  },
+  "af27_retry_budget_source_receipt": {
+    "source_pr": 44,
+    "source_head_sha": "fd71cf0f1597931ed575e165a8a0b9fb76c35e39",
+    "source_tree_sha": "43aa52b9353ab12141aed760b75dd520bd668c75",
+    "pr_ci_run": 38886756075,
+    "merged_main_sha": "8992aa0e7dbbab05c73848694c972b3dac799a7b",
+    "merged_main_ci_run": 38886830294,
+    "python": "3.11.17",
+    "product_tests": 409,
+    "product_failures": 0,
+    "product_skips": 0,
+    "scope": "Exact recovery-report-bound metadata-only retry budgets with an eight-attempt cap and deterministic recovered, exhausted or retry-permitted dispositions.",
+    "limitations": "No retry, recovery, sleeping, agent/tool/command execution, durable-state or project access, external calls, credentials, payloads, or isolation claim."
   }
 }
