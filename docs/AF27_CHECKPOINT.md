@@ -36,3 +36,15 @@ The budget result is itself deterministic and content-addressed. It performs no
 retry, recovery, sleeping, command or tool execution, project access, durable
 state access, external call, or isolation. `retry_permitted` describes only the
 caller-supplied recorded budget; it does not authorize execution.
+
+### Retry-budget source receipt
+
+- Source PR: [#44](https://github.com/antonypaul98/-agentflight/pull/44)
+- Source SHA: `fd71cf0f1597931ed575e165a8a0b9fb76c35e39`
+- Source tree: `43aa52b9353ab12141aed760b75dd520bd668c75`
+- Pull-request CI: [38886756075](https://github.com/antonypaul98/-agentflight/actions/runs/38886756075), Python 3.11.17, 409 passed, zero product skips
+- Merged main: `8992aa0e7dbbab05c73848694c972b3dac799a7b`
+- Merged-main CI: [38886830294](https://github.com/antonypaul98/-agentflight/actions/runs/38886830294), Python 3.11.17, 409 passed, zero product skips
+
+This is a second verified slice, not AF-27 checkpoint acceptance. Roadmap
+progress remains 4/12 pending independent records CI and explicit release.

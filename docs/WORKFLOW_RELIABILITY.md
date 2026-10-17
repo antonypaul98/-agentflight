@@ -152,3 +152,22 @@ This is recorded-metadata verification only. It performs no retry, recovery,
 agent/tool/command execution, project or durable-state access, external call,
 credential/payload handling, or filesystem/process/network/OS isolation. This
 records change requires its own exact PR and merged-main CI before release.
+
+## AF-27 recorded retry-budget receipt (2026-10-16)
+
+Source PR #44 added deterministic verification of a fixed retry budget bound to
+the exact content hash of a recomputed recovery report. It caps recorded budgets
+at eight attempts, rejects already-overrun budgets, and distinguishes recovered,
+exhausted, and retry-permitted metadata states. A recovered report never permits
+another retry merely because nominal budget remains.
+
+Source head `fd71cf0f1597931ed575e165a8a0b9fb76c35e39`, tree
+`43aa52b9353ab12141aed760b75dd520bd668c75`, passed exact-head PR CI
+38886756075 on Python 3.11.17 with 409 product tests, zero failures and zero
+product skips. Guarded merge `8992aa0e7dbbab05c73848694c972b3dac799a7b`
+passed exact merged-main CI 38886830294 with the same 409/0/0 result.
+
+This is metadata-only verification: no retry, recovery, sleeping, project or
+durable-state access, agent/tool/command execution, external call, credential,
+payload, or isolation claim. This records change requires independent exact-head
+and merged-main CI before the writer slice is released.
