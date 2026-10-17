@@ -537,7 +537,7 @@
       "product_skips": 0
     }
   },
-  "local_test_status": "AF-27 retry-budget slice: Python 3.11 was unavailable locally; Python 3.12.14 compatibility audit passed 24 focused tests and 407 broader product tests excluding only two established container-specific /proc observations. Exact PR and merged-main Linux CI on pinned Python 3.11.17 each passed all 409 product tests with zero failures and zero product skips.",
+  "local_test_status": "AF-27 retry-budget records slice revalidated on local Python 3.11.17: dependency/import diagnostics passed, all 24 focused recovery/retry tests passed, and 407 broader product tests passed when excluding only the two established container-specific /proc descendant observations. The unfiltered local suite was 407 passed and 2 failed at those observations. Exact source PR and merged-main Linux CI on Python 3.11.17 each passed all 409 product tests with zero failures and zero product skips; records-head CI remains required.",
   "merge_status": "AF27_RETRY_BUDGET_SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
   "known_blocker": null,
   "next_action": "Publish and verify this AF-27 retry-budget CI receipt, explicitly release the records slice, then implement only the smallest remaining AF-27 durable-state invariant.",
@@ -926,7 +926,7 @@
     },
     "release_record": "The AF-27 recorded retry-budget source slice is merged and verified. The hourly task owns only this canonical records receipt until exact records CI and release."
   },
-  "recorded_at_utc": "2026-10-16T10:24:00Z",
+  "recorded_at_utc": "2026-10-17T21:31:00Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
     "exit_code": 1,
