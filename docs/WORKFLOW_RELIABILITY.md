@@ -211,3 +211,24 @@ project/agent/tool/command execution, durable-state access, external call,
 credential/payload handling, or filesystem/process/network/OS isolation. This
 records change requires independent exact-head and merged-main CI before writer
 release. AF-27 remains in progress and roadmap acceptance remains 4/12.
+
+## AF-27 recorded resume-transition continuity receipt (2026-10-18)
+
+Source PR #50 added deterministic verification that one caller-supplied resume
+transition extends a validated prior resume candidate by exactly one event. It
+preserves the full recovery prefix and evidence bindings, advances the recorded
+attempt and checkpoint generation exactly once, and fails closed on replay,
+history alteration, skipped generations, action-bearing fields, and Boolean
+schema values.
+
+Source head `74310a2aca5091118d4692a043ba668310b4a8ae`, tree
+`0e99662a7080c399088b7cdfedb6996e83e26e0d`, passed exact-head PR CI
+39159042557 on Python 3.11.17 with 439 product tests, zero failures and zero
+product skips. Guarded merge `d68706b245bd22a63bec854b68c08f1e1f1dc5d6`
+passed exact merged-main CI 39159139603 with the same 439/0/0 result.
+
+This is metadata-only verification. It performs no retry, recovery, restore,
+project/agent/tool/command execution, durable-state access, external call,
+credential/payload handling, or filesystem/process/network/OS isolation. This
+records change requires independent exact-head and merged-main CI before writer
+release. AF-27 remains in progress and roadmap acceptance remains 4/12.
