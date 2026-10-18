@@ -88,3 +88,15 @@ This is metadata validation only. A resume-candidate disposition neither
 authorizes nor performs retry, recovery, restore, project/agent/tool/command
 execution, durable-state access, external calls, credential or payload access,
 or filesystem/process/network/OS isolation.
+
+### Resume-guard source receipt
+
+- Source PR: [#48](https://github.com/antonypaul98/-agentflight/pull/48)
+- Source SHA: `7d99425194774aab8f1d64aac1c27c744e302a45`
+- Source tree: `ce8e5b691c2527955108138022ab491df0f90ab3`
+- Pull-request CI: [39131567287](https://github.com/antonypaul98/-agentflight/actions/runs/39131567287), Python 3.11.17, 427 passed, zero product skips
+- Merged main: `f4588406d6c7cf12d9e8893386f106533d5d6556`
+- Merged-main CI: [39131630319](https://github.com/antonypaul98/-agentflight/actions/runs/39131630319), Python 3.11.17, 427 passed, zero product skips
+
+This is a fourth verified AF-27 slice, not checkpoint acceptance. Roadmap
+progress remains 4/12 pending independent records CI and explicit release.

@@ -191,3 +191,23 @@ written, restored or persisted. It adds no project access, retry/recovery action
 agent/tool/command execution, external call, credential/payload handling, or
 filesystem/process/network/OS isolation. This records change requires its own
 exact PR and merged-main CI before release.
+
+## AF-27 recorded resume-guard receipt (2026-10-18)
+
+Source PR #48 added deterministic verification that recomputes and binds exact
+recovery, retry-budget, and state-checkpoint evidence into one disposition:
+closed after recovery, closed after budget exhaustion, or a recorded resume
+candidate with the next attempt number. The candidate is explicitly
+non-authoritative and does not grant execution permission.
+
+Source head `7d99425194774aab8f1d64aac1c27c744e302a45`, tree
+`ce8e5b691c2527955108138022ab491df0f90ab3`, passed exact-head PR CI
+39131567287 on Python 3.11.17 with 427 product tests, zero failures and zero
+product skips. Guarded merge `f4588406d6c7cf12d9e8893386f106533d5d6556`
+passed exact merged-main CI 39131630319 with the same 427/0/0 result.
+
+This is metadata-only verification. It performs no retry, recovery, restore,
+project/agent/tool/command execution, durable-state access, external call,
+credential/payload handling, or filesystem/process/network/OS isolation. This
+records change requires independent exact-head and merged-main CI before writer
+release. AF-27 remains in progress and roadmap acceptance remains 4/12.
