@@ -48,3 +48,18 @@ caller-supplied recorded budget; it does not authorize execution.
 
 This is a second verified slice, not AF-27 checkpoint acceptance. Roadmap
 progress remains 4/12 pending independent records CI and explicit release.
+
+## Recorded state-checkpoint slice
+
+The next bounded slice validates caller-supplied checkpoint metadata against an
+exact, recomputed recovery report. It binds the recovery evidence ID, a bounded
+positive checkpoint generation, the recorded initial state hash, and the final
+recorded state hash. Recovered and incomplete transcripts are both supported;
+incomplete transcripts remain at their unchanged initial hash under the
+existing no-commit invariant.
+
+The result is deterministic and content-addressed. It does not inspect, read,
+write, restore, or claim persistence of durable state. It performs no project,
+agent, tool, command, process, filesystem, or network action and accepts no
+payloads or credentials. Evidence and CI receipts remain pending until the
+source slice is independently verified.
