@@ -23,6 +23,9 @@ STATE_CHECKPOINT_AUTHORITY = (
 RESUME_GUARD_AUTHORITY = (
     "recorded_resume_guard_only_no_retry_recovery_or_execution"
 )
+RESUME_TRANSITION_AUTHORITY = (
+    "recorded_resume_transition_only_no_retry_recovery_or_execution"
+)
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -354,5 +357,161 @@ def evaluate_recorded_resume_guard(
     canonical = _canonical(result)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise RecoveryConsistencyError("resume_guard_report_too_large")
+    result["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return result
+
+
+def _verified_resume_guard(resume_guard: Mapping[str, object]) -> dict:
+    guard = _exact_dict(
+        resume_guard,
+        frozenset({
+            "resume_guard_schema_version", "recovery_evidence_id",
+            "retry_budget_evidence_id", "state_checkpoint_evidence_id",
+            "checkpoint_generation", "checkpoint_state_sha256",
+            "used_attempts", "remaining_attempts", "next_attempt",
+            "disposition", "coverage", "authority", "evidence_id",
+        }),
+        "invalid_resume_guard_shape",
+    )
+    supplied_evidence_id = _text(
+        guard["evidence_id"], _SHA256, "invalid_resume_guard_evidence_id")
+    unsigned = {key: value for key, value in guard.items() if key != "evidence_id"}
+    expected_evidence_id = hashlib.sha256(
+        _canonical(unsigned).encode("utf-8")
+    ).hexdigest()
+    if supplied_evidence_id != expected_evidence_id:
+        raise RecoveryConsistencyError("resume_guard_evidence_mismatch")
+    if (type(guard["resume_guard_schema_version"]) is not int
+            or guard["resume_guard_schema_version"] != SCHEMA_VERSION):
+        raise RecoveryConsistencyError("invalid_resume_guard")
+    for key in (
+        "recovery_evidence_id", "retry_budget_evidence_id",
+        "state_checkpoint_evidence_id", "checkpoint_state_sha256",
+    ):
+        _text(guard[key], _SHA256, "invalid_resume_guard")
+    generation = guard["checkpoint_generation"]
+    used = guard["used_attempts"]
+    remaining = guard["remaining_attempts"]
+    if (type(generation) is not int
+            or not 1 <= generation <= MAX_CHECKPOINT_GENERATION
+            or type(used) is not int or not 1 <= used <= MAX_RETRY_ATTEMPTS
+            or type(remaining) is not int
+            or not 0 <= remaining <= MAX_RETRY_ATTEMPTS - used):
+        raise RecoveryConsistencyError("invalid_resume_guard")
+    disposition = guard["disposition"]
+    if disposition == "resume_candidate":
+        if guard["next_attempt"] != used + 1 or remaining < 1:
+            raise RecoveryConsistencyError("invalid_resume_guard")
+    elif disposition in {"closed_recovered", "closed_exhausted"}:
+        if guard["next_attempt"] is not None:
+            raise RecoveryConsistencyError("invalid_resume_guard")
+    else:
+        raise RecoveryConsistencyError("invalid_resume_guard")
+    if guard["coverage"] != {
+        "recovery_report_verified": True,
+        "retry_budget_verified": True,
+        "state_checkpoint_verified": True,
+        "scope": "bounded_recorded_resume_guard_metadata_only",
+    } or guard["authority"] != RESUME_GUARD_AUTHORITY:
+        raise RecoveryConsistencyError("invalid_resume_guard")
+    return guard
+
+
+def evaluate_recorded_resume_transition(
+    prior_resume_guard: Mapping[str, object],
+    prior_recovery_report: Mapping[str, object],
+    current_recovery_report: Mapping[str, object],
+    current_retry_budget: Mapping[str, object],
+    current_state_checkpoint: Mapping[str, object],
+    transition: Mapping[str, object],
+) -> dict:
+    """Verify one exact recorded resume step without performing it.
+
+    The current recovery transcript must append exactly one event to the prior
+    transcript, preserve the full prefix, and advance the checkpoint generation
+    exactly once. The returned disposition remains metadata-only.
+    """
+
+    prior_guard = _verified_resume_guard(prior_resume_guard)
+    prior_report = _verified_recovery_report(prior_recovery_report)
+    if prior_guard["recovery_evidence_id"] != prior_report["evidence_id"]:
+        raise RecoveryConsistencyError("prior_resume_guard_recovery_mismatch")
+    if prior_guard["disposition"] != "resume_candidate":
+        raise RecoveryConsistencyError("prior_resume_guard_not_candidate")
+    if prior_guard["used_attempts"] != len(prior_report["events"]):
+        raise RecoveryConsistencyError("prior_resume_guard_attempt_mismatch")
+    if (prior_guard["checkpoint_state_sha256"]
+            != prior_report["events"][-1]["state_after_sha256"]):
+        raise RecoveryConsistencyError("prior_resume_guard_state_mismatch")
+
+    current_report = _verified_recovery_report(current_recovery_report)
+    prior_events = prior_report["events"]
+    current_events = current_report["events"]
+    if (len(current_events) != len(prior_events) + 1
+            or current_events[:-1] != prior_events):
+        raise RecoveryConsistencyError("invalid_resume_event_advance")
+    if current_report["recovery_id"] != prior_report["recovery_id"]:
+        raise RecoveryConsistencyError("resume_recovery_id_mismatch")
+    for key in (
+        "failure_plan_evidence_id", "trajectory_evidence_id",
+        "operation_evidence_id", "idempotency_key_sha256",
+    ):
+        if current_report[key] != prior_report[key]:
+            raise RecoveryConsistencyError("resume_recovery_binding_mismatch")
+
+    current_guard = evaluate_recorded_resume_guard(
+        current_report, current_retry_budget, current_state_checkpoint)
+    if current_guard["used_attempts"] != prior_guard["next_attempt"]:
+        raise RecoveryConsistencyError("invalid_resume_attempt_advance")
+    if (current_guard["checkpoint_generation"]
+            != prior_guard["checkpoint_generation"] + 1):
+        raise RecoveryConsistencyError("invalid_resume_generation_advance")
+
+    root = _exact_dict(
+        transition,
+        frozenset({
+            "schema_version", "transition_id",
+            "prior_resume_guard_evidence_id",
+            "current_resume_guard_evidence_id",
+        }),
+        "invalid_resume_transition_shape",
+    )
+    if type(root["schema_version"]) is not int or root["schema_version"] != SCHEMA_VERSION:
+        raise RecoveryConsistencyError("unsupported_resume_transition_schema_version")
+    transition_id = _text(
+        root["transition_id"], _IDENTIFIER, "invalid_resume_transition_id")
+    prior_evidence_id = _text(
+        root["prior_resume_guard_evidence_id"], _SHA256,
+        "invalid_resume_guard_evidence_id")
+    current_evidence_id = _text(
+        root["current_resume_guard_evidence_id"], _SHA256,
+        "invalid_resume_guard_evidence_id")
+    if prior_evidence_id != prior_guard["evidence_id"]:
+        raise RecoveryConsistencyError("prior_resume_guard_evidence_mismatch")
+    if current_evidence_id != current_guard["evidence_id"]:
+        raise RecoveryConsistencyError("current_resume_guard_evidence_mismatch")
+
+    result = {
+        "resume_transition_schema_version": SCHEMA_VERSION,
+        "transition_id": transition_id,
+        "prior_resume_guard_evidence_id": prior_evidence_id,
+        "current_resume_guard_evidence_id": current_evidence_id,
+        "prior_attempts": prior_guard["used_attempts"],
+        "current_attempts": current_guard["used_attempts"],
+        "prior_checkpoint_generation": prior_guard["checkpoint_generation"],
+        "current_checkpoint_generation": current_guard["checkpoint_generation"],
+        "disposition": current_guard["disposition"],
+        "coverage": {
+            "prior_resume_guard_verified": True,
+            "current_resume_guard_recomputed": True,
+            "recorded_event_advance": 1,
+            "checkpoint_generation_advance": 1,
+            "scope": "bounded_recorded_resume_transition_metadata_only",
+        },
+        "authority": RESUME_TRANSITION_AUTHORITY,
+    }
+    canonical = _canonical(result)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise RecoveryConsistencyError("resume_transition_report_too_large")
     result["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return result

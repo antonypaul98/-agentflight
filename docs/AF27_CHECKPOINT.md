@@ -100,3 +100,19 @@ or filesystem/process/network/OS isolation.
 
 This is a fourth verified AF-27 slice, not checkpoint acceptance. Roadmap
 progress remains 4/12 pending independent records CI and explicit release.
+
+## Recorded resume-transition continuity slice
+
+The next bounded slice verifies that a later caller-supplied recovery snapshot
+extends a prior resume candidate by exactly one recorded event. It preserves the
+complete earlier event prefix and recovery bindings, advances the attempt count
+and checkpoint generation exactly once, and binds both exact resume-guard
+evidence identities. Replayed snapshots, skipped generations, altered history,
+and action-bearing fields fail closed.
+
+This is deterministic metadata validation only. It neither authorizes nor
+performs a retry, recovery, restore, project/agent/tool/command execution,
+durable-state access, external call, credential or payload access, or any form
+of filesystem/process/network/OS isolation. AF-27 remains in progress and the
+roadmap remains 4/12 accepted pending exact-head CI, merge, records evidence,
+and eventual bounded checkpoint acceptance.
