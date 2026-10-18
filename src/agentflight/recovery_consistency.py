@@ -20,6 +20,9 @@ RETRY_BUDGET_AUTHORITY = "recorded_retry_budget_only_no_retry_or_execution"
 STATE_CHECKPOINT_AUTHORITY = (
     "recorded_state_checkpoint_only_no_storage_access_or_execution"
 )
+RESUME_GUARD_AUTHORITY = (
+    "recorded_resume_guard_only_no_retry_recovery_or_execution"
+)
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -300,5 +303,56 @@ def evaluate_recorded_state_checkpoint(
     canonical = _canonical(result)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise RecoveryConsistencyError("state_checkpoint_report_too_large")
+    result["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return result
+
+
+def evaluate_recorded_resume_guard(
+    recovery_report: Mapping[str, object],
+    retry_budget: Mapping[str, object],
+    state_checkpoint: Mapping[str, object],
+) -> dict:
+    """Combine exact recorded recovery, budget, and checkpoint evidence.
+
+    A ``resume_candidate`` disposition describes metadata consistency only. It
+    neither authorizes nor performs a retry, recovery, restore, or execution.
+    """
+
+    report = _verified_recovery_report(recovery_report)
+    budget_result = evaluate_recorded_retry_budget(report, retry_budget)
+    checkpoint_result = evaluate_recorded_state_checkpoint(report, state_checkpoint)
+
+    if report["verdict"] == "recovered":
+        disposition = "closed_recovered"
+        next_attempt = None
+    elif budget_result["retry_permitted"]:
+        disposition = "resume_candidate"
+        next_attempt = budget_result["used_attempts"] + 1
+    else:
+        disposition = "closed_exhausted"
+        next_attempt = None
+
+    result = {
+        "resume_guard_schema_version": SCHEMA_VERSION,
+        "recovery_evidence_id": report["evidence_id"],
+        "retry_budget_evidence_id": budget_result["evidence_id"],
+        "state_checkpoint_evidence_id": checkpoint_result["evidence_id"],
+        "checkpoint_generation": checkpoint_result["generation"],
+        "checkpoint_state_sha256": checkpoint_result["checkpoint_state_sha256"],
+        "used_attempts": budget_result["used_attempts"],
+        "remaining_attempts": budget_result["remaining_attempts"],
+        "next_attempt": next_attempt,
+        "disposition": disposition,
+        "coverage": {
+            "recovery_report_verified": True,
+            "retry_budget_verified": True,
+            "state_checkpoint_verified": True,
+            "scope": "bounded_recorded_resume_guard_metadata_only",
+        },
+        "authority": RESUME_GUARD_AUTHORITY,
+    }
+    canonical = _canonical(result)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise RecoveryConsistencyError("resume_guard_report_too_large")
     result["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return result

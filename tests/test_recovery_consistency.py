@@ -5,10 +5,12 @@ import pytest
 from agentflight.recovery_consistency import (
     AUTHORITY,
     RETRY_BUDGET_AUTHORITY,
+    RESUME_GUARD_AUTHORITY,
     STATE_CHECKPOINT_AUTHORITY,
     RecoveryConsistencyError,
     evaluate_recorded_recovery,
     evaluate_recorded_retry_budget,
+    evaluate_recorded_resume_guard,
     evaluate_recorded_state_checkpoint,
 )
 
@@ -242,5 +244,77 @@ def test_forged_or_payload_bearing_state_checkpoint_fails_closed(change, code):
 def test_state_checkpoint_contains_no_external_target_or_payload_fields():
     recovery = evaluate_recorded_recovery(record())
     rendered = repr(evaluate_recorded_state_checkpoint(recovery, checkpoint(recovery)))
+    for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
+        assert forbidden not in rendered
+
+
+def test_recorded_resume_guard_is_bound_deterministic_and_non_authoritative():
+    source = record()
+    source["events"] = source["events"][:1]
+    recovery = evaluate_recorded_recovery(source)
+    retry = budget(recovery, 3)
+    state = checkpoint(recovery, 9)
+    first = evaluate_recorded_resume_guard(recovery, retry, state)
+    assert first == evaluate_recorded_resume_guard(
+        copy.deepcopy(recovery), copy.deepcopy(retry), copy.deepcopy(state))
+    assert first["disposition"] == "resume_candidate"
+    assert first["next_attempt"] == 2
+    assert first["remaining_attempts"] == 2
+    assert first["checkpoint_generation"] == 9
+    assert first["checkpoint_state_sha256"] == H0
+    assert first["authority"] == RESUME_GUARD_AUTHORITY
+    assert len(first["evidence_id"]) == 64
+
+
+def test_recorded_resume_guard_closes_recovered_and_exhausted_records():
+    recovered = evaluate_recorded_recovery(record())
+    recovered_result = evaluate_recorded_resume_guard(
+        recovered, budget(recovered, 4), checkpoint(recovered))
+    assert recovered_result["disposition"] == "closed_recovered"
+    assert recovered_result["next_attempt"] is None
+
+    source = record()
+    source["events"] = source["events"][:1]
+    incomplete = evaluate_recorded_recovery(source)
+    exhausted = evaluate_recorded_resume_guard(
+        incomplete, budget(incomplete, 1), checkpoint(incomplete))
+    assert exhausted["disposition"] == "closed_exhausted"
+    assert exhausted["next_attempt"] is None
+
+
+@pytest.mark.parametrize(
+    "target,change,code",
+    [
+        ("recovery", lambda value: value.update(verdict="recovered"),
+         "recovery_evidence_mismatch"),
+        ("budget", lambda value: value.update(command="retry"),
+         "invalid_retry_budget_shape"),
+        ("checkpoint", lambda value: value.update(path="/state"),
+         "invalid_state_checkpoint_shape"),
+        ("budget", lambda value: value.update(recovery_evidence_id=H0),
+         "retry_budget_evidence_mismatch"),
+        ("checkpoint", lambda value: value.update(recovery_evidence_id=H0),
+         "state_checkpoint_evidence_mismatch"),
+    ],
+)
+def test_recorded_resume_guard_rejects_forged_or_action_bearing_inputs(
+    target, change, code
+):
+    source = record()
+    source["events"] = source["events"][:1]
+    recovery = evaluate_recorded_recovery(source)
+    retry = budget(recovery, 2)
+    state = checkpoint(recovery)
+    change({"recovery": recovery, "budget": retry, "checkpoint": state}[target])
+    with pytest.raises(RecoveryConsistencyError, match=code):
+        evaluate_recorded_resume_guard(recovery, retry, state)
+
+
+def test_recorded_resume_guard_contains_no_external_target_or_payload_fields():
+    source = record()
+    source["events"] = source["events"][:1]
+    recovery = evaluate_recorded_recovery(source)
+    rendered = repr(evaluate_recorded_resume_guard(
+        recovery, budget(recovery, 2), checkpoint(recovery)))
     for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
         assert forbidden not in rendered

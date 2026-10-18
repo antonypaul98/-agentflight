@@ -74,3 +74,17 @@ payloads or credentials.
 
 This is a third verified AF-27 slice, not checkpoint acceptance. Roadmap
 progress remains 4/12 pending independent records CI and explicit release.
+
+## Recorded resume-guard slice
+
+The next bounded slice combines exact recovery, retry-budget, and state-checkpoint
+evidence into one deterministic disposition: closed after recovery, closed after
+budget exhaustion, or a recorded resume candidate with the next attempt number.
+Every input is recomputed before use, and the output binds the exact three
+evidence identities, checkpoint generation, checkpoint state hash, and budget
+coverage.
+
+This is metadata validation only. A resume-candidate disposition neither
+authorizes nor performs retry, recovery, restore, project/agent/tool/command
+execution, durable-state access, external calls, credential or payload access,
+or filesystem/process/network/OS isolation.
