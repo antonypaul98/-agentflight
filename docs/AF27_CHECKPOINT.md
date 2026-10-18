@@ -61,5 +61,16 @@ existing no-commit invariant.
 The result is deterministic and content-addressed. It does not inspect, read,
 write, restore, or claim persistence of durable state. It performs no project,
 agent, tool, command, process, filesystem, or network action and accepts no
-payloads or credentials. Evidence and CI receipts remain pending until the
-source slice is independently verified.
+payloads or credentials.
+
+### State-checkpoint source receipt
+
+- Source PR: [#46](https://github.com/antonypaul98/-agentflight/pull/46)
+- Source SHA: `c556396d3caa982e70be914cedb12010804bce73`
+- Source tree: `dd0eb0c5cf5bac8f3469f85b48220b77f207939a`
+- Pull-request CI: [39089907017](https://github.com/antonypaul98/-agentflight/actions/runs/39089907017), Python 3.11.17, 419 passed, zero product skips
+- Merged main: `99ff09825e77613917c866591ebba37700412d40`
+- Merged-main CI: [39089947965](https://github.com/antonypaul98/-agentflight/actions/runs/39089947965), Python 3.11.17, 419 passed, zero product skips
+
+This is a third verified AF-27 slice, not checkpoint acceptance. Roadmap
+progress remains 4/12 pending independent records CI and explicit release.
