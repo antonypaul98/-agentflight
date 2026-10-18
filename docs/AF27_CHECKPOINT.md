@@ -113,6 +113,17 @@ and action-bearing fields fail closed.
 This is deterministic metadata validation only. It neither authorizes nor
 performs a retry, recovery, restore, project/agent/tool/command execution,
 durable-state access, external call, credential or payload access, or any form
-of filesystem/process/network/OS isolation. AF-27 remains in progress and the
-roadmap remains 4/12 accepted pending exact-head CI, merge, records evidence,
-and eventual bounded checkpoint acceptance.
+of filesystem/process/network/OS isolation.
+
+### Resume-transition source receipt
+
+- Source PR: [#50](https://github.com/antonypaul98/-agentflight/pull/50)
+- Source SHA: `74310a2aca5091118d4692a043ba668310b4a8ae`
+- Source tree: `0e99662a7080c399088b7cdfedb6996e83e26e0d`
+- Pull-request CI: [39159042557](https://github.com/antonypaul98/-agentflight/actions/runs/39159042557), Python 3.11.17, 439 passed, zero product skips
+- Merged main: `d68706b245bd22a63bec854b68c08f1e1f1dc5d6`
+- Merged-main CI: [39159139603](https://github.com/antonypaul98/-agentflight/actions/runs/39159139603), Python 3.11.17, 439 passed, zero product skips
+
+This is a fifth verified AF-27 slice, not checkpoint acceptance. AF-27 remains
+in progress and the roadmap remains 4/12 accepted pending independent records
+CI, explicit release, and eventual bounded checkpoint acceptance.
