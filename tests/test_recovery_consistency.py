@@ -5,9 +5,11 @@ import pytest
 from agentflight.recovery_consistency import (
     AUTHORITY,
     RETRY_BUDGET_AUTHORITY,
+    STATE_CHECKPOINT_AUTHORITY,
     RecoveryConsistencyError,
     evaluate_recorded_recovery,
     evaluate_recorded_retry_budget,
+    evaluate_recorded_state_checkpoint,
 )
 
 
@@ -171,5 +173,74 @@ def test_retry_budget_rejects_attempts_beyond_bound_and_leaks_no_payload():
     with pytest.raises(RecoveryConsistencyError, match="retry_budget_exceeded"):
         evaluate_recorded_retry_budget(recovery, budget(recovery, 2))
     rendered = repr(evaluate_recorded_retry_budget(recovery, budget(recovery, 3)))
+    for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
+        assert forbidden not in rendered
+
+
+def checkpoint(report, generation=7):
+    return {
+        "schema_version": 1,
+        "checkpoint_id": "state-checkpoint-1",
+        "recovery_evidence_id": report["evidence_id"],
+        "generation": generation,
+        "initial_state_sha256": report["events"][0]["state_before_sha256"],
+        "checkpoint_state_sha256": report["events"][-1]["state_after_sha256"],
+    }
+
+
+def test_recorded_state_checkpoint_is_exactly_bound_and_deterministic():
+    recovery = evaluate_recorded_recovery(record())
+    source = checkpoint(recovery)
+    first = evaluate_recorded_state_checkpoint(recovery, source)
+    assert first == evaluate_recorded_state_checkpoint(
+        copy.deepcopy(recovery), copy.deepcopy(source))
+    assert first["generation"] == 7
+    assert first["checkpoint_state_sha256"] == H1
+    assert first["recovery_verdict"] == "recovered"
+    assert first["state_consistent"] is True
+    assert first["authority"] == STATE_CHECKPOINT_AUTHORITY
+    assert len(first["evidence_id"]) == 64
+
+
+def test_incomplete_recovery_checkpoint_remains_at_initial_state():
+    source = record()
+    source["events"] = source["events"][:1]
+    recovery = evaluate_recorded_recovery(source)
+    result = evaluate_recorded_state_checkpoint(recovery, checkpoint(recovery, 1))
+    assert result["recovery_verdict"] == "incomplete"
+    assert result["initial_state_sha256"] == H0
+    assert result["checkpoint_state_sha256"] == H0
+
+
+@pytest.mark.parametrize(
+    "change,code",
+    [
+        (lambda recovery, source: source.update(path="/state"),
+         "invalid_state_checkpoint_shape"),
+        (lambda recovery, source: source.update(generation=0),
+         "invalid_checkpoint_generation"),
+        (lambda recovery, source: source.update(generation=True),
+         "invalid_checkpoint_generation"),
+        (lambda recovery, source: source.update(recovery_evidence_id=H0),
+         "state_checkpoint_evidence_mismatch"),
+        (lambda recovery, source: source.update(initial_state_sha256=H2),
+         "checkpoint_initial_state_mismatch"),
+        (lambda recovery, source: source.update(checkpoint_state_sha256=H2),
+         "checkpoint_state_mismatch"),
+        (lambda recovery, source: recovery.update(verdict="incomplete"),
+         "recovery_evidence_mismatch"),
+    ],
+)
+def test_forged_or_payload_bearing_state_checkpoint_fails_closed(change, code):
+    recovery = evaluate_recorded_recovery(record())
+    source = checkpoint(recovery)
+    change(recovery, source)
+    with pytest.raises(RecoveryConsistencyError, match=code):
+        evaluate_recorded_state_checkpoint(recovery, source)
+
+
+def test_state_checkpoint_contains_no_external_target_or_payload_fields():
+    recovery = evaluate_recorded_recovery(record())
+    rendered = repr(evaluate_recorded_state_checkpoint(recovery, checkpoint(recovery)))
     for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
         assert forbidden not in rendered

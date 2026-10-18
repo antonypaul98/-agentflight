@@ -13,9 +13,13 @@ from collections.abc import Mapping
 SCHEMA_VERSION = 1
 MAX_EVENTS = 32
 MAX_RETRY_ATTEMPTS = 8
+MAX_CHECKPOINT_GENERATION = 1_000_000
 MAX_REPORT_BYTES = 32_768
 AUTHORITY = "recorded_recovery_consistency_only_no_execution"
 RETRY_BUDGET_AUTHORITY = "recorded_retry_budget_only_no_retry_or_execution"
+STATE_CHECKPOINT_AUTHORITY = (
+    "recorded_state_checkpoint_only_no_storage_access_or_execution"
+)
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -135,11 +139,7 @@ def evaluate_recorded_recovery(record: Mapping[str, object]) -> dict:
     return report
 
 
-def evaluate_recorded_retry_budget(
-    recovery_report: Mapping[str, object], budget: Mapping[str, object]
-) -> dict:
-    """Bind one fixed retry budget to an exact recorded recovery report."""
-
+def _verified_recovery_report(recovery_report: Mapping[str, object]) -> dict:
     report = _exact_dict(
         recovery_report,
         frozenset({
@@ -173,6 +173,16 @@ def evaluate_recorded_retry_budget(
         raise RecoveryConsistencyError("invalid_recovery_report") from None
     if recomputed != report:
         raise RecoveryConsistencyError("invalid_recovery_report")
+    return report
+
+
+def evaluate_recorded_retry_budget(
+    recovery_report: Mapping[str, object], budget: Mapping[str, object]
+) -> dict:
+    """Bind one fixed retry budget to an exact recorded recovery report."""
+
+    report = _verified_recovery_report(recovery_report)
+    supplied_evidence_id = report["evidence_id"]
     events = report["events"]
 
     root = _exact_dict(
@@ -227,5 +237,68 @@ def evaluate_recorded_retry_budget(
     canonical = _canonical(result)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise RecoveryConsistencyError("retry_budget_report_too_large")
+    result["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return result
+
+
+def evaluate_recorded_state_checkpoint(
+    recovery_report: Mapping[str, object], checkpoint: Mapping[str, object]
+) -> dict:
+    """Bind one recorded state checkpoint to an exact recovery report.
+
+    All hashes and the generation are caller-supplied metadata.  This function
+    does not read from or write to durable storage.
+    """
+
+    report = _verified_recovery_report(recovery_report)
+    root = _exact_dict(
+        checkpoint,
+        frozenset({
+            "schema_version", "checkpoint_id", "recovery_evidence_id",
+            "generation", "initial_state_sha256", "checkpoint_state_sha256",
+        }),
+        "invalid_state_checkpoint_shape",
+    )
+    if type(root["schema_version"]) is not int or root["schema_version"] != SCHEMA_VERSION:
+        raise RecoveryConsistencyError("unsupported_state_checkpoint_schema_version")
+    checkpoint_id = _text(
+        root["checkpoint_id"], _IDENTIFIER, "invalid_checkpoint_id")
+    recovery_evidence_id = _text(
+        root["recovery_evidence_id"], _SHA256, "invalid_recovery_evidence_id")
+    if recovery_evidence_id != report["evidence_id"]:
+        raise RecoveryConsistencyError("state_checkpoint_evidence_mismatch")
+    generation = root["generation"]
+    if (type(generation) is not int
+            or not 1 <= generation <= MAX_CHECKPOINT_GENERATION):
+        raise RecoveryConsistencyError("invalid_checkpoint_generation")
+    initial_state = _text(
+        root["initial_state_sha256"], _SHA256, "invalid_initial_state_hash")
+    checkpoint_state = _text(
+        root["checkpoint_state_sha256"], _SHA256, "invalid_checkpoint_state_hash")
+    events = report["events"]
+    if initial_state != events[0]["state_before_sha256"]:
+        raise RecoveryConsistencyError("checkpoint_initial_state_mismatch")
+    if checkpoint_state != events[-1]["state_after_sha256"]:
+        raise RecoveryConsistencyError("checkpoint_state_mismatch")
+
+    result = {
+        "state_checkpoint_schema_version": SCHEMA_VERSION,
+        "checkpoint_id": checkpoint_id,
+        "recovery_evidence_id": recovery_evidence_id,
+        "generation": generation,
+        "initial_state_sha256": initial_state,
+        "checkpoint_state_sha256": checkpoint_state,
+        "recovery_verdict": report["verdict"],
+        "state_consistent": True,
+        "coverage": {
+            "recovery_report_verified": True,
+            "recorded_events": len(events),
+            "scope": "bounded_recorded_state_checkpoint_metadata_only",
+        },
+        "authority": STATE_CHECKPOINT_AUTHORITY,
+    }
+    canonical = _canonical(result)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise RecoveryConsistencyError("state_checkpoint_report_too_large")
     result["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return result
