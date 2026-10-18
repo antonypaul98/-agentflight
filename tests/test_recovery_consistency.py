@@ -1,4 +1,6 @@
 import copy
+import hashlib
+import json
 
 import pytest
 
@@ -6,11 +8,13 @@ from agentflight.recovery_consistency import (
     AUTHORITY,
     RETRY_BUDGET_AUTHORITY,
     RESUME_GUARD_AUTHORITY,
+    RESUME_TRANSITION_AUTHORITY,
     STATE_CHECKPOINT_AUTHORITY,
     RecoveryConsistencyError,
     evaluate_recorded_recovery,
     evaluate_recorded_retry_budget,
     evaluate_recorded_resume_guard,
+    evaluate_recorded_resume_transition,
     evaluate_recorded_state_checkpoint,
 )
 
@@ -316,5 +320,122 @@ def test_recorded_resume_guard_contains_no_external_target_or_payload_fields():
     recovery = evaluate_recorded_recovery(source)
     rendered = repr(evaluate_recorded_resume_guard(
         recovery, budget(recovery, 2), checkpoint(recovery)))
+    for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
+        assert forbidden not in rendered
+
+
+def resume_transition_inputs(outcome="failed_no_commit"):
+    prior_source = record()
+    prior_source["events"] = prior_source["events"][:1]
+    prior_recovery = evaluate_recorded_recovery(prior_source)
+    prior_guard = evaluate_recorded_resume_guard(
+        prior_recovery, budget(prior_recovery, 3), checkpoint(prior_recovery, 9))
+
+    current_source = copy.deepcopy(prior_source)
+    state_after = H1 if outcome == "committed" else H0
+    current_source["events"].append({
+        "sequence": 2,
+        "attempt": 2,
+        "state_before_sha256": H0,
+        "state_after_sha256": state_after,
+        "outcome_code": outcome,
+    })
+    current_recovery = evaluate_recorded_recovery(current_source)
+    current_budget = budget(current_recovery, 3)
+    current_checkpoint = checkpoint(current_recovery, 10)
+    current_guard = evaluate_recorded_resume_guard(
+        current_recovery, current_budget, current_checkpoint)
+    transition = {
+        "schema_version": 1,
+        "transition_id": "resume-transition-1",
+        "prior_resume_guard_evidence_id": prior_guard["evidence_id"],
+        "current_resume_guard_evidence_id": current_guard["evidence_id"],
+    }
+    return (prior_guard, prior_recovery, current_recovery,
+            current_budget, current_checkpoint, transition)
+
+
+def test_recorded_resume_transition_is_deterministic_and_non_authoritative():
+    inputs = resume_transition_inputs()
+    first = evaluate_recorded_resume_transition(*inputs)
+    assert first == evaluate_recorded_resume_transition(*copy.deepcopy(inputs))
+    assert first["prior_attempts"] == 1
+    assert first["current_attempts"] == 2
+    assert first["prior_checkpoint_generation"] == 9
+    assert first["current_checkpoint_generation"] == 10
+    assert first["disposition"] == "resume_candidate"
+    assert first["authority"] == RESUME_TRANSITION_AUTHORITY
+    assert len(first["evidence_id"]) == 64
+
+
+def test_recorded_resume_transition_can_close_after_recorded_recovery():
+    result = evaluate_recorded_resume_transition(
+        *resume_transition_inputs("committed"))
+    assert result["disposition"] == "closed_recovered"
+
+
+@pytest.mark.parametrize(
+    "index,change,code",
+    [
+        (0, lambda value: value.update(disposition="closed_recovered"),
+         "resume_guard_evidence_mismatch"),
+        (1, lambda value: value.update(recovery_id="forged"),
+         "recovery_evidence_mismatch"),
+        (2, lambda value: value["events"][0].update(state_after_sha256=H2),
+         "recovery_evidence_mismatch"),
+        (3, lambda value: value.update(command="retry"),
+         "invalid_retry_budget_shape"),
+        (4, lambda value: value.update(path="/state"),
+         "invalid_state_checkpoint_shape"),
+        (5, lambda value: value.update(command="resume"),
+         "invalid_resume_transition_shape"),
+        (5, lambda value: value.update(prior_resume_guard_evidence_id=H0),
+         "prior_resume_guard_evidence_mismatch"),
+    ],
+)
+def test_recorded_resume_transition_rejects_forged_or_action_bearing_inputs(
+    index, change, code
+):
+    inputs = list(resume_transition_inputs())
+    change(inputs[index])
+    with pytest.raises(RecoveryConsistencyError, match=code):
+        evaluate_recorded_resume_transition(*inputs)
+
+
+def test_recorded_resume_transition_rejects_replay_and_generation_gaps():
+    inputs = list(resume_transition_inputs())
+    replay_report = copy.deepcopy(inputs[1])
+    inputs[2] = replay_report
+    inputs[3] = budget(replay_report, 3)
+    inputs[4] = checkpoint(replay_report, 10)
+    replay_guard = evaluate_recorded_resume_guard(inputs[2], inputs[3], inputs[4])
+    inputs[5]["current_resume_guard_evidence_id"] = replay_guard["evidence_id"]
+    with pytest.raises(RecoveryConsistencyError, match="invalid_resume_event_advance"):
+        evaluate_recorded_resume_transition(*inputs)
+
+    inputs = list(resume_transition_inputs())
+    inputs[4]["generation"] = 11
+    gap_guard = evaluate_recorded_resume_guard(inputs[2], inputs[3], inputs[4])
+    inputs[5]["current_resume_guard_evidence_id"] = gap_guard["evidence_id"]
+    with pytest.raises(RecoveryConsistencyError, match="invalid_resume_generation_advance"):
+        evaluate_recorded_resume_transition(*inputs)
+
+
+def test_recorded_resume_transition_rejects_boolean_guard_schema_version():
+    inputs = list(resume_transition_inputs())
+    guard = inputs[0]
+    guard["resume_guard_schema_version"] = True
+    unsigned = {key: value for key, value in guard.items() if key != "evidence_id"}
+    guard["evidence_id"] = hashlib.sha256(json.dumps(
+        unsigned, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")).hexdigest()
+    inputs[5]["prior_resume_guard_evidence_id"] = guard["evidence_id"]
+    with pytest.raises(RecoveryConsistencyError, match="invalid_resume_guard"):
+        evaluate_recorded_resume_transition(*inputs)
+
+
+def test_recorded_resume_transition_contains_no_external_target_or_payload_fields():
+    rendered = repr(evaluate_recorded_resume_transition(
+        *resume_transition_inputs()))
     for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
         assert forbidden not in rendered
