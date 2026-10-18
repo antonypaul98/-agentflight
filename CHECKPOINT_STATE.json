@@ -2,17 +2,45 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-27 recovery, retry, and state consistency",
-  "checkpoint_status": "IN_PROGRESS_RECORDED_RETRY_BUDGET_SOURCE_MERGED_AND_VERIFIED",
-  "active_branch": "work/af27-recorded-retry-budget-records",
-  "verified_main_sha": "8992aa0e7dbbab05c73848694c972b3dac799a7b",
-  "observed_feature_sha": "fd71cf0f1597931ed575e165a8a0b9fb76c35e39",
+  "checkpoint_status": "IN_PROGRESS_RECORDED_STATE_CHECKPOINT_SOURCE_MERGED_AND_VERIFIED",
+  "active_branch": "work/af27-recorded-state-checkpoint-records",
+  "verified_main_sha": "99ff09825e77613917c866591ebba37700412d40",
+  "observed_feature_sha": "c556396d3caa982e70be914cedb12010804bce73",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-27 recorded retry-budget source slice merged through PR #44. Exact pull_request and merged-main push CI passed on Python 3.11.17 with 409 product tests and zero product skips. This canonical records change requires its own exact PR and merged-main CI before release.",
-  "pr_number": 44,
+  "branch_remote_status": "AF-27 recorded state-checkpoint source slice merged through PR #46. Exact pull_request and merged-main push CI passed on Python 3.11.17 with 419 product tests and zero product skips. This canonical records change requires its own exact PR and merged-main CI before release.",
+  "pr_number": 46,
   "pr_state": "merged",
   "ci_state": {
+    "af27_state_checkpoint_source_pr_run": {
+      "id": 39089907017,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39089907017",
+      "head_sha": "c556396d3caa982e70be914cedb12010804bce73",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 419,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
+    "af27_state_checkpoint_merged_main_run": {
+      "id": 39089947965,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39089947965",
+      "head_sha": "99ff09825e77613917c866591ebba37700412d40",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 419,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
     "af27_retry_budget_source_pr_run": {
       "id": 38886756075,
       "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38886756075",
@@ -537,10 +565,10 @@
       "product_skips": 0
     }
   },
-  "local_test_status": "AF-27 retry-budget records slice revalidated on local Python 3.11.17: dependency/import diagnostics passed, all 24 focused recovery/retry tests passed, and 407 broader product tests passed when excluding only the two established container-specific /proc descendant observations. The unfiltered local suite was 407 passed and 2 failed at those observations. Exact source PR and merged-main Linux CI on Python 3.11.17 each passed all 409 product tests with zero failures and zero product skips; records-head CI remains required.",
-  "merge_status": "AF27_RETRY_BUDGET_SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
+  "local_test_status": "AF-27 state-checkpoint records slice revalidated on local Python 3.11.17: dependency/import diagnostics passed, all 34 focused recovery/retry/checkpoint tests passed, and 417 broader product tests passed when excluding only the two established container-specific /proc descendant observations. Exact source PR and merged-main Linux CI on Python 3.11.17 each passed all 419 product tests with zero failures and zero product skips; records-head CI remains required.",
+  "merge_status": "AF27_STATE_CHECKPOINT_SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
   "known_blocker": null,
-  "next_action": "Publish and verify this AF-27 retry-budget CI receipt, explicitly release the records slice, then implement only the smallest remaining AF-27 durable-state invariant.",
+  "next_action": "Publish and verify this AF-27 state-checkpoint CI receipt, explicitly release the records slice, then review the smallest remaining AF-27 acceptance gap.",
   "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
@@ -779,13 +807,13 @@
   "last_session_exit": {
     "BLOCKED_LAYER": null,
     "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "AF-27 recorded retry-budget slice merged through PR #44 after exact-head CI; merged-main CI passed 409 product tests with zero failures or product skips. Canonical records are prepared for independent CI.",
-    "REMOTE_SHA": "8992aa0e7dbbab05c73848694c972b3dac799a7b",
-    "NEXT_ACTION": "Publish and verify the AF-27 retry-budget records-only receipt, then explicitly release this records slice."
+    "SAFE_WORK_COMPLETED": "AF-27 recorded state-checkpoint slice merged through PR #46 after exact-head CI; merged-main CI passed 419 product tests with zero failures or product skips. Canonical records are prepared for independent CI.",
+    "REMOTE_SHA": "99ff09825e77613917c866591ebba37700412d40",
+    "NEXT_ACTION": "Publish and verify the AF-27 state-checkpoint records-only receipt, then explicitly release this records slice."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "fd71cf0f1597931ed575e165a8a0b9fb76c35e39",
+  "observed_branch_sha": "c556396d3caa982e70be914cedb12010804bce73",
   "historical_session_exits": [
     {
       "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
@@ -911,22 +939,22 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF27-RECORDED-RETRY-BUDGET-RECEIPT-20261016",
+    "ownership_id": "AF27-RECORDED-STATE-CHECKPOINT-RECEIPT-20261018",
     "status": "records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
-    "release_requirement": "Exact AF-27 retry-budget records PR and merged-main CI, followed by explicit records-slice release before further AF-27 source work",
+    "release_requirement": "Exact AF-27 state-checkpoint records PR and merged-main CI, followed by explicit records-slice release before further AF-27 source work",
     "source_repair_accepted": true,
     "prior_release": {
-      "ownership_id": "AF27-RECORDED-RECOVERY-20261016",
+      "ownership_id": "AF27-RECORDED-STATE-CHECKPOINT-20261018",
       "owner": "AgentFlight Hourly Build",
       "status": "released",
-      "receipt": "https://github.com/antonypaul98/-agentflight/pull/42#issuecomment-6208068774",
-      "released_at": "2026-10-16T04:27:00Z"
+      "receipt": "https://github.com/antonypaul98/-agentflight/pull/46#issuecomment-6244700423",
+      "released_at": "2026-10-18T02:25:01Z"
     },
-    "release_record": "The AF-27 recorded retry-budget source slice is merged and verified. The hourly task owns only this canonical records receipt until exact records CI and release."
+    "release_record": "The AF-27 recorded state-checkpoint source slice is merged and verified. The hourly task owns only this canonical records receipt until exact records CI and release."
   },
-  "recorded_at_utc": "2026-10-17T21:31:00Z",
+  "recorded_at_utc": "2026-10-18T03:24:00Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
     "exit_code": 1,
@@ -1169,5 +1197,19 @@
     "product_skips": 0,
     "scope": "Exact recovery-report-bound metadata-only retry budgets with an eight-attempt cap and deterministic recovered, exhausted or retry-permitted dispositions.",
     "limitations": "No retry, recovery, sleeping, agent/tool/command execution, durable-state or project access, external calls, credentials, payloads, or isolation claim."
+  },
+  "af27_state_checkpoint_source_receipt": {
+    "source_pr": 46,
+    "source_head_sha": "c556396d3caa982e70be914cedb12010804bce73",
+    "source_tree_sha": "dd0eb0c5cf5bac8f3469f85b48220b77f207939a",
+    "pr_ci_run": 39089907017,
+    "merged_main_sha": "99ff09825e77613917c866591ebba37700412d40",
+    "merged_main_ci_run": 39089947965,
+    "python": "3.11.17",
+    "product_tests": 419,
+    "product_failures": 0,
+    "product_skips": 0,
+    "scope": "Exact recovery-report-bound metadata-only state checkpoints with a bounded positive generation and initial/final state hash continuity.",
+    "limitations": "No durable-state read, write, restore or persistence claim; no project access, retry/recovery action, agent/tool/command execution, external call, credentials, payloads, or isolation claim."
   }
 }

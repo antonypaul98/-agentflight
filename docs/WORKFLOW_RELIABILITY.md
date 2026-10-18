@@ -171,3 +171,23 @@ This is metadata-only verification: no retry, recovery, sleeping, project or
 durable-state access, agent/tool/command execution, external call, credential,
 payload, or isolation claim. This records change requires independent exact-head
 and merged-main CI before the writer slice is released.
+
+## AF-27 recorded state-checkpoint receipt (2026-10-18)
+
+Source PR #46 added deterministic validation that binds caller-supplied state
+checkpoint metadata to the exact content hash of a recomputed recovery report.
+It requires a bounded positive generation and exact initial/final recorded state
+hashes. Recovered and incomplete transcripts preserve the existing state-chain
+and no-commit invariants.
+
+Source head `c556396d3caa982e70be914cedb12010804bce73`, tree
+`dd0eb0c5cf5bac8f3469f85b48220b77f207939a`, passed exact-head PR CI
+39089907017 on Python 3.11.17 with 419 product tests, zero failures and zero
+product skips. Guarded merge `99ff09825e77613917c866591ebba37700412d40`
+passed exact merged-main CI 39089947965 with the same 419/0/0 result.
+
+This is metadata-only verification, not proof that durable storage was read,
+written, restored or persisted. It adds no project access, retry/recovery action,
+agent/tool/command execution, external call, credential/payload handling, or
+filesystem/process/network/OS isolation. This records change requires its own
+exact PR and merged-main CI before release.
