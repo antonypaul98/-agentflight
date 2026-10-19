@@ -127,3 +127,28 @@ of filesystem/process/network/OS isolation.
 This is a fifth verified AF-27 slice, not checkpoint acceptance. AF-27 remains
 in progress and the roadmap remains 4/12 accepted pending independent records
 CI, explicit release, and eventual bounded checkpoint acceptance.
+
+## Recorded resume-lineage continuity slice
+
+This bounded slice verifies an ordered sequence of content-addressed resume
+transition reports. It requires exact guard-evidence, attempt-count, and
+checkpoint-generation continuity, rejects duplicate transitions, and prohibits
+any transition after a recovered or exhausted terminal disposition.
+
+It validates recorded metadata only. It neither authorizes nor performs retry,
+recovery, restore, project/agent/tool/command execution, durable-state access,
+external calls, credential or payload access, or filesystem/process/network/OS
+isolation.
+
+### Resume-lineage source receipt
+
+- Source PR: [#52](https://github.com/antonypaul98/-agentflight/pull/52)
+- Source SHA: `20a775610f2a92369b895bddb63bc29a28ae5f6f`
+- Source tree: `a541d34f67e6c15d9986903ff8e59024d553533b`
+- Pull-request CI: [39185479785](https://github.com/antonypaul98/-agentflight/actions/runs/39185479785), Python 3.11.17, 442 passed, zero product skips
+- Merged main: `5d45a7ccee5146ab429094fb8b5d73809348f819`
+- Merged-main CI: [39185564505](https://github.com/antonypaul98/-agentflight/actions/runs/39185564505), Python 3.11.17, 442 passed, zero product skips
+
+This is a sixth verified AF-27 slice, not checkpoint acceptance. AF-27 remains
+in progress and roadmap acceptance remains 4/12 pending independent records CI,
+explicit release, and bounded checkpoint closure.
