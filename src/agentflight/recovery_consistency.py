@@ -7,7 +7,7 @@ does not retry, recover, execute, inspect a project, or read durable state.
 import hashlib
 import json
 import re
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 
 
 SCHEMA_VERSION = 1
@@ -25,6 +25,9 @@ RESUME_GUARD_AUTHORITY = (
 )
 RESUME_TRANSITION_AUTHORITY = (
     "recorded_resume_transition_only_no_retry_recovery_or_execution"
+)
+RESUME_LINEAGE_AUTHORITY = (
+    "recorded_resume_lineage_only_no_retry_recovery_or_execution"
 )
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
@@ -513,5 +516,120 @@ def evaluate_recorded_resume_transition(
     canonical = _canonical(result)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise RecoveryConsistencyError("resume_transition_report_too_large")
+    result["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return result
+
+
+def _verified_resume_transition_report(value: Mapping[str, object]) -> dict:
+    report = _exact_dict(
+        value,
+        frozenset({
+            "resume_transition_schema_version", "transition_id",
+            "prior_resume_guard_evidence_id", "current_resume_guard_evidence_id",
+            "prior_attempts", "current_attempts", "prior_checkpoint_generation",
+            "current_checkpoint_generation", "disposition", "coverage",
+            "authority", "evidence_id",
+        }),
+        "invalid_resume_transition_report_shape",
+    )
+    supplied = _text(
+        report["evidence_id"], _SHA256, "invalid_resume_transition_evidence_id")
+    unsigned = {key: item for key, item in report.items() if key != "evidence_id"}
+    if supplied != hashlib.sha256(_canonical(unsigned).encode("utf-8")).hexdigest():
+        raise RecoveryConsistencyError("resume_transition_evidence_mismatch")
+    if (type(report["resume_transition_schema_version"]) is not int
+            or report["resume_transition_schema_version"] != SCHEMA_VERSION):
+        raise RecoveryConsistencyError("invalid_resume_transition_report")
+    _text(report["transition_id"], _IDENTIFIER, "invalid_resume_transition_report")
+    _text(report["prior_resume_guard_evidence_id"], _SHA256,
+          "invalid_resume_transition_report")
+    _text(report["current_resume_guard_evidence_id"], _SHA256,
+          "invalid_resume_transition_report")
+    for prior_key, current_key, upper in (
+        ("prior_attempts", "current_attempts", MAX_RETRY_ATTEMPTS),
+        ("prior_checkpoint_generation", "current_checkpoint_generation",
+         MAX_CHECKPOINT_GENERATION),
+    ):
+        prior = report[prior_key]
+        current = report[current_key]
+        if (type(prior) is not int or type(current) is not int
+                or not 1 <= prior < current <= upper or current != prior + 1):
+            raise RecoveryConsistencyError("invalid_resume_transition_report")
+    if report["disposition"] not in {
+        "resume_candidate", "closed_recovered", "closed_exhausted",
+    }:
+        raise RecoveryConsistencyError("invalid_resume_transition_report")
+    if report["coverage"] != {
+        "prior_resume_guard_verified": True,
+        "current_resume_guard_recomputed": True,
+        "recorded_event_advance": 1,
+        "checkpoint_generation_advance": 1,
+        "scope": "bounded_recorded_resume_transition_metadata_only",
+    } or report["authority"] != RESUME_TRANSITION_AUTHORITY:
+        raise RecoveryConsistencyError("invalid_resume_transition_report")
+    return report
+
+
+def evaluate_recorded_resume_lineage(
+    transition_reports: Iterable[Mapping[str, object]],
+) -> dict:
+    """Verify a bounded ordered lineage of recorded resume transitions.
+
+    This validates content-addressed metadata continuity only. It does not
+    perform or authorize a retry, recovery, restore, or execution.
+    """
+
+    try:
+        reports = tuple(transition_reports)
+    except TypeError:
+        raise RecoveryConsistencyError("invalid_resume_lineage") from None
+    if not 1 <= len(reports) <= MAX_RETRY_ATTEMPTS - 1:
+        raise RecoveryConsistencyError("invalid_resume_lineage_count")
+
+    verified = []
+    transition_ids = set()
+    evidence_ids = set()
+    for index, value in enumerate(reports):
+        report = _verified_resume_transition_report(value)
+        if report["transition_id"] in transition_ids:
+            raise RecoveryConsistencyError("duplicate_resume_transition_id")
+        if report["evidence_id"] in evidence_ids:
+            raise RecoveryConsistencyError("duplicate_resume_transition_evidence")
+        transition_ids.add(report["transition_id"])
+        evidence_ids.add(report["evidence_id"])
+        if index:
+            prior = verified[-1]
+            if (report["prior_resume_guard_evidence_id"]
+                    != prior["current_resume_guard_evidence_id"]
+                    or report["prior_attempts"] != prior["current_attempts"]
+                    or report["prior_checkpoint_generation"]
+                    != prior["current_checkpoint_generation"]):
+                raise RecoveryConsistencyError("resume_lineage_discontinuity")
+            if prior["disposition"] != "resume_candidate":
+                raise RecoveryConsistencyError("resume_transition_after_terminal")
+        verified.append(report)
+
+    first = verified[0]
+    last = verified[-1]
+    result = {
+        "resume_lineage_schema_version": SCHEMA_VERSION,
+        "transition_evidence_ids": [item["evidence_id"] for item in verified],
+        "first_resume_guard_evidence_id": first["prior_resume_guard_evidence_id"],
+        "last_resume_guard_evidence_id": last["current_resume_guard_evidence_id"],
+        "transition_count": len(verified),
+        "initial_attempts": first["prior_attempts"],
+        "final_attempts": last["current_attempts"],
+        "initial_checkpoint_generation": first["prior_checkpoint_generation"],
+        "final_checkpoint_generation": last["current_checkpoint_generation"],
+        "final_disposition": last["disposition"],
+        "coverage": {
+            "transition_reports_verified": len(verified),
+            "scope": "bounded_recorded_resume_lineage_metadata_only",
+        },
+        "authority": RESUME_LINEAGE_AUTHORITY,
+    }
+    canonical = _canonical(result)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise RecoveryConsistencyError("resume_lineage_report_too_large")
     result["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return result
