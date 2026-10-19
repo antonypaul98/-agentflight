@@ -8,12 +8,14 @@ from agentflight.recovery_consistency import (
     AUTHORITY,
     RETRY_BUDGET_AUTHORITY,
     RESUME_GUARD_AUTHORITY,
+    RESUME_LINEAGE_AUTHORITY,
     RESUME_TRANSITION_AUTHORITY,
     STATE_CHECKPOINT_AUTHORITY,
     RecoveryConsistencyError,
     evaluate_recorded_recovery,
     evaluate_recorded_retry_budget,
     evaluate_recorded_resume_guard,
+    evaluate_recorded_resume_lineage,
     evaluate_recorded_resume_transition,
     evaluate_recorded_state_checkpoint,
 )
@@ -437,5 +439,67 @@ def test_recorded_resume_transition_rejects_boolean_guard_schema_version():
 def test_recorded_resume_transition_contains_no_external_target_or_payload_fields():
     rendered = repr(evaluate_recorded_resume_transition(
         *resume_transition_inputs()))
+    for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
+        assert forbidden not in rendered
+
+
+def rehash(value):
+    unsigned = {key: item for key, item in value.items() if key != "evidence_id"}
+    value["evidence_id"] = hashlib.sha256(json.dumps(
+        unsigned, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")).hexdigest()
+    return value
+
+
+def resume_lineage_reports():
+    first = evaluate_recorded_resume_transition(*resume_transition_inputs())
+    second = copy.deepcopy(first)
+    second.update({
+        "transition_id": "resume-transition-2",
+        "prior_resume_guard_evidence_id": first["current_resume_guard_evidence_id"],
+        "current_resume_guard_evidence_id": H2,
+        "prior_attempts": first["current_attempts"],
+        "current_attempts": first["current_attempts"] + 1,
+        "prior_checkpoint_generation": first["current_checkpoint_generation"],
+        "current_checkpoint_generation": first["current_checkpoint_generation"] + 1,
+        "disposition": "closed_recovered",
+    })
+    return [first, rehash(second)]
+
+
+def test_recorded_resume_lineage_is_deterministic_bound_and_terminal():
+    reports = resume_lineage_reports()
+    first = evaluate_recorded_resume_lineage(reports)
+    assert first == evaluate_recorded_resume_lineage(copy.deepcopy(reports))
+    assert first["transition_count"] == 2
+    assert first["initial_attempts"] == 1
+    assert first["final_attempts"] == 3
+    assert first["final_disposition"] == "closed_recovered"
+    assert first["authority"] == RESUME_LINEAGE_AUTHORITY
+
+
+def test_recorded_resume_lineage_rejects_forgery_discontinuity_and_terminal_replay():
+    reports = resume_lineage_reports()
+    reports[1]["evidence_id"] = H3
+    with pytest.raises(RecoveryConsistencyError, match="resume_transition_evidence_mismatch"):
+        evaluate_recorded_resume_lineage(reports)
+
+    reports = resume_lineage_reports()
+    reports[1]["prior_resume_guard_evidence_id"] = H3
+    rehash(reports[1])
+    with pytest.raises(RecoveryConsistencyError, match="resume_lineage_discontinuity"):
+        evaluate_recorded_resume_lineage(reports)
+
+    reports = resume_lineage_reports()
+    reports[0]["disposition"] = "closed_exhausted"
+    rehash(reports[0])
+    with pytest.raises(RecoveryConsistencyError, match="resume_transition_after_terminal"):
+        evaluate_recorded_resume_lineage(reports)
+
+
+def test_recorded_resume_lineage_is_bounded_and_contains_no_action_fields():
+    with pytest.raises(RecoveryConsistencyError, match="invalid_resume_lineage_count"):
+        evaluate_recorded_resume_lineage([])
+    rendered = repr(evaluate_recorded_resume_lineage(resume_lineage_reports()))
     for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
         assert forbidden not in rendered
