@@ -212,6 +212,26 @@ credential/payload handling, or filesystem/process/network/OS isolation. This
 records change requires independent exact-head and merged-main CI before writer
 release. AF-27 remains in progress and roadmap acceptance remains 4/12.
 
+## AF-27 recorded terminal resume-closure receipt (2026-10-20)
+
+Source PR #54 added deterministic closure verification for exact
+content-addressed resume-lineage reports. It accepts only terminal
+`closed_recovered` or `closed_exhausted` dispositions and fails closed for an
+unfinished candidate, forged lineage, mismatched expected disposition, or
+action-bearing metadata.
+
+Source head `3f0e7332d8f8a929318ed794cb6143fbebb750cd`, tree
+`6af927ea1bae1eefeea3da22ff7b34122ff09280`, passed exact-head PR CI
+39386039725 on Python 3.11.17 with 450 product tests, zero failures and zero
+product skips. Guarded merge `ecdfdc932a9501520f73313a2ae75014ba682ec3`
+passed exact merged-main CI 39386156518 with the same 450/0/0 result.
+
+This is metadata-only verification. It performs no retry, recovery, restore,
+project/agent/tool/command execution, durable-state access, external call,
+credential/payload handling, or filesystem/process/network/OS isolation. This
+records change requires independent exact-head and merged-main CI before writer
+release. AF-27 remains in progress and roadmap acceptance remains 4/12.
+
 ## AF-27 recorded resume-lineage receipt (2026-10-18)
 
 Source PR #52 added deterministic verification for a bounded ordered lineage of
