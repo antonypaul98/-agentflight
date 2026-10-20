@@ -36,6 +36,4 @@ environment-drift evidence. Neither checkpoint executes agents, tools,
 frameworks, fixture commands or host operations. AF-26 is merged and verified
 for bounded metadata-only synthetic network, timeout, rate-limit and API faults
 plus deterministic recorded retry/outage evidence. It performs no external or
-recovery action. AF-27 recovery, retry and state consistency is next. See
-[AF-24](docs/AF24_CHECKPOINT.md), [AF-25](docs/AF25_CHECKPOINT.md), and
-[AF-26](docs/AF26_CHECKPOINT.md).
+recovery action. AF-27 is merged and verified for bounded metadata-only recovery, retry and state-consistency evidence: idempotency, retry budgets, exact state checkpoints, resume guards, ordered transition lineage and terminal closure. It performs no recovery or execution action. AF-28 concurrent and multi-agent scenarios is next. See [AF-24](docs/AF24_CHECKPOINT.md), [AF-25](docs/AF25_CHECKPOINT.md), [AF-26](docs/AF26_CHECKPOINT.md), and [AF-27](docs/AF27_CHECKPOINT.md).

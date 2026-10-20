@@ -272,3 +272,21 @@ project/agent/tool/command execution, durable-state access, external call,
 credential/payload handling, or filesystem/process/network/OS isolation. This
 records change requires independent exact-head and merged-main CI before writer
 release. AF-27 remains in progress and roadmap acceptance remains 4/12.
+
+
+## AF-27 bounded-scope acceptance closure (2026-10-20)
+
+AF-27 is accepted only for deterministic recorded metadata. Seven independently
+verified source/records pairs cover idempotency and state-chain invariants,
+bounded retry budgets, exact state checkpoints, recomputed resume guards,
+single-step transition continuity, bounded ordered lineage and terminal closure.
+The latest canonical records are PR #55 at
+`fd65a7cf5acdebb3269544517223fc494a00130a`, merged as
+`07a79c9b001fd5597ed11cabd650f8211fa08bbc`; exact PR and merged-main CI runs 39386623417
+and 39386694632 each passed all 450 product tests with zero failures or product
+skips on Python 3.11.17.
+
+No accepted path performs retry, recovery, restore, durable-state access,
+agent/tool/command/project execution, external calls, credential/payload
+handling, or filesystem/process/network/OS isolation. This closure requires its
+own exact-head PR and merged-main CI before AF-28 starts.
