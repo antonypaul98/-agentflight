@@ -152,3 +152,29 @@ isolation.
 This is a sixth verified AF-27 slice, not checkpoint acceptance. AF-27 remains
 in progress and roadmap acceptance remains 4/12 pending independent records CI,
 explicit release, and bounded checkpoint closure.
+
+## Recorded terminal resume-closure slice
+
+This bounded slice verifies the exact content hash and internal bounds of a
+resume-lineage report, then issues a separate content-addressed closure only for
+`closed_recovered` or `closed_exhausted`. An unfinished `resume_candidate`, a
+forged lineage, a mismatched expected disposition, or action-bearing metadata
+fails closed.
+
+The closure remains recorded metadata only. It neither authorizes nor performs
+retry, recovery, restore, project/agent/tool/command execution, durable-state
+access, external calls, credential or payload access, or filesystem/process/
+network/OS isolation.
+
+### Resume-closure source receipt
+
+- Source PR: [#54](https://github.com/antonypaul98/-agentflight/pull/54)
+- Source SHA: `3f0e7332d8f8a929318ed794cb6143fbebb750cd`
+- Source tree: `6af927ea1bae1eefeea3da22ff7b34122ff09280`
+- Pull-request CI: [39386039725](https://github.com/antonypaul98/-agentflight/actions/runs/39386039725), Python 3.11.17, 450 passed, zero product skips
+- Merged main: `ecdfdc932a9501520f73313a2ae75014ba682ec3`
+- Merged-main CI: [39386156518](https://github.com/antonypaul98/-agentflight/actions/runs/39386156518), Python 3.11.17, 450 passed, zero product skips
+
+This is a seventh verified AF-27 slice, not checkpoint acceptance. AF-27 remains
+in progress and roadmap acceptance remains 4/12 pending independent records CI,
+explicit release, and bounded-scope acceptance review.

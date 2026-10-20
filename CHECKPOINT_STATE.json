@@ -2,17 +2,45 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-27 recovery, retry, and state consistency",
-  "checkpoint_status": "IN_PROGRESS_RECORDED_RESUME_LINEAGE_SOURCE_MERGED_AND_VERIFIED",
-  "active_branch": "work/af27-resume-lineage-records",
-  "verified_main_sha": "5d45a7ccee5146ab429094fb8b5d73809348f819",
-  "observed_feature_sha": "20a775610f2a92369b895bddb63bc29a28ae5f6f",
+  "checkpoint_status": "IN_PROGRESS_RECORDED_RESUME_CLOSURE_SOURCE_MERGED_AND_VERIFIED",
+  "active_branch": "work/af27-resume-closure-records",
+  "verified_main_sha": "ecdfdc932a9501520f73313a2ae75014ba682ec3",
+  "observed_feature_sha": "3f0e7332d8f8a929318ed794cb6143fbebb750cd",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-27 bounded resume-lineage source slice merged through PR #52. Exact pull_request and merged-main push CI passed on Python 3.11.17 with 442 product tests and zero product skips. This canonical records change requires its own exact PR and merged-main CI before release.",
-  "pr_number": 52,
+  "branch_remote_status": "AF-27 terminal resume-closure source slice merged through PR #54. Exact pull_request and merged-main push CI passed on Python 3.11.17 with 450 product tests and zero product skips. This canonical records change requires its own exact PR and merged-main CI before release.",
+  "pr_number": 54,
   "pr_state": "merged",
   "ci_state": {
+    "af27_resume_closure_source_pr_run": {
+      "id": 39386039725,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39386039725",
+      "head_sha": "3f0e7332d8f8a929318ed794cb6143fbebb750cd",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 450,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
+    "af27_resume_closure_merged_main_run": {
+      "id": 39386156518,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39386156518",
+      "head_sha": "ecdfdc932a9501520f73313a2ae75014ba682ec3",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 450,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
     "af27_resume_lineage_source_pr_run": {
       "id": 39185479785,
       "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39185479785",
@@ -649,10 +677,10 @@
       "product_skips": 0
     }
   },
-  "local_test_status": "AF-27 state-checkpoint records slice revalidated on local Python 3.11.17: dependency/import diagnostics passed, all 34 focused recovery/retry/checkpoint tests passed, and 417 broader product tests passed when excluding only the two established container-specific /proc descendant observations. Exact source PR and merged-main Linux CI on Python 3.11.17 each passed all 419 product tests with zero failures and zero product skips; records-head CI remains required.",
-  "merge_status": "AF27_STATE_CHECKPOINT_SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
+  "local_test_status": "AF-27 terminal resume-closure source and records content validated on local Python 3.11.17: dependency/import diagnostics passed, all 65 focused recovery-consistency tests passed, and 448 product tests passed when excluding only the two established container-specific /proc descendant observations. Infrastructure guards passed 17 with one baseline Memory-only skip. Exact source PR and merged-main Linux CI each passed all 450 product tests with zero failures and zero product skips; records-head CI remains required.",
+  "merge_status": "AF27_RESUME_CLOSURE_SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
   "known_blocker": null,
-  "next_action": "Publish and verify this AF-27 state-checkpoint CI receipt, explicitly release the records slice, then review the smallest remaining AF-27 acceptance gap.",
+  "next_action": "Publish and verify this AF-27 terminal resume-closure CI receipt, explicitly release the records slice, then review whether the bounded AF-27 metadata-only acceptance criteria are complete.",
   "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
@@ -891,13 +919,13 @@
   "last_session_exit": {
     "BLOCKED_LAYER": null,
     "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "AF-27 recorded state-checkpoint slice merged through PR #46 after exact-head CI; merged-main CI passed 419 product tests with zero failures or product skips. Canonical records are prepared for independent CI.",
-    "REMOTE_SHA": "99ff09825e77613917c866591ebba37700412d40",
-    "NEXT_ACTION": "Publish and verify the AF-27 state-checkpoint records-only receipt, then explicitly release this records slice."
+    "SAFE_WORK_COMPLETED": "AF-27 terminal resume-closure slice merged through PR #54 after exact-head CI; merged-main CI passed 450 product tests with zero failures or product skips. Canonical records are prepared for independent CI.",
+    "REMOTE_SHA": "ecdfdc932a9501520f73313a2ae75014ba682ec3",
+    "NEXT_ACTION": "Publish and verify the AF-27 terminal resume-closure records-only receipt, then explicitly release this records slice."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "c556396d3caa982e70be914cedb12010804bce73",
+  "observed_branch_sha": "3f0e7332d8f8a929318ed794cb6143fbebb750cd",
   "historical_session_exits": [
     {
       "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
@@ -1023,22 +1051,22 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF27-RECORDED-STATE-CHECKPOINT-RECEIPT-20261018",
+    "ownership_id": "AF27-RECORDED-RESUME-CLOSURE-RECEIPT-20261020",
     "status": "records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
-    "release_requirement": "Exact AF-27 state-checkpoint records PR and merged-main CI, followed by explicit records-slice release before further AF-27 source work",
+    "release_requirement": "Exact AF-27 resume-closure records PR and merged-main CI, followed by explicit records-slice release before further AF-27 work",
     "source_repair_accepted": true,
     "prior_release": {
-      "ownership_id": "AF27-RECORDED-STATE-CHECKPOINT-20261018",
+      "ownership_id": "AF27-RECORDED-RESUME-LINEAGE-RECEIPT-20261018",
       "owner": "AgentFlight Hourly Build",
       "status": "released",
-      "receipt": "https://github.com/antonypaul98/-agentflight/pull/46#issuecomment-6244700423",
-      "released_at": "2026-10-18T02:25:01Z"
+      "receipt": "https://github.com/antonypaul98/-agentflight/pull/53#issuecomment-6261219878",
+      "released_at": "2026-10-19T01:35:00Z"
     },
-    "release_record": "The AF-27 recorded state-checkpoint source slice is merged and verified. The hourly task owns only this canonical records receipt until exact records CI and release."
+    "release_record": "The AF-27 terminal resume-closure source slice is merged and verified. The hourly task owns only this canonical records receipt until exact records CI and release."
   },
-  "recorded_at_utc": "2026-10-18T03:24:00Z",
+  "recorded_at_utc": "2026-10-20T07:24:00Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
     "exit_code": 1,
@@ -1336,6 +1364,20 @@
     "product_failures": 0,
     "product_skips": 0,
     "scope": "Deterministic metadata-only lineage verification for one through seven ordered content-addressed resume transitions with exact guard evidence, attempt-count, and checkpoint-generation continuity.",
+    "limitations": "No retry, recovery, restore, agent/tool/command execution, project or durable-state access, external calls, credentials, payloads, or isolation claim."
+  },
+  "af27_resume_closure_source_receipt": {
+    "source_pr": 54,
+    "source_head_sha": "3f0e7332d8f8a929318ed794cb6143fbebb750cd",
+    "source_tree_sha": "6af927ea1bae1eefeea3da22ff7b34122ff09280",
+    "pr_ci_run": 39386039725,
+    "merged_main_sha": "ecdfdc932a9501520f73313a2ae75014ba682ec3",
+    "merged_main_ci_run": 39386156518,
+    "python": "3.11.17",
+    "product_tests": 450,
+    "product_failures": 0,
+    "product_skips": 0,
+    "scope": "Content-addressed metadata-only closure that accepts only exact terminal closed-recovered or closed-exhausted resume lineages and rejects unfinished candidates.",
     "limitations": "No retry, recovery, restore, agent/tool/command execution, project or durable-state access, external calls, credentials, payloads, or isolation claim."
   }
 }
