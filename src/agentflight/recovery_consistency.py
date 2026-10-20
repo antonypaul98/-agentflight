@@ -29,6 +29,9 @@ RESUME_TRANSITION_AUTHORITY = (
 RESUME_LINEAGE_AUTHORITY = (
     "recorded_resume_lineage_only_no_retry_recovery_or_execution"
 )
+RESUME_CLOSURE_AUTHORITY = (
+    "recorded_resume_closure_only_no_retry_recovery_or_execution"
+)
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -631,5 +634,114 @@ def evaluate_recorded_resume_lineage(
     canonical = _canonical(result)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise RecoveryConsistencyError("resume_lineage_report_too_large")
+    result["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return result
+
+
+def _verified_resume_lineage_report(value: Mapping[str, object]) -> dict:
+    report = _exact_dict(
+        value,
+        frozenset({
+            "resume_lineage_schema_version", "transition_evidence_ids",
+            "first_resume_guard_evidence_id", "last_resume_guard_evidence_id",
+            "transition_count", "initial_attempts", "final_attempts",
+            "initial_checkpoint_generation", "final_checkpoint_generation",
+            "final_disposition", "coverage", "authority", "evidence_id",
+        }),
+        "invalid_resume_lineage_report_shape",
+    )
+    supplied = _text(
+        report["evidence_id"], _SHA256, "invalid_resume_lineage_evidence_id")
+    unsigned = {key: item for key, item in report.items() if key != "evidence_id"}
+    if supplied != hashlib.sha256(_canonical(unsigned).encode("utf-8")).hexdigest():
+        raise RecoveryConsistencyError("resume_lineage_evidence_mismatch")
+    if (type(report["resume_lineage_schema_version"]) is not int
+            or report["resume_lineage_schema_version"] != SCHEMA_VERSION):
+        raise RecoveryConsistencyError("invalid_resume_lineage_report")
+    evidence_ids = report["transition_evidence_ids"]
+    count = report["transition_count"]
+    if (type(evidence_ids) is not list or type(count) is not int
+            or not 1 <= count <= MAX_RETRY_ATTEMPTS - 1
+            or len(evidence_ids) != count or len(set(evidence_ids)) != count):
+        raise RecoveryConsistencyError("invalid_resume_lineage_report")
+    for evidence_id in evidence_ids:
+        _text(evidence_id, _SHA256, "invalid_resume_lineage_report")
+    for key in ("first_resume_guard_evidence_id", "last_resume_guard_evidence_id"):
+        _text(report[key], _SHA256, "invalid_resume_lineage_report")
+    initial_attempts = report["initial_attempts"]
+    final_attempts = report["final_attempts"]
+    initial_generation = report["initial_checkpoint_generation"]
+    final_generation = report["final_checkpoint_generation"]
+    if (type(initial_attempts) is not int or type(final_attempts) is not int
+            or not 1 <= initial_attempts < final_attempts <= MAX_RETRY_ATTEMPTS
+            or final_attempts - initial_attempts != count
+            or type(initial_generation) is not int or type(final_generation) is not int
+            or not 1 <= initial_generation < final_generation <= MAX_CHECKPOINT_GENERATION
+            or final_generation - initial_generation != count):
+        raise RecoveryConsistencyError("invalid_resume_lineage_report")
+    if report["final_disposition"] not in {
+        "resume_candidate", "closed_recovered", "closed_exhausted",
+    }:
+        raise RecoveryConsistencyError("invalid_resume_lineage_report")
+    if report["coverage"] != {
+        "transition_reports_verified": count,
+        "scope": "bounded_recorded_resume_lineage_metadata_only",
+    } or report["authority"] != RESUME_LINEAGE_AUTHORITY:
+        raise RecoveryConsistencyError("invalid_resume_lineage_report")
+    return report
+
+
+def evaluate_recorded_resume_closure(
+    lineage_report: Mapping[str, object], closure: Mapping[str, object]
+) -> dict:
+    """Certify only a terminal recorded resume lineage.
+
+    Closure is content-addressed metadata, not permission to retry, recover,
+    restore, or execute. An unfinished ``resume_candidate`` fails closed.
+    """
+
+    lineage = _verified_resume_lineage_report(lineage_report)
+    if lineage["final_disposition"] == "resume_candidate":
+        raise RecoveryConsistencyError("resume_lineage_not_terminal")
+    root = _exact_dict(
+        closure,
+        frozenset({
+            "schema_version", "closure_id", "resume_lineage_evidence_id",
+            "expected_terminal_disposition",
+        }),
+        "invalid_resume_closure_shape",
+    )
+    if type(root["schema_version"]) is not int or root["schema_version"] != SCHEMA_VERSION:
+        raise RecoveryConsistencyError("unsupported_resume_closure_schema_version")
+    closure_id = _text(root["closure_id"], _IDENTIFIER, "invalid_resume_closure_id")
+    lineage_evidence_id = _text(
+        root["resume_lineage_evidence_id"], _SHA256,
+        "invalid_resume_lineage_evidence_id")
+    if lineage_evidence_id != lineage["evidence_id"]:
+        raise RecoveryConsistencyError("resume_closure_lineage_evidence_mismatch")
+    expected = root["expected_terminal_disposition"]
+    if expected not in {"closed_recovered", "closed_exhausted"}:
+        raise RecoveryConsistencyError("invalid_expected_terminal_disposition")
+    if expected != lineage["final_disposition"]:
+        raise RecoveryConsistencyError("resume_closure_disposition_mismatch")
+
+    result = {
+        "resume_closure_schema_version": SCHEMA_VERSION,
+        "closure_id": closure_id,
+        "resume_lineage_evidence_id": lineage_evidence_id,
+        "terminal_disposition": expected,
+        "final_attempts": lineage["final_attempts"],
+        "final_checkpoint_generation": lineage["final_checkpoint_generation"],
+        "closed": True,
+        "coverage": {
+            "resume_lineage_verified": True,
+            "transition_reports_verified": lineage["transition_count"],
+            "scope": "bounded_recorded_resume_closure_metadata_only",
+        },
+        "authority": RESUME_CLOSURE_AUTHORITY,
+    }
+    canonical = _canonical(result)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise RecoveryConsistencyError("resume_closure_report_too_large")
     result["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return result

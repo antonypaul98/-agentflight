@@ -7,6 +7,7 @@ import pytest
 from agentflight.recovery_consistency import (
     AUTHORITY,
     RETRY_BUDGET_AUTHORITY,
+    RESUME_CLOSURE_AUTHORITY,
     RESUME_GUARD_AUTHORITY,
     RESUME_LINEAGE_AUTHORITY,
     RESUME_TRANSITION_AUTHORITY,
@@ -14,6 +15,7 @@ from agentflight.recovery_consistency import (
     RecoveryConsistencyError,
     evaluate_recorded_recovery,
     evaluate_recorded_retry_budget,
+    evaluate_recorded_resume_closure,
     evaluate_recorded_resume_guard,
     evaluate_recorded_resume_lineage,
     evaluate_recorded_resume_transition,
@@ -501,5 +503,77 @@ def test_recorded_resume_lineage_is_bounded_and_contains_no_action_fields():
     with pytest.raises(RecoveryConsistencyError, match="invalid_resume_lineage_count"):
         evaluate_recorded_resume_lineage([])
     rendered = repr(evaluate_recorded_resume_lineage(resume_lineage_reports()))
+    for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
+        assert forbidden not in rendered
+
+
+def resume_closure(lineage, disposition="closed_recovered"):
+    return {
+        "schema_version": 1,
+        "closure_id": "resume-closure-1",
+        "resume_lineage_evidence_id": lineage["evidence_id"],
+        "expected_terminal_disposition": disposition,
+    }
+
+
+def test_recorded_resume_closure_is_deterministic_bound_and_non_authoritative():
+    lineage = evaluate_recorded_resume_lineage(resume_lineage_reports())
+    source = resume_closure(lineage)
+    first = evaluate_recorded_resume_closure(lineage, source)
+    assert first == evaluate_recorded_resume_closure(
+        copy.deepcopy(lineage), copy.deepcopy(source))
+    assert first["terminal_disposition"] == "closed_recovered"
+    assert first["final_attempts"] == 3
+    assert first["final_checkpoint_generation"] == 11
+    assert first["closed"] is True
+    assert first["authority"] == RESUME_CLOSURE_AUTHORITY
+
+
+def test_recorded_resume_closure_accepts_exhausted_terminal_lineage():
+    reports = resume_lineage_reports()
+    reports[-1]["disposition"] = "closed_exhausted"
+    rehash(reports[-1])
+    lineage = evaluate_recorded_resume_lineage(reports)
+    result = evaluate_recorded_resume_closure(
+        lineage, resume_closure(lineage, "closed_exhausted"))
+    assert result["terminal_disposition"] == "closed_exhausted"
+
+
+def test_recorded_resume_closure_rejects_unfinished_lineage():
+    candidate = evaluate_recorded_resume_lineage([
+        evaluate_recorded_resume_transition(*resume_transition_inputs())
+    ])
+    with pytest.raises(RecoveryConsistencyError, match="resume_lineage_not_terminal"):
+        evaluate_recorded_resume_closure(candidate, resume_closure(candidate))
+
+
+@pytest.mark.parametrize(
+    "target,change,code",
+    [
+        ("lineage", lambda value: value.update(final_attempts=8),
+         "resume_lineage_evidence_mismatch"),
+        ("closure", lambda value: value.update(command="retry"),
+         "invalid_resume_closure_shape"),
+        ("closure", lambda value: value.update(resume_lineage_evidence_id=H0),
+         "resume_closure_lineage_evidence_mismatch"),
+        ("closure", lambda value: value.update(
+            expected_terminal_disposition="closed_exhausted"),
+         "resume_closure_disposition_mismatch"),
+    ],
+)
+def test_recorded_resume_closure_rejects_forged_or_action_bearing_inputs(
+    target, change, code
+):
+    lineage = evaluate_recorded_resume_lineage(resume_lineage_reports())
+    source = resume_closure(lineage)
+    change({"lineage": lineage, "closure": source}[target])
+    with pytest.raises(RecoveryConsistencyError, match=code):
+        evaluate_recorded_resume_closure(lineage, source)
+
+
+def test_recorded_resume_closure_contains_no_external_target_or_payload_fields():
+    lineage = evaluate_recorded_resume_lineage(resume_lineage_reports())
+    rendered = repr(evaluate_recorded_resume_closure(
+        lineage, resume_closure(lineage)))
     for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
         assert forbidden not in rendered
