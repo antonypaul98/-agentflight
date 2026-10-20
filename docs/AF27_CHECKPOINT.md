@@ -178,3 +178,24 @@ network/OS isolation.
 This is a seventh verified AF-27 slice, not checkpoint acceptance. AF-27 remains
 in progress and roadmap acceptance remains 4/12 pending independent records CI,
 explicit release, and bounded-scope acceptance review.
+
+
+## Bounded-scope acceptance closure (2026-10-20)
+
+AF-27 is accepted only for deterministic recorded metadata. Source PRs #42,
+#44, #46, #48, #50, #52 and #54 cover exact recovery/idempotency evidence,
+bounded retry budgets, state checkpoints, resume guards, one-step continuity,
+bounded ordered lineage and terminal closure. Records PRs #43, #45, #47, #49,
+#51, #53 and #55 independently passed exact-head and merged-main CI and were
+explicitly writer-released.
+
+The latest records head `fd65a7cf5acdebb3269544517223fc494a00130a`
+passed PR CI run 39386623417 on Python 3.11.17 with 450 product tests, zero
+failures and zero product skips. Main
+`07a79c9b001fd5597ed11cabd650f8211fa08bbc` passed merged-main CI run 39386694632 with the same 450/0/0 result.
+
+No accepted path retries, recovers, restores, reads or writes durable state,
+executes agents, tools, commands or projects, makes external calls, handles
+credentials or payloads, or claims filesystem/process/network/OS isolation.
+This records-only closure must pass its own exact-head PR and merged-main CI
+before the 5/12 acceptance record is canonical and AF-28 source work may begin.

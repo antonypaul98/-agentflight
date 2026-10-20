@@ -1,7 +1,7 @@
 # AgentFlight competitive roadmap — AF-23 through AF-34
 
-Status: **AUTHORIZED, 4/12 ACCEPTED**. AF-23 through AF-26 are merged and
-verified for their bounded recorded-only scopes; AF-27 is next. The 13–18 week range is
+Status: **AUTHORIZED, 5/12 ACCEPTED**. AF-23 through AF-27 are merged and
+verified for their bounded recorded-only scopes; AF-28 is next. The 13–18 week range is
 a planning estimate and will be recalibrated from measured checkpoint throughput.
 
 Each checkpoint requires synthetic regressions, exact-head PR CI, guarded
