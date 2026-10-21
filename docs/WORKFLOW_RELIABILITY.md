@@ -309,3 +309,25 @@ agents, tools, projects, commands or network calls; accesses no credentials,
 payloads, filesystem or durable state; and makes no resource-cap or OS-isolation
 claim. This records change requires independent exact-head and merged-main CI
 before writer release or another AF-28 source slice.
+
+## AF-28 recorded resource-state-lineage source receipt (2026-10-21)
+
+Source PR #59 adds a deterministic, exact-evidence-bound resource lineage over
+the validated concurrent-scenario metadata. Every resource round requires one
+shared recorded pre-state and exactly one accepted event; a later round must
+begin at the prior accepted post-state, and an isolated conflict rejection fails
+closed. Resources are tracked independently and the report exposes only hashes,
+content-addressed event identifiers, bounded coverage, and final state hashes.
+
+Source head `7c0c0b942229a9a88dd10f0ab189f0ae89c3d5dd`, tree
+`bed10fc7d5490064a6b5f9a5382938710813c5d9`, passed exact-head PR CI
+39584777028 on Python 3.11.17 with 466 product tests, zero failures and zero
+product skips. Guarded merge `5b36cad43680532448a06e44d16f6945cbe5c85e`
+passed exact merged-main CI 39584936518 with the same 466/0/0 result.
+
+This is recorded-metadata verification only. It starts no threads, processes,
+agents, tools, projects, commands or external calls; accesses no credentials,
+payloads, filesystem or durable state; and makes no retry, recovery,
+resource-cap or OS-isolation claim. This records change requires independent
+exact-head and merged-main CI before writer release or another AF-28 source
+slice. AF-28 remains in progress and roadmap acceptance remains 5/12.
