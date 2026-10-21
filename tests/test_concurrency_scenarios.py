@@ -4,8 +4,10 @@ import pytest
 
 from agentflight.concurrency_scenarios import (
     AUTHORITY,
+    RESOURCE_LINEAGE_AUTHORITY,
     ConcurrencyScenarioError,
     evaluate_recorded_concurrent_scenario,
+    evaluate_recorded_resource_state_lineage,
 )
 
 
@@ -167,3 +169,78 @@ def test_report_contains_no_external_target_payload_or_raw_tenant_fields():
     for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
         assert forbidden not in rendered
     assert "tenant_id_sha256" in rendered
+
+
+def _append_next_resource_round(source, *, state_before=H1):
+    first = evaluate_recorded_concurrent_scenario(source)
+    source["events"].append({
+        "sequence": 3,
+        "logical_time": 11,
+        "participant_id": "agent-a",
+        "prior_participant_event_id": first["events"][0]["event_id"],
+        "resource_key_sha256": H4,
+        "state_before_sha256": state_before,
+        "state_after_sha256": H2,
+        "outcome_code": "completed",
+    })
+
+
+def test_resource_state_lineage_is_deterministic_and_evidence_bound():
+    source = scenario()
+    _append_next_resource_round(source)
+    first = evaluate_recorded_resource_state_lineage(source)
+    second = evaluate_recorded_resource_state_lineage(copy.deepcopy(source))
+    concurrency = evaluate_recorded_concurrent_scenario(source)
+
+    assert first == second
+    assert first["concurrency_evidence_id"] == concurrency["evidence_id"]
+    assert [round_["state_after_sha256"] for round_ in first["rounds"]] == [H1, H2]
+    assert first["final_resource_states"] == [
+        {"resource_key_sha256": H4, "state_sha256": H2}
+    ]
+    assert first["coverage"] == {
+        "recorded_round_count": 2,
+        "resource_count": 1,
+        "state_continuity_verified": True,
+        "scope": "bounded_recorded_resource_state_lineage_metadata_only",
+    }
+    assert first["authority"] == RESOURCE_LINEAGE_AUTHORITY
+
+
+def test_resource_state_lineage_rejects_stale_next_round_state():
+    source = scenario()
+    _append_next_resource_round(source, state_before=H0)
+    with pytest.raises(ConcurrencyScenarioError, match="resource_state_chain_mismatch"):
+        evaluate_recorded_resource_state_lineage(source)
+
+
+def test_resource_state_lineage_rejects_divergent_contender_views():
+    source = scenario()
+    source["events"][1]["state_before_sha256"] = H2
+    source["events"][1]["state_after_sha256"] = H2
+    with pytest.raises(ConcurrencyScenarioError, match="contending_state_before_mismatch"):
+        evaluate_recorded_resource_state_lineage(source)
+
+
+def test_resource_state_lineage_rejects_isolated_conflict():
+    source = scenario()
+    source["events"] = [source["events"][1]]
+    source["events"][0]["sequence"] = 1
+    with pytest.raises(ConcurrencyScenarioError, match="isolated_conflict_rejection"):
+        evaluate_recorded_resource_state_lineage(source)
+
+
+def test_resource_state_lineage_tracks_resources_independently():
+    source = scenario()
+    source["events"][1].update({
+        "resource_key_sha256": H5,
+        "state_before_sha256": H2,
+        "state_after_sha256": H3,
+        "outcome_code": "completed",
+    })
+    report = evaluate_recorded_resource_state_lineage(source)
+    assert report["final_resource_states"] == [
+        {"resource_key_sha256": H4, "state_sha256": H1},
+        {"resource_key_sha256": H5, "state_sha256": H3},
+    ]
+    assert report["coverage"]["resource_count"] == 2
