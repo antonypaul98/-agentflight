@@ -4,8 +4,10 @@ import pytest
 
 from agentflight.concurrency_scenarios import (
     AUTHORITY,
+    CAUSAL_HANDOFF_AUTHORITY,
     RESOURCE_LINEAGE_AUTHORITY,
     ConcurrencyScenarioError,
+    evaluate_recorded_causal_handoffs,
     evaluate_recorded_concurrent_scenario,
     evaluate_recorded_resource_state_lineage,
 )
@@ -244,3 +246,119 @@ def test_resource_state_lineage_tracks_resources_independently():
         {"resource_key_sha256": H5, "state_sha256": H3},
     ]
     assert report["coverage"]["resource_count"] == 2
+
+
+def scenario_with_handoff():
+    source = scenario()
+    first = evaluate_recorded_concurrent_scenario(source)
+    source["events"].append({
+        "sequence": 3,
+        "logical_time": 11,
+        "participant_id": "agent-b",
+        "prior_participant_event_id": first["events"][1]["event_id"],
+        "resource_key_sha256": H5,
+        "state_before_sha256": H0,
+        "state_after_sha256": H2,
+        "outcome_code": "completed",
+    })
+    report = evaluate_recorded_concurrent_scenario(source)
+    handoffs = {
+        "schema_version": 1,
+        "handoff_set_id": "two-agent-causal-handoff",
+        "handoff_limit": 4,
+        "handoffs": [{
+            "sequence": 1,
+            "sender_participant_id": "agent-a",
+            "receiver_participant_id": "agent-b",
+            "source_event_id": report["events"][0]["event_id"],
+            "receiver_event_id": report["events"][2]["event_id"],
+            "handoff_evidence_sha256": H3,
+        }],
+    }
+    return source, handoffs
+
+
+def test_causal_handoff_is_deterministic_and_exact_event_bound():
+    source, handoffs = scenario_with_handoff()
+    first = evaluate_recorded_causal_handoffs(source, handoffs)
+    second = evaluate_recorded_causal_handoffs(
+        copy.deepcopy(source), copy.deepcopy(handoffs)
+    )
+    concurrency = evaluate_recorded_concurrent_scenario(source)
+
+    assert first == second
+    assert first["concurrency_evidence_id"] == concurrency["evidence_id"]
+    assert first["handoffs"][0]["source_event_id"] == concurrency["events"][0]["event_id"]
+    assert first["handoffs"][0]["receiver_event_id"] == concurrency["events"][2]["event_id"]
+    assert first["coverage"] == {
+        "recorded_handoff_count": 1,
+        "sender_count": 1,
+        "receiver_count": 1,
+        "strict_temporal_order_verified": True,
+        "scope": "bounded_recorded_cross_agent_causal_metadata_only",
+    }
+    assert first["authority"] == CAUSAL_HANDOFF_AUTHORITY
+
+
+def test_causal_handoff_rejects_unknown_or_mismatched_events():
+    source, handoffs = scenario_with_handoff()
+    handoffs["handoffs"][0]["source_event_id"] = H5
+    with pytest.raises(ConcurrencyScenarioError, match="unknown_handoff_event"):
+        evaluate_recorded_causal_handoffs(source, handoffs)
+
+    source, handoffs = scenario_with_handoff()
+    handoffs["handoffs"][0].update({
+        "sender_participant_id": "agent-b",
+        "receiver_participant_id": "agent-a",
+    })
+    with pytest.raises(ConcurrencyScenarioError, match="handoff_sender_event_mismatch"):
+        evaluate_recorded_causal_handoffs(source, handoffs)
+
+
+def test_causal_handoff_rejects_self_or_noncausal_edges():
+    source, handoffs = scenario_with_handoff()
+    handoffs["handoffs"][0]["receiver_participant_id"] = "agent-a"
+    with pytest.raises(ConcurrencyScenarioError, match="self_handoff"):
+        evaluate_recorded_causal_handoffs(source, handoffs)
+
+    source, handoffs = scenario_with_handoff()
+    events = evaluate_recorded_concurrent_scenario(source)["events"]
+    handoffs["handoffs"][0].update({
+        "sender_participant_id": "agent-b",
+        "receiver_participant_id": "agent-a",
+        "source_event_id": events[2]["event_id"],
+        "receiver_event_id": events[0]["event_id"],
+    })
+    with pytest.raises(ConcurrencyScenarioError, match="noncausal_handoff_order"):
+        evaluate_recorded_causal_handoffs(source, handoffs)
+
+
+def test_causal_handoff_requires_completed_receiver():
+    source, handoffs = scenario_with_handoff()
+    events = evaluate_recorded_concurrent_scenario(source)["events"]
+    handoffs["handoffs"][0]["receiver_event_id"] = events[1]["event_id"]
+    with pytest.raises(ConcurrencyScenarioError, match="handoff_receiver_not_completed"):
+        evaluate_recorded_causal_handoffs(source, handoffs)
+
+
+@pytest.mark.parametrize(
+    "change,code",
+    [
+        (lambda value: value.update(command="run"), "invalid_handoff_record_shape"),
+        (lambda value: value.update(handoff_limit=True), "invalid_handoff_limit"),
+        (lambda value: value.update(handoff_limit=33), "invalid_handoff_limit"),
+        (lambda value: value.update(handoffs=[]), "invalid_handoff_count"),
+    ],
+)
+def test_causal_handoff_rejects_action_fields_boolean_and_bounds(change, code):
+    source, handoffs = scenario_with_handoff()
+    change(handoffs)
+    with pytest.raises(ConcurrencyScenarioError, match=code):
+        evaluate_recorded_causal_handoffs(source, handoffs)
+
+
+def test_causal_handoff_report_contains_no_payload_or_external_target():
+    source, handoffs = scenario_with_handoff()
+    rendered = repr(evaluate_recorded_causal_handoffs(source, handoffs))
+    for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
+        assert forbidden not in rendered

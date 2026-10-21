@@ -13,10 +13,14 @@ from collections.abc import Mapping
 SCHEMA_VERSION = 1
 MAX_PARTICIPANTS = 8
 MAX_EVENTS = 64
+MAX_HANDOFFS = 32
 MAX_REPORT_BYTES = 32_768
 AUTHORITY = "recorded_concurrency_evidence_only_no_execution"
 RESOURCE_LINEAGE_AUTHORITY = (
     "recorded_resource_state_lineage_only_no_execution_or_state_access"
+)
+CAUSAL_HANDOFF_AUTHORITY = (
+    "recorded_cross_agent_causal_handoffs_only_no_execution_or_data_access"
 )
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
@@ -287,5 +291,130 @@ def evaluate_recorded_resource_state_lineage(
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise ConcurrencyScenarioError("resource_lineage_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_causal_handoffs(
+    scenario: Mapping[str, object], handoff_record: Mapping[str, object]
+) -> dict:
+    """Verify bounded cross-agent causal edges without executing or transferring data."""
+
+    concurrency_report = evaluate_recorded_concurrent_scenario(scenario)
+    root = _exact_dict(
+        handoff_record,
+        frozenset({"schema_version", "handoff_set_id", "handoff_limit", "handoffs"}),
+        "invalid_handoff_record_shape",
+    )
+    if type(root["schema_version"]) is not int or root["schema_version"] != SCHEMA_VERSION:
+        raise ConcurrencyScenarioError("unsupported_handoff_schema")
+    handoff_set_id = _text(
+        root["handoff_set_id"], _IDENTIFIER, "invalid_handoff_set_id"
+    )
+    handoff_limit = root["handoff_limit"]
+    if type(handoff_limit) is not int or not 1 <= handoff_limit <= MAX_HANDOFFS:
+        raise ConcurrencyScenarioError("invalid_handoff_limit")
+    handoffs = root["handoffs"]
+    if type(handoffs) is not list or not 1 <= len(handoffs) <= handoff_limit:
+        raise ConcurrencyScenarioError("invalid_handoff_count")
+
+    participants = {
+        participant["participant_id"] for participant in concurrency_report["participants"]
+    }
+    events = {event["event_id"]: event for event in concurrency_report["events"]}
+    handoff_keys = frozenset({
+        "sequence", "sender_participant_id", "receiver_participant_id",
+        "source_event_id", "receiver_event_id", "handoff_evidence_sha256",
+    })
+    normalized = []
+    seen_edges = set()
+    prior_order = None
+    senders = set()
+    receivers = set()
+    for expected_sequence, value in enumerate(handoffs, start=1):
+        handoff = _exact_dict(value, handoff_keys, "invalid_handoff_shape")
+        if type(handoff["sequence"]) is not int or handoff["sequence"] != expected_sequence:
+            raise ConcurrencyScenarioError("invalid_handoff_sequence")
+        sender = _text(
+            handoff["sender_participant_id"], _IDENTIFIER, "invalid_participant_id"
+        )
+        receiver = _text(
+            handoff["receiver_participant_id"], _IDENTIFIER, "invalid_participant_id"
+        )
+        if sender not in participants or receiver not in participants:
+            raise ConcurrencyScenarioError("unregistered_handoff_participant")
+        if sender == receiver:
+            raise ConcurrencyScenarioError("self_handoff")
+        source_event_id = _text(
+            handoff["source_event_id"], _SHA256, "invalid_source_event_id"
+        )
+        receiver_event_id = _text(
+            handoff["receiver_event_id"], _SHA256, "invalid_receiver_event_id"
+        )
+        if source_event_id not in events or receiver_event_id not in events:
+            raise ConcurrencyScenarioError("unknown_handoff_event")
+        source_event = events[source_event_id]
+        receiver_event = events[receiver_event_id]
+        if source_event["participant_id"] != sender:
+            raise ConcurrencyScenarioError("handoff_sender_event_mismatch")
+        if receiver_event["participant_id"] != receiver:
+            raise ConcurrencyScenarioError("handoff_receiver_event_mismatch")
+        if source_event["outcome_code"] != "completed":
+            raise ConcurrencyScenarioError("handoff_source_not_completed")
+        if receiver_event["outcome_code"] != "completed":
+            raise ConcurrencyScenarioError("handoff_receiver_not_completed")
+        if (
+            source_event["sequence"] >= receiver_event["sequence"]
+            or source_event["logical_time"] >= receiver_event["logical_time"]
+        ):
+            raise ConcurrencyScenarioError("noncausal_handoff_order")
+        evidence = _text(
+            handoff["handoff_evidence_sha256"],
+            _SHA256,
+            "invalid_handoff_evidence_hash",
+        )
+        edge = (source_event_id, receiver_event_id, evidence)
+        if edge in seen_edges:
+            raise ConcurrencyScenarioError("duplicate_handoff")
+        seen_edges.add(edge)
+        order = (
+            receiver_event["sequence"], sender, source_event_id,
+            receiver, receiver_event_id, evidence,
+        )
+        if prior_order is not None and order <= prior_order:
+            raise ConcurrencyScenarioError("nondeterministic_handoff_order")
+        prior_order = order
+
+        unsigned = {
+            "sequence": expected_sequence,
+            "sender_participant_id": sender,
+            "receiver_participant_id": receiver,
+            "source_event_id": source_event_id,
+            "receiver_event_id": receiver_event_id,
+            "handoff_evidence_sha256": evidence,
+        }
+        handoff_id = hashlib.sha256(_canonical(unsigned).encode("utf-8")).hexdigest()
+        normalized.append({"handoff_id": handoff_id, **unsigned})
+        senders.add(sender)
+        receivers.add(receiver)
+
+    report = {
+        "causal_handoff_schema_version": SCHEMA_VERSION,
+        "handoff_set_id": handoff_set_id,
+        "scenario_id": concurrency_report["scenario_id"],
+        "concurrency_evidence_id": concurrency_report["evidence_id"],
+        "handoffs": normalized,
+        "coverage": {
+            "recorded_handoff_count": len(normalized),
+            "sender_count": len(senders),
+            "receiver_count": len(receivers),
+            "strict_temporal_order_verified": True,
+            "scope": "bounded_recorded_cross_agent_causal_metadata_only",
+        },
+        "authority": CAUSAL_HANDOFF_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise ConcurrencyScenarioError("causal_handoff_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report

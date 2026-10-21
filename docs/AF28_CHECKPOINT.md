@@ -24,6 +24,13 @@ conflict rejection fails closed. The derived report exposes only hashes,
 content-addressed event identifiers, bounded coverage, and final recorded state
 hashes; it neither reads nor writes state.
 
+The third bounded slice verifies caller-supplied cross-agent causal handoff
+metadata against exact event identities from the validated schedule. It accepts
+only registered distinct participants, completed source and receiver events,
+strictly earlier source logical time, deterministic edge ordering, bounded
+cardinality, and content-addressed handoff records. Handoff evidence is a hash;
+the verifier never reads or transfers a message, artifact, payload, or state.
+
 ## Acceptance gate
 
 The source must pass exact Python 3.11 PR-head CI with zero product skips, a
