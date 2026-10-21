@@ -16,6 +16,14 @@ commands or network calls. It accesses no credentials, payloads, filesystem,
 durable state or external system and makes no resource-cap or OS-sandbox claim.
 All tenant, adapter, resource and state identities are caller-supplied hashes.
 
+The second bounded slice derives an exact-evidence-bound resource lineage from
+that validated schedule. It requires all contenders in a logical round to share
+one recorded pre-state, exactly one accepted event per resource round, and each
+later round to begin at the prior accepted post-state. An isolated recorded
+conflict rejection fails closed. The derived report exposes only hashes,
+content-addressed event identifiers, bounded coverage, and final recorded state
+hashes; it neither reads nor writes state.
+
 ## Acceptance gate
 
 The source must pass exact Python 3.11 PR-head CI with zero product skips, a

@@ -15,6 +15,9 @@ MAX_PARTICIPANTS = 8
 MAX_EVENTS = 64
 MAX_REPORT_BYTES = 32_768
 AUTHORITY = "recorded_concurrency_evidence_only_no_execution"
+RESOURCE_LINEAGE_AUTHORITY = (
+    "recorded_resource_state_lineage_only_no_execution_or_state_access"
+)
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -212,5 +215,77 @@ def evaluate_recorded_concurrent_scenario(scenario: Mapping[str, object]) -> dic
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise ConcurrencyScenarioError("concurrent_scenario_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_resource_state_lineage(
+    scenario: Mapping[str, object],
+) -> dict:
+    """Verify resource-state continuity in one recorded concurrent schedule."""
+
+    concurrency_report = evaluate_recorded_concurrent_scenario(scenario)
+    grouped = {}
+    for event in concurrency_report["events"]:
+        key = (event["logical_time"], event["resource_key_sha256"])
+        grouped.setdefault(key, []).append(event)
+
+    prior_state_by_resource = {}
+    rounds = []
+    for (logical_time, resource_key), events in sorted(grouped.items()):
+        observed_before = {event["state_before_sha256"] for event in events}
+        if len(observed_before) != 1:
+            raise ConcurrencyScenarioError("contending_state_before_mismatch")
+        state_before = observed_before.pop()
+        if (
+            resource_key in prior_state_by_resource
+            and state_before != prior_state_by_resource[resource_key]
+        ):
+            raise ConcurrencyScenarioError("resource_state_chain_mismatch")
+
+        completed = [event for event in events if event["outcome_code"] == "completed"]
+        rejected = [
+            event for event in events if event["outcome_code"] == "conflict_rejected"
+        ]
+        if len(events) == 1 and rejected:
+            raise ConcurrencyScenarioError("isolated_conflict_rejection")
+        if len(completed) != 1:
+            raise ConcurrencyScenarioError("invalid_recorded_round_completion")
+
+        accepted = completed[0]
+        state_after = accepted["state_after_sha256"]
+        prior_state_by_resource[resource_key] = state_after
+        rounds.append({
+            "logical_time": logical_time,
+            "resource_key_sha256": resource_key,
+            "state_before_sha256": state_before,
+            "accepted_event_id": accepted["event_id"],
+            "state_after_sha256": state_after,
+            "rejected_event_ids": sorted(event["event_id"] for event in rejected),
+        })
+
+    report = {
+        "resource_lineage_schema_version": SCHEMA_VERSION,
+        "scenario_id": concurrency_report["scenario_id"],
+        "concurrency_evidence_id": concurrency_report["evidence_id"],
+        "rounds": rounds,
+        "final_resource_states": [
+            {
+                "resource_key_sha256": resource_key,
+                "state_sha256": state,
+            }
+            for resource_key, state in sorted(prior_state_by_resource.items())
+        ],
+        "coverage": {
+            "recorded_round_count": len(rounds),
+            "resource_count": len(prior_state_by_resource),
+            "state_continuity_verified": True,
+            "scope": "bounded_recorded_resource_state_lineage_metadata_only",
+        },
+        "authority": RESOURCE_LINEAGE_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise ConcurrencyScenarioError("resource_lineage_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report
