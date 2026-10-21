@@ -331,3 +331,26 @@ payloads, filesystem or durable state; and makes no retry, recovery,
 resource-cap or OS-isolation claim. This records change requires independent
 exact-head and merged-main CI before writer release or another AF-28 source
 slice. AF-28 remains in progress and roadmap acceptance remains 5/12.
+
+## AF-28 recorded cross-agent causal-handoff source receipt (2026-10-21)
+
+Source PR #61 adds deterministic verification for bounded caller-supplied
+cross-agent causal handoff metadata. Each edge binds exact source and receiver
+event identities from a validated concurrent schedule, requires registered
+distinct participants and completed endpoints, and enforces strict event and
+logical-time ordering. Unknown, mismatched, self, noncausal, duplicate,
+nondeterministically ordered and action-bearing metadata fail closed.
+
+Source head `59e964c2bf0654ca07a889af50191974444f53fb`, tree
+`c9828596e82c9ad8d585529ebff2a350c6527176`, passed exact-head PR CI
+39616728490 on Python 3.11.17 with 475 product tests, zero failures and zero
+product skips. Guarded merge `ffe763a188e808d0557a678b6b7cec5d6475b3f0`
+passed exact merged-main CI 39617458489 with the same 475/0/0 result.
+
+This is recorded-metadata verification only. It starts no agents, threads,
+processes, tools, projects or commands; reads or transfers no state, message,
+artifact or payload; accesses no credentials or external systems; and makes no
+retry, recovery, resource-cap or OS-isolation claim. This records change
+requires independent exact-head and merged-main CI before writer release or
+another AF-28 source slice. AF-28 remains in progress and roadmap acceptance
+remains 5/12.
