@@ -290,3 +290,22 @@ No accepted path performs retry, recovery, restore, durable-state access,
 agent/tool/command/project execution, external calls, credential/payload
 handling, or filesystem/process/network/OS isolation. This closure requires its
 own exact-head PR and merged-main CI before AF-28 starts.
+
+## AF-28 bounded recorded-concurrency source receipt (2026-10-21)
+
+Source PR #57 adds deterministic, fail-closed validation for caller-supplied
+concurrent and multi-agent scenario metadata. It bounds two to eight participants
+and one to sixty-four events, verifies one hashed tenant boundary, enforces
+content-addressed participant chains and stable logical-time/participant ordering,
+and requires deterministic conflict rejection without recorded state mutation.
+
+Source head `4047ac8ef65622e7627950ae95b8fa67c671a5ca` passed exact-head
+PR CI 39543240658 on Python 3.11.17 with 461 product tests, zero failures and
+zero product skips. Guarded merge `12c03f3a2df97a299ed98e36630857df564ce3e5`
+passed exact merged-main CI 39543334981 with the same 461/0/0 result.
+
+This is recorded-metadata verification only. It starts no threads, processes,
+agents, tools, projects, commands or network calls; accesses no credentials,
+payloads, filesystem or durable state; and makes no resource-cap or OS-isolation
+claim. This records change requires independent exact-head and merged-main CI
+before writer release or another AF-28 source slice.
