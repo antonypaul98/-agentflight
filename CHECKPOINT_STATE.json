@@ -2,15 +2,15 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-28 concurrent and multi-agent scenarios",
-  "checkpoint_status": "READY_AFTER_AF27_CLOSURE_CI",
-  "active_branch": "work/af27-closure",
-  "verified_main_sha": "07a79c9b001fd5597ed11cabd650f8211fa08bbc",
-  "observed_feature_sha": "3f0e7332d8f8a929318ed794cb6143fbebb750cd",
+  "checkpoint_status": "IN_PROGRESS_RECORDED_CONCURRENCY_RECORDS_PENDING",
+  "active_branch": "work/af28-recorded-concurrency-records",
+  "verified_main_sha": "12c03f3a2df97a299ed98e36630857df564ce3e5",
+  "observed_feature_sha": "4047ac8ef65622e7627950ae95b8fa67c671a5ca",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-27 source PRs #42, #44, #46, #48, #50, #52 and #54 and records PRs #43, #45, #47, #49, #51, #53 and #55 are merged, independently verified and explicitly released. This records-only checkpoint closure requires exact PR and merged-main CI before AF-28 begins.",
-  "pr_number": 55,
+  "branch_remote_status": "AF-27 closure is merged, exact-main verified and writer-released. AF-28 first bounded recorded-concurrency source PR #57 is merged; exact PR-head and merged-main Python 3.11 CI each passed 461 product tests with zero product skips. Canonical records and explicit writer release remain pending.",
+  "pr_number": 57,
   "pr_state": "merged",
   "ci_state": {
     "af27_resume_closure_source_pr_run": {
@@ -711,13 +711,65 @@
       "required_head": null,
       "product_tests_required": true,
       "product_skips_required": 0
+    },
+    "af27_acceptance_closure_pr_run": {
+      "id": 39473923079,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39473923079",
+      "head_sha": "2be6916fe4dfcb2036293ae02ab74a2ac6955613",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 450,
+      "product_failures": 0,
+      "product_skips": 0
+    },
+    "af27_acceptance_closure_merged_main_run": {
+      "id": 39474080378,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39474080378",
+      "head_sha": "fd0a9df6c86e6baef2a09b44e822ccfb2f6c4a6d",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 450,
+      "product_failures": 0,
+      "product_skips": 0
+    },
+    "af28_recorded_concurrency_source_pr_run": {
+      "id": 39543240658,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39543240658",
+      "head_sha": "4047ac8ef65622e7627950ae95b8fa67c671a5ca",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 461,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
+    "af28_recorded_concurrency_merged_main_run": {
+      "id": 39543334981,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39543334981",
+      "head_sha": "12c03f3a2df97a299ed98e36630857df564ce3e5",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 461,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
     }
   },
-  "local_test_status": "Latest AF-27 source and records validation used Python 3.11.17: 65 focused recovery-consistency tests passed locally; exact PR and merged-main Linux CI each passed all 450 product tests with zero failures and zero product skips. This records-only closure adds no source behavior and requires its own exact CI.",
-  "merge_status": "AF27_MERGED_AND_VERIFIED_CLOSURE_RECORDS_PENDING",
+  "local_test_status": "Prior supplemental local validation passed 11 focused AF-28 tests and 18 infrastructure guards (17 passed, one baseline Memory-only skip). Canonical exact Python 3.11 PR and merged-main CI passed 461 product tests with zero product skips.",
+  "merge_status": "AF28_RECORDED_CONCURRENCY_RECORDS_PENDING",
   "known_blocker": null,
-  "next_action": "Publish and verify this AF-27 records-only acceptance closure with exact PR-head and merged-main Python 3.11 CI, explicitly release the writer, then begin AF-28 with one bounded deterministic scheduling invariant.",
-  "feature_checkpoint_advanced": true,
+  "next_action": "Publish this records-only AF-28 receipt, require exact Python 3.11 PR and merged-main CI with zero product skips, then explicitly release the writer before another AF-28 source slice.",
+  "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
     "checkpoint_range": "AF-23..AF-34",
@@ -732,6 +784,35 @@
     "af27_scope": "MERGED_AND_VERIFIED metadata-only idempotency, crash/recovery evidence, bounded retry budgets, exact state checkpoints, resume guards, ordered transition lineage and terminal closure"
   },
   "completed_checkpoints": [
+    {
+      "checkpoint": "AF-27 recovery/retry/state consistency",
+      "status": "MERGED_AND_VERIFIED",
+      "accepted_scope": "Bounded deterministic recorded metadata for idempotency, state chains/checkpoints, retry budgets, resume guards, transition lineage and terminal closure",
+      "source_prs": [
+        42,
+        44,
+        46,
+        48,
+        50,
+        52,
+        54
+      ],
+      "records_prs": [
+        43,
+        45,
+        47,
+        49,
+        51,
+        53,
+        55
+      ],
+      "acceptance_pr": 56,
+      "accepted_main_sha": "fd0a9df6c86e6baef2a09b44e822ccfb2f6c4a6d",
+      "final_product_tests": 450,
+      "product_failures": 0,
+      "product_skips": 0,
+      "limitations": "No retry, recovery, restore, durable-state access, agent/tool/command/project execution, external call, credential/payload handling, arbitrary execution, or filesystem/process/network/OS isolation authority."
+    },
     {
       "checkpoint": "AF-26 controlled failure injection",
       "status": "MERGED_AND_VERIFIED",
@@ -956,13 +1037,13 @@
   "last_session_exit": {
     "BLOCKED_LAYER": null,
     "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "All seven AF-27 source slices and their canonical records are merged, independently verified and writer-released. The bounded-scope acceptance review is prepared for independent closure CI.",
-    "REMOTE_SHA": "07a79c9b001fd5597ed11cabd650f8211fa08bbc",
-    "NEXT_ACTION": "Publish and verify the AF-27 records-only acceptance closure, explicitly release the writer, then begin AF-28."
+    "SAFE_WORK_COMPLETED": "AF-27 exact-main CI was reconciled and its writer release confirmed. AF-28 bounded recorded-concurrency source merged and passed exact PR and merged-main Python 3.11 CI with zero product skips. Canonical records are prepared.",
+    "REMOTE_SHA": "12c03f3a2df97a299ed98e36630857df564ce3e5",
+    "NEXT_ACTION": "Publish and verify the AF-28 records receipt, then explicitly release the writer."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "07a79c9b001fd5597ed11cabd650f8211fa08bbc",
+  "observed_branch_sha": "12c03f3a2df97a299ed98e36630857df564ce3e5",
   "historical_session_exits": [
     {
       "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
@@ -979,7 +1060,7 @@
       "NEXT_ACTION": "Use an authorized source-code publication path to apply the preserved wait-EINTR patch and 3 regressions to existing main; run full Python 3.11 suite and verify exact-commit CI."
     }
   ],
-  "starting_main_sha": "ffaaa39daa8db1fb241883014086c65abcc773a5",
+  "starting_main_sha": "fd0a9df6c86e6baef2a09b44e822ccfb2f6c4a6d",
   "local_validation": {
     "python": "3.11.17",
     "focused_before_fix": "3 failed",
@@ -1023,8 +1104,9 @@
   },
   "usage_allowance": "BUDGET UNKNOWN: actual remaining Astra/Work allowance is not exposed. Repair scope is bounded; capacity is reserved for exact-head CI, canonical records and writer handoff.",
   "changed_files": [
-    "CHECKPOINT_STATE.json",
-    "docs/AF25_CHECKPOINT.md"
+    "docs/AF28_CHECKPOINT.md",
+    "src/agentflight/concurrency_scenarios.py",
+    "tests/test_concurrency_scenarios.py"
   ],
   "shell_preflight_receipt": {
     "BLOCKED_LAYER": "external",
@@ -1088,22 +1170,21 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF27-FINAL-ACCEPTANCE-20261020",
-    "status": "closure_records_pending",
+    "ownership_id": "AF28-RECORDED-CONCURRENCY-20261021",
+    "status": "records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
-    "release_requirement": "Exact AF-27 closure PR and merged-main Python 3.11 CI green, followed by explicit writer release before AF-28 source work.",
-    "source_repair_accepted": true,
-    "prior_release": {
-      "ownership_id": "AF27-RECORDED-RESUME-CLOSURE-RECEIPT-20261020",
-      "owner": "AgentFlight Hourly Build",
-      "status": "released",
-      "receipt": "https://github.com/antonypaul98/-agentflight/pull/55#issuecomment-6285763201",
-      "released_at": "2026-10-20T07:31:00Z"
-    },
-    "release_record": "The AF-27 bounded metadata-only acceptance closure is owned solely for records CI and release; AF-28 source work must not begin early."
+    "source_writing_stopped": true,
+    "source_head": "4047ac8ef65622e7627950ae95b8fa67c671a5ca",
+    "source_merge": "12c03f3a2df97a299ed98e36630857df564ce3e5",
+    "source_pr": 57,
+    "source_pr_ci": 39543240658,
+    "source_merged_main_ci": 39543334981,
+    "release_requirement": "Exact AF-28 records PR and merged-main Python 3.11 CI green, followed by explicit writer release before another AF-28 source slice.",
+    "no_real_execution": true,
+    "no_private_data_or_secrets_committed": true
   },
-  "recorded_at_utc": "2026-10-20T18:18:31.588Z",
+  "recorded_at_utc": "2026-10-21T04:19:10Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
     "exit_code": 1,
@@ -1418,7 +1499,7 @@
     "limitations": "No retry, recovery, restore, agent/tool/command execution, project or durable-state access, external calls, credentials, payloads, or isolation claim."
   },
   "af27_acceptance_closure": {
-    "status": "CLOSURE_RECORDS_PENDING",
+    "status": "MERGED_AND_VERIFIED",
     "accepted_checkpoints": 5,
     "total_checkpoints": 12,
     "reviewed_main_sha": "07a79c9b001fd5597ed11cabd650f8211fa08bbc",
@@ -1448,6 +1529,24 @@
     "product_failures": 0,
     "product_skips": 0,
     "scope": "Deterministic recorded-metadata verification for idempotency, bounded retries, exact state chains/checkpoints, resume dispositions, ordered transition lineage and terminal closure.",
-    "limitations": "No retry, recovery, restore, durable-state access, agent/tool/command/project execution, external call, credential/payload handling, or filesystem/process/network/OS isolation claim."
+    "limitations": "No retry, recovery, restore, durable-state access, agent/tool/command/project execution, external call, credential/payload handling, or filesystem/process/network/OS isolation claim.",
+    "closure_pr": 56,
+    "closure_head": "2be6916fe4dfcb2036293ae02ab74a2ac6955613",
+    "closure_merge": "fd0a9df6c86e6baef2a09b44e822ccfb2f6c4a6d",
+    "closure_pr_ci": 39473923079,
+    "closure_merged_main_ci": 39474080378,
+    "writer_release": "https://github.com/antonypaul98/-agentflight/pull/56#issuecomment-6298048620"
+  },
+  "af28_recorded_concurrency_source_receipt": {
+    "status": "SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
+    "source_sha": "4047ac8ef65622e7627950ae95b8fa67c671a5ca",
+    "source_pr": 57,
+    "source_merge_sha": "12c03f3a2df97a299ed98e36630857df564ce3e5",
+    "source_pr_ci_run": 39543240658,
+    "source_merged_main_ci_run": 39543334981,
+    "product_tests": 461,
+    "product_failures": 0,
+    "product_skips": 0,
+    "scope": "Deterministic bounded recorded concurrent-scenario metadata with single-tenant hashes, stable scheduling, participant chains and conflict rejection; no execution or isolation authority."
   }
 }
