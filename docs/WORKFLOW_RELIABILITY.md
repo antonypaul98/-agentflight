@@ -406,3 +406,15 @@ filesystem, durable state or external systems; and makes no resource-cap or
 OS-isolation claim. This records change requires independent exact-head and
 merged-main CI before writer release or another AF-28 source slice. AF-28
 remains in progress and roadmap acceptance remains 5/12.
+
+## AF-28 recorded capacity-budget source candidate (2026-10-22)
+
+This bounded slice binds per-participant event counts and distinct resource-key
+counts to exact concurrent-scenario evidence and rejects missing, reordered,
+Boolean, oversized, or overrun caller-declared caps.
+
+This is metadata-only accounting. It performs no execution, scheduling,
+waiting, resource allocation or enforcement; starts no agents, threads,
+processes, tools, projects or commands; and makes no runtime resource-cap,
+filesystem, network, process or OS-isolation claim. Exact Python 3.11 PR and
+merged-main CI are required before canonical records or writer release.

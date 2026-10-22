@@ -3,12 +3,14 @@ import copy
 import pytest
 
 from agentflight.concurrency_scenarios import (
+    CAPACITY_BUDGET_AUTHORITY,
     AUTHORITY,
     CAUSAL_HANDOFF_AUTHORITY,
     QUORUM_BARRIER_AUTHORITY,
     RESOURCE_LINEAGE_AUTHORITY,
     ConcurrencyScenarioError,
     evaluate_recorded_causal_handoffs,
+    evaluate_recorded_capacity_budget,
     evaluate_recorded_concurrent_scenario,
     evaluate_recorded_quorum_barriers,
     evaluate_recorded_resource_state_lineage,
@@ -512,4 +514,64 @@ def test_quorum_barrier_report_contains_no_payload_or_external_target():
     for forbidden in (
         "url", "endpoint", "payload", "credential", "command", "path", "timeout"
     ):
+        assert forbidden not in rendered
+
+
+def capacity_budget():
+    return {
+        "schema_version": 1,
+        "budget_id": "two-agent-recorded-capacity",
+        "resource_key_limit": 2,
+        "participant_event_limits": [
+            {"participant_id": "agent-a", "event_limit": 1},
+            {"participant_id": "agent-b", "event_limit": 1},
+        ],
+    }
+
+
+def test_capacity_budget_is_deterministic_and_exact_evidence_bound():
+    source = scenario()
+    first = evaluate_recorded_capacity_budget(source, capacity_budget())
+    second = evaluate_recorded_capacity_budget(copy.deepcopy(source), capacity_budget())
+    assert first == second
+    assert first["concurrency_evidence_id"] == evaluate_recorded_concurrent_scenario(source)["evidence_id"]
+    assert first["recorded_resource_key_count"] == 1
+    assert first["participant_event_limits"][0]["recorded_event_count"] == 1
+    assert first["coverage"]["runtime_resource_enforcement_performed"] is False
+    assert first["authority"] == CAPACITY_BUDGET_AUTHORITY
+
+
+def test_capacity_budget_rejects_event_or_resource_overrun():
+    source = scenario()
+    budget = capacity_budget()
+    budget["participant_event_limits"][0]["event_limit"] = 0
+    with pytest.raises(ConcurrencyScenarioError, match="invalid_participant_event_limit"):
+        evaluate_recorded_capacity_budget(source, budget)
+    source = scenario()
+    source["events"][1]["resource_key_sha256"] = H5
+    budget = capacity_budget()
+    budget["resource_key_limit"] = 1
+    with pytest.raises(ConcurrencyScenarioError, match="resource_key_budget_exceeded"):
+        evaluate_recorded_capacity_budget(source, budget)
+
+
+def test_capacity_budget_rejects_missing_unsorted_or_action_fields():
+    source = scenario()
+    budget = capacity_budget()
+    budget["participant_event_limits"].pop()
+    with pytest.raises(ConcurrencyScenarioError, match="invalid_participant_budget_count"):
+        evaluate_recorded_capacity_budget(source, budget)
+    budget = capacity_budget()
+    budget["participant_event_limits"].reverse()
+    with pytest.raises(ConcurrencyScenarioError, match="participant_budget_set_mismatch"):
+        evaluate_recorded_capacity_budget(source, budget)
+    budget = capacity_budget()
+    budget["command"] = "enforce"
+    with pytest.raises(ConcurrencyScenarioError, match="invalid_capacity_budget_shape"):
+        evaluate_recorded_capacity_budget(source, budget)
+
+
+def test_capacity_budget_report_contains_no_executable_target():
+    rendered = repr(evaluate_recorded_capacity_budget(scenario(), capacity_budget()))
+    for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
         assert forbidden not in rendered

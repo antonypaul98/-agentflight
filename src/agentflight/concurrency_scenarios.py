@@ -15,6 +15,7 @@ MAX_PARTICIPANTS = 8
 MAX_EVENTS = 64
 MAX_HANDOFFS = 32
 MAX_SYNCHRONIZATIONS = 16
+MAX_RESOURCE_KEYS = 32
 MAX_REPORT_BYTES = 32_768
 AUTHORITY = "recorded_concurrency_evidence_only_no_execution"
 RESOURCE_LINEAGE_AUTHORITY = (
@@ -25,6 +26,9 @@ CAUSAL_HANDOFF_AUTHORITY = (
 )
 QUORUM_BARRIER_AUTHORITY = (
     "recorded_quorum_barrier_evidence_only_no_execution_waiting_or_scheduling"
+)
+CAPACITY_BUDGET_AUTHORITY = (
+    "recorded_capacity_budget_evidence_only_no_resource_enforcement"
 )
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
@@ -595,5 +599,70 @@ def evaluate_recorded_quorum_barriers(
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise ConcurrencyScenarioError("quorum_barrier_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_capacity_budget(
+    scenario: Mapping[str, object], budget_record: Mapping[str, object]
+) -> dict:
+    """Verify bounded recorded counts without enforcing runtime resources."""
+    concurrency_report = evaluate_recorded_concurrent_scenario(scenario)
+    root = _exact_dict(
+        budget_record,
+        frozenset({"schema_version", "budget_id", "resource_key_limit", "participant_event_limits"}),
+        "invalid_capacity_budget_shape",
+    )
+    if type(root["schema_version"]) is not int or root["schema_version"] != SCHEMA_VERSION:
+        raise ConcurrencyScenarioError("unsupported_capacity_budget_schema")
+    budget_id = _text(root["budget_id"], _IDENTIFIER, "invalid_capacity_budget_id")
+    resource_limit = root["resource_key_limit"]
+    if type(resource_limit) is not int or not 1 <= resource_limit <= MAX_RESOURCE_KEYS:
+        raise ConcurrencyScenarioError("invalid_resource_key_limit")
+    limits = root["participant_event_limits"]
+    if type(limits) is not list or len(limits) != len(concurrency_report["participants"]):
+        raise ConcurrencyScenarioError("invalid_participant_budget_count")
+    normalized_limits = []
+    for value in limits:
+        item = _exact_dict(value, frozenset({"participant_id", "event_limit"}), "invalid_participant_budget_shape")
+        participant_id = _text(item["participant_id"], _IDENTIFIER, "invalid_participant_id")
+        event_limit = item["event_limit"]
+        if type(event_limit) is not int or not 1 <= event_limit <= MAX_EVENTS:
+            raise ConcurrencyScenarioError("invalid_participant_event_limit")
+        normalized_limits.append({"participant_id": participant_id, "event_limit": event_limit})
+    registered = [value["participant_id"] for value in concurrency_report["participants"]]
+    if [value["participant_id"] for value in normalized_limits] != registered:
+        raise ConcurrencyScenarioError("participant_budget_set_mismatch")
+    observed = {participant_id: 0 for participant_id in registered}
+    resources = set()
+    for event in concurrency_report["events"]:
+        observed[event["participant_id"]] += 1
+        resources.add(event["resource_key_sha256"])
+    if len(resources) > resource_limit:
+        raise ConcurrencyScenarioError("resource_key_budget_exceeded")
+    for limit in normalized_limits:
+        if observed[limit["participant_id"]] > limit["event_limit"]:
+            raise ConcurrencyScenarioError("participant_event_budget_exceeded")
+    report = {
+        "capacity_budget_schema_version": SCHEMA_VERSION,
+        "budget_id": budget_id,
+        "scenario_id": concurrency_report["scenario_id"],
+        "concurrency_evidence_id": concurrency_report["evidence_id"],
+        "resource_key_limit": resource_limit,
+        "recorded_resource_key_count": len(resources),
+        "participant_event_limits": [
+            {**value, "recorded_event_count": observed[value["participant_id"]]}
+            for value in normalized_limits
+        ],
+        "coverage": {
+            "recorded_counts_within_declared_limits": True,
+            "runtime_resource_enforcement_performed": False,
+            "scope": "bounded_recorded_capacity_budget_metadata_only",
+        },
+        "authority": CAPACITY_BUDGET_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise ConcurrencyScenarioError("capacity_budget_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report
