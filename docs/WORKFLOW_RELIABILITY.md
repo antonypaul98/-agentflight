@@ -418,3 +418,17 @@ waiting, resource allocation or enforcement; starts no agents, threads,
 processes, tools, projects or commands; and makes no runtime resource-cap,
 filesystem, network, process or OS-isolation claim. Exact Python 3.11 PR and
 merged-main CI are required before canonical records or writer release.
+
+## AF-28 recorded capacity-budget source receipt (2026-10-22)
+
+PR #65 head `86cb28ee9090bfeb4f2d7eeb64575e3fde306df0`, tree
+`e010c7385a1586780d84b71eaf669b2f5ee71760`, passed exact-head Python
+3.11.17 CI 39871905292 with 489 product tests and zero product skips. Guarded
+merge `31682f750a40055a45be49513d1d4b82df49454f` passed exact merged-main
+CI 39872066120 with the same 489/0/0 result.
+
+The verifier binds recorded per-participant event counts and distinct resource
+keys to exact concurrent-scenario evidence and caller-declared caps. It performs
+no runtime allocation or enforcement and grants no execution or isolation
+authority. This records-only change requires its own exact PR and merged-main
+CI before writer release.
