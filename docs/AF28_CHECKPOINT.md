@@ -31,6 +31,14 @@ strictly earlier source logical time, deterministic edge ordering, bounded
 cardinality, and content-addressed handoff records. Handoff evidence is a hash;
 the verifier never reads or transfers a message, artifact, payload, or state.
 
+The fourth bounded slice verifies caller-supplied quorum-barrier metadata against
+exact completed events from the validated schedule. It requires two to eight
+sorted registered participants, a non-boolean quorum of at least two, unique
+completed arrivals meeting that quorum, and a completed release event strictly
+after every recorded arrival. Barrier and arrival ordering is deterministic,
+event roles cannot be reused, and all evidence is content-addressed. The verifier
+does not wait, schedule, coordinate, execute, transfer data, or access state.
+
 ## Acceptance gate
 
 The source must pass exact Python 3.11 PR-head CI with zero product skips, a
