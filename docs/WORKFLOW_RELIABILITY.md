@@ -358,7 +358,7 @@ remains 5/12.
 ## AF-28 recorded cross-agent causal-handoff records receipt (2026-10-22)
 
 Canonical records PR #62 head
-`7a27da6db7e88c53db69cd670d8330d99d3708df` passed exact-head Python
+`7a27ca356d13569dfaa7983806087d47233c3864` passed exact-head Python
 3.11.17 CI 39618071176 with 475 product tests, zero failures and zero product
 skips. Guarded merge `6328e9ba9871fd63d1b938a0b9fdb9d67e3b8916`
 passed exact merged-main CI 39821897925 with the same 475/0/0 result. The prior
@@ -389,3 +389,20 @@ filesystem, durable state or external systems; and makes no resource-cap or
 OS-isolation claim. Source and canonical records still require independent
 exact-head and merged-main CI before writer release. AF-28 remains in progress
 and roadmap acceptance remains 5/12.
+
+## AF-28 recorded quorum-barrier source receipt (2026-10-22)
+
+Source PR #63 head `dbb4390ed1d9b3536130daeb52be88722b859862`,
+tree `e3c96509ea23a931c826b363483ac896461dec75`, passed exact-head
+Python 3.11.17 CI 39831615764 with 485 product tests, zero failures and
+zero product skips. Guarded merge
+`f632ab4a26488f75a981ce4c833f76475b74ec84` passed exact merged-main
+CI 39831774279 with the same 485/0/0 result.
+
+This is recorded-metadata verification only. It performs no waiting,
+scheduling, coordination, execution or transfer; starts no agents, threads,
+processes, tools, projects or commands; accesses no credentials, payloads,
+filesystem, durable state or external systems; and makes no resource-cap or
+OS-isolation claim. This records change requires independent exact-head and
+merged-main CI before writer release or another AF-28 source slice. AF-28
+remains in progress and roadmap acceptance remains 5/12.
