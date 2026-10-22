@@ -14,6 +14,7 @@ SCHEMA_VERSION = 1
 MAX_PARTICIPANTS = 8
 MAX_EVENTS = 64
 MAX_HANDOFFS = 32
+MAX_SYNCHRONIZATIONS = 16
 MAX_REPORT_BYTES = 32_768
 AUTHORITY = "recorded_concurrency_evidence_only_no_execution"
 RESOURCE_LINEAGE_AUTHORITY = (
@@ -21,6 +22,9 @@ RESOURCE_LINEAGE_AUTHORITY = (
 )
 CAUSAL_HANDOFF_AUTHORITY = (
     "recorded_cross_agent_causal_handoffs_only_no_execution_or_data_access"
+)
+QUORUM_BARRIER_AUTHORITY = (
+    "recorded_quorum_barrier_evidence_only_no_execution_waiting_or_scheduling"
 )
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
@@ -416,5 +420,180 @@ def evaluate_recorded_causal_handoffs(
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise ConcurrencyScenarioError("causal_handoff_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_quorum_barriers(
+    scenario: Mapping[str, object], synchronization_record: Mapping[str, object]
+) -> dict:
+    """Verify bounded recorded quorum barriers without waiting or scheduling work."""
+
+    concurrency_report = evaluate_recorded_concurrent_scenario(scenario)
+    root = _exact_dict(
+        synchronization_record,
+        frozenset({
+            "schema_version", "synchronization_set_id",
+            "synchronization_limit", "barriers",
+        }),
+        "invalid_synchronization_record_shape",
+    )
+    if type(root["schema_version"]) is not int or root["schema_version"] != SCHEMA_VERSION:
+        raise ConcurrencyScenarioError("unsupported_synchronization_schema")
+    synchronization_set_id = _text(
+        root["synchronization_set_id"],
+        _IDENTIFIER,
+        "invalid_synchronization_set_id",
+    )
+    synchronization_limit = root["synchronization_limit"]
+    if (
+        type(synchronization_limit) is not int
+        or not 1 <= synchronization_limit <= MAX_SYNCHRONIZATIONS
+    ):
+        raise ConcurrencyScenarioError("invalid_synchronization_limit")
+    barriers = root["barriers"]
+    if (
+        type(barriers) is not list
+        or not 1 <= len(barriers) <= synchronization_limit
+    ):
+        raise ConcurrencyScenarioError("invalid_synchronization_count")
+
+    registered = {
+        participant["participant_id"]
+        for participant in concurrency_report["participants"]
+    }
+    events = {event["event_id"]: event for event in concurrency_report["events"]}
+    barrier_keys = frozenset({
+        "sequence", "barrier_id", "participant_ids", "quorum",
+        "arrivals", "release_event_id",
+    })
+    arrival_keys = frozenset({"participant_id", "event_id"})
+    normalized = []
+    seen_barrier_ids = set()
+    seen_event_roles = set()
+    prior_order = None
+    participants_observed = set()
+    for expected_sequence, value in enumerate(barriers, start=1):
+        barrier = _exact_dict(value, barrier_keys, "invalid_barrier_shape")
+        if type(barrier["sequence"]) is not int or barrier["sequence"] != expected_sequence:
+            raise ConcurrencyScenarioError("invalid_barrier_sequence")
+        barrier_id = _text(barrier["barrier_id"], _IDENTIFIER, "invalid_barrier_id")
+        if barrier_id in seen_barrier_ids:
+            raise ConcurrencyScenarioError("duplicate_barrier_id")
+        seen_barrier_ids.add(barrier_id)
+
+        participant_ids = barrier["participant_ids"]
+        if type(participant_ids) is not list or not 2 <= len(participant_ids) <= MAX_PARTICIPANTS:
+            raise ConcurrencyScenarioError("invalid_barrier_participant_count")
+        normalized_participants = [
+            _text(value, _IDENTIFIER, "invalid_participant_id")
+            for value in participant_ids
+        ]
+        if (
+            normalized_participants != sorted(normalized_participants)
+            or len(set(normalized_participants)) != len(normalized_participants)
+        ):
+            raise ConcurrencyScenarioError("nondeterministic_barrier_participants")
+        if any(participant not in registered for participant in normalized_participants):
+            raise ConcurrencyScenarioError("unregistered_barrier_participant")
+
+        quorum = barrier["quorum"]
+        if type(quorum) is not int or not 2 <= quorum <= len(normalized_participants):
+            raise ConcurrencyScenarioError("invalid_barrier_quorum")
+        arrivals = barrier["arrivals"]
+        if (
+            type(arrivals) is not list
+            or not quorum <= len(arrivals) <= len(normalized_participants)
+        ):
+            raise ConcurrencyScenarioError("barrier_quorum_not_met")
+
+        release_event_id = _text(
+            barrier["release_event_id"], _SHA256, "invalid_release_event_id"
+        )
+        release_event = events.get(release_event_id)
+        if release_event is None:
+            raise ConcurrencyScenarioError("unknown_release_event")
+        if release_event["outcome_code"] != "completed":
+            raise ConcurrencyScenarioError("barrier_release_not_completed")
+        if release_event["participant_id"] not in normalized_participants:
+            raise ConcurrencyScenarioError("barrier_release_participant_mismatch")
+
+        normalized_arrivals = []
+        arrival_participants = set()
+        arrival_event_ids = set()
+        for arrival_value in arrivals:
+            arrival = _exact_dict(
+                arrival_value, arrival_keys, "invalid_barrier_arrival_shape"
+            )
+            participant_id = _text(
+                arrival["participant_id"], _IDENTIFIER, "invalid_participant_id"
+            )
+            event_id = _text(arrival["event_id"], _SHA256, "invalid_arrival_event_id")
+            if participant_id not in normalized_participants:
+                raise ConcurrencyScenarioError("arrival_participant_not_in_barrier")
+            if participant_id in arrival_participants or event_id in arrival_event_ids:
+                raise ConcurrencyScenarioError("duplicate_barrier_arrival")
+            event = events.get(event_id)
+            if event is None:
+                raise ConcurrencyScenarioError("unknown_arrival_event")
+            if event["participant_id"] != participant_id:
+                raise ConcurrencyScenarioError("arrival_event_participant_mismatch")
+            if event["outcome_code"] != "completed":
+                raise ConcurrencyScenarioError("barrier_arrival_not_completed")
+            if (
+                event["sequence"] >= release_event["sequence"]
+                or event["logical_time"] >= release_event["logical_time"]
+            ):
+                raise ConcurrencyScenarioError("barrier_released_before_arrival")
+            arrival_participants.add(participant_id)
+            arrival_event_ids.add(event_id)
+            normalized_arrivals.append({
+                "participant_id": participant_id,
+                "event_id": event_id,
+            })
+
+        if normalized_arrivals != sorted(
+            normalized_arrivals, key=lambda item: (item["participant_id"], item["event_id"])
+        ):
+            raise ConcurrencyScenarioError("nondeterministic_barrier_arrivals")
+        event_roles = arrival_event_ids | {release_event_id}
+        if release_event_id in arrival_event_ids or seen_event_roles & event_roles:
+            raise ConcurrencyScenarioError("reused_synchronization_event")
+        seen_event_roles.update(event_roles)
+        order = (release_event["sequence"], barrier_id)
+        if prior_order is not None and order <= prior_order:
+            raise ConcurrencyScenarioError("nondeterministic_barrier_order")
+        prior_order = order
+
+        unsigned = {
+            "sequence": expected_sequence,
+            "barrier_id": barrier_id,
+            "participant_ids": normalized_participants,
+            "quorum": quorum,
+            "arrivals": normalized_arrivals,
+            "release_event_id": release_event_id,
+        }
+        record_id = hashlib.sha256(_canonical(unsigned).encode("utf-8")).hexdigest()
+        normalized.append({"barrier_evidence_id": record_id, **unsigned})
+        participants_observed.update(normalized_participants)
+
+    report = {
+        "quorum_barrier_schema_version": SCHEMA_VERSION,
+        "synchronization_set_id": synchronization_set_id,
+        "scenario_id": concurrency_report["scenario_id"],
+        "concurrency_evidence_id": concurrency_report["evidence_id"],
+        "barriers": normalized,
+        "coverage": {
+            "recorded_barrier_count": len(normalized),
+            "recorded_arrival_count": sum(len(value["arrivals"]) for value in normalized),
+            "participant_count": len(participants_observed),
+            "quorum_and_release_order_verified": True,
+            "scope": "bounded_recorded_quorum_barrier_metadata_only",
+        },
+        "authority": QUORUM_BARRIER_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise ConcurrencyScenarioError("quorum_barrier_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report

@@ -5,10 +5,12 @@ import pytest
 from agentflight.concurrency_scenarios import (
     AUTHORITY,
     CAUSAL_HANDOFF_AUTHORITY,
+    QUORUM_BARRIER_AUTHORITY,
     RESOURCE_LINEAGE_AUTHORITY,
     ConcurrencyScenarioError,
     evaluate_recorded_causal_handoffs,
     evaluate_recorded_concurrent_scenario,
+    evaluate_recorded_quorum_barriers,
     evaluate_recorded_resource_state_lineage,
 )
 
@@ -361,4 +363,153 @@ def test_causal_handoff_report_contains_no_payload_or_external_target():
     source, handoffs = scenario_with_handoff()
     rendered = repr(evaluate_recorded_causal_handoffs(source, handoffs))
     for forbidden in ("url", "endpoint", "payload", "credential", "command", "path"):
+        assert forbidden not in rendered
+
+
+def scenario_with_quorum_barrier():
+    source = scenario()
+    initial = evaluate_recorded_concurrent_scenario(source)
+    source["events"].append({
+        "sequence": 3,
+        "logical_time": 11,
+        "participant_id": "agent-b",
+        "prior_participant_event_id": initial["events"][1]["event_id"],
+        "resource_key_sha256": H5,
+        "state_before_sha256": H0,
+        "state_after_sha256": H2,
+        "outcome_code": "completed",
+    })
+    before_release = evaluate_recorded_concurrent_scenario(source)
+    source["events"].append({
+        "sequence": 4,
+        "logical_time": 12,
+        "participant_id": "agent-a",
+        "prior_participant_event_id": before_release["events"][0]["event_id"],
+        "resource_key_sha256": H5,
+        "state_before_sha256": H2,
+        "state_after_sha256": H3,
+        "outcome_code": "completed",
+    })
+    report = evaluate_recorded_concurrent_scenario(source)
+    synchronization = {
+        "schema_version": 1,
+        "synchronization_set_id": "two-agent-quorum",
+        "synchronization_limit": 4,
+        "barriers": [{
+            "sequence": 1,
+            "barrier_id": "fixture-ready",
+            "participant_ids": ["agent-a", "agent-b"],
+            "quorum": 2,
+            "arrivals": [
+                {"participant_id": "agent-a", "event_id": report["events"][0]["event_id"]},
+                {"participant_id": "agent-b", "event_id": report["events"][2]["event_id"]},
+            ],
+            "release_event_id": report["events"][3]["event_id"],
+        }],
+    }
+    return source, synchronization
+
+
+def test_quorum_barrier_is_deterministic_and_exact_event_bound():
+    source, synchronization = scenario_with_quorum_barrier()
+    first = evaluate_recorded_quorum_barriers(source, synchronization)
+    second = evaluate_recorded_quorum_barriers(
+        copy.deepcopy(source), copy.deepcopy(synchronization)
+    )
+    concurrency = evaluate_recorded_concurrent_scenario(source)
+    assert first == second
+    assert first["concurrency_evidence_id"] == concurrency["evidence_id"]
+    assert first["barriers"][0]["release_event_id"] == concurrency["events"][3]["event_id"]
+    assert first["coverage"] == {
+        "recorded_barrier_count": 1,
+        "recorded_arrival_count": 2,
+        "participant_count": 2,
+        "quorum_and_release_order_verified": True,
+        "scope": "bounded_recorded_quorum_barrier_metadata_only",
+    }
+    assert first["authority"] == QUORUM_BARRIER_AUTHORITY
+
+
+def test_quorum_barrier_rejects_unsorted_or_unregistered_participants():
+    source, synchronization = scenario_with_quorum_barrier()
+    synchronization["barriers"][0]["participant_ids"].reverse()
+    with pytest.raises(
+        ConcurrencyScenarioError, match="nondeterministic_barrier_participants"
+    ):
+        evaluate_recorded_quorum_barriers(source, synchronization)
+
+    source, synchronization = scenario_with_quorum_barrier()
+    synchronization["barriers"][0]["participant_ids"][1] = "agent-c"
+    with pytest.raises(ConcurrencyScenarioError, match="unregistered_barrier_participant"):
+        evaluate_recorded_quorum_barriers(source, synchronization)
+
+
+def test_quorum_barrier_rejects_insufficient_or_boolean_quorum():
+    source, synchronization = scenario_with_quorum_barrier()
+    synchronization["barriers"][0]["arrivals"].pop()
+    with pytest.raises(ConcurrencyScenarioError, match="barrier_quorum_not_met"):
+        evaluate_recorded_quorum_barriers(source, synchronization)
+
+    source, synchronization = scenario_with_quorum_barrier()
+    synchronization["barriers"][0]["quorum"] = True
+    with pytest.raises(ConcurrencyScenarioError, match="invalid_barrier_quorum"):
+        evaluate_recorded_quorum_barriers(source, synchronization)
+
+
+def test_quorum_barrier_rejects_unknown_mismatched_or_duplicate_arrivals():
+    source, synchronization = scenario_with_quorum_barrier()
+    synchronization["barriers"][0]["arrivals"][0]["event_id"] = H5
+    with pytest.raises(ConcurrencyScenarioError, match="unknown_arrival_event"):
+        evaluate_recorded_quorum_barriers(source, synchronization)
+
+    source, synchronization = scenario_with_quorum_barrier()
+    events = evaluate_recorded_concurrent_scenario(source)["events"]
+    synchronization["barriers"][0]["arrivals"][0]["event_id"] = events[2]["event_id"]
+    with pytest.raises(ConcurrencyScenarioError, match="arrival_event_participant_mismatch"):
+        evaluate_recorded_quorum_barriers(source, synchronization)
+
+    source, synchronization = scenario_with_quorum_barrier()
+    synchronization["barriers"][0]["arrivals"][1] = copy.deepcopy(
+        synchronization["barriers"][0]["arrivals"][0]
+    )
+    with pytest.raises(ConcurrencyScenarioError, match="duplicate_barrier_arrival"):
+        evaluate_recorded_quorum_barriers(source, synchronization)
+
+
+def test_quorum_barrier_rejects_rejected_arrival_or_early_release():
+    source, synchronization = scenario_with_quorum_barrier()
+    events = evaluate_recorded_concurrent_scenario(source)["events"]
+    synchronization["barriers"][0]["arrivals"][1]["event_id"] = events[1]["event_id"]
+    with pytest.raises(ConcurrencyScenarioError, match="barrier_arrival_not_completed"):
+        evaluate_recorded_quorum_barriers(source, synchronization)
+
+    source, synchronization = scenario_with_quorum_barrier()
+    events = evaluate_recorded_concurrent_scenario(source)["events"]
+    synchronization["barriers"][0]["release_event_id"] = events[2]["event_id"]
+    with pytest.raises(ConcurrencyScenarioError, match="barrier_released_before_arrival"):
+        evaluate_recorded_quorum_barriers(source, synchronization)
+
+
+@pytest.mark.parametrize(
+    "change,code",
+    [
+        (lambda value: value.update(command="wait"), "invalid_synchronization_record_shape"),
+        (lambda value: value.update(synchronization_limit=True), "invalid_synchronization_limit"),
+        (lambda value: value.update(synchronization_limit=17), "invalid_synchronization_limit"),
+        (lambda value: value.update(barriers=[]), "invalid_synchronization_count"),
+    ],
+)
+def test_quorum_barrier_rejects_action_fields_boolean_and_bounds(change, code):
+    source, synchronization = scenario_with_quorum_barrier()
+    change(synchronization)
+    with pytest.raises(ConcurrencyScenarioError, match=code):
+        evaluate_recorded_quorum_barriers(source, synchronization)
+
+
+def test_quorum_barrier_report_contains_no_payload_or_external_target():
+    source, synchronization = scenario_with_quorum_barrier()
+    rendered = repr(evaluate_recorded_quorum_barriers(source, synchronization))
+    for forbidden in (
+        "url", "endpoint", "payload", "credential", "command", "path", "timeout"
+    ):
         assert forbidden not in rendered

@@ -354,3 +354,38 @@ retry, recovery, resource-cap or OS-isolation claim. This records change
 requires independent exact-head and merged-main CI before writer release or
 another AF-28 source slice. AF-28 remains in progress and roadmap acceptance
 remains 5/12.
+
+## AF-28 recorded cross-agent causal-handoff records receipt (2026-10-22)
+
+Canonical records PR #62 head
+`7a27da6db7e88c53db69cd670d8330d99d3708df` passed exact-head Python
+3.11.17 CI 39618071176 with 475 product tests, zero failures and zero product
+skips. Guarded merge `6328e9ba9871fd63d1b938a0b9fdb9d67e3b8916`
+passed exact merged-main CI 39821897925 with the same 475/0/0 result. The prior
+writer was explicitly released in PR #62 comment 6346891476.
+
+No executable scope was added by the records-only change. AF-28 remains in
+progress and roadmap acceptance remains 5/12.
+
+## AF-28 bounded recorded quorum-barrier source candidate (2026-10-22)
+
+This bounded source candidate validates caller-supplied quorum-barrier metadata
+against exact events in an already validated recorded concurrent scenario. It
+requires two to eight sorted registered participants, a non-Boolean quorum,
+unique completed arrivals meeting that quorum, and a completed release event
+strictly after every arrival. Barrier roles cannot reuse event identities, and
+normalized evidence is deterministic and content-addressed.
+
+Local Python 3.11.17 validation passed all 35 focused concurrency tests and all
+483 portable product tests. The unfiltered local suite has only the two
+established container-specific `/proc` descendant-observation failures.
+Infrastructure validation passed 17 checks with one documented Memory-only
+skip; dependency, import, compile and environment diagnostics passed.
+
+This is recorded-metadata verification only. It performs no waiting,
+scheduling, coordination, execution or transfer; starts no agents, threads,
+processes, tools, projects or commands; accesses no credentials, payloads,
+filesystem, durable state or external systems; and makes no resource-cap or
+OS-isolation claim. Source and canonical records still require independent
+exact-head and merged-main CI before writer release. AF-28 remains in progress
+and roadmap acceptance remains 5/12.
