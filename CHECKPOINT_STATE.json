@@ -2,15 +2,15 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-28 concurrent and multi-agent scenarios",
-  "checkpoint_status": "IN_PROGRESS_RESOURCE_STATE_LINEAGE_RECORDS_PENDING",
-  "active_branch": "work/af28-resource-state-lineage-records",
-  "verified_main_sha": "5b36cad43680532448a06e44d16f6945cbe5c85e",
-  "observed_feature_sha": "7c0c0b942229a9a88dd10f0ab189f0ae89c3d5dd",
+  "checkpoint_status": "IN_PROGRESS_CAUSAL_HANDOFFS_RECORDS_PENDING",
+  "active_branch": "work/af28-recorded-causal-handoffs-records",
+  "verified_main_sha": "ffe763a188e808d0557a678b6b7cec5d6475b3f0",
+  "observed_feature_sha": "59e964c2bf0654ca07a889af50191974444f53fb",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-28 foundation source/records PRs #57/#58 are merged, exact-main verified and writer-released. Resource-state-lineage source PR #59 is merged; exact PR-head and merged-main Python 3.11 CI each passed 466 product tests with zero product skips. Canonical records and explicit writer release remain pending.",
-  "pr_number": 59,
+  "branch_remote_status": "AF-28 foundation and resource-lineage source/records PRs #57-#60 are merged, exact-main verified and writer-released. Causal-handoff source PR #61 is merged; exact PR-head and merged-main Python 3.11 CI each passed 475 product tests with zero product skips. Canonical records and explicit writer release remain pending.",
+  "pr_number": 61,
   "pr_state": "merged",
   "ci_state": {
     "af27_resume_closure_source_pr_run": {
@@ -791,12 +791,40 @@
       "product_skips": 0,
       "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
       "diagnostics": "passed"
+    },
+    "af28_causal_handoffs_source_pr_run": {
+      "id": 39616728490,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39616728490",
+      "head_sha": "59e964c2bf0654ca07a889af50191974444f53fb",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 475,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
+    "af28_causal_handoffs_merged_main_run": {
+      "id": 39617458489,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39617458489",
+      "head_sha": "ffe763a188e808d0557a678b6b7cec5d6475b3f0",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 475,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
     }
   },
-  "local_test_status": "Python 3.11.17 focused validation passed 16 AF-28 tests; the portable suite passed 464 tests. Two container-specific /proc descendant observations failed locally, then exact clean-runner PR and merged-main CI each passed all 466 product tests with zero product skips. Infrastructure guards passed 17 with one baseline Memory-only skip; dependency and environment diagnostics passed.",
-  "merge_status": "AF28_RESOURCE_STATE_LINEAGE_RECORDS_PENDING",
+  "local_test_status": "Python 3.11.17 focused validation passed 25 AF-28 tests; the portable suite passed 473 tests. Two container-specific /proc descendant observations failed locally, then exact clean-runner PR and merged-main CI each passed all 475 product tests with zero product skips. Infrastructure guards passed 17 with one baseline Memory-only skip; dependency and environment diagnostics passed.",
+  "merge_status": "AF28_CAUSAL_HANDOFFS_RECORDS_PENDING",
   "known_blocker": null,
-  "next_action": "Publish this records-only resource-lineage receipt, require exact Python 3.11 PR and merged-main CI with zero product skips, then explicitly release the writer before another AF-28 source slice.",
+  "next_action": "Publish this records-only causal-handoff receipt, require exact Python 3.11 PR and merged-main CI with zero product skips, then explicitly release the writer before another AF-28 source slice.",
   "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
@@ -1065,13 +1093,13 @@
   "last_session_exit": {
     "BLOCKED_LAYER": null,
     "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "AF-28 resource-state-lineage source PR #59 merged and exact PR and merged-main Python 3.11 CI each passed 466 product tests with zero product skips. Canonical records are prepared.",
-    "REMOTE_SHA": "5b36cad43680532448a06e44d16f6945cbe5c85e",
-    "NEXT_ACTION": "Publish and verify the AF-28 resource-lineage records receipt, then explicitly release the writer."
+    "SAFE_WORK_COMPLETED": "AF-28 causal-handoff source PR #61 merged and exact PR and merged-main Python 3.11 CI each passed 475 product tests with zero product skips. Canonical records are prepared.",
+    "REMOTE_SHA": "ffe763a188e808d0557a678b6b7cec5d6475b3f0",
+    "NEXT_ACTION": "Publish and verify the AF-28 causal-handoff records receipt, then explicitly release the writer."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "5b36cad43680532448a06e44d16f6945cbe5c85e",
+  "observed_branch_sha": "ffe763a188e808d0557a678b6b7cec5d6475b3f0",
   "historical_session_exits": [
     {
       "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
@@ -1198,22 +1226,22 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF28-RESOURCE-LINEAGE-20261021",
+    "ownership_id": "AF28-CAUSAL-HANDOFFS-20261021",
     "status": "records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
     "source_writing_stopped": true,
-    "source_head": "7c0c0b942229a9a88dd10f0ab189f0ae89c3d5dd",
-    "source_tree": "bed10fc7d5490064a6b5f9a5382938710813c5d9",
-    "source_merge": "5b36cad43680532448a06e44d16f6945cbe5c85e",
-    "source_pr": 59,
-    "source_pr_ci": 39584777028,
-    "source_merged_main_ci": 39584936518,
+    "source_head": "59e964c2bf0654ca07a889af50191974444f53fb",
+    "source_tree": "c9828596e82c9ad8d585529ebff2a350c6527176",
+    "source_merge": "ffe763a188e808d0557a678b6b7cec5d6475b3f0",
+    "source_pr": 61,
+    "source_pr_ci": 39616728490,
+    "source_merged_main_ci": 39617458489,
     "release_requirement": "Exact AF-28 records PR and merged-main Python 3.11 CI green, followed by explicit writer release before another AF-28 source slice.",
     "no_real_execution": true,
     "no_private_data_or_secrets_committed": true
   },
-  "recorded_at_utc": "2026-10-21T10:31:00Z",
+  "recorded_at_utc": "2026-10-21T14:34:00Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
     "exit_code": 1,
@@ -1591,7 +1619,7 @@
     "release_receipt": "https://github.com/antonypaul98/-agentflight/pull/58#issuecomment-6307986245"
   },
   "af28_resource_state_lineage_source_receipt": {
-    "status": "SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
+    "status": "SOURCE_AND_RECORDS_MERGED_AND_VERIFIED",
     "source_sha": "7c0c0b942229a9a88dd10f0ab189f0ae89c3d5dd",
     "source_tree_sha": "bed10fc7d5490064a6b5f9a5382938710813c5d9",
     "source_pr": 59,
@@ -1604,5 +1632,32 @@
     "product_skips": 0,
     "scope": "Deterministic exact-evidence-bound recorded resource-state lineage with shared contender pre-state, one accepted event per round, cross-round state continuity and isolated-conflict rejection.",
     "limitations": "No threads, processes, agents, tools, projects, commands, external calls, credentials, payloads, filesystem or durable-state access, retry/recovery action, resource-cap claim, or OS isolation claim."
+  },
+  "af28_resource_state_lineage_records_receipt": {
+    "records_pr": 60,
+    "records_head_sha": "5e787b3fb00885b763842a7626b906ba66ae1f09",
+    "records_pr_ci_run": 39585237927,
+    "merged_main_sha": "de7cced8ebc578ab036c4c311fd713b12d246e8c",
+    "merged_main_ci_run": 39585366060,
+    "python": "3.11.17",
+    "product_tests": 466,
+    "product_failures": 0,
+    "product_skips": 0,
+    "release_receipt": "https://github.com/antonypaul98/-agentflight/pull/60#issuecomment-6313853305"
+  },
+  "af28_causal_handoffs_source_receipt": {
+    "status": "SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
+    "source_sha": "59e964c2bf0654ca07a889af50191974444f53fb",
+    "source_tree_sha": "c9828596e82c9ad8d585529ebff2a350c6527176",
+    "source_pr": 61,
+    "source_merge_sha": "ffe763a188e808d0557a678b6b7cec5d6475b3f0",
+    "source_pr_ci_run": 39616728490,
+    "source_merged_main_ci_run": 39617458489,
+    "python": "3.11.17",
+    "product_tests": 475,
+    "product_failures": 0,
+    "product_skips": 0,
+    "scope": "Deterministic bounded recorded cross-agent causal handoffs bound to exact validated event identities, registered distinct participants, completed endpoints and strict temporal order.",
+    "limitations": "No agents, threads, processes, tools, projects, commands, state access, message or artifact transfer, external calls, credentials, payloads, retries, recovery, resource-cap claim, or OS isolation claim."
   }
 }
