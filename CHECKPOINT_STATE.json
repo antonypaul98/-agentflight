@@ -1,17 +1,20 @@
+Warning: truncated output (original token count: 21365)
+Total output lines: 1929
+
 {
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-29 permission and prompt-injection testing",
-  "checkpoint_status": "IN_PROGRESS_INSTRUCTION_PROVENANCE_RECORDS_PENDING",
-  "active_branch": "work/af29-recorded-instruction-provenance-records",
-  "verified_main_sha": "d3f8723f2269d22e905533df8aaeb3187af92dea",
-  "observed_feature_sha": "18d326c096671988f34162d98f2ed48e0344f2e9",
+  "checkpoint_status": "IN_PROGRESS_UNTRUSTED_INFLUENCE_LINEAGE_SOURCE_CANDIDATE",
+  "active_branch": "work/af29-untrusted-influence-lineage",
+  "verified_main_sha": "257ee922395eff7bb01ebf6e114fe46880cb64b3",
+  "observed_feature_sha": null,
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-29 instruction-provenance source PR #70 is merged at exact main d3f8723f2269d22e905533df8aaeb3187af92dea. Exact Python 3.11 PR and merged-main CI each passed 516 product tests with zero product skips; canonical records and explicit writer release are pending.",
-  "pr_number": 70,
-  "pr_state": "merged",
+  "branch_remote_status": "No open PRs. AF-29 instruction-provenance records PR #71 merged as exact main 257ee922395eff7bb01ebf6e114fe46880cb64b3; exact Python 3.11 records and merged-main CI each passed 516 product tests with zero product skips, and writer AF29-INSTRUCTION-PROVENANCE-20261023 was released. The multi-hop influence source branch is local and unpublished.",
+  "pr_number": null,
+  "pr_state": "not_created",
   "ci_state": {
     "af27_resume_closure_source_pr_run": {
       "id": 39386039725,
@@ -933,10 +936,10 @@
       "diagnostics": "passed"
     }
   },
-  "local_test_status": "Python 3.12.14 local: 27 focused passed; broad 514 passed with two established container-specific /proc failures. Exact clean-runner PR and merged-main CI each passed all 516 product tests with zero product skips on Python 3.11.17; infrastructure executed 18 guards with one baseline Memory-only skip.",
-  "merge_status": "AF29_INSTRUCTION_PROVENANCE_RECORDS_PENDING",
+  "local_test_status": "Python 3.11.17 local source candidate: 40 focused passed; 527 portable product tests passed; unfiltered suite 527 passed with the two established container-specific /proc failures. Infrastructure executed 18 guards: 17 passed and one baseline Memory-only skip; diagnostics and compile checks passed. Exact PR and merged-main CI are pending.",
+  "merge_status": "AF29_UNTRUSTED_INFLUENCE_SOURCE_UNPUBLISHED",
   "known_blocker": null,
-  "next_action": "Publish this records-only AF-29 instruction-provenance receipt, require exact Python 3.11 PR and merged-main CI with zero product skips, then explicitly release the writer.",
+  "next_action": "Publish the bounded AF-29 multi-hop untrusted-influence source candidate, require exact Python 3.11 PR CI with zero product skips, guarded merge, exact merged-main CI, then create canonical records before writer release.",
   "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
@@ -1024,139 +1027,7 @@
       "final_product_tests": 385,
       "product_failures": 0,
       "product_skips": 0,
-      "limitations": "No network calls, DNS, sleeping, agent/tool/command execution, recovery action, live project access, credentials, payloads, filesystem/process/OS isolation, hardware or production authority."
-    },
-    {
-      "checkpoint": "AF-25 reproducible environments and fixtures",
-      "status": "MERGED_AND_VERIFIED",
-      "accepted_scope": "Bounded metadata-only versioned synthetic fixtures, deterministic recorded setup/cleanup, exact provenance and environment-drift evidence",
-      "source_prs": [
-        32,
-        34
-      ],
-      "records_prs": [
-        33,
-        35
-      ],
-      "final_source_sha": "2982797a4112681e3a53c82b46e80311e668d416",
-      "final_source_tree_sha": "ecc701860154181252a2a72dd215497ce2a134a9",
-      "accepted_main_sha": "6847a346c8249d6d4620613576ba92aef0b5201b",
-      "final_product_tests": 354,
-      "product_failures": 0,
-      "product_skips": 0,
-      "limitations": "No setup/cleanup command execution, live project access, host inspection, credentials, network, arbitrary agent/tool execution, filesystem/process/OS isolation, hardware or production authority."
-    },
-    {
-      "checkpoint": "AF-24 multi-step trajectory verification",
-      "status": "MERGED_AND_VERIFIED",
-      "accepted_scope": "Bounded metadata-only ordered state/evidence transitions, terminal partial-failure semantics and deterministic exact-evidence replay",
-      "source_prs": [
-        27,
-        29
-      ],
-      "records_prs": [
-        28,
-        30
-      ],
-      "final_source_sha": "f0dfda043dd222faac95f9d8501f54ecaa6e5d9d",
-      "final_source_tree_sha": "b3adc7d4d54d51623af4c72b28d0dd9f6f912c0d",
-      "accepted_main_sha": "0c074fd7356de1ed6313e1d6b7bb36c3573cda8c",
-      "final_product_tests": 322,
-      "product_failures": 0,
-      "product_skips": 0,
-      "limitations": "No live agent/tool execution, framework or project access, credentials, network, payload inspection, filesystem/process isolation, hardware or production authority."
-    },
-    {
-      "checkpoint": "AF-23 framework-neutral agent adapter",
-      "status": "MERGED_AND_VERIFIED",
-      "accepted_scope": "Bounded metadata-only recorded/mock trajectories, fail-closed authorized recorded-adapter registry, and versioned positive/adversarial conformance evidence",
-      "source_prs": [
-        20,
-        22,
-        24
-      ],
-      "records_prs": [
-        21,
-        23,
-        25
-      ],
-      "final_source_sha": "fa395214e5494737116ca6b47d9c2c1d775bb2bf",
-      "final_source_tree_sha": "caa5270ee2264d9c5a7169e017172ed4e88d0ce7",
-      "accepted_main_sha": "8684d979355ecc20a4958ba92534d6af59d4f614",
-      "final_product_tests": 305,
-      "product_failures": 0,
-      "product_skips": 0,
-      "limitations": "No live framework/project adapter, arbitrary agent/tool execution, credentials, network, filesystem/process isolation, resource enforcement, hardware or production authority."
-    },
-    {
-      "checkpoint": "AF-19 adversarial prompt injection",
-      "pr": 4,
-      "merge": "MERGED AND VERIFIED",
-      "verified_main_sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
-      "ci_state": {
-        "pr_run": {
-          "id": 37155199677,
-          "sha": "1abdedb7d7617f5fe3131ae7eff542ce7606257a",
-          "event": "pull_request",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        "merged_main_run": {
-          "id": 37155388507,
-          "sha": "57bde8a2e343e425c019fe73eacb232d40a5ccc0",
-          "event": "push",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        "completion_main_run": {
-          "id": 37156155589,
-          "sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
-          "event": "push",
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37156155589"
-        }
-      }
-    },
-    {
-      "current_checkpoint": "AF-20 bounded tool-call argument envelope",
-      "checkpoint_status": "MERGED_AND_VERIFIED",
-      "verified_main_sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5",
-      "observed_feature_sha": "18c01d2e06d2b68173e31fda5c4e4c837a4b45cc",
-      "pr_number": 5,
-      "pr_state": {
-        "number": 5,
-        "state": "merged",
-        "head_sha": "18c01d2e06d2b68173e31fda5c4e4c837a4b45cc",
-        "url": "https://github.com/antonypaul98/-agentflight/pull/5",
-        "merge_commit_sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5"
-      },
-      "ci_state": {
-        "pr_run": {
-          "id": 37859607596,
-          "sha": "18c01d2e06d2b68173e31fda5c4e4c837a4b45cc",
-          "event": "pull_request",
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37859607596"
-        },
-        "merged_main_run": {
-          "id": 37860434918,
-          "sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5",
-          "event": "push",
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37860434918"
-        },
-        "historical_failure": {
-          "id": 37702259363,
-          "sha": "e0c054948266e91a3c47c6007f7fbda203692ad3",
-          "event": "pull_request",
-          "status": "completed",
-          "conclusion": "failure",
-          "cause": "ci_diagnostics.py KeyError diagnostic_import; state schema restored in following commit"
-        },
-        "push_run": {
+      "limitations": "No network calls, DNS, sleeping,…1365 tokens truncated…"push_run": {
           "id": 37874203999,
           "sha": "a4673b136e5eddc7792036f77681c3556742d99b",
           "event": "push",
@@ -1230,13 +1101,13 @@
   "last_session_exit": {
     "BLOCKED_LAYER": null,
     "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "AF-29 permission-boundary source PR #68 and exact merged-main CI were verified: Python 3.11.17, 504 product tests, zero product skips, and infrastructure guards green. Canonical records prepared.",
-    "REMOTE_SHA": "5330726fd81bf1b6071fdd72b825e89ed47edd6b",
-    "NEXT_ACTION": "Require exact-head records PR CI, guarded merge, exact merged-main CI and explicit writer release."
+    "SAFE_WORK_COMPLETED": "Live main, open PRs, exact-main CI and prior writer release were refreshed. A bounded AF-29 multi-hop untrusted-influence lineage source candidate passed 40 focused, 527 portable product, infrastructure, diagnostics and compile checks on Python 3.11.17; publication and exact CI remain pending.",
+    "REMOTE_SHA": "257ee922395eff7bb01ebf6e114fe46880cb64b3",
+    "NEXT_ACTION": "Publish the reviewed source candidate and require exact-head Python 3.11 PR CI before guarded merge."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "5330726fd81bf1b6071fdd72b825e89ed47edd6b",
+  "observed_branch_sha": "257ee922395eff7bb01ebf6e114fe46880cb64b3",
   "historical_session_exits": [
     {
       "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
@@ -1298,6 +1169,8 @@
   "usage_allowance": "BUDGET UNKNOWN: actual remaining Astra/Work allowance is not exposed. Repair scope is bounded; capacity is reserved for exact-head CI, canonical records and writer handoff.",
   "changed_files": [
     "CHECKPOINT_STATE.json",
+    "src/agentflight/security_probes.py",
+    "tests/test_security_probes.py",
     "docs/AF29_CHECKPOINT.md",
     "docs/WORKFLOW_RELIABILITY.md"
   ],
@@ -1363,26 +1236,26 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF29-INSTRUCTION-PROVENANCE-20261023",
-    "status": "records_pending",
+    "ownership_id": "AF29-UNTRUSTED-INFLUENCE-LINEAGE-20261023",
+    "status": "source_candidate_local",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
-    "source_writing_stopped": true,
-    "base_main_sha": "2d56b167427ce0e451793bca2d73ba4e67fc383e",
-    "branch": "work/af29-recorded-instruction-provenance",
-    "source_head": "18d326c096671988f34162d98f2ed48e0344f2e9",
-    "source_tree": "c6bd70346fdf515bbbf29c781a7c6db381a4bb95",
-    "source_merge": "d3f8723f2269d22e905533df8aaeb3187af92dea",
-    "source_pr": 70,
-    "source_pr_ci": 39939002114,
-    "source_merged_main_ci": 39939139774,
-    "prior_release_receipt": "https://github.com/antonypaul98/-agentflight/pull/69#issuecomment-6361817131",
-    "release_requirement": "Exact AF-29 instruction-provenance source and records PR/merged-main Python 3.11 CI green, followed by explicit writer release.",
+    "source_writing_stopped": false,
+    "base_main_sha": "257ee922395eff7bb01ebf6e114fe46880cb64b3",
+    "branch": "work/af29-untrusted-influence-lineage",
+    "source_head": null,
+    "source_tree": null,
+    "source_merge": null,
+    "source_pr": null,
+    "source_pr_ci": null,
+    "source_merged_main_ci": null,
+    "prior_release_receipt": "https://github.com/antonypaul98/-agentflight/pull/71#issuecomment-6362877043",
+    "release_requirement": "Exact AF-29 multi-hop influence source and records PR/merged-main Python 3.11 CI green, followed by explicit writer release.",
     "no_real_execution": true,
     "no_private_data_or_secrets_committed": true,
-    "recorded_at": "2026-10-23T10:28:00Z"
+    "recorded_at": "2026-10-23T15:22:52Z"
   },
-  "recorded_at_utc": "2026-10-23T10:28:00Z",
+  "recorded_at_utc": "2026-10-23T15:22:52Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
     "exit_code": 1,

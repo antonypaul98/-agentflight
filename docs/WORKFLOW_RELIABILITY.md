@@ -510,3 +510,20 @@ merged-main CI remain required before a source receipt or writer release.
   performs no project inspection, live execution, credential/payload access,
   external action, resource enforcement or OS-sandbox validation. AF-29 remains
   in progress at 6/12 accepted.
+
+## AF-29 recorded multi-hop influence-lineage source candidate (2026-10-23)
+
+This bounded candidate recomputes exact permission and instruction-provenance
+evidence for two to sixteen ordered hops. It binds every hop input to its
+recorded provenance, requires hash continuity between adjacent hops, and
+propagates recorded untrusted-content or injection influence through every
+downstream hop. Affected lineages require rejection; evidence substitution,
+discontinuity, duplicate hop identities, malformed metadata and action-bearing
+fields fail closed.
+
+This is synthetic recorded-metadata verification only. It reads no raw prompt,
+instruction, payload or credential, performs no injection detection, grants no
+permission, and invokes no project, agent, tool or command. It accesses no
+filesystem, network or external system and makes no arbitrary-execution,
+resource-enforcement or OS-isolation claim. Exact Python 3.11 PR and merged-main
+CI remain required before a source receipt, canonical records or writer release.
