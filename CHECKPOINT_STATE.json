@@ -2,15 +2,15 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-29 permission and prompt-injection testing",
-  "checkpoint_status": "AF29_PERMISSION_BOUNDARY_SOURCE_PENDING",
-  "active_branch": "work/af29-permission-injection-foundation",
-  "verified_main_sha": "f4b89eb8024ffdbac18e7dc6352b4c6235aeac0d",
-  "observed_feature_sha": "f4b89eb8024ffdbac18e7dc6352b4c6235aeac0d",
+  "checkpoint_status": "IN_PROGRESS_PERMISSION_BOUNDARY_RECORDS_PENDING",
+  "active_branch": "work/af29-permission-injection-records",
+  "verified_main_sha": "5330726fd81bf1b6071fdd72b825e89ed47edd6b",
+  "observed_feature_sha": "01d73281f39afb7338137f3df10d6d29a8cf8b59",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-28 closure PR #67 is merged and verified at f4b89eb8024ffdbac18e7dc6352b4c6235aeac0d; exact Python 3.11 PR and merged-main CI each passed 489 product tests with zero product skips, and the writer was explicitly released. AF-29 first bounded recorded permission-boundary source is local pending publication.",
-  "pr_number": null,
+  "branch_remote_status": "AF-29 permission-boundary source PR #68 is merged at exact main 5330726fd81bf1b6071fdd72b825e89ed47edd6b. Exact Python 3.11 PR and merged-main CI each passed 504 product tests with zero product skips; canonical records and explicit writer release are pending.",
+  "pr_number": 68,
   "pr_state": "merged",
   "ci_state": {
     "af27_resume_closure_source_pr_run": {
@@ -875,12 +875,40 @@
       "product_skips": 0,
       "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
       "diagnostics": "passed"
+    },
+    "af29_permission_boundary_source_pr_run": {
+      "id": 39900570012,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39900570012",
+      "head_sha": "01d73281f39afb7338137f3df10d6d29a8cf8b59",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 504,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
+    "af29_permission_boundary_merged_main_run": {
+      "id": 39900701428,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39900701428",
+      "head_sha": "5330726fd81bf1b6071fdd72b825e89ed47edd6b",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 504,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
     }
   },
-  "local_test_status": "Python 3.11.17: AF-29 focused security-probe suite passed 15 tests. The full local suite passed 502 tests and retained the two established container-specific /proc descendant-observation failures; infrastructure guards passed 17 with one documented Memory-only skip. Exact clean-runner PR CI remains required.",
-  "merge_status": "AF29_PERMISSION_BOUNDARY_SOURCE_PENDING",
+  "local_test_status": "Python 3.11.17: AF-29 focused security-probe suite passed 15 tests. The broad local suite passed 502 tests and retained two established container-specific /proc descendant-observation failures; exact clean-runner PR and merged-main CI each passed all 504 product tests with zero product skips. Infrastructure guards passed 17 with one documented Memory-only skip; JSON, compile, commit-message and whitespace checks passed.",
+  "merge_status": "AF29_PERMISSION_BOUNDARY_RECORDS_PENDING",
   "known_blocker": null,
-  "next_action": "Publish the bounded AF-29 recorded permission-boundary source, require exact Python 3.11 PR and merged-main CI with zero product skips, then prepare canonical records before releasing the writer.",
+  "next_action": "Publish this records-only AF-29 permission-boundary receipt, require exact Python 3.11 PR and merged-main CI with zero product skips, then explicitly release the writer.",
   "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
@@ -901,8 +929,20 @@
       "checkpoint": "AF-28 concurrent and multi-agent scenarios",
       "status": "MERGED_AND_VERIFIED",
       "accepted_scope": "Bounded deterministic recorded metadata for concurrent scheduling, conflict/state lineage, tenant separation, causal handoffs, quorum barriers and capacity-budget evidence",
-      "source_prs": [57, 59, 61, 63, 65],
-      "records_prs": [58, 60, 62, 64, 66],
+      "source_prs": [
+        57,
+        59,
+        61,
+        63,
+        65
+      ],
+      "records_prs": [
+        58,
+        60,
+        62,
+        64,
+        66
+      ],
       "accepted_main_sha": "4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03",
       "final_product_tests": 489,
       "product_failures": 0,
@@ -1162,13 +1202,13 @@
   "last_session_exit": {
     "BLOCKED_LAYER": null,
     "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "AF-28 closure PR #67 and exact merged-main CI were verified and its writer release confirmed. A bounded AF-29 recorded permission-boundary source passed 15 focused synthetic tests and infrastructure guards locally.",
-    "REMOTE_SHA": "f4b89eb8024ffdbac18e7dc6352b4c6235aeac0d",
-    "NEXT_ACTION": "Publish the AF-29 source branch and require exact-head Python 3.11 CI."
+    "SAFE_WORK_COMPLETED": "AF-29 permission-boundary source PR #68 and exact merged-main CI were verified: Python 3.11.17, 504 product tests, zero product skips, and infrastructure guards green. Canonical records prepared.",
+    "REMOTE_SHA": "5330726fd81bf1b6071fdd72b825e89ed47edd6b",
+    "NEXT_ACTION": "Require exact-head records PR CI, guarded merge, exact merged-main CI and explicit writer release."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "f4b89eb8024ffdbac18e7dc6352b4c6235aeac0d",
+  "observed_branch_sha": "5330726fd81bf1b6071fdd72b825e89ed47edd6b",
   "historical_session_exits": [
     {
       "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
@@ -1229,9 +1269,9 @@
   },
   "usage_allowance": "BUDGET UNKNOWN: actual remaining Astra/Work allowance is not exposed. Repair scope is bounded; capacity is reserved for exact-head CI, canonical records and writer handoff.",
   "changed_files": [
-    "docs/AF28_CHECKPOINT.md",
-    "src/agentflight/concurrency_scenarios.py",
-    "tests/test_concurrency_scenarios.py"
+    "CHECKPOINT_STATE.json",
+    "docs/AF29_CHECKPOINT.md",
+    "docs/WORKFLOW_RELIABILITY.md"
   ],
   "shell_preflight_receipt": {
     "BLOCKED_LAYER": "external",
@@ -1241,7 +1281,7 @@
     "NEXT_ACTION": "Publish the reviewed implementation tree, create or reuse the AF-21 PR, and verify exact-head CI before merge and exact merged-main verification."
   },
   "accepted_at": "2026-10-09T03:49:11.530699+00:00",
-  "source_tree_sha": "9b4135caafe4a752c1b4d4af57d76ed77fa32a8c",
+  "source_tree_sha": "7f6ba51744545bfc10902e4f907439afa73b0545",
   "preserved_local_commits": {
     "scope": "f02efb5303e509f18247dffd6788c884bfb9c92e",
     "implementation": "fa41cd86f56a292d9bd348c9c23432e1f7a65a3f",
@@ -1296,23 +1336,25 @@
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
     "ownership_id": "AF29-PERMISSION-BOUNDARY-20261023",
-    "status": "source_in_progress",
+    "status": "records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
-    "source_writing_stopped": false,
+    "source_writing_stopped": true,
     "base_main_sha": "f4b89eb8024ffdbac18e7dc6352b4c6235aeac0d",
-    "branch": "work/af29-permission-injection-foundation",
-    "source_head": null,
-    "source_merge": null,
-    "source_pr": null,
-    "source_pr_ci": null,
-    "source_merged_main_ci": null,
+    "branch": "work/af29-permission-injection-records",
+    "source_head": "01d73281f39afb7338137f3df10d6d29a8cf8b59",
+    "source_tree": "7f6ba51744545bfc10902e4f907439afa73b0545",
+    "source_merge": "5330726fd81bf1b6071fdd72b825e89ed47edd6b",
+    "source_pr": 68,
+    "source_pr_ci": 39900570012,
+    "source_merged_main_ci": 39900701428,
     "prior_release_receipt": "https://github.com/antonypaul98/-agentflight/pull/67#issuecomment-6356709988",
-    "release_requirement": "Exact AF-29 source and records PR plus merged-main Python 3.11 CI green, followed by explicit writer release.",
+    "release_requirement": "Exact AF-29 records PR and merged-main Python 3.11 CI green, followed by explicit writer release.",
     "no_real_execution": true,
-    "no_private_data_or_secrets_committed": true
+    "no_private_data_or_secrets_committed": true,
+    "recorded_at": "2026-10-23T09:25:00Z"
   },
-  "recorded_at_utc": "2026-10-23T04:36:00Z",
+  "recorded_at_utc": "2026-10-23T09:25:00Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
     "exit_code": 1,
@@ -1790,8 +1832,20 @@
     "accepted_checkpoints": 6,
     "total_checkpoints": 12,
     "reviewed_main_sha": "4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03",
-    "source_prs": [57, 59, 61, 63, 65],
-    "records_prs": [58, 60, 62, 64, 66],
+    "source_prs": [
+      57,
+      59,
+      61,
+      63,
+      65
+    ],
+    "records_prs": [
+      58,
+      60,
+      62,
+      64,
+      66
+    ],
     "latest_records_pr_head": "aef8dd2769d1120d69c75d9678b1818d729e3239",
     "latest_records_merge": "4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03",
     "latest_records_pr_ci": 39872276338,
@@ -1807,5 +1861,22 @@
     "closure_pr_ci": 39895297515,
     "closure_merged_main_ci": 39895403697,
     "writer_release": "https://github.com/antonypaul98/-agentflight/pull/67#issuecomment-6356709988"
+  },
+  "af29_permission_boundary_source_receipt": {
+    "status": "SOURCE_MERGED_VERIFIED_RECORDS_PENDING",
+    "source_sha": "01d73281f39afb7338137f3df10d6d29a8cf8b59",
+    "source_tree_sha": "7f6ba51744545bfc10902e4f907439afa73b0545",
+    "source_pr": 68,
+    "source_merge_sha": "5330726fd81bf1b6071fdd72b825e89ed47edd6b",
+    "source_pr_ci_run": 39900570012,
+    "source_merged_main_ci_run": 39900701428,
+    "python": "3.11.17",
+    "product_tests": 504,
+    "product_failures": 0,
+    "product_skips": 0,
+    "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+    "local_focused_tests": 15,
+    "scope": "Deterministic fail-closed verification of caller-supplied recorded tenant, scope, trust-boundary and injection decisions using hashed identities and bounded scope identifiers.",
+    "limitations": "Synthetic recorded metadata only; no raw prompts, payloads, credentials, project inspection, permission grant, tool/agent/command execution, filesystem/network access, external action, resource boundary, or OS-sandbox claim."
   }
 }
