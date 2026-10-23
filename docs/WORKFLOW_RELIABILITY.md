@@ -511,7 +511,7 @@ merged-main CI remain required before a source receipt or writer release.
   external action, resource enforcement or OS-sandbox validation. AF-29 remains
   in progress at 6/12 accepted.
 
-## AF-29 recorded multi-hop influence-lineage source candidate (2026-10-23)
+## AF-29 recorded multi-hop influence-lineage source receipt (2026-10-23)
 
 This bounded candidate recomputes exact permission and instruction-provenance
 evidence for two to sixteen ordered hops. It binds every hop input to its
@@ -525,5 +525,13 @@ This is synthetic recorded-metadata verification only. It reads no raw prompt,
 instruction, payload or credential, performs no injection detection, grants no
 permission, and invokes no project, agent, tool or command. It accesses no
 filesystem, network or external system and makes no arbitrary-execution,
-resource-enforcement or OS-isolation claim. Exact Python 3.11 PR and merged-main
-CI remain required before a source receipt, canonical records or writer release.
+resource-enforcement or OS-isolation claim.
+
+Source PR #72 head `17a4481e04e1a3eab5e35144d2f2877159acae89`, tree
+`307efa7409053d0d426dde7701204ca17870cae5`, passed exact-head run
+39978381724 on Python 3.11.17 with 529 product tests and zero product skips.
+Guarded merge produced main `31a83bed71303cbf1dc02b8f5484e7b943f27dab`;
+exact push run 40002769894 passed the same 529-test suite with zero product
+skips. Both runs executed 18 infrastructure guards: 17 passed and one baseline
+Memory-only case was skipped. Canonical records require independent exact PR
+and merged-main CI before writer release. AF-29 remains in progress at 6/12.
