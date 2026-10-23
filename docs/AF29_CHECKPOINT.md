@@ -2,7 +2,7 @@
 
 Status: **IN PROGRESS**. The first bounded slice verifies caller-supplied,
 recorded authorization decisions against a deterministic fail-closed oracle.
-The next bounded candidate propagates recorded untrusted influence across an
+The latest bounded source slice propagates recorded untrusted influence across an
 exact, content-addressed multi-hop lineage over recomputed authorization and
 instruction-provenance evidence.
 
@@ -14,8 +14,8 @@ bounded scope identifiers. Raw prompts, payloads and credentials are excluded.
 This is synthetic recorded-metadata verification, not an authorization system.
 It does not read prompts, inspect projects, invoke tools, execute agents or
 commands, access filesystems or networks, grant permissions, or establish an OS
-sandbox. Exact Python 3.11 PR and merged-main CI is required before recording
-or accepting this slice. AF-29 remains in progress at 6/12.
+sandbox. Its source PR and merged-main CI are verified; canonical records and
+their independent CI remain required. AF-29 remains in progress at 6/12.
 
 ## Recorded multi-hop untrusted-influence lineage candidate
 
@@ -32,8 +32,24 @@ The verifier reads no instruction or prompt text and does not detect injection.
 It processes bounded caller-supplied hashes, identifiers, booleans and
 dispositions only. It grants no permission, executes nothing, and accesses no
 project, payload, credential, filesystem, network or external system. Exact
-Python 3.11 PR and merged-main CI are required before a source receipt or
-canonical records can be claimed.
+Python 3.11 source PR and merged-main CI are complete. Canonical records and
+their independent PR/merged-main CI remain required before writer release.
+
+## Recorded multi-hop untrusted-influence lineage source receipt
+
+PR #72 head `17a4481e04e1a3eab5e35144d2f2877159acae89`, tree
+`307efa7409053d0d426dde7701204ca17870cae5`, passed exact-head run
+39978381724 on Python 3.11.17 with 529 product tests and zero product skips.
+Guarded merge produced main `31a83bed71303cbf1dc02b8f5484e7b943f27dab`;
+exact push run 40002769894 passed the same 529-test suite with zero product
+skips. Both runs executed 18 infrastructure guards: 17 passed and one baseline
+Memory-only case was skipped.
+
+The slice remains synthetic recorded-metadata verification only. It reads no
+raw prompt, instruction, payload or credential, detects no injection, grants no
+permission, and performs no project inspection, tool/agent/command execution,
+filesystem/network access, external action, resource enforcement or OS-sandbox
+validation. AF-29 remains in progress and roadmap acceptance remains 6/12.
 
 ## Recorded instruction-provenance candidate
 
