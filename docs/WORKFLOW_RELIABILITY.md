@@ -450,3 +450,18 @@ coordination, execution, allocation or enforcement; access state, payloads,
 credentials, filesystems, networks or external systems; or claim runtime
 resource limits or OS isolation. Final acceptance requires this closure change
 to pass exact PR-head and merged-main CI before its writer is released.
+
+## AF-29 recorded permission-boundary source candidate (2026-10-23)
+
+This bounded candidate compares caller-supplied recorded authorization decisions
+with a deterministic fail-closed oracle. Cross-tenant authorization,
+untrusted-content control, caller-recorded injection findings and requests beyond
+exact granted scopes require denial. Evidence contains hashes and bounded scope
+identifiers only; it excludes raw prompts, payloads and credentials.
+
+This is synthetic recorded-metadata verification, not an authorization system.
+It reads no project or prompt, invokes no tool, agent or command, accesses no
+filesystem, network, credential or external system, grants no permission, and
+makes no arbitrary-execution or OS-isolation claim. Exact Python 3.11 PR and
+merged-main CI are required before canonical records or writer release. AF-29
+remains in progress and roadmap acceptance remains 6/12.
