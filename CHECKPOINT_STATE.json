@@ -1,16 +1,16 @@
 {
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
-  "current_checkpoint": "AF-28 concurrent and multi-agent scenarios",
-  "checkpoint_status": "IN_PROGRESS_RECORDED_CAPACITY_BUDGET_RECORDS_PENDING",
+  "current_checkpoint": "AF-29 permission and prompt-injection testing",
+  "checkpoint_status": "AF28_ACCEPTANCE_CLOSURE_PENDING",
   "active_branch": "work/af28-recorded-capacity-budget-records",
-  "verified_main_sha": "31682f750a40055a45be49513d1d4b82df49454f",
+  "verified_main_sha": "4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03",
   "observed_feature_sha": "86cb28ee9090bfeb4f2d7eeb64575e3fde306df0",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-28 capacity-budget source PR #65 is merged at 31682f750a40055a45be49513d1d4b82df49454f after exact PR-head and merged-main Python 3.11 CI each passed 489 product tests with zero product skips. Canonical records and explicit writer release remain pending.",
-  "pr_number": 65,
+  "branch_remote_status": "AF-28 source and records PRs #57-#66 are merged and verified. Capacity-budget records PR #66 merged at 4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03; exact Python 3.11 PR and merged-main CI each passed 489 product tests with zero product skips, and the writer was explicitly released. Final bounded-scope acceptance closure is pending.",
+  "pr_number": null,
   "pr_state": "merged",
   "ci_state": {
     "af27_resume_closure_source_pr_run": {
@@ -878,14 +878,14 @@
     }
   },
   "local_test_status": "Python 3.11.17 focused AF-28 concurrency validation passed 39 tests and the portable product suite passed 487 tests. The two established container-specific /proc observations were covered by exact clean-runner PR and merged-main CI, each passing all 489 product tests with zero product skips. Infrastructure guards passed 17 with one documented Memory-only skip; dependency, compile and whitespace checks passed.",
-  "merge_status": "AF28_RECORDED_CAPACITY_BUDGET_RECORDS_PENDING",
+  "merge_status": "AF28_FINAL_ACCEPTANCE_PENDING",
   "known_blocker": null,
-  "next_action": "Publish this records-only capacity-budget receipt, require exact Python 3.11 PR and merged-main CI with zero product skips, then explicitly release the writer.",
+  "next_action": "Publish the AF-28 bounded-scope acceptance closure, require exact Python 3.11 PR and merged-main CI with zero product skips, then explicitly release the writer before starting AF-29.",
   "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
     "checkpoint_range": "AF-23..AF-34",
-    "accepted": 5,
+    "accepted": 6,
     "total": 12,
     "roadmap": "docs/COMPETITIVE_ROADMAP.md",
     "arbitrary_execution_authorized": false,
@@ -893,9 +893,22 @@
     "af24_scope": "MERGED_AND_VERIFIED metadata-only multi-step state/evidence continuity, terminal partial-failure semantics and exact-evidence deterministic replay",
     "af25_scope": "MERGED_AND_VERIFIED metadata-only versioned synthetic fixtures, deterministic recorded setup/cleanup, provenance and environment-drift evidence",
     "af26_scope": "MERGED_AND_VERIFIED metadata-only synthetic network, timeout, rate-limit and API faults with exact bindings and bounded deterministic retry/outage evidence",
-    "af27_scope": "MERGED_AND_VERIFIED metadata-only idempotency, crash/recovery evidence, bounded retry budgets, exact state checkpoints, resume guards, ordered transition lineage and terminal closure"
+    "af27_scope": "MERGED_AND_VERIFIED metadata-only idempotency, crash/recovery evidence, bounded retry budgets, exact state checkpoints, resume guards, ordered transition lineage and terminal closure",
+    "af28_scope": "MERGED_AND_VERIFIED metadata-only deterministic scheduling, conflict/state evidence, tenant separation, causal handoffs, quorum barriers and recorded capacity budgets"
   },
   "completed_checkpoints": [
+    {
+      "checkpoint": "AF-28 concurrent and multi-agent scenarios",
+      "status": "MERGED_AND_VERIFIED",
+      "accepted_scope": "Bounded deterministic recorded metadata for concurrent scheduling, conflict/state lineage, tenant separation, causal handoffs, quorum barriers and capacity-budget evidence",
+      "source_prs": [57, 59, 61, 63, 65],
+      "records_prs": [58, 60, 62, 64, 66],
+      "accepted_main_sha": "4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03",
+      "final_product_tests": 489,
+      "product_failures": 0,
+      "product_skips": 0,
+      "limitations": "Recorded metadata only: no agents, threads, processes, tools, commands, waiting, scheduling, coordination, execution, allocation, enforcement, state/payload access, external calls, credentials, filesystem/network access, runtime resource-cap guarantee, or OS-isolation claim."
+    },
     {
       "checkpoint": "AF-27 recovery/retry/state consistency",
       "status": "MERGED_AND_VERIFIED",
@@ -1282,21 +1295,20 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF28-RECORDED-CAPACITY-BUDGET-20261022",
-    "status": "records_pending",
+    "ownership_id": "AF28-FINAL-ACCEPTANCE-20261022",
+    "status": "closure_records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
     "source_writing_stopped": true,
     "base_main_sha": "c992e2580d9e8e9433a5373ee46e2635d928c8da",
     "branch": "work/af28-recorded-capacity-budget-records",
-    "source_head": "86cb28ee9090bfeb4f2d7eeb64575e3fde306df0",
-    "source_tree": "e010c7385a1586780d84b71eaf669b2f5ee71760",
-    "source_merge": "31682f750a40055a45be49513d1d4b82df49454f",
-    "source_pr": 65,
-    "source_pr_ci": 39871905292,
-    "source_merged_main_ci": 39872066120,
-    "prior_release_receipt": "https://github.com/antonypaul98/-agentflight/pull/64#issuecomment-6352675376",
-    "release_requirement": "Exact AF-28 source PR and merged-main Python 3.11 CI green, a separately verified canonical records PR and merged-main CI, followed by explicit writer release.",
+    "source_head": "aef8dd2769d1120d69c75d9678b1818d729e3239",
+    "source_merge": "4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03",
+    "source_pr": 66,
+    "source_pr_ci": 39872276338,
+    "source_merged_main_ci": 39872366099,
+    "prior_release_receipt": "https://github.com/antonypaul98/-agentflight/pull/66#issuecomment-6353647830",
+    "release_requirement": "Exact AF-28 acceptance-closure PR and merged-main Python 3.11 CI green, followed by explicit writer release before AF-29 source work.",
     "no_real_execution": true,
     "no_private_data_or_secrets_committed": true
   },
@@ -1747,7 +1759,7 @@
     "limitations": "No waiting, scheduling, coordination, execution, transfer, agents, threads, processes, tools, projects, commands, external calls, credentials, payloads, filesystem or durable-state access, resource-cap claim, or OS isolation claim."
   },
   "af28_capacity_budget_source_receipt": {
-    "status": "SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
+    "status": "SOURCE_AND_RECORDS_MERGED_VERIFIED_WRITER_RELEASED",
     "source_sha": "86cb28ee9090bfeb4f2d7eeb64575e3fde306df0",
     "source_tree_sha": "e010c7385a1586780d84b71eaf669b2f5ee71760",
     "source_pr": 65,
@@ -1760,5 +1772,34 @@
     "product_skips": 0,
     "scope": "Deterministic exact-evidence-bound recorded participant-event and distinct-resource counts checked against caller-declared caps.",
     "limitations": "No execution, scheduling, waiting, allocation, enforcement, agents, threads, processes, tools, commands, external calls, credentials, payloads, filesystem, network, durable-state access, runtime resource-cap claim, or OS isolation claim."
+  },
+  "af28_capacity_budget_records_receipt": {
+    "records_pr": 66,
+    "records_head_sha": "aef8dd2769d1120d69c75d9678b1818d729e3239",
+    "records_pr_ci_run": 39872276338,
+    "merged_main_sha": "4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03",
+    "merged_main_ci_run": 39872366099,
+    "python": "3.11.17",
+    "product_tests": 489,
+    "product_failures": 0,
+    "product_skips": 0,
+    "release_receipt": "https://github.com/antonypaul98/-agentflight/pull/66#issuecomment-6353647830"
+  },
+  "af28_acceptance_closure": {
+    "status": "PENDING_EXACT_CLOSURE_CI",
+    "accepted_checkpoints": 6,
+    "total_checkpoints": 12,
+    "reviewed_main_sha": "4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03",
+    "source_prs": [57, 59, 61, 63, 65],
+    "records_prs": [58, 60, 62, 64, 66],
+    "latest_records_pr_head": "aef8dd2769d1120d69c75d9678b1818d729e3239",
+    "latest_records_merge": "4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03",
+    "latest_records_pr_ci": 39872276338,
+    "latest_records_merged_main_ci": 39872366099,
+    "latest_product_tests": 489,
+    "product_failures": 0,
+    "product_skips": 0,
+    "scope": "Deterministic recorded-metadata verification for bounded concurrent scheduling, conflict/state lineage, tenant separation, causal handoffs, quorum barriers and capacity budgets.",
+    "limitations": "No real agents, threads, processes, tools, commands, waiting, scheduling, coordination, execution, allocation, enforcement, state/payload access, external calls, credentials, filesystem/network access, runtime resource-cap guarantee, or OS-isolation claim."
   }
 }

@@ -432,3 +432,21 @@ keys to exact concurrent-scenario evidence and caller-declared caps. It performs
 no runtime allocation or enforcement and grants no execution or isolation
 authority. This records-only change requires its own exact PR and merged-main
 CI before writer release.
+
+## AF-28 bounded-scope acceptance closure candidate (2026-10-22)
+
+AF-28 acceptance is supported by five independently verified source/records
+pairs: deterministic recorded scheduling and conflict rejection (#57/#58),
+resource-state lineage and tenant isolation (#59/#60), causal handoffs (#61/#62),
+quorum barriers (#63/#64), and capacity-budget evidence (#65/#66). The latest
+records head `aef8dd2769d1120d69c75d9678b1818d729e3239` and resulting main
+`4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03` passed exact Python 3.11.17
+CI runs 39872276338 and 39872366099 with 489 product tests and zero product
+skips. The writer release is recorded on PR #66.
+
+This acceptance is strictly metadata-only. It does not start real agents,
+threads, processes, tools or commands; perform waiting, scheduling,
+coordination, execution, allocation or enforcement; access state, payloads,
+credentials, filesystems, networks or external systems; or claim runtime
+resource limits or OS isolation. Final acceptance requires this closure change
+to pass exact PR-head and merged-main CI before its writer is released.

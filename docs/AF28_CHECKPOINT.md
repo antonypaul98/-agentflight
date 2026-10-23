@@ -1,7 +1,7 @@
 # AF-28 — concurrent and multi-agent scenarios
 
-Status: **IN PROGRESS**. The first bounded slice validates deterministic,
-caller-supplied concurrent-scenario metadata.
+Status: **MERGED AND VERIFIED** for the bounded recorded-only scope. The
+checkpoint validates deterministic caller-supplied concurrent-scenario metadata.
 
 `evaluate_recorded_concurrent_scenario` accepts two to eight registered
 participants and one to sixty-four recorded events. It verifies one hashed
@@ -39,8 +39,14 @@ after every recorded arrival. Barrier and arrival ordering is deterministic,
 event roles cannot be reused, and all evidence is content-addressed. The verifier
 does not wait, schedule, coordinate, execute, transfer data, or access state.
 
+The fifth bounded slice binds per-participant event counts and distinct recorded
+resource hashes to exact scenario evidence and caller-declared caps. Those caps
+are verified metadata, not runtime allocation, enforcement, or isolation.
+
 ## Acceptance gate
 
 The source must pass exact Python 3.11 PR-head CI with zero product skips, a
 guarded merge, and exact merged-main CI. A separate canonical records receipt
-and explicit writer release are required before another AF-28 source slice.
+and explicit writer release were required for every source slice. PRs #57-#66
+and their exact CI receipts satisfy that gate; the final closure PR independently
+re-runs the full suite before AF-29 begins.
