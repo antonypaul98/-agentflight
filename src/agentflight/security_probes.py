@@ -11,11 +11,16 @@ from collections.abc import Mapping
 
 SCHEMA_VERSION = 1
 INSTRUCTION_PROVENANCE_SCHEMA_VERSION = 1
+INFLUENCE_LINEAGE_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
+MAX_INFLUENCE_HOPS = 16
 MAX_REPORT_BYTES = 8_192
 AUTHORITY = "recorded_security_probe_evidence_only_no_authorization_or_execution"
 INSTRUCTION_PROVENANCE_AUTHORITY = (
     "recorded_instruction_provenance_evidence_only_no_authorization_or_execution"
+)
+INFLUENCE_LINEAGE_AUTHORITY = (
+    "recorded_untrusted_influence_lineage_only_no_detection_authorization_or_execution"
 )
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -207,5 +212,125 @@ def evaluate_recorded_instruction_provenance(provenance: Mapping[str, object]) -
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise SecurityProbeError("instruction_provenance_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_influence_lineage(lineage: Mapping[str, object]) -> dict:
+    """Verify bounded hash-linked influence propagation across recorded hops."""
+
+    keys = frozenset({
+        "schema_version", "lineage_id", "hops", "observed_disposition",
+    })
+    if type(lineage) is not dict or frozenset(lineage) != keys:
+        raise SecurityProbeError("invalid_influence_lineage_shape")
+    if (
+        type(lineage["schema_version"]) is not int
+        or lineage["schema_version"] != INFLUENCE_LINEAGE_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError("unsupported_influence_lineage_schema")
+
+    hops = lineage["hops"]
+    if type(hops) is not list or not 2 <= len(hops) <= MAX_INFLUENCE_HOPS:
+        raise SecurityProbeError("invalid_influence_hops")
+    observed = lineage["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError("invalid_influence_lineage_disposition")
+
+    normalized_hops = []
+    seen_hop_ids = set()
+    previous_output = None
+    influence_active = False
+    influenced_hop_ids = []
+    rejection_reasons = []
+    hop_keys = frozenset({
+        "hop_id", "instruction_provenance",
+        "instruction_provenance_evidence_id", "input_sha256", "output_sha256",
+    })
+
+    for index, hop in enumerate(hops):
+        if type(hop) is not dict or frozenset(hop) != hop_keys:
+            raise SecurityProbeError("invalid_influence_hop_shape")
+        hop_id = _text(hop["hop_id"], _IDENTIFIER, "invalid_influence_hop_id")
+        if hop_id in seen_hop_ids:
+            raise SecurityProbeError("duplicate_influence_hop_id")
+        seen_hop_ids.add(hop_id)
+
+        provenance_report = evaluate_recorded_instruction_provenance(
+            hop["instruction_provenance"]
+        )
+        provenance_evidence_id = _text(
+            hop["instruction_provenance_evidence_id"],
+            _SHA256,
+            "invalid_instruction_provenance_evidence_id",
+        )
+        if provenance_evidence_id != provenance_report["evidence_id"]:
+            raise SecurityProbeError("instruction_provenance_evidence_mismatch")
+        input_sha256 = _text(
+            hop["input_sha256"], _SHA256, "invalid_influence_input_hash"
+        )
+        output_sha256 = _text(
+            hop["output_sha256"], _SHA256, "invalid_influence_output_hash"
+        )
+        if input_sha256 != provenance_report["observed_instruction_sha256"]:
+            raise SecurityProbeError("influence_input_provenance_mismatch")
+        if index and input_sha256 != previous_output:
+            raise SecurityProbeError("influence_lineage_discontinuity")
+
+        provenance = hop["instruction_provenance"]
+        security_probe = provenance["security_probe"]
+        influence_active = influence_active or (
+            provenance["instruction_source_boundary"] == "untrusted_content"
+            or security_probe["source_boundary"] == "untrusted_content"
+            or security_probe["injection_detected"] is True
+        )
+        if influence_active:
+            influenced_hop_ids.append(hop_id)
+        if not provenance_report["passed"]:
+            rejection_reasons.append(f"{hop_id}:instruction_provenance_failed")
+        elif provenance_report["expected_disposition"] != "accepted":
+            rejection_reasons.append(f"{hop_id}:instruction_requires_rejection")
+
+        normalized_hops.append({
+            "hop_index": index,
+            "hop_id": hop_id,
+            "instruction_provenance_evidence_id": provenance_evidence_id,
+            "input_sha256": input_sha256,
+            "output_sha256": output_sha256,
+            "instruction_expected_disposition": provenance_report[
+                "expected_disposition"
+            ],
+            "instruction_probe_passed": provenance_report["passed"],
+            "untrusted_influence_active": influence_active,
+        })
+        previous_output = output_sha256
+
+    if influenced_hop_ids:
+        rejection_reasons.append("untrusted_influence_propagated")
+    expected = "rejected" if rejection_reasons else "accepted"
+    report = {
+        "influence_lineage_schema_version": INFLUENCE_LINEAGE_SCHEMA_VERSION,
+        "lineage_id": _text(
+            lineage["lineage_id"], _IDENTIFIER, "invalid_influence_lineage_id"
+        ),
+        "hops": normalized_hops,
+        "hop_count": len(normalized_hops),
+        "terminal_output_sha256": previous_output,
+        "influenced_hop_ids": influenced_hop_ids,
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": rejection_reasons,
+        "coverage": {
+            "instruction_evidence_recomputed": True,
+            "hop_hash_continuity_checked": True,
+            "indirect_untrusted_influence_propagated": True,
+            "scope": "bounded_recorded_multi_hop_influence_metadata_only",
+        },
+        "authority": INFLUENCE_LINEAGE_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError("influence_lineage_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report

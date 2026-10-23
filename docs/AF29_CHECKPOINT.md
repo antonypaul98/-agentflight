@@ -2,8 +2,9 @@
 
 Status: **IN PROGRESS**. The first bounded slice verifies caller-supplied,
 recorded authorization decisions against a deterministic fail-closed oracle.
-The current bounded candidate adds exact, content-addressed instruction
-provenance over that recomputed authorization evidence.
+The next bounded candidate propagates recorded untrusted influence across an
+exact, content-addressed multi-hop lineage over recomputed authorization and
+instruction-provenance evidence.
 
 The oracle denies cross-tenant authorization, untrusted-content control,
 caller-recorded injection findings, and requests exceeding exact granted scopes.
@@ -15,6 +16,24 @@ It does not read prompts, inspect projects, invoke tools, execute agents or
 commands, access filesystems or networks, grant permissions, or establish an OS
 sandbox. Exact Python 3.11 PR and merged-main CI is required before recording
 or accepting this slice. AF-29 remains in progress at 6/12.
+
+## Recorded multi-hop untrusted-influence lineage candidate
+
+The candidate accepts two to sixteen ordered recorded hops. Each hop binds its
+input hash to recomputed instruction-provenance evidence, and every later input
+must equal the prior output hash. Untrusted instruction or input boundaries and
+caller-recorded injection findings activate influence at that hop and propagate
+it through all downstream hops. Any affected lineage requires rejection even
+when a later hop is recorded as trusted. Substituted evidence, discontinuous
+hashes, duplicate hop identities, malformed metadata and action-bearing fields
+fail closed.
+
+The verifier reads no instruction or prompt text and does not detect injection.
+It processes bounded caller-supplied hashes, identifiers, booleans and
+dispositions only. It grants no permission, executes nothing, and accesses no
+project, payload, credential, filesystem, network or external system. Exact
+Python 3.11 PR and merged-main CI are required before a source receipt or
+canonical records can be claimed.
 
 ## Recorded instruction-provenance candidate
 
