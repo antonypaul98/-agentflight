@@ -478,3 +478,20 @@ remains in progress and roadmap acceptance remains 6/12.
   permissions and performs no raw prompt/payload/credential access, project
   inspection, live execution, external action, resource enforcement or
   OS-sandbox validation. AF-29 remains in progress at 6/12 accepted.
+
+## AF-29 recorded instruction-provenance source candidate (2026-10-23)
+
+This bounded candidate recomputes exact permission-boundary evidence and binds
+it to caller-supplied trusted and observed instruction hashes. Acceptance
+requires matching hashes, a trusted-control source, no recorded policy-override
+attempt, and an underlying security decision that both passes its oracle and
+permits authorization. Substitution, untrusted instruction sources,
+denial-required or inconsistent security decisions, override attempts,
+malformed metadata and action-bearing fields fail closed.
+
+The verifier processes hashes and bounded metadata only. It reads no prompt or
+instruction text, detects no injection itself, grants no permission, invokes no
+agent, tool or command, and accesses no project, payload, credential,
+filesystem, network or external system. It makes no arbitrary-execution,
+resource-enforcement or OS-isolation claim. Exact Python 3.11 PR and
+merged-main CI remain required before a source receipt or writer release.
