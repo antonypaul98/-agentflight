@@ -2,7 +2,13 @@ import copy
 
 import pytest
 
-from agentflight.security_probes import AUTHORITY, SecurityProbeError, evaluate_recorded_security_probe
+from agentflight.security_probes import (
+    AUTHORITY,
+    INSTRUCTION_PROVENANCE_AUTHORITY,
+    SecurityProbeError,
+    evaluate_recorded_instruction_provenance,
+    evaluate_recorded_security_probe,
+)
 
 H0 = "0" * 64
 H1 = "1" * 64
@@ -24,6 +30,23 @@ def probe():
         "requested_scopes": ["records.read"],
         "granted_scopes": ["records.read"],
         "observed_decision": "authorized",
+    }
+
+
+def provenance():
+    security_probe = probe()
+    return {
+        "schema_version": 1,
+        "provenance_id": "trusted-policy-lineage",
+        "security_probe": security_probe,
+        "security_probe_evidence_id": evaluate_recorded_security_probe(
+            security_probe
+        )["evidence_id"],
+        "trusted_instruction_sha256": H3,
+        "observed_instruction_sha256": H3,
+        "instruction_source_boundary": "trusted_control",
+        "override_attempt_detected": False,
+        "observed_disposition": "accepted",
     }
 
 
@@ -94,4 +117,88 @@ def test_malformed_or_action_bearing_metadata_fails_closed(change, code):
 def test_report_contains_no_raw_input_target_or_action_fields():
     rendered = repr(evaluate_recorded_security_probe(probe()))
     for forbidden in ("payload", "url", "endpoint", "command", "credential"):
+        assert forbidden not in rendered
+
+
+def test_matching_trusted_instruction_lineage_passes_deterministically():
+    first = evaluate_recorded_instruction_provenance(provenance())
+    assert first == evaluate_recorded_instruction_provenance(
+        copy.deepcopy(provenance())
+    )
+    assert first["passed"] is True
+    assert first["expected_disposition"] == "accepted"
+    assert first["rejection_reasons"] == []
+    assert first["authority"] == INSTRUCTION_PROVENANCE_AUTHORITY
+
+
+@pytest.mark.parametrize("change,reason", [
+    (
+        lambda value: value.update(instruction_source_boundary="untrusted_content"),
+        "untrusted_instruction_source",
+    ),
+    (
+        lambda value: value.update(observed_instruction_sha256=H2),
+        "instruction_provenance_mismatch",
+    ),
+    (
+        lambda value: value.update(override_attempt_detected=True),
+        "policy_override_attempt",
+    ),
+])
+def test_instruction_lineage_fail_closed_conditions_require_rejection(change, reason):
+    source = provenance()
+    change(source)
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_instruction_provenance(source)
+    assert report["passed"] is True
+    assert report["expected_disposition"] == "rejected"
+    assert reason in report["rejection_reasons"]
+
+
+def test_denied_or_inconsistent_security_probe_cannot_be_accepted():
+    denied = provenance()
+    denied["security_probe"].update(
+        injection_detected=True, observed_decision="denied"
+    )
+    denied["security_probe_evidence_id"] = evaluate_recorded_security_probe(
+        denied["security_probe"]
+    )["evidence_id"]
+    denied["observed_disposition"] = "rejected"
+    report = evaluate_recorded_instruction_provenance(denied)
+    assert report["rejection_reasons"] == ["security_probe_requires_denial"]
+
+    inconsistent = provenance()
+    inconsistent["security_probe"]["observed_decision"] = "denied"
+    inconsistent["security_probe_evidence_id"] = evaluate_recorded_security_probe(
+        inconsistent["security_probe"]
+    )["evidence_id"]
+    inconsistent["observed_disposition"] = "rejected"
+    report = evaluate_recorded_instruction_provenance(inconsistent)
+    assert report["rejection_reasons"] == ["security_probe_failed"]
+
+
+def test_instruction_provenance_is_bound_to_recomputed_security_evidence():
+    source = provenance()
+    source["security_probe_evidence_id"] = H0
+    with pytest.raises(SecurityProbeError, match="security_probe_evidence_mismatch"):
+        evaluate_recorded_instruction_provenance(source)
+
+
+@pytest.mark.parametrize("change,code", [
+    (lambda value: value.update(command="run"), "invalid_instruction_provenance_shape"),
+    (lambda value: value.update(schema_version=True), "unsupported_instruction_provenance_schema"),
+    (lambda value: value.update(override_attempt_detected=1), "invalid_override_attempt_flag"),
+    (lambda value: value.update(instruction_source_boundary="unknown"), "invalid_instruction_source_boundary"),
+    (lambda value: value.update(observed_disposition="maybe"), "invalid_observed_disposition"),
+])
+def test_malformed_instruction_provenance_fails_closed(change, code):
+    source = provenance()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_instruction_provenance(source)
+
+
+def test_instruction_provenance_report_contains_no_raw_instruction_or_action_fields():
+    rendered = repr(evaluate_recorded_instruction_provenance(provenance()))
+    for forbidden in ("prompt", "payload", "instruction_text", "command", "credential"):
         assert forbidden not in rendered

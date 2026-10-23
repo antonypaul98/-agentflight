@@ -10,13 +10,18 @@ import re
 from collections.abc import Mapping
 
 SCHEMA_VERSION = 1
+INSTRUCTION_PROVENANCE_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
 MAX_REPORT_BYTES = 8_192
 AUTHORITY = "recorded_security_probe_evidence_only_no_authorization_or_execution"
+INSTRUCTION_PROVENANCE_AUTHORITY = (
+    "recorded_instruction_provenance_evidence_only_no_authorization_or_execution"
+)
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _BOUNDARIES = frozenset({"trusted_control", "untrusted_content"})
 _DECISIONS = frozenset({"authorized", "denied"})
+_DISPOSITIONS = frozenset({"accepted", "rejected"})
 
 
 class SecurityProbeError(ValueError):
@@ -111,5 +116,96 @@ def evaluate_recorded_security_probe(probe: Mapping[str, object]) -> dict:
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise SecurityProbeError("security_probe_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_instruction_provenance(provenance: Mapping[str, object]) -> dict:
+    """Verify recorded instruction lineage without reading any instruction text."""
+
+    keys = frozenset({
+        "schema_version", "provenance_id", "security_probe",
+        "security_probe_evidence_id", "trusted_instruction_sha256",
+        "observed_instruction_sha256", "instruction_source_boundary",
+        "override_attempt_detected", "observed_disposition",
+    })
+    if type(provenance) is not dict or frozenset(provenance) != keys:
+        raise SecurityProbeError("invalid_instruction_provenance_shape")
+    if (
+        type(provenance["schema_version"]) is not int
+        or provenance["schema_version"] != INSTRUCTION_PROVENANCE_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError("unsupported_instruction_provenance_schema")
+
+    security_report = evaluate_recorded_security_probe(provenance["security_probe"])
+    recorded_security_evidence = _text(
+        provenance["security_probe_evidence_id"],
+        _SHA256,
+        "invalid_security_probe_evidence_id",
+    )
+    if recorded_security_evidence != security_report["evidence_id"]:
+        raise SecurityProbeError("security_probe_evidence_mismatch")
+
+    normalized = {
+        "instruction_provenance_schema_version": INSTRUCTION_PROVENANCE_SCHEMA_VERSION,
+        "provenance_id": _text(
+            provenance["provenance_id"], _IDENTIFIER, "invalid_provenance_id"
+        ),
+        "security_probe_evidence_id": recorded_security_evidence,
+        "trusted_instruction_sha256": _text(
+            provenance["trusted_instruction_sha256"],
+            _SHA256,
+            "invalid_trusted_instruction_hash",
+        ),
+        "observed_instruction_sha256": _text(
+            provenance["observed_instruction_sha256"],
+            _SHA256,
+            "invalid_observed_instruction_hash",
+        ),
+    }
+    boundary = provenance["instruction_source_boundary"]
+    if type(boundary) is not str or boundary not in _BOUNDARIES:
+        raise SecurityProbeError("invalid_instruction_source_boundary")
+    override_detected = provenance["override_attempt_detected"]
+    if type(override_detected) is not bool:
+        raise SecurityProbeError("invalid_override_attempt_flag")
+    observed = provenance["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError("invalid_observed_disposition")
+
+    reasons = []
+    if not security_report["passed"]:
+        reasons.append("security_probe_failed")
+    if security_report["expected_decision"] != "authorized":
+        reasons.append("security_probe_requires_denial")
+    if boundary == "untrusted_content":
+        reasons.append("untrusted_instruction_source")
+    if normalized["trusted_instruction_sha256"] != normalized["observed_instruction_sha256"]:
+        reasons.append("instruction_provenance_mismatch")
+    if override_detected:
+        reasons.append("policy_override_attempt")
+
+    expected = "rejected" if reasons else "accepted"
+    report = {
+        **normalized,
+        "instruction_source_boundary": boundary,
+        "override_attempt_detected": override_detected,
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": reasons,
+        "security_probe_expected_decision": security_report["expected_decision"],
+        "coverage": {
+            "security_evidence_recomputed": True,
+            "trusted_instruction_hash_checked": True,
+            "instruction_boundary_checked": True,
+            "override_attempt_flag_checked": True,
+            "scope": "bounded_recorded_instruction_provenance_metadata_only",
+        },
+        "authority": INSTRUCTION_PROVENANCE_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError("instruction_provenance_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report

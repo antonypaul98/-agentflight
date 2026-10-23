@@ -2,6 +2,8 @@
 
 Status: **IN PROGRESS**. The first bounded slice verifies caller-supplied,
 recorded authorization decisions against a deterministic fail-closed oracle.
+The current bounded candidate adds exact, content-addressed instruction
+provenance over that recomputed authorization evidence.
 
 The oracle denies cross-tenant authorization, untrusted-content control,
 caller-recorded injection findings, and requests exceeding exact granted scopes.
@@ -13,6 +15,21 @@ It does not read prompts, inspect projects, invoke tools, execute agents or
 commands, access filesystems or networks, grant permissions, or establish an OS
 sandbox. Exact Python 3.11 PR and merged-main CI is required before recording
 or accepting this slice. AF-29 remains in progress at 6/12.
+
+## Recorded instruction-provenance candidate
+
+The candidate accepts only a trusted-control instruction hash matching the
+recorded trusted hash, an exact recomputed security-probe evidence identifier,
+an underlying authorization decision that passes and permits authorization,
+and no caller-recorded policy-override attempt. Untrusted instruction sources,
+hash substitution, denial-required probes, inconsistent decisions, override
+attempts, malformed metadata and action-bearing fields fail closed.
+
+Only hashes, bounded identifiers, booleans and dispositions are processed. The
+verifier never reads instruction or prompt text, detects injections itself,
+authorizes or invokes a tool, or accesses a project, filesystem, network,
+credential, payload or external system. Exact Python 3.11 PR and merged-main CI
+remain required before a source receipt can be recorded or the writer released.
 
 ## Permission-boundary source receipt
 
