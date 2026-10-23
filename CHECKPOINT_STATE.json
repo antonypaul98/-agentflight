@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 21924)
-Total output lines: 1957
-
 {
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
@@ -1020,7 +1017,189 @@ Total output lines: 1957
       "records_prs": [
         38,
         40
-      ],…1924 tokens truncated…p; diagnostics passed on Python 3.11.17"
+      ],
+      "final_source_sha": "02beb959f5357168cdf4a04bdeaf0a90e26cbf21",
+      "final_source_tree_sha": "595c08d6bf25d6f93bcf6941013a8c29b0e9b977",
+      "accepted_main_sha": "833495376f75ea8606b078fd27737b7dd987283c",
+      "final_product_tests": 385,
+      "product_failures": 0,
+      "product_skips": 0,
+      "limitations": "No network calls, DNS, sleeping, agent/tool/command execution, recovery action, live project access, credentials, payloads, filesystem/process/OS isolation, hardware or production authority."
+    },
+    {
+      "checkpoint": "AF-25 reproducible environments and fixtures",
+      "status": "MERGED_AND_VERIFIED",
+      "accepted_scope": "Bounded metadata-only versioned synthetic fixtures, deterministic recorded setup/cleanup, exact provenance and environment-drift evidence",
+      "source_prs": [
+        32,
+        34
+      ],
+      "records_prs": [
+        33,
+        35
+      ],
+      "final_source_sha": "2982797a4112681e3a53c82b46e80311e668d416",
+      "final_source_tree_sha": "ecc701860154181252a2a72dd215497ce2a134a9",
+      "accepted_main_sha": "6847a346c8249d6d4620613576ba92aef0b5201b",
+      "final_product_tests": 354,
+      "product_failures": 0,
+      "product_skips": 0,
+      "limitations": "No setup/cleanup command execution, live project access, host inspection, credentials, network, arbitrary agent/tool execution, filesystem/process/OS isolation, hardware or production authority."
+    },
+    {
+      "checkpoint": "AF-24 multi-step trajectory verification",
+      "status": "MERGED_AND_VERIFIED",
+      "accepted_scope": "Bounded metadata-only ordered state/evidence transitions, terminal partial-failure semantics and deterministic exact-evidence replay",
+      "source_prs": [
+        27,
+        29
+      ],
+      "records_prs": [
+        28,
+        30
+      ],
+      "final_source_sha": "f0dfda043dd222faac95f9d8501f54ecaa6e5d9d",
+      "final_source_tree_sha": "b3adc7d4d54d51623af4c72b28d0dd9f6f912c0d",
+      "accepted_main_sha": "0c074fd7356de1ed6313e1d6b7bb36c3573cda8c",
+      "final_product_tests": 322,
+      "product_failures": 0,
+      "product_skips": 0,
+      "limitations": "No live agent/tool execution, framework or project access, credentials, network, payload inspection, filesystem/process isolation, hardware or production authority."
+    },
+    {
+      "checkpoint": "AF-23 framework-neutral agent adapter",
+      "status": "MERGED_AND_VERIFIED",
+      "accepted_scope": "Bounded metadata-only recorded/mock trajectories, fail-closed authorized recorded-adapter registry, and versioned positive/adversarial conformance evidence",
+      "source_prs": [
+        20,
+        22,
+        24
+      ],
+      "records_prs": [
+        21,
+        23,
+        25
+      ],
+      "final_source_sha": "fa395214e5494737116ca6b47d9c2c1d775bb2bf",
+      "final_source_tree_sha": "caa5270ee2264d9c5a7169e017172ed4e88d0ce7",
+      "accepted_main_sha": "8684d979355ecc20a4958ba92534d6af59d4f614",
+      "final_product_tests": 305,
+      "product_failures": 0,
+      "product_skips": 0,
+      "limitations": "No live framework/project adapter, arbitrary agent/tool execution, credentials, network, filesystem/process isolation, resource enforcement, hardware or production authority."
+    },
+    {
+      "checkpoint": "AF-19 adversarial prompt injection",
+      "pr": 4,
+      "merge": "MERGED AND VERIFIED",
+      "verified_main_sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
+      "ci_state": {
+        "pr_run": {
+          "id": 37155199677,
+          "sha": "1abdedb7d7617f5fe3131ae7eff542ce7606257a",
+          "event": "pull_request",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        "merged_main_run": {
+          "id": 37155388507,
+          "sha": "57bde8a2e343e425c019fe73eacb232d40a5ccc0",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        "completion_main_run": {
+          "id": 37156155589,
+          "sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37156155589"
+        }
+      }
+    },
+    {
+      "current_checkpoint": "AF-20 bounded tool-call argument envelope",
+      "checkpoint_status": "MERGED_AND_VERIFIED",
+      "verified_main_sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5",
+      "observed_feature_sha": "18c01d2e06d2b68173e31fda5c4e4c837a4b45cc",
+      "pr_number": 5,
+      "pr_state": {
+        "number": 5,
+        "state": "merged",
+        "head_sha": "18c01d2e06d2b68173e31fda5c4e4c837a4b45cc",
+        "url": "https://github.com/antonypaul98/-agentflight/pull/5",
+        "merge_commit_sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5"
+      },
+      "ci_state": {
+        "pr_run": {
+          "id": 37859607596,
+          "sha": "18c01d2e06d2b68173e31fda5c4e4c837a4b45cc",
+          "event": "pull_request",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37859607596"
+        },
+        "merged_main_run": {
+          "id": 37860434918,
+          "sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37860434918"
+        },
+        "historical_failure": {
+          "id": 37702259363,
+          "sha": "e0c054948266e91a3c47c6007f7fbda203692ad3",
+          "event": "pull_request",
+          "status": "completed",
+          "conclusion": "failure",
+          "cause": "ci_diagnostics.py KeyError diagnostic_import; state schema restored in following commit"
+        },
+        "push_run": {
+          "id": 37874203999,
+          "sha": "a4673b136e5eddc7792036f77681c3556742d99b",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37874203999",
+          "tests": "126 product tests passed; infrastructure 18 executed, 1 skipped (prior run evidence)"
+        }
+      },
+      "checkpoint": "AF-20 bounded tool-call argument envelope",
+      "completion_main_run": {
+        "id": 37878490104,
+        "sha": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
+        "event": "push",
+        "status": "completed",
+        "conclusion": "success",
+        "tests": "126 product tests passed; 18 infrastructure tests executed including 1 skip"
+      }
+    },
+    {
+      "checkpoint": "AF-21 structured replay-suite reporting",
+      "status": "MERGED_AND_VERIFIED",
+      "source_sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
+      "source_tree_sha": "14ee27b417525d209241c703eacf0bb32b20c21a",
+      "verified_main_sha": "8066bbcc8127c12c528f4d355d1029f894355c95",
+      "pr_state": {
+        "number": 6,
+        "state": "merged",
+        "head_sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
+        "url": "https://github.com/antonypaul98/-agentflight/pull/6",
+        "merge_commit_sha": "8066bbcc8127c12c528f4d355d1029f894355c95"
+      },
+      "ci_state": {
+        "push_run": {
+          "id": 37880641379,
+          "sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "attempt": 1,
+          "job_id": 113659304972,
+          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37880641379",
+          "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
         },
         "pr_run": {
           "id": 37880666599,
