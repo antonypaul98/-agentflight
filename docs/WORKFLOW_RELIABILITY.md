@@ -465,3 +465,16 @@ filesystem, network, credential or external system, grants no permission, and
 makes no arbitrary-execution or OS-isolation claim. Exact Python 3.11 PR and
 merged-main CI are required before canonical records or writer release. AF-29
 remains in progress and roadmap acceptance remains 6/12.
+
+## AF-29 permission-boundary source receipt (2026-10-23)
+
+- Source PR #68: head `01d73281f39afb7338137f3df10d6d29a8cf8b59`, tree `7f6ba51744545bfc10902e4f907439afa73b0545`.
+- Exact PR run 39900570012: Python 3.11.17, 504 product tests passed, zero
+  product skips; infrastructure 17 passed with one baseline Memory-only skip.
+- Guarded merge: exact main `5330726fd81bf1b6071fdd72b825e89ed47edd6b`.
+- Exact merged-main run 39900701428: the same 504-test suite passed with zero
+  product skips; infrastructure 17 passed with one baseline Memory-only skip.
+- Scope remains synthetic recorded-metadata verification only. It grants no
+  permissions and performs no raw prompt/payload/credential access, project
+  inspection, live execution, external action, resource enforcement or
+  OS-sandbox validation. AF-29 remains in progress at 6/12 accepted.
