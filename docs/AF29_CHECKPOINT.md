@@ -31,6 +31,23 @@ authorizes or invokes a tool, or accesses a project, filesystem, network,
 credential, payload or external system. Exact Python 3.11 PR and merged-main CI
 remain required before a source receipt can be recorded or the writer released.
 
+## Recorded instruction-provenance source receipt
+
+PR #70 head `18d326c096671988f34162d98f2ed48e0344f2e9`, tree
+`c6bd70346fdf515bbbf29c781a7c6db381a4bb95`, passed exact-head run
+39939002114 on Python 3.11.17 with 516 product tests and zero product
+skips. Guarded merge produced main `d3f8723f2269d22e905533df8aaeb3187af92dea`;
+exact push run 39939139774 passed the same 516-test suite with zero product
+skips. Both runs executed 18 infrastructure guards: 17 passed and one baseline
+Memory-only case was skipped.
+
+The slice remains limited to deterministic fail-closed verification of bounded,
+caller-supplied recorded hashes and dispositions. It reads no raw instruction,
+prompt, payload or credential; grants no permission; and performs no project
+inspection, injection detection, tool/agent/command execution,
+filesystem/network access, external action, resource enforcement or OS-sandbox
+validation. AF-29 remains in progress and roadmap acceptance remains 6/12.
+
 ## Permission-boundary source receipt
 
 PR #68 head `01d73281f39afb7338137f3df10d6d29a8cf8b59`, tree
