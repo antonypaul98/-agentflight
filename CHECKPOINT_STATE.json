@@ -2,16 +2,16 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-29 permission and prompt-injection testing",
-  "checkpoint_status": "IN_PROGRESS_INSTRUCTION_PROVENANCE_SOURCE_PENDING",
-  "active_branch": "work/af29-recorded-instruction-provenance",
-  "verified_main_sha": "2d56b167427ce0e451793bca2d73ba4e67fc383e",
-  "observed_feature_sha": null,
+  "checkpoint_status": "IN_PROGRESS_INSTRUCTION_PROVENANCE_RECORDS_PENDING",
+  "active_branch": "work/af29-recorded-instruction-provenance-records",
+  "verified_main_sha": "d3f8723f2269d22e905533df8aaeb3187af92dea",
+  "observed_feature_sha": "18d326c096671988f34162d98f2ed48e0344f2e9",
   "current_repository_sha": null,
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "AF-29 permission-boundary source/records PRs #68/#69 are merged, exact Python 3.11 CI is green, and the writer was explicitly released. Instruction-provenance source candidate is local and unpublished.",
-  "pr_number": null,
-  "pr_state": "not_created",
+  "branch_remote_status": "AF-29 instruction-provenance source PR #70 is merged at exact main d3f8723f2269d22e905533df8aaeb3187af92dea. Exact Python 3.11 PR and merged-main CI each passed 516 product tests with zero product skips; canonical records and explicit writer release are pending.",
+  "pr_number": 70,
+  "pr_state": "merged",
   "ci_state": {
     "af27_resume_closure_source_pr_run": {
       "id": 39386039725,
@@ -903,12 +903,40 @@
       "product_skips": 0,
       "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
       "diagnostics": "passed"
+    },
+    "af29_instruction_provenance_source_pr_run": {
+      "id": 39939002114,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39939002114",
+      "head_sha": "18d326c096671988f34162d98f2ed48e0344f2e9",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 516,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
+    "af29_instruction_provenance_merged_main_run": {
+      "id": 39939139774,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39939139774",
+      "head_sha": "d3f8723f2269d22e905533df8aaeb3187af92dea",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 516,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
     }
   },
-  "local_test_status": "Python 3.12.14: AF-29 focused security-probe suite passed 27 tests. The broad local suite passed 514 tests and reproduced the two established container-specific /proc descendant-observation failures. Exact Python 3.11 acceptance remains pending PR CI.",
-  "merge_status": "AF29_INSTRUCTION_PROVENANCE_SOURCE_PENDING",
+  "local_test_status": "Python 3.12.14 local: 27 focused passed; broad 514 passed with two established container-specific /proc failures. Exact clean-runner PR and merged-main CI each passed all 516 product tests with zero product skips on Python 3.11.17; infrastructure executed 18 guards with one baseline Memory-only skip.",
+  "merge_status": "AF29_INSTRUCTION_PROVENANCE_RECORDS_PENDING",
   "known_blocker": null,
-  "next_action": "Validate, publish and open the AF-29 instruction-provenance source candidate; require exact Python 3.11 PR and merged-main CI with zero product skips before recording evidence.",
+  "next_action": "Publish this records-only AF-29 instruction-provenance receipt, require exact Python 3.11 PR and merged-main CI with zero product skips, then explicitly release the writer.",
   "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
@@ -1271,9 +1299,7 @@
   "changed_files": [
     "CHECKPOINT_STATE.json",
     "docs/AF29_CHECKPOINT.md",
-    "docs/WORKFLOW_RELIABILITY.md",
-    "src/agentflight/security_probes.py",
-    "tests/test_security_probes.py"
+    "docs/WORKFLOW_RELIABILITY.md"
   ],
   "shell_preflight_receipt": {
     "BLOCKED_LAYER": "external",
@@ -1338,25 +1364,25 @@
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
     "ownership_id": "AF29-INSTRUCTION-PROVENANCE-20261023",
-    "status": "source_pending",
+    "status": "records_pending",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
-    "source_writing_stopped": false,
+    "source_writing_stopped": true,
     "base_main_sha": "2d56b167427ce0e451793bca2d73ba4e67fc383e",
     "branch": "work/af29-recorded-instruction-provenance",
-    "source_head": null,
-    "source_tree": null,
-    "source_merge": null,
-    "source_pr": null,
-    "source_pr_ci": null,
-    "source_merged_main_ci": null,
+    "source_head": "18d326c096671988f34162d98f2ed48e0344f2e9",
+    "source_tree": "c6bd70346fdf515bbbf29c781a7c6db381a4bb95",
+    "source_merge": "d3f8723f2269d22e905533df8aaeb3187af92dea",
+    "source_pr": 70,
+    "source_pr_ci": 39939002114,
+    "source_merged_main_ci": 39939139774,
     "prior_release_receipt": "https://github.com/antonypaul98/-agentflight/pull/69#issuecomment-6361817131",
     "release_requirement": "Exact AF-29 instruction-provenance source and records PR/merged-main Python 3.11 CI green, followed by explicit writer release.",
     "no_real_execution": true,
     "no_private_data_or_secrets_committed": true,
-    "recorded_at": "2026-10-23T10:23:42Z"
+    "recorded_at": "2026-10-23T10:28:00Z"
   },
-  "recorded_at_utc": "2026-10-23T10:23:42Z",
+  "recorded_at_utc": "2026-10-23T10:28:00Z",
   "preflight_receipt": {
     "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
     "exit_code": 1,
@@ -1880,5 +1906,22 @@
     "local_focused_tests": 15,
     "scope": "Deterministic fail-closed verification of caller-supplied recorded tenant, scope, trust-boundary and injection decisions using hashed identities and bounded scope identifiers.",
     "limitations": "Synthetic recorded metadata only; no raw prompts, payloads, credentials, project inspection, permission grant, tool/agent/command execution, filesystem/network access, external action, resource boundary, or OS-sandbox claim."
+  },
+  "af29_instruction_provenance_source_receipt": {
+    "status": "SOURCE_MERGED_VERIFIED_RECORDS_PENDING",
+    "source_sha": "18d326c096671988f34162d98f2ed48e0344f2e9",
+    "source_tree_sha": "c6bd70346fdf515bbbf29c781a7c6db381a4bb95",
+    "source_pr": 70,
+    "source_merge_sha": "d3f8723f2269d22e905533df8aaeb3187af92dea",
+    "source_pr_ci_run": 39939002114,
+    "source_merged_main_ci_run": 39939139774,
+    "python": "3.11.17",
+    "product_tests": 516,
+    "product_failures": 0,
+    "product_skips": 0,
+    "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+    "local_focused_tests": 27,
+    "scope": "Deterministic exact-evidence-bound verification of recorded trusted instruction hashes, source boundaries and override-attempt dispositions over recomputed permission evidence.",
+    "limitations": "Synthetic recorded metadata only; no raw prompt/instruction text, injection detection, permission grant, project inspection, tool/agent/command execution, credential/payload handling, filesystem/network access, external action, resource enforcement, or OS-sandbox claim."
   }
 }

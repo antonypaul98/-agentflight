@@ -495,3 +495,18 @@ agent, tool or command, and accesses no project, payload, credential,
 filesystem, network or external system. It makes no arbitrary-execution,
 resource-enforcement or OS-isolation claim. Exact Python 3.11 PR and
 merged-main CI remain required before a source receipt or writer release.
+
+## AF-29 recorded instruction-provenance source receipt (2026-10-23)
+
+- Source PR #70: head `18d326c096671988f34162d98f2ed48e0344f2e9`, tree `c6bd70346fdf515bbbf29c781a7c6db381a4bb95`.
+- Exact PR run 39939002114: Python 3.11.17, 516 product tests passed,
+  zero product skips; infrastructure 17 passed with one baseline Memory-only
+  skip.
+- Guarded merge: exact main `d3f8723f2269d22e905533df8aaeb3187af92dea`.
+- Exact merged-main run 39939139774: the same 516-test suite passed with zero
+  product skips; infrastructure 17 passed with one baseline Memory-only skip.
+- Scope remains synthetic recorded-metadata verification only. It reads no raw
+  prompt or instruction text, detects no injection, grants no permission, and
+  performs no project inspection, live execution, credential/payload access,
+  external action, resource enforcement or OS-sandbox validation. AF-29 remains
+  in progress at 6/12 accepted.
