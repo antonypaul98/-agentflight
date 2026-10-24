@@ -6,10 +6,12 @@ from agentflight.security_probes import (
     AUTHORITY,
     INFLUENCE_LINEAGE_AUTHORITY,
     INSTRUCTION_PROVENANCE_AUTHORITY,
+    SENSITIVE_SINK_AUTHORITY,
     SecurityProbeError,
     evaluate_recorded_influence_lineage,
     evaluate_recorded_instruction_provenance,
     evaluate_recorded_security_probe,
+    evaluate_recorded_sensitive_sink_boundary,
 )
 
 H0 = "0" * 64
@@ -86,6 +88,21 @@ def lineage():
                 "output_sha256": H5,
             },
         ],
+        "observed_disposition": "accepted",
+    }
+
+
+def sensitive_sink():
+    influence_lineage = lineage()
+    return {
+        "schema_version": 1,
+        "boundary_id": "recorded-search-read-boundary",
+        "influence_lineage": influence_lineage,
+        "influence_lineage_evidence_id": evaluate_recorded_influence_lineage(
+            influence_lineage
+        )["evidence_id"],
+        "sink_id": "recorded-search-results",
+        "sink_class": "read_only",
         "observed_disposition": "accepted",
     }
 
@@ -343,6 +360,125 @@ def test_lineage_input_must_match_provenance_and_prior_output():
 
 def test_influence_lineage_report_contains_no_raw_or_action_fields():
     rendered = repr(evaluate_recorded_influence_lineage(lineage()))
+    for forbidden in (
+        "prompt", "payload", "instruction_text", "command", "credential", "url"
+    ):
+        assert forbidden not in rendered
+
+
+def test_trusted_least_privilege_sink_passes_deterministically():
+    first = evaluate_recorded_sensitive_sink_boundary(sensitive_sink())
+    assert first == evaluate_recorded_sensitive_sink_boundary(
+        copy.deepcopy(sensitive_sink())
+    )
+    assert first["passed"] is True
+    assert first["expected_disposition"] == "accepted"
+    assert first["required_scope"] == "records.read"
+    assert first["authority"] == SENSITIVE_SINK_AUTHORITY
+
+
+def test_untrusted_influence_cannot_be_laundered_at_sensitive_sink():
+    source = sensitive_sink()
+    first = source["influence_lineage"]["hops"][0]["instruction_provenance"]
+    first["instruction_source_boundary"] = "untrusted_content"
+    first["observed_disposition"] = "rejected"
+    source["influence_lineage"]["hops"][0][
+        "instruction_provenance_evidence_id"
+    ] = evaluate_recorded_instruction_provenance(first)["evidence_id"]
+    source["influence_lineage"]["observed_disposition"] = "rejected"
+    source["influence_lineage_evidence_id"] = evaluate_recorded_influence_lineage(
+        source["influence_lineage"]
+    )["evidence_id"]
+    source["observed_disposition"] = "rejected"
+
+    report = evaluate_recorded_sensitive_sink_boundary(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == [
+        "lineage_requires_rejection",
+        "untrusted_influence_reaches_sink",
+    ]
+
+
+def test_recorded_injection_reaches_and_rejects_sensitive_sink():
+    source = sensitive_sink()
+    first = source["influence_lineage"]["hops"][0]["instruction_provenance"]
+    first["security_probe"].update(
+        injection_detected=True, observed_decision="denied"
+    )
+    first["security_probe_evidence_id"] = evaluate_recorded_security_probe(
+        first["security_probe"]
+    )["evidence_id"]
+    first["observed_disposition"] = "rejected"
+    source["influence_lineage"]["hops"][0][
+        "instruction_provenance_evidence_id"
+    ] = evaluate_recorded_instruction_provenance(first)["evidence_id"]
+    source["influence_lineage"]["observed_disposition"] = "rejected"
+    source["influence_lineage_evidence_id"] = evaluate_recorded_influence_lineage(
+        source["influence_lineage"]
+    )["evidence_id"]
+    source["observed_disposition"] = "rejected"
+
+    report = evaluate_recorded_sensitive_sink_boundary(source)
+    assert report["passed"] is True
+    assert "untrusted_influence_reaches_sink" in report["rejection_reasons"]
+
+
+@pytest.mark.parametrize("sink_class", [
+    "state_change", "external_effect", "privileged_control",
+])
+def test_sensitive_sink_requires_class_specific_terminal_scope(sink_class):
+    source = sensitive_sink()
+    source["sink_class"] = sink_class
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_sensitive_sink_boundary(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == ["missing_sensitive_sink_scope"]
+
+
+def test_sensitive_sink_exposes_recorded_acceptance_bypass():
+    source = sensitive_sink()
+    source["sink_class"] = "privileged_control"
+    report = evaluate_recorded_sensitive_sink_boundary(source)
+    assert report["expected_disposition"] == "rejected"
+    assert report["passed"] is False
+
+
+def test_sensitive_sink_is_bound_to_recomputed_lineage_evidence():
+    source = sensitive_sink()
+    source["influence_lineage_evidence_id"] = H0
+    with pytest.raises(
+        SecurityProbeError, match="influence_lineage_evidence_mismatch"
+    ):
+        evaluate_recorded_sensitive_sink_boundary(source)
+
+
+@pytest.mark.parametrize("change,code", [
+    (
+        lambda value: value.update(command="run"),
+        "invalid_sensitive_sink_boundary_shape",
+    ),
+    (
+        lambda value: value.update(schema_version=True),
+        "unsupported_sensitive_sink_boundary_schema",
+    ),
+    (
+        lambda value: value.update(sink_class="unknown"),
+        "invalid_sensitive_sink_class",
+    ),
+    (
+        lambda value: value.update(observed_disposition="maybe"),
+        "invalid_sensitive_sink_disposition",
+    ),
+])
+def test_malformed_or_action_bearing_sensitive_sink_fails_closed(change, code):
+    source = sensitive_sink()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_sensitive_sink_boundary(source)
+
+
+def test_sensitive_sink_report_contains_no_raw_or_action_fields():
+    rendered = repr(evaluate_recorded_sensitive_sink_boundary(sensitive_sink()))
     for forbidden in (
         "prompt", "payload", "instruction_text", "command", "credential", "url"
     ):

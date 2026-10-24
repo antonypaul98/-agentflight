@@ -2,9 +2,9 @@
 
 Status: **IN PROGRESS**. The first bounded slice verifies caller-supplied,
 recorded authorization decisions against a deterministic fail-closed oracle.
-The latest bounded source slice propagates recorded untrusted influence across an
-exact, content-addressed multi-hop lineage over recomputed authorization and
-instruction-provenance evidence.
+The latest bounded source candidate verifies that an exact, content-addressed
+multi-hop lineage and its terminal authorization are safe for one recorded
+sensitive sink class.
 
 The oracle denies cross-tenant authorization, untrusted-content control,
 caller-recorded injection findings, and requests exceeding exact granted scopes.
@@ -14,8 +14,27 @@ bounded scope identifiers. Raw prompts, payloads and credentials are excluded.
 This is synthetic recorded-metadata verification, not an authorization system.
 It does not read prompts, inspect projects, invoke tools, execute agents or
 commands, access filesystems or networks, grant permissions, or establish an OS
-sandbox. Its source PR and merged-main CI are verified; canonical records and
-their independent CI remain required. AF-29 remains in progress at 6/12.
+sandbox. The prior influence-lineage source and records are verified and its
+writer is released. The sensitive-sink candidate requires exact Python 3.11 PR
+and merged-main CI before canonical records. AF-29 remains in progress at 6/12.
+
+## Recorded sensitive-sink boundary candidate
+
+The candidate recomputes an embedded influence lineage and binds its exact
+evidence identifier. It then recomputes the terminal recorded authorization
+decision and maps one of four fixed sink classes to its required scope:
+`read_only`, `state_change`, `external_effect`, or `privileged_control`.
+Acceptance requires a verified accepted lineage with no untrusted influence,
+an internally consistent authorized terminal decision, and the exact required
+scope among the terminal requested scopes. Upstream untrusted instructions or
+caller-recorded injection findings cannot be laundered by a later trusted hop.
+
+Only bounded caller-supplied hashes, identifiers, booleans, dispositions, and
+scope names are processed. The verifier reads no prompt, instruction, payload,
+credential, project, filesystem, or network; it detects no injection, grants no
+permission, invokes nothing, and performs no external action. Exact Python 3.11
+source PR and merged-main CI remain required before a source receipt or
+canonical records can be claimed.
 
 ## Recorded multi-hop untrusted-influence lineage candidate
 

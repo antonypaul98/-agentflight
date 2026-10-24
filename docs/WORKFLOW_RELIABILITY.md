@@ -535,3 +535,20 @@ exact push run 40002769894 passed the same 529-test suite with zero product
 skips. Both runs executed 18 infrastructure guards: 17 passed and one baseline
 Memory-only case was skipped. Canonical records require independent exact PR
 and merged-main CI before writer release. AF-29 remains in progress at 6/12.
+
+## AF-29 recorded sensitive-sink boundary source candidate (2026-10-24)
+
+This bounded candidate recomputes and binds the exact multi-hop influence
+lineage and terminal authorization evidence before comparing one recorded sink
+disposition with a deterministic fail-closed oracle. Four fixed sink classes
+map to fixed least-privilege scopes. A lineage requiring rejection, any
+propagated untrusted influence, an inconsistent terminal authorization, or a
+missing sink scope requires rejection. A later trusted hop cannot clear earlier
+untrusted or caller-recorded injection influence.
+
+This is synthetic recorded-metadata verification only. It reads no prompt,
+instruction, payload, credential, project, filesystem, or network; detects no
+injection; grants no permission; invokes no agent, tool, or command; and performs
+no external action or OS-sandbox validation. Exact Python 3.11 PR and
+merged-main CI remain required before canonical records or writer release.
+AF-29 remains in progress and roadmap acceptance remains 6/12.
