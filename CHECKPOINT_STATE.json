@@ -1,1992 +1,10 @@
-{
-  "schema_version": 2,
-  "repository": "antonypaul98/-agentflight",
-  "current_checkpoint": "AF-29 permission and prompt-injection testing",
-  "checkpoint_status": "IN_PROGRESS_RECORDED_SENSITIVE_SINK_BOUNDARY_CLAIMED",
-  "active_branch": "work/af29-recorded-sensitive-sink-boundary",
-  "verified_main_sha": "164c29ab0ff30ace51d0ba792aac9507dbfea5f4",
-  "observed_feature_sha": "164c29ab0ff30ace51d0ba792aac9507dbfea5f4",
-  "current_repository_sha": "164c29ab0ff30ace51d0ba792aac9507dbfea5f4",
-  "current_repository_sha_command": "git rev-parse HEAD",
-  "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "No open PRs. PR #73 records merged as exact main 164c29ab0ff30ace51d0ba792aac9507dbfea5f4; exact Python 3.11 records PR and merged-main CI each passed 529 product tests with zero product skips, and writer AF29-UNTRUSTED-INFLUENCE-LINEAGE-20261023 was released. The next bounded AF-29 recorded sensitive-sink boundary branch is claimed from that exact main.",
-  "pr_number": null,
-  "pr_state": "not_created",
-  "ci_state": {
-    "af27_resume_closure_source_pr_run": {
-      "id": 39386039725,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39386039725",
-      "head_sha": "3f0e7332d8f8a929318ed794cb6143fbebb750cd",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 450,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_resume_closure_merged_main_run": {
-      "id": 39386156518,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39386156518",
-      "head_sha": "ecdfdc932a9501520f73313a2ae75014ba682ec3",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 450,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_resume_lineage_source_pr_run": {
-      "id": 39185479785,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39185479785",
-      "head_sha": "20a775610f2a92369b895bddb63bc29a28ae5f6f",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 442,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_resume_lineage_merged_main_run": {
-      "id": 39185564505,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39185564505",
-      "head_sha": "5d45a7ccee5146ab429094fb8b5d73809348f819",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 442,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_resume_transition_source_pr_run": {
-      "id": 39159042557,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39159042557",
-      "head_sha": "74310a2aca5091118d4692a043ba668310b4a8ae",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 439,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_resume_transition_merged_main_run": {
-      "id": 39159139603,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39159139603",
-      "head_sha": "d68706b245bd22a63bec854b68c08f1e1f1dc5d6",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 439,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_resume_guard_source_pr_run": {
-      "id": 39131567287,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39131567287",
-      "head_sha": "7d99425194774aab8f1d64aac1c27c744e302a45",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 427,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_resume_guard_merged_main_run": {
-      "id": 39131630319,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39131630319",
-      "head_sha": "f4588406d6c7cf12d9e8893386f106533d5d6556",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 427,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_state_checkpoint_source_pr_run": {
-      "id": 39089907017,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39089907017",
-      "head_sha": "c556396d3caa982e70be914cedb12010804bce73",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 419,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_state_checkpoint_merged_main_run": {
-      "id": 39089947965,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39089947965",
-      "head_sha": "99ff09825e77613917c866591ebba37700412d40",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 419,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_retry_budget_source_pr_run": {
-      "id": 38886756075,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38886756075",
-      "head_sha": "fd71cf0f1597931ed575e165a8a0b9fb76c35e39",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 409,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_retry_budget_merged_main_run": {
-      "id": 38886830294,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38886830294",
-      "head_sha": "8992aa0e7dbbab05c73848694c972b3dac799a7b",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 409,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_recorded_recovery_source_pr_run": {
-      "id": 38850492412,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38850492412",
-      "head_sha": "ca4bd35a1e5557ee9a48ecd18145b7d9ddeb7301",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 401,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_recorded_recovery_merged_main_run": {
-      "id": 38850574375,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38850574375",
-      "head_sha": "234678fe214f86336832d1a901a9c5be8a5581aa",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 401,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af26_retry_sequence_source_pr_run": {
-      "id": 38734703918,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38734703918",
-      "head_sha": "02beb959f5357168cdf4a04bdeaf0a90e26cbf21",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 385,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af26_retry_sequence_merged_main_run": {
-      "id": 38734820602,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38734820602",
-      "head_sha": "e89a1afd4ad2998854cfd6c6387234c794134863",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 385,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af26_first_source_pr_run": {
-      "id": 38698230914,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38698230914",
-      "head_sha": "4ecadd26898f06e161322777a7b6f52c778468da",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 374,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af26_first_source_merged_main_run": {
-      "id": 38698334703,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38698334703",
-      "head_sha": "b90e0ea063e8ca7204d1f5f543ade18858b87161",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 374,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af26_retry_sequence_records_pr_run": {
-      "id": 38777475825,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38777475825",
-      "head_sha": "aee5648088971243bfb272a585a7f6c93cfedf54",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 385,
-      "product_failures": 0,
-      "product_skips": 0
-    },
-    "af26_retry_sequence_records_merged_main_run": {
-      "id": 38777568067,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38777568067",
-      "head_sha": "833495376f75ea8606b078fd27737b7dd987283c",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 385,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af23_source_pr_run": {
-      "id": 38390138733,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38390138733",
-      "head_sha": "e527f30390c6ca2f0fdf9455fee2048d4198066e",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 267,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af23_source_merged_main_run": {
-      "id": 38390222096,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38390222096",
-      "head_sha": "a4471303d92047ed027c46a223e48f0a1747336a",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 267,
-      "product_failures": 0,
-      "product_skips": 0
-    },
-    "af23_registry_source_pr_run": {
-      "id": 38430295837,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38430295837",
-      "head_sha": "3adf61f11bd3d216703f06eac28b33932b64d5f4",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 288,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af23_registry_source_merged_main_run": {
-      "id": 38430473722,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38430473722",
-      "head_sha": "06ca355b85c56a54c725b05e38d0de9a3de05bbf",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 288,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af23_conformance_source_pr_run": {
-      "id": 38437879753,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38437879753",
-      "head_sha": "fa395214e5494737116ca6b47d9c2c1d775bb2bf",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 305,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af23_conformance_source_merged_main_run": {
-      "id": 38438010128,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38438010128",
-      "head_sha": "2551f8e61e5ad378e6b65fb8d7e403a1c516b3c2",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 305,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af23_conformance_records_pr_run": {
-      "id": 38438470593,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38438470593",
-      "head_sha": "ec4ea0941e0e300684c81fac274ad882dcc9b9d4",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 305,
-      "product_failures": 0,
-      "product_skips": 0
-    },
-    "af23_conformance_records_merged_main_run": {
-      "id": 38438610938,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38438610938",
-      "head_sha": "a04bde73ee7e5f6ccb728135c55b4e59fa88969f",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 305,
-      "product_failures": 0,
-      "product_skips": 0
-    },
-    "af23_closure_pr_run": {
-      "id": 38470099889,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38470099889",
-      "head_sha": "fe86ad0642808e5387fc1c574b16ab7cc65407df",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 305,
-      "product_failures": 0,
-      "product_skips": 0
-    },
-    "af23_closure_merged_main_run": {
-      "id": 38470231080,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38470231080",
-      "head_sha": "8684d979355ecc20a4958ba92534d6af59d4f614",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 305,
-      "product_failures": 0,
-      "product_skips": 0
-    },
-    "af24_trajectory_source_pr_run": {
-      "id": 38477794522,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38477794522",
-      "head_sha": "5c5b2ebdad8e6c87c81eb44a81b3b938df14b3bd",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 314,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af24_trajectory_source_merged_main_run": {
-      "id": 38477919301,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38477919301",
-      "head_sha": "ab6584369ae381201caed15941bdc719c28adc61",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 314,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af24_replay_gate_source_pr_run": {
-      "id": 38501273784,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38501273784",
-      "head_sha": "f0dfda043dd222faac95f9d8501f54ecaa6e5d9d",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 322,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af24_replay_gate_source_merged_main_run": {
-      "id": 38501378546,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38501378546",
-      "head_sha": "2a505c674082144800ab3b0ccf301060037cde05",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 322,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af24_replay_gate_records_pr_run": {
-      "id": 38501622421,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38501622421",
-      "head_sha": "3ba79a6cb3723e02833eb5f5cfbab6e1ee3a40b5",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 322,
-      "product_failures": 0,
-      "product_skips": 0
-    },
-    "af24_replay_gate_records_merged_main_run": {
-      "id": 38501684738,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38501684738",
-      "head_sha": "0c074fd7356de1ed6313e1d6b7bb36c3573cda8c",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 322,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af24_closure_pr_run": {
-      "id": 38505939727,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38505939727",
-      "head_sha": "4e2a1710fbb4217ab3a6a2e155784aac433b5af8",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 322,
-      "product_failures": 0,
-      "product_skips": 0
-    },
-    "af24_closure_merged_main_run": {
-      "id": 38506022682,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38506022682",
-      "head_sha": "08168abb50dcb526476210bcd92aa0c117ce1802",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 322,
-      "product_failures": 0,
-      "product_skips": 0
-    },
-    "af25_fixture_source_pr_run": {
-      "id": 38528669015,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38528669015",
-      "head_sha": "c19c81f3c44cbb14b6516570002a5a30c460899d",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 341,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af25_fixture_source_merged_main_run": {
-      "id": 38528790850,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38528790850",
-      "head_sha": "ea36c18fff741a90e5322bd3e13cc3d789e2203e",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 341,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af25_lifecycle_source_pr_run": {
-      "id": 38535427969,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38535427969",
-      "head_sha": "2982797a4112681e3a53c82b46e80311e668d416",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 354,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af25_lifecycle_source_merged_main_run": {
-      "id": 38535509996,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38535509996",
-      "head_sha": "ab4f1478ed53feab510f043fd20e3c2471f0e781",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 354,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af25_lifecycle_records_pr_run": {
-      "id": 38535834193,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38535834193",
-      "head_sha": "534ac2c19b5150b6618987b5fc858ee78cf33a39",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 354,
-      "product_failures": 0,
-      "product_skips": 0
-    },
-    "af25_lifecycle_records_merged_main_run": {
-      "id": 38535949222,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38535949222",
-      "head_sha": "6847a346c8249d6d4620613576ba92aef0b5201b",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 354,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "source_push_run": {
-      "id": 38175727976,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38175727976",
-      "head_sha": "f94fa0b223293ac2976dde750c00df9421432a57",
-      "head_branch": "work/af22-wait-eintr-repair",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 251,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "source_pr_run": {
-      "id": 38175734396,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38175734396",
-      "head_sha": "f94fa0b223293ac2976dde750c00df9421432a57",
-      "head_branch": "work/af22-wait-eintr-repair",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 251,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "source_merged_main_run": {
-      "id": 38180015727,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38180015727",
-      "head_sha": "72b7619f7f614592b7c38ceca97a591d076bd8f1",
-      "head_branch": "main",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 251,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "records_pr_run": {
-      "id": 38191352599,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38191352599",
-      "head_sha": "1f44a4873fc842ae6f286e8cf08c91e4b2b2c087",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "product_tests": 251,
-      "product_failures": 0,
-      "product_skips": 0
-    },
-    "records_merged_main_run": {
-      "id": 38191409187,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38191409187",
-      "head_sha": "eb070d2e150dbadaa8f393a0d5f72e15711a18a5",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "product_tests": 251,
-      "product_failures": 0,
-      "product_skips": 0
-    },
-    "af27_resume_closure_records_pr_run": {
-      "id": 39386623417,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39386623417",
-      "head_sha": "fd65a7cf5acdebb3269544517223fc494a00130a",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 450,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_resume_closure_records_merged_main_run": {
-      "id": 39386694632,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39386694632",
-      "head_sha": "07a79c9b001fd5597ed11cabd650f8211fa08bbc",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 450,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af27_checkpoint_closure": {
-      "status": "pending",
-      "conclusion": null,
-      "event": "pull_request_then_push",
-      "required_head": null,
-      "product_tests_required": true,
-      "product_skips_required": 0
-    },
-    "af27_acceptance_closure_pr_run": {
-      "id": 39473923079,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39473923079",
-      "head_sha": "2be6916fe4dfcb2036293ae02ab74a2ac6955613",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 450,
-      "product_failures": 0,
-      "product_skips": 0
-    },
-    "af27_acceptance_closure_merged_main_run": {
-      "id": 39474080378,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39474080378",
-      "head_sha": "fd0a9df6c86e6baef2a09b44e822ccfb2f6c4a6d",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 450,
-      "product_failures": 0,
-      "product_skips": 0
-    },
-    "af28_recorded_concurrency_source_pr_run": {
-      "id": 39543240658,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39543240658",
-      "head_sha": "4047ac8ef65622e7627950ae95b8fa67c671a5ca",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 461,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af28_recorded_concurrency_merged_main_run": {
-      "id": 39543334981,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39543334981",
-      "head_sha": "12c03f3a2df97a299ed98e36630857df564ce3e5",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 461,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af28_resource_state_lineage_source_pr_run": {
-      "id": 39584777028,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39584777028",
-      "head_sha": "7c0c0b942229a9a88dd10f0ab189f0ae89c3d5dd",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 466,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af28_resource_state_lineage_merged_main_run": {
-      "id": 39584936518,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39584936518",
-      "head_sha": "5b36cad43680532448a06e44d16f6945cbe5c85e",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 466,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af28_causal_handoffs_source_pr_run": {
-      "id": 39616728490,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39616728490",
-      "head_sha": "59e964c2bf0654ca07a889af50191974444f53fb",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 475,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af28_causal_handoffs_merged_main_run": {
-      "id": 39617458489,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39617458489",
-      "head_sha": "ffe763a188e808d0557a678b6b7cec5d6475b3f0",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 475,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af28_causal_handoffs_records_pr_run": {
-      "id": 39618071176,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39618071176",
-      "head_sha": "7a27ca356d13569dfaa7983806087d47233c3864",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 475,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af28_causal_handoffs_records_merged_main_run": {
-      "id": 39821897925,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39821897925",
-      "head_sha": "6328e9ba9871fd63d1b938a0b9fdb9d67e3b8916",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 475,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af28_quorum_barrier_source_pr_run": {
-      "id": 39831615764,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39831615764",
-      "head_sha": "dbb4390ed1d9b3536130daeb52be88722b859862",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 485,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af28_quorum_barrier_merged_main_run": {
-      "id": 39831774279,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39831774279",
-      "head_sha": "f632ab4a26488f75a981ce4c833f76475b74ec84",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 485,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af29_permission_boundary_source_pr_run": {
-      "id": 39900570012,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39900570012",
-      "head_sha": "01d73281f39afb7338137f3df10d6d29a8cf8b59",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 504,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af29_permission_boundary_merged_main_run": {
-      "id": 39900701428,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39900701428",
-      "head_sha": "5330726fd81bf1b6071fdd72b825e89ed47edd6b",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 504,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af29_instruction_provenance_source_pr_run": {
-      "id": 39939002114,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39939002114",
-      "head_sha": "18d326c096671988f34162d98f2ed48e0344f2e9",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 516,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af29_instruction_provenance_merged_main_run": {
-      "id": 39939139774,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39939139774",
-      "head_sha": "d3f8723f2269d22e905533df8aaeb3187af92dea",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 516,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af29_untrusted_influence_lineage_source_pr_run": {
-      "id": 39978381724,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/39978381724",
-      "head_sha": "17a4481e04e1a3eab5e35144d2f2877159acae89",
-      "event": "pull_request",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 529,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    },
-    "af29_untrusted_influence_lineage_merged_main_run": {
-      "id": 40002769894,
-      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/40002769894",
-      "head_sha": "31a83bed71303cbf1dc02b8f5484e7b943f27dab",
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "python": "3.11.17",
-      "product_tests": 529,
-      "product_failures": 0,
-      "product_skips": 0,
-      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-      "diagnostics": "passed"
-    }
-  },
-  "local_test_status": "Python 3.11.17 preflight ran on exact main-derived branch. It stopped only because canonical state still named the already merged and explicitly released prior records branch; live GitHub evidence resolved that stale handoff. Product tests for this new slice have not run yet.",
-  "merge_status": "AF29_RECORDED_SENSITIVE_SINK_WRITER_CLAIM_PENDING_PUBLICATION",
-  "known_blocker": null,
-  "next_action": "Publish the AF-29 recorded sensitive-sink writer claim, rerun Python 3.11 preflight, then implement the bounded synthetic verifier and regressions.",
-  "feature_checkpoint_advanced": false,
-  "roadmap_expansion": {
-    "authorized_at": "2026-10-12",
-    "checkpoint_range": "AF-23..AF-34",
-    "accepted": 6,
-    "total": 12,
-    "roadmap": "docs/COMPETITIVE_ROADMAP.md",
-    "arbitrary_execution_authorized": false,
-    "af23_scope": "MERGED_AND_VERIFIED recorded/mock framework-neutral adapter, authorized registry and adversarial conformance only",
-    "af24_scope": "MERGED_AND_VERIFIED metadata-only multi-step state/evidence continuity, terminal partial-failure semantics and exact-evidence deterministic replay",
-    "af25_scope": "MERGED_AND_VERIFIED metadata-only versioned synthetic fixtures, deterministic recorded setup/cleanup, provenance and environment-drift evidence",
-    "af26_scope": "MERGED_AND_VERIFIED metadata-only synthetic network, timeout, rate-limit and API faults with exact bindings and bounded deterministic retry/outage evidence",
-    "af27_scope": "MERGED_AND_VERIFIED metadata-only idempotency, crash/recovery evidence, bounded retry budgets, exact state checkpoints, resume guards, ordered transition lineage and terminal closure",
-    "af28_scope": "MERGED_AND_VERIFIED metadata-only deterministic scheduling, conflict/state evidence, tenant separation, causal handoffs, quorum barriers and recorded capacity budgets"
-  },
-  "completed_checkpoints": [
-    {
-      "checkpoint": "AF-28 concurrent and multi-agent scenarios",
-      "status": "MERGED_AND_VERIFIED",
-      "accepted_scope": "Bounded deterministic recorded metadata for concurrent scheduling, conflict/state lineage, tenant separation, causal handoffs, quorum barriers and capacity-budget evidence",
-      "source_prs": [
-        57,
-        59,
-        61,
-        63,
-        65
-      ],
-      "records_prs": [
-        58,
-        60,
-        62,
-        64,
-        66
-      ],
-      "accepted_main_sha": "4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03",
-      "final_product_tests": 489,
-      "product_failures": 0,
-      "product_skips": 0,
-      "limitations": "Recorded metadata only: no agents, threads, processes, tools, commands, waiting, scheduling, coordination, execution, allocation, enforcement, state/payload access, external calls, credentials, filesystem/network access, runtime resource-cap guarantee, or OS-isolation claim."
-    },
-    {
-      "checkpoint": "AF-27 recovery/retry/state consistency",
-      "status": "MERGED_AND_VERIFIED",
-      "accepted_scope": "Bounded deterministic recorded metadata for idempotency, state chains/checkpoints, retry budgets, resume guards, transition lineage and terminal closure",
-      "source_prs": [
-        42,
-        44,
-        46,
-        48,
-        50,
-        52,
-        54
-      ],
-      "records_prs": [
-        43,
-        45,
-        47,
-        49,
-        51,
-        53,
-        55
-      ],
-      "acceptance_pr": 56,
-      "accepted_main_sha": "fd0a9df6c86e6baef2a09b44e822ccfb2f6c4a6d",
-      "final_product_tests": 450,
-      "product_failures": 0,
-      "product_skips": 0,
-      "limitations": "No retry, recovery, restore, durable-state access, agent/tool/command/project execution, external call, credential/payload handling, arbitrary execution, or filesystem/process/network/OS isolation authority."
-    },
-    {
-      "checkpoint": "AF-26 controlled failure injection",
-      "status": "MERGED_AND_VERIFIED",
-      "accepted_scope": "Bounded metadata-only synthetic network, timeout, rate-limit and API faults with exact environment, plan and trajectory bindings plus deterministic recorded retry/outage evidence",
-      "source_prs": [
-        37,
-        39
-      ],
-      "records_prs": [
-        38,
-        40
-      ],
-      "final_source_sha": "02beb959f5357168cdf4a04bdeaf0a90e26cbf21",
-      "final_source_tree_sha": "595c08d6bf25d6f93bcf6941013a8c29b0e9b977",
-      "accepted_main_sha": "833495376f75ea8606b078fd27737b7dd987283c",
-      "final_product_tests": 385,
-      "product_failures": 0,
-      "product_skips": 0,
-      "limitations": "No network calls, DNS, sleeping, agent/tool/command execution, recovery action, live project access, credentials, payloads, filesystem/process/OS isolation, hardware or production authority."
-    },
-    {
-      "checkpoint": "AF-25 reproducible environments and fixtures",
-      "status": "MERGED_AND_VERIFIED",
-      "accepted_scope": "Bounded metadata-only versioned synthetic fixtures, deterministic recorded setup/cleanup, exact provenance and environment-drift evidence",
-      "source_prs": [
-        32,
-        34
-      ],
-      "records_prs": [
-        33,
-        35
-      ],
-      "final_source_sha": "2982797a4112681e3a53c82b46e80311e668d416",
-      "final_source_tree_sha": "ecc701860154181252a2a72dd215497ce2a134a9",
-      "accepted_main_sha": "6847a346c8249d6d4620613576ba92aef0b5201b",
-      "final_product_tests": 354,
-      "product_failures": 0,
-      "product_skips": 0,
-      "limitations": "No setup/cleanup command execution, live project access, host inspection, credentials, network, arbitrary agent/tool execution, filesystem/process/OS isolation, hardware or production authority."
-    },
-    {
-      "checkpoint": "AF-24 multi-step trajectory verification",
-      "status": "MERGED_AND_VERIFIED",
-      "accepted_scope": "Bounded metadata-only ordered state/evidence transitions, terminal partial-failure semantics and deterministic exact-evidence replay",
-      "source_prs": [
-        27,
-        29
-      ],
-      "records_prs": [
-        28,
-        30
-      ],
-      "final_source_sha": "f0dfda043dd222faac95f9d8501f54ecaa6e5d9d",
-      "final_source_tree_sha": "b3adc7d4d54d51623af4c72b28d0dd9f6f912c0d",
-      "accepted_main_sha": "0c074fd7356de1ed6313e1d6b7bb36c3573cda8c",
-      "final_product_tests": 322,
-      "product_failures": 0,
-      "product_skips": 0,
-      "limitations": "No live agent/tool execution, framework or project access, credentials, network, payload inspection, filesystem/process isolation, hardware or production authority."
-    },
-    {
-      "checkpoint": "AF-23 framework-neutral agent adapter",
-      "status": "MERGED_AND_VERIFIED",
-      "accepted_scope": "Bounded metadata-only recorded/mock trajectories, fail-closed authorized recorded-adapter registry, and versioned positive/adversarial conformance evidence",
-      "source_prs": [
-        20,
-        22,
-        24
-      ],
-      "records_prs": [
-        21,
-        23,
-        25
-      ],
-      "final_source_sha": "fa395214e5494737116ca6b47d9c2c1d775bb2bf",
-      "final_source_tree_sha": "caa5270ee2264d9c5a7169e017172ed4e88d0ce7",
-      "accepted_main_sha": "8684d979355ecc20a4958ba92534d6af59d4f614",
-      "final_product_tests": 305,
-      "product_failures": 0,
-      "product_skips": 0,
-      "limitations": "No live framework/project adapter, arbitrary agent/tool execution, credentials, network, filesystem/process isolation, resource enforcement, hardware or production authority."
-    },
-    {
-      "checkpoint": "AF-19 adversarial prompt injection",
-      "pr": 4,
-      "merge": "MERGED AND VERIFIED",
-      "verified_main_sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
-      "ci_state": {
-        "pr_run": {
-          "id": 37155199677,
-          "sha": "1abdedb7d7617f5fe3131ae7eff542ce7606257a",
-          "event": "pull_request",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        "merged_main_run": {
-          "id": 37155388507,
-          "sha": "57bde8a2e343e425c019fe73eacb232d40a5ccc0",
-          "event": "push",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        "completion_main_run": {
-          "id": 37156155589,
-          "sha": "6918811421e0d9aad4cdffa0aef4111e92eed64f",
-          "event": "push",
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37156155589"
-        }
-      }
-    },
-    {
-      "current_checkpoint": "AF-20 bounded tool-call argument envelope",
-      "checkpoint_status": "MERGED_AND_VERIFIED",
-      "verified_main_sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5",
-      "observed_feature_sha": "18c01d2e06d2b68173e31fda5c4e4c837a4b45cc",
-      "pr_number": 5,
-      "pr_state": {
-        "number": 5,
-        "state": "merged",
-        "head_sha": "18c01d2e06d2b68173e31fda5c4e4c837a4b45cc",
-        "url": "https://github.com/antonypaul98/-agentflight/pull/5",
-        "merge_commit_sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5"
-      },
-      "ci_state": {
-        "pr_run": {
-          "id": 37859607596,
-          "sha": "18c01d2e06d2b68173e31fda5c4e4c837a4b45cc",
-          "event": "pull_request",
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37859607596"
-        },
-        "merged_main_run": {
-          "id": 37860434918,
-          "sha": "4adc900e1058d1be6f8ecd8a8b8022b80d0a20b5",
-          "event": "push",
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37860434918"
-        },
-        "historical_failure": {
-          "id": 37702259363,
-          "sha": "e0c054948266e91a3c47c6007f7fbda203692ad3",
-          "event": "pull_request",
-          "status": "completed",
-          "conclusion": "failure",
-          "cause": "ci_diagnostics.py KeyError diagnostic_import; state schema restored in following commit"
-        },
-        "push_run": {
-          "id": 37874203999,
-          "sha": "a4673b136e5eddc7792036f77681c3556742d99b",
-          "event": "push",
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37874203999",
-          "tests": "126 product tests passed; infrastructure 18 executed, 1 skipped (prior run evidence)"
-        }
-      },
-      "checkpoint": "AF-20 bounded tool-call argument envelope",
-      "completion_main_run": {
-        "id": 37878490104,
-        "sha": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
-        "event": "push",
-        "status": "completed",
-        "conclusion": "success",
-        "tests": "126 product tests passed; 18 infrastructure tests executed including 1 skip"
-      }
-    },
-    {
-      "checkpoint": "AF-21 structured replay-suite reporting",
-      "status": "MERGED_AND_VERIFIED",
-      "source_sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
-      "source_tree_sha": "14ee27b417525d209241c703eacf0bb32b20c21a",
-      "verified_main_sha": "8066bbcc8127c12c528f4d355d1029f894355c95",
-      "pr_state": {
-        "number": 6,
-        "state": "merged",
-        "head_sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
-        "url": "https://github.com/antonypaul98/-agentflight/pull/6",
-        "merge_commit_sha": "8066bbcc8127c12c528f4d355d1029f894355c95"
-      },
-      "ci_state": {
-        "push_run": {
-          "id": 37880641379,
-          "sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
-          "event": "push",
-          "status": "completed",
-          "conclusion": "success",
-          "attempt": 1,
-          "job_id": 113659304972,
-          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37880641379",
-          "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
-        },
-        "pr_run": {
-          "id": 37880666599,
-          "sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
-          "event": "pull_request",
-          "status": "completed",
-          "conclusion": "success",
-          "attempt": 1,
-          "job_id": 113659383793,
-          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37880666599",
-          "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
-        },
-        "merged_main_run": {
-          "id": 37880827835,
-          "sha": "8066bbcc8127c12c528f4d355d1029f894355c95",
-          "event": "push",
-          "status": "completed",
-          "conclusion": "success",
-          "attempt": 1,
-          "job_id": 113659884474,
-          "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37880827835",
-          "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
-        }
-      },
-      "limitations": "Recorded-call contract verification only; no return-value assertions, arbitrary project execution, sandboxing, real-project adapter or hardware acceptance."
-    }
-  ],
-  "last_session_exit": {
-    "BLOCKED_LAYER": null,
-    "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "Live main 164c29ab0ff30ace51d0ba792aac9507dbfea5f4, no open PRs, records PR #73 exact CI, merged-main CI and explicit prior writer release were refreshed. A new single-writer claim is prepared for a bounded synthetic recorded sensitive-sink boundary slice; no product source has changed yet.",
-    "REMOTE_SHA": "164c29ab0ff30ace51d0ba792aac9507dbfea5f4",
-    "NEXT_ACTION": "Publish the writer claim, then implement and validate the bounded recorded sensitive-sink boundary verifier with Python 3.11."
-  },
-  "diagnostic_import": "agentflight",
-  "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "257ee922395eff7bb01ebf6e114fe46880cb64b3",
-  "historical_session_exits": [
-    {
-      "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
-      "BLOCKER": "Shell Git fetch cannot resolve github.com; create_file for prepared regression tests was rejected by safety checks.",
-      "SAFE_WORK_COMPLETED": "Read live main, AGENTS.md and checkpoint state; confirmed source commit a4673b1 and exact-head CI #37874203999 success; regression patch preserved but not published.",
-      "REMOTE_SHA": "a4673b136e5eddc7792036f77681c3556742d99b",
-      "NEXT_ACTION": "Publish preserved scripts/tests/test_preflight_legacy_status.py regression tests through an approved write route; verify exact-head CI, reconcile state, then define AF-21 acceptance criteria."
-    },
-    {
-      "BLOCKED_LAYER": "shell DNS and connected source/test write safety",
-      "BLOCKER": "Canonical preflight git fetch cannot resolve github.com; connected create_blob rejected source and regression contents.",
-      "SAFE_WORK_COMPLETED": "Verified current main and exact-head CI (240 passed), executed canonical preflight, independently reproduced red/green wait-EINTR tests (3 red/3 green), preserved source patch and tests; pending source remains unpublished.",
-      "REMOTE_SHA": "9ac3b8ae71aec06b52338a16f4755f2629af57ed",
-      "NEXT_ACTION": "Use an authorized source-code publication path to apply the preserved wait-EINTR patch and 3 regressions to existing main; run full Python 3.11 suite and verify exact-commit CI."
-    }
-  ],
-  "starting_main_sha": "fd0a9df6c86e6baef2a09b44e822ccfb2f6c4a6d",
-  "local_validation": {
-    "python": "3.11.17",
-    "focused_before_fix": "3 failed",
-    "focused_after_fix": "3 passed, 0 failed",
-    "full_suite": {
-      "passed": 241,
-      "failed": 2,
-      "skipped": 0,
-      "environment_issue": "Execution environment PID versus /proc identity mismatch; both existing descendant tests reproduce on baseline 36913ae7",
-      "baseline_reproduced": true
-    },
-    "infrastructure": {
-      "passed": 17,
-      "skipped": 1,
-      "failed": 0
-    },
-    "diagnostics": "passed",
-    "scope": "Canonical Python 3.11.17 repository; local results preserved honestly. Complete remote Linux suite passes on the exact source and merged main.",
-    "commands": [
-      {
-        "command": "python -m pytest tests/test_capture_wait_interruptions.py --tb=short",
-        "result": "3 failed before fix; 3 passed after fix"
-      },
-      {
-        "command": "python -m pytest --tb=short",
-        "result": "241 passed, 2 failed, 0 skipped; both failures reproduced on untouched baseline due to local PID/proc mismatch"
-      },
-      {
-        "command": "python -m unittest discover -s scripts/tests -p 'test_*.py'",
-        "result": "18 executed, 17 passed, 1 baseline skip"
-      },
-      {
-        "command": "python scripts/ci_diagnostics.py",
-        "result": "exit 0: pip check and package import passed"
-      },
-      {
-        "command": "git diff --check",
-        "result": "exit 0"
-      }
-    ]
-  },
-  "usage_allowance": "BUDGET UNKNOWN: actual remaining Astra/Work allowance is not exposed. Repair scope is bounded; capacity is reserved for exact-head CI, canonical records and writer handoff.",
-  "changed_files": [
-    "CHECKPOINT_STATE.json",
-    "src/agentflight/security_probes.py",
-    "tests/test_security_probes.py",
-    "docs/AF29_CHECKPOINT.md",
-    "docs/WORKFLOW_RELIABILITY.md"
-  ],
-  "shell_preflight_receipt": {
-    "BLOCKED_LAYER": "external",
-    "BLOCKER": "GitHub API: gh unavailable; connector authorization must be checked separately; git push: authentication/authorization unavailable",
-    "SAFE_WORK_COMPLETED": "Clean clone and pinned Python 3.11.17 setup; scope and connector write remotely verified; bounded replay-suite implementation passed 160 product tests plus infrastructure and diagnostics. Feature publication and exact-head CI pending.",
-    "REMOTE_SHA": "8dc07a0b927a0c412a5595c6af08d43c523be94a",
-    "NEXT_ACTION": "Publish the reviewed implementation tree, create or reuse the AF-21 PR, and verify exact-head CI before merge and exact merged-main verification."
-  },
-  "accepted_at": "2026-10-09T03:49:11.530699+00:00",
-  "source_tree_sha": "7f6ba51744545bfc10902e4f907439afa73b0545",
-  "preserved_local_commits": {
-    "scope": "f02efb5303e509f18247dffd6788c884bfb9c92e",
-    "implementation": "fa41cd86f56a292d9bd348c9c23432e1f7a65a3f",
-    "remote_implementation_tree_equals_local": true
-  },
-  "non_product_environment_issues": [
-    {
-      "issue": "gh absent and shell Git push authentication unavailable",
-      "workaround": "GitHub connector actual writes, exact trees, branch leases and changed-file lists verified",
-      "blocks_checkpoint": false,
-      "antony_intervention_required": false
-    }
-  ],
-  "current_af22_slice": {
-    "title": "Bounded post-signal process reaping",
-    "status": "ACCEPTED",
-    "base_sha": "63a06647cce660635f01705d7d361d7e525a64fe",
-    "source_sha": "4ff75384c3a8415a2066323ed75db4ca2479856b",
-    "source_tree_sha": "1249b8f945dccb3dcc2fe5b23310a97a5c6243b9",
-    "pr": 15,
-    "merge_sha": "312eb503591d65f63400def41a7419bf9036c784",
-    "push_ci_run": 38171808059,
-    "pr_ci_run": 38171815572,
-    "merged_main_ci_run": 38171884636,
-    "remote_test_result": "Each exact-sha Python 3.11.17 run passed 251 product tests, 0 failed, 0 skipped; 18 infrastructure executed with 1 existing Memory-only skip; diagnostics passed",
-    "local_test_result": "19 focused tests passed; 249 product tests passed with 2 unchanged /proc observation failures; full suite otherwise passed on Python 3.11.17",
-    "scope": "Bound post-signal process.wait to the existing maximum synthetic-case timeout and preserve the original deadline across EINTR retries; no process-group re-signal, allowlist expansion, test weakening or sandbox claim"
-  },
-  "pending_af22_slice": {
-    "title": "Interrupted process.wait after pipe EOF",
-    "source_patch": "Canonical existing _capture_bounded wait retry against the original monotonic deadline; original archived ZIP unavailable through accessible workspace/Library",
-    "new_test": "tests/test_capture_wait_interruptions.py",
-    "published": true,
-    "local_test_scope": "canonical repository and Python 3.11.17",
-    "local_test_result": "3 red before fix, 3 green after; full suite 241 passed and 2 baseline environment failures",
-    "remote_ci": "Verified source push #38083240626, PR #38083268347 and merged-main #38083310755: 243 passed, 0 failed, 0 product skips",
-    "base_sha": "36913ae7ff1d7aaae2e179bc675f1f0be248dd2c",
-    "source_sha": "16365db581f9ed1019f466575187685d2b97a481",
-    "merge_sha": "a2195a74fc49de43eadbc468c73e4c77d5e926aa",
-    "acceptance_status": "ACCEPTED bounded wait-EINTR repair; no overall AF-22 completion claim"
-  },
-  "prior_wait_eintr_recovery_record": {
-    "title": "Interrupted process.wait after pipe EOF",
-    "source_patch": "source.patch in agentflight-run39-wait-eintr-handoff.zip",
-    "new_test": "tests/test_capture_wait_interruptions.py",
-    "published": false,
-    "local_test_scope": "focused reconstructed function only",
-    "local_test_result": "3 failed before patch, 3 passed after patch",
-    "remote_ci": "not triggered",
-    "base_sha": "9ac3b8ae71aec06b52338a16f4755f2629af57ed"
-  },
-  "writer_handoff": {
-    "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF29-RECORDED-SENSITIVE-SINK-20261024",
-    "status": "source_claimed",
-    "hourly_mode": "single_writer",
-    "next_owner": "AgentFlight Hourly Build",
-    "source_writing_stopped": false,
-    "base_main_sha": "164c29ab0ff30ace51d0ba792aac9507dbfea5f4",
-    "branch": "work/af29-recorded-sensitive-sink-boundary",
-    "source_head": null,
-    "source_tree": null,
-    "source_merge": null,
-    "source_pr": null,
-    "source_pr_ci": null,
-    "source_merged_main_ci": null,
-    "prior_release_receipt": "https://github.com/antonypaul98/-agentflight/pull/73#issuecomment-6372026991",
-    "release_requirement": "Exact AF-29 recorded sensitive-sink source and records PR/merged-main Python 3.11 CI green, followed by explicit writer release.",
-    "no_real_execution": true,
-    "no_private_data_or_secrets_committed": true,
-    "recorded_at": "2026-10-24T00:20:25Z"
-  },
-  "recorded_at_utc": "2026-10-24T00:20:25Z",
-  "preflight_receipt": {
-    "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
-    "exit_code": 1,
-    "current_repository_sha": "08168abb50dcb526476210bcd92aa0c117ce1802",
-    "remote_sha": "4e2a1710fbb4217ab3a6a2e155784aac433b5af8",
-    "dirty": true,
-    "local_only": 0,
-    "remote_only": 0,
-    "behind_main": 0,
-    "BLOCKED_LAYER": "Git metadata (resolved)",
-    "BLOCKER": "Preflight named the historical AF-24 branch from the pre-release state. Live PR #31 exact CI, merged-main CI and explicit release independently authorize the AF-25 branch created from current main."
-  },
-  "publication_recovery_receipt": {
-    "shell_push": "Rejected because terminal Git credentials were unavailable",
-    "authorized_path": "Repository-authorized GitHub connector",
-    "remote_branch": "work/af24-multi-step-trajectory",
-    "remote_sha": "5c5b2ebdad8e6c87c81eb44a81b3b938df14b3bd",
-    "remote_tree_sha": "59979a02cd3721b0cfa10439888ed9fa31e6d841",
-    "base_sha": "8684d979355ecc20a4958ba92534d6af59d4f614",
-    "compare": "ahead 1, behind 0; exact five-file source diff verified",
-    "resolved": true
-  },
-  "af25_publication_recovery_receipt": {
-    "shell_push": "Rejected because terminal Git credentials were unavailable",
-    "authorized_path": "Repository-authorized GitHub connector",
-    "remote_branch": "work/af25-reproducible-fixtures",
-    "remote_sha": "c19c81f3c44cbb14b6516570002a5a30c460899d",
-    "remote_tree_sha": "4595315dd15c31b23ad9fe47966bbd702e899ac4",
-    "base_sha": "08168abb50dcb526476210bcd92aa0c117ce1802",
-    "compare": "ahead 1, behind 0; exact five-file source diff verified",
-    "resolved": true
-  },
-  "af25_fixture_source_receipt": {
-    "scope": "Bounded metadata-only versioned synthetic-fixture environment manifest with exact provenance hashes and deterministic drift evidence",
-    "source_sha": "c19c81f3c44cbb14b6516570002a5a30c460899d",
-    "source_tree_sha": "4595315dd15c31b23ad9fe47966bbd702e899ac4",
-    "source_pr": 32,
-    "merge_sha": "ea36c18fff741a90e5322bd3e13cc3d789e2203e",
-    "pr_ci_run": 38528669015,
-    "merged_main_ci_run": 38528790850,
-    "product_tests": 341,
-    "product_failures": 0,
-    "product_skips": 0,
-    "checkpoint_status": "IN_PROGRESS",
-    "roadmap_progress": "2/12",
-    "limitations": "No host inspection, file reads, dependency installation, setup/cleanup execution, live framework/project adapter, arbitrary agent/tool execution, credentials, network, filesystem/process isolation, hardware or production authority."
-  },
-  "af25_lifecycle_source_receipt": {
-    "scope": "Bounded metadata-only setup/cleanup lifecycle verification bound to one exact normalized synthetic fixture environment",
-    "source_sha": "2982797a4112681e3a53c82b46e80311e668d416",
-    "source_tree_sha": "ecc701860154181252a2a72dd215497ce2a134a9",
-    "source_pr": 34,
-    "merge_sha": "ab4f1478ed53feab510f043fd20e3c2471f0e781",
-    "pr_ci_run": 38535427969,
-    "merged_main_ci_run": 38535509996,
-    "product_tests": 354,
-    "product_failures": 0,
-    "product_skips": 0,
-    "checkpoint_status": "IN_PROGRESS",
-    "roadmap_progress": "2/12",
-    "limitations": "Recorded identifiers, operation hashes and outcomes only; no proof that setup/cleanup ran, no commands, paths, payloads, logs, environment values, credentials, host inspection, project access, network, arbitrary execution or isolation claim."
-  },
-  "af24_source_receipt": {
-    "scope": "Bounded metadata-only verification of ordered AF-23 authorized recorded trajectories with exact adjacent state-hash binding and terminal partial-failure semantics",
-    "source_sha": "5c5b2ebdad8e6c87c81eb44a81b3b938df14b3bd",
-    "source_tree_sha": "59979a02cd3721b0cfa10439888ed9fa31e6d841",
-    "source_pr": 27,
-    "merge_sha": "ab6584369ae381201caed15941bdc719c28adc61",
-    "pr_ci_run": 38477794522,
-    "merged_main_ci_run": 38477919301,
-    "product_tests": 314,
-    "product_failures": 0,
-    "product_skips": 0,
-    "checkpoint_status": "IN_PROGRESS",
-    "roadmap_progress": "1/12",
-    "limitations": "No live framework/project adapter, arbitrary agent/tool execution, payload dereference, credentials, network, filesystem/process isolation, resource enforcement, hardware or production authority."
-  },
-  "shell_git_write_probe": {
-    "command": "GIT_TERMINAL_PROMPT=0 git push --dry-run origin HEAD:refs/heads/work/af22-wait-eintr-repair",
-    "exit_code": 128,
-    "result": "could not read Username for https://github.com: terminal prompts disabled",
-    "recovery": "AGENTS.md authorized connected-integration preservation with observed parent/base tree, force=false, exact tree/ref and file-list verification. Native repository permissions report push=true."
-  },
-  "historical_ci_states": [
-    {
-      "push_run": {
-        "id": 37880641379,
-        "sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
-        "event": "push",
-        "status": "completed",
-        "conclusion": "success",
-        "attempt": 1,
-        "job_id": 113659304972,
-        "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37880641379",
-        "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
-      },
-      "pr_run": {
-        "id": 37880666599,
-        "sha": "81d435cf6dd17253d5c9924537458b612f030c3a",
-        "event": "pull_request",
-        "status": "completed",
-        "conclusion": "success",
-        "attempt": 1,
-        "job_id": 113659383793,
-        "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37880666599",
-        "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
-      },
-      "merged_main_run": {
-        "id": 37880827835,
-        "sha": "8066bbcc8127c12c528f4d355d1029f894355c95",
-        "event": "push",
-        "status": "completed",
-        "conclusion": "success",
-        "attempt": 1,
-        "job_id": 113659884474,
-        "url": "https://github.com/antonypaul98/-agentflight/actions/runs/37880827835",
-        "tests": "160 product tests passed, 0 failed; 18 infrastructure executed, 17 passed and 1 baseline skip; diagnostics passed on Python 3.11.17"
-      },
-      "af22_latest_verified_main_run": {
-        "id": 38059118699,
-        "sha": "9ac3b8ae71aec06b52338a16f4755f2629af57ed",
-        "event": "push",
-        "status": "completed",
-        "conclusion": "success",
-        "job_id": 114233578057,
-        "url": "https://github.com/antonypaul98/-agentflight/actions/runs/38059118699",
-        "tests": "240 product tests passed, 0 failed; infrastructure and diagnostics steps successful on Python 3.11.17."
-      }
-    }
-  ],
-  "accepted_af22_repairs": [
-    {
-      "title": "Interrupted process.wait after pipe EOF",
-      "status": "ACCEPTED",
-      "source_sha": "16365db581f9ed1019f466575187685d2b97a481",
-      "pr": 7,
-      "merge_sha": "a2195a74fc49de43eadbc468c73e4c77d5e926aa",
-      "pr_ci_run": 38083268347,
-      "merged_main_ci_run": 38083310755,
-      "product_tests": 243,
-      "product_failures": 0,
-      "product_skips": 0,
-      "scope": "Bounded retry preserves original deadline and timeout redaction; exactly three synthetic regressions; no worker allowlist, security boundary or cleanup test weakening"
-    },
-    {
-      "title": "Interrupted cleanup reaping after group termination",
-      "status": "ACCEPTED",
-      "source_sha": "f238100a09109c432050c90decec9f8c1d14a557",
-      "pr": 9,
-      "merge_sha": "4540d22005a7d5a7ff464089af364a56134a36b6",
-      "push_ci_run": 38128419013,
-      "pr_ci_run": 38128432122,
-      "merged_main_ci_run": 38128463396,
-      "product_tests": 245,
-      "product_failures": 0,
-      "product_skips": 0,
-      "scope": "Bounded cleanup wait retry after group termination; two synthetic regressions; no group re-signal, allowlist expansion, test weakening or sandbox claim"
-    },
-    {
-      "title": "Interrupted parent liveness poll during fallback cleanup",
-      "status": "ACCEPTED",
-      "source_sha": "d99ff70c8e10d3eccbdbab00d57c848595b0db7c",
-      "pr": 11,
-      "merge_sha": "141be6b41cbd8d64842617ca66c96fe6dd039fe8",
-      "push_ci_run": 38131721751,
-      "pr_ci_run": 38131730706,
-      "merged_main_ci_run": 38147173127,
-      "product_tests": 247,
-      "product_failures": 0,
-      "product_skips": 0,
-      "scope": "Bounded parent poll retry before fallback signaling; two synthetic regressions; no signal or wait while liveness is unknown; no allowlist expansion, test weakening or sandbox claim"
-    },
-    {
-      "title": "Interrupted captured-pipe close during final cleanup",
-      "status": "ACCEPTED",
-      "source_sha": "a8d1440d9b1ff1daf06fae085f8a911f0e28ddb6",
-      "pr": 13,
-      "merge_sha": "427428b22b638ea517ad340d6d47741c5f24723f",
-      "push_ci_run": 38151299109,
-      "pr_ci_run": 38151317133,
-      "merged_main_ci_run": 38151372219,
-      "product_tests": 249,
-      "product_failures": 0,
-      "product_skips": 0,
-      "scope": "Bounded pipe-close retry after subprocess cleanup; transient interruption preserves the verdict and persistent interruption remains deterministic while the second pipe closes; two synthetic regressions; no allowlist expansion, test weakening or sandbox claim"
-    },
-    {
-      "title": "Bounded post-signal process reaping",
-      "status": "ACCEPTED",
-      "source_sha": "4ff75384c3a8415a2066323ed75db4ca2479856b",
-      "source_tree_sha": "1249b8f945dccb3dcc2fe5b23310a97a5c6243b9",
-      "pr": 15,
-      "merge_sha": "312eb503591d65f63400def41a7419bf9036c784",
-      "push_ci_run": 38171808059,
-      "pr_ci_run": 38171815572,
-      "merged_main_ci_run": 38171884636,
-      "product_tests": 251,
-      "product_failures": 0,
-      "product_skips": 0,
-      "scope": "Bound post-signal process.wait to the existing maximum synthetic-case timeout and preserve one deadline across interrupted retries; two synthetic regressions; no process-group re-signal, allowlist expansion, test weakening or sandbox claim"
-    }
-  ],
-  "af27_recorded_recovery_source_receipt": {
-    "source_pr": 42,
-    "source_head_sha": "ca4bd35a1e5557ee9a48ecd18145b7d9ddeb7301",
-    "source_tree_sha": "9b4135caafe4a752c1b4d4af57d76ed77fa32a8c",
-    "pr_ci_run": 38850492412,
-    "merged_main_sha": "234678fe214f86336832d1a901a9c5be8a5581aa",
-    "merged_main_ci_run": 38850574375,
-    "python": "3.11.17",
-    "product_tests": 401,
-    "product_failures": 0,
-    "product_skips": 0,
-    "scope": "Bounded recorded recovery metadata with exact failure-plan, trajectory, operation and idempotency bindings; contiguous state chain; at most one commit; failed and duplicate attempts do not mutate state.",
-    "limitations": "No retries, recovery action, agent/tool/command execution, durable-state or project access, credentials, payloads, network calls, or isolation claim."
-  },
-  "af27_recorded_recovery_records_receipt": {
-    "records_pr": 43,
-    "records_head_sha": "c68c3c5af7821386e0b36d3a2563e7ba270c64da",
-    "records_tree_sha": "17034f92bcd6a8b98805a857c2aecdb22ee3890a",
-    "pr_ci_run": 38879692754,
-    "merged_main_sha": "4045888be212e805e8dea7654df776f4f6c5196e",
-    "merged_main_ci_run": 38879807047,
-    "python": "3.11.17",
-    "product_tests": 401,
-    "product_failures": 0,
-    "product_skips": 0,
-    "release_receipt": "https://github.com/antonypaul98/-agentflight/pull/43#issuecomment-6212328098"
-  },
-  "af27_retry_budget_source_receipt": {
-    "source_pr": 44,
-    "source_head_sha": "fd71cf0f1597931ed575e165a8a0b9fb76c35e39",
-    "source_tree_sha": "43aa52b9353ab12141aed760b75dd520bd668c75",
-    "pr_ci_run": 38886756075,
-    "merged_main_sha": "8992aa0e7dbbab05c73848694c972b3dac799a7b",
-    "merged_main_ci_run": 38886830294,
-    "python": "3.11.17",
-    "product_tests": 409,
-    "product_failures": 0,
-    "product_skips": 0,
-    "scope": "Exact recovery-report-bound metadata-only retry budgets with an eight-attempt cap and deterministic recovered, exhausted or retry-permitted dispositions.",
-    "limitations": "No retry, recovery, sleeping, agent/tool/command execution, durable-state or project access, external calls, credentials, payloads, or isolation claim."
-  },
-  "af27_state_checkpoint_source_receipt": {
-    "source_pr": 46,
-    "source_head_sha": "c556396d3caa982e70be914cedb12010804bce73",
-    "source_tree_sha": "dd0eb0c5cf5bac8f3469f85b48220b77f207939a",
-    "pr_ci_run": 39089907017,
-    "merged_main_sha": "99ff09825e77613917c866591ebba37700412d40",
-    "merged_main_ci_run": 39089947965,
-    "python": "3.11.17",
-    "product_tests": 419,
-    "product_failures": 0,
-    "product_skips": 0,
-    "scope": "Exact recovery-report-bound metadata-only state checkpoints with a bounded positive generation and initial/final state hash continuity.",
-    "limitations": "No durable-state read, write, restore or persistence claim; no project access, retry/recovery action, agent/tool/command execution, external call, credentials, payloads, or isolation claim."
-  },
-  "af27_resume_guard_source_receipt": {
-    "source_pr": 48,
-    "source_head_sha": "7d99425194774aab8f1d64aac1c27c744e302a45",
-    "source_tree_sha": "ce8e5b691c2527955108138022ab491df0f90ab3",
-    "pr_ci_run": 39131567287,
-    "merged_main_sha": "f4588406d6c7cf12d9e8893386f106533d5d6556",
-    "merged_main_ci_run": 39131630319,
-    "python": "3.11.17",
-    "product_tests": 427,
-    "product_failures": 0,
-    "product_skips": 0,
-    "scope": "Deterministic metadata-only disposition binding exact recovery, retry-budget, and state-checkpoint evidence as closed-recovered, closed-exhausted, or a non-authoritative recorded resume candidate.",
-    "limitations": "No retry, recovery, restore, agent/tool/command execution, project or durable-state access, external calls, credentials, payloads, or isolation claim."
-  },
-  "af27_resume_transition_source_receipt": {
-    "source_pr": 50,
-    "source_head_sha": "74310a2aca5091118d4692a043ba668310b4a8ae",
-    "source_tree_sha": "0e99662a7080c399088b7cdfedb6996e83e26e0d",
-    "pr_ci_run": 39159042557,
-    "merged_main_sha": "d68706b245bd22a63bec854b68c08f1e1f1dc5d6",
-    "merged_main_ci_run": 39159139603,
-    "python": "3.11.17",
-    "product_tests": 439,
-    "product_failures": 0,
-    "product_skips": 0,
-    "scope": "Deterministic metadata-only continuity verification requiring an exact prior resume candidate, one appended recovery event, preserved recovery bindings, and one checkpoint-generation advance.",
-    "limitations": "No retry, recovery, restore, agent/tool/command execution, project or durable-state access, external calls, credentials, payloads, or isolation claim."
-  },
-  "af27_resume_lineage_source_receipt": {
-    "source_pr": 52,
-    "source_head_sha": "20a775610f2a92369b895bddb63bc29a28ae5f6f",
-    "source_tree_sha": "a541d34f67e6c15d9986903ff8e59024d553533b",
-    "pr_ci_run": 39185479785,
-    "merged_main_sha": "5d45a7ccee5146ab429094fb8b5d73809348f819",
-    "merged_main_ci_run": 39185564505,
-    "python": "3.11.17",
-    "product_tests": 442,
-    "product_failures": 0,
-    "product_skips": 0,
-    "scope": "Deterministic metadata-only lineage verification for one through seven ordered content-addressed resume transitions with exact guard evidence, attempt-count, and checkpoint-generation continuity.",
-    "limitations": "No retry, recovery, restore, agent/tool/command execution, project or durable-state access, external calls, credentials, payloads, or isolation claim."
-  },
-  "af27_resume_closure_source_receipt": {
-    "source_pr": 54,
-    "source_head_sha": "3f0e7332d8f8a929318ed794cb6143fbebb750cd",
-    "source_tree_sha": "6af927ea1bae1eefeea3da22ff7b34122ff09280",
-    "pr_ci_run": 39386039725,
-    "merged_main_sha": "ecdfdc932a9501520f73313a2ae75014ba682ec3",
-    "merged_main_ci_run": 39386156518,
-    "python": "3.11.17",
-    "product_tests": 450,
-    "product_failures": 0,
-    "product_skips": 0,
-    "scope": "Content-addressed metadata-only closure that accepts only exact terminal closed-recovered or closed-exhausted resume lineages and rejects unfinished candidates.",
-    "limitations": "No retry, recovery, restore, agent/tool/command execution, project or durable-state access, external calls, credentials, payloads, or isolation claim."
-  },
-  "af27_acceptance_closure": {
-    "status": "MERGED_AND_VERIFIED",
-    "accepted_checkpoints": 5,
-    "total_checkpoints": 12,
-    "reviewed_main_sha": "07a79c9b001fd5597ed11cabd650f8211fa08bbc",
-    "source_prs": [
-      42,
-      44,
-      46,
-      48,
-      50,
-      52,
-      54
-    ],
-    "records_prs": [
-      43,
-      45,
-      47,
-      49,
-      51,
-      53,
-      55
-    ],
-    "latest_records_pr_head": "fd65a7cf5acdebb3269544517223fc494a00130a",
-    "latest_records_merge": "07a79c9b001fd5597ed11cabd650f8211fa08bbc",
-    "latest_records_pr_ci": 39386623417,
-    "latest_records_merged_main_ci": 39386694632,
-    "latest_product_tests": 450,
-    "product_failures": 0,
-    "product_skips": 0,
-    "scope": "Deterministic recorded-metadata verification for idempotency, bounded retries, exact state chains/checkpoints, resume dispositions, ordered transition lineage and terminal closure.",
-    "limitations": "No retry, recovery, restore, durable-state access, agent/tool/command/project execution, external call, credential/payload handling, or filesystem/process/network/OS isolation claim.",
-    "closure_pr": 56,
-    "closure_head": "2be6916fe4dfcb2036293ae02ab74a2ac6955613",
-    "closure_merge": "fd0a9df6c86e6baef2a09b44e822ccfb2f6c4a6d",
-    "closure_pr_ci": 39473923079,
-    "closure_merged_main_ci": 39474080378,
-    "writer_release": "https://github.com/antonypaul98/-agentflight/pull/56#issuecomment-6298048620"
-  },
-  "af28_recorded_concurrency_source_receipt": {
-    "status": "SOURCE_AND_RECORDS_MERGED_AND_VERIFIED",
-    "source_sha": "4047ac8ef65622e7627950ae95b8fa67c671a5ca",
-    "source_pr": 57,
-    "source_merge_sha": "12c03f3a2df97a299ed98e36630857df564ce3e5",
-    "source_pr_ci_run": 39543240658,
-    "source_merged_main_ci_run": 39543334981,
-    "product_tests": 461,
-    "product_failures": 0,
-    "product_skips": 0,
-    "scope": "Deterministic bounded recorded concurrent-scenario metadata with single-tenant hashes, stable scheduling, participant chains and conflict rejection; no execution or isolation authority."
-  },
-  "af28_recorded_concurrency_records_receipt": {
-    "records_pr": 58,
-    "records_head_sha": "9e2f506175c98d641454adec962dcf72384b4b20",
-    "records_pr_ci_run": 39543530242,
-    "merged_main_sha": "4e05af01f85996462d5f509dd8c6266cdb1c4bf0",
-    "merged_main_ci_run": 39543620169,
-    "python": "3.11.17",
-    "product_tests": 461,
-    "product_failures": 0,
-    "product_skips": 0,
-    "release_receipt": "https://github.com/antonypaul98/-agentflight/pull/58#issuecomment-6307986245"
-  },
-  "af28_resource_state_lineage_source_receipt": {
-    "status": "SOURCE_AND_RECORDS_MERGED_AND_VERIFIED",
-    "source_sha": "7c0c0b942229a9a88dd10f0ab189f0ae89c3d5dd",
-    "source_tree_sha": "bed10fc7d5490064a6b5f9a5382938710813c5d9",
-    "source_pr": 59,
-    "source_merge_sha": "5b36cad43680532448a06e44d16f6945cbe5c85e",
-    "source_pr_ci_run": 39584777028,
-    "source_merged_main_ci_run": 39584936518,
-    "python": "3.11.17",
-    "product_tests": 466,
-    "product_failures": 0,
-    "product_skips": 0,
-    "scope": "Deterministic exact-evidence-bound recorded resource-state lineage with shared contender pre-state, one accepted event per round, cross-round state continuity and isolated-conflict rejection.",
-    "limitations": "No threads, processes, agents, tools, projects, commands, external calls, credentials, payloads, filesystem or durable-state access, retry/recovery action, resource-cap claim, or OS isolation claim."
-  },
-  "af28_resource_state_lineage_records_receipt": {
-    "records_pr": 60,
-    "records_head_sha": "5e787b3fb00885b763842a7626b906ba66ae1f09",
-    "records_pr_ci_run": 39585237927,
-    "merged_main_sha": "de7cced8ebc578ab036c4c311fd713b12d246e8c",
-    "merged_main_ci_run": 39585366060,
-    "python": "3.11.17",
-    "product_tests": 466,
-    "product_failures": 0,
-    "product_skips": 0,
-    "release_receipt": "https://github.com/antonypaul98/-agentflight/pull/60#issuecomment-6313853305"
-  },
-  "af28_causal_handoffs_source_receipt": {
-    "status": "SOURCE_AND_RECORDS_MERGED_VERIFIED_WRITER_RELEASED",
-    "source_sha": "59e964c2bf0654ca07a889af50191974444f53fb",
-    "source_tree_sha": "c9828596e82c9ad8d585529ebff2a350c6527176",
-    "source_pr": 61,
-    "source_merge_sha": "ffe763a188e808d0557a678b6b7cec5d6475b3f0",
-    "source_pr_ci_run": 39616728490,
-    "source_merged_main_ci_run": 39617458489,
-    "python": "3.11.17",
-    "product_tests": 475,
-    "product_failures": 0,
-    "product_skips": 0,
-    "scope": "Deterministic bounded recorded cross-agent causal handoffs bound to exact validated event identities, registered distinct participants, completed endpoints and strict temporal order.",
-    "limitations": "No agents, threads, processes, tools, projects, commands, state access, message or artifact transfer, external calls, credentials, payloads, retries, recovery, resource-cap claim, or OS isolation claim."
-  },
-  "af28_causal_handoffs_records_receipt": {
-    "records_pr": 62,
-    "records_head_sha": "7a27ca356d13569dfaa7983806087d47233c3864",
-    "records_pr_ci_run": 39618071176,
-    "merged_main_sha": "6328e9ba9871fd63d1b938a0b9fdb9d67e3b8916",
-    "merged_main_ci_run": 39821897925,
-    "python": "3.11.17",
-    "product_tests": 475,
-    "product_failures": 0,
-    "product_skips": 0,
-    "release_receipt": "https://github.com/antonypaul98/-agentflight/pull/62#issuecomment-6346891476"
-  },
-  "af28_quorum_barrier_source_receipt": {
-    "status": "SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
-    "source_sha": "dbb4390ed1d9b3536130daeb52be88722b859862",
-    "source_tree_sha": "e3c96509ea23a931c826b363483ac896461dec75",
-    "source_pr": 63,
-    "source_merge_sha": "f632ab4a26488f75a981ce4c833f76475b74ec84",
-    "source_pr_ci_run": 39831615764,
-    "source_merged_main_ci_run": 39831774279,
-    "python": "3.11.17",
-    "product_tests": 485,
-    "product_failures": 0,
-    "product_skips": 0,
-    "scope": "Deterministic exact-event-bound recorded quorum barriers with bounded participants, completed arrivals meeting quorum, strictly later completed release events, deterministic ordering and content-addressed evidence.",
-    "limitations": "No waiting, scheduling, coordination, execution, transfer, agents, threads, processes, tools, projects, commands, external calls, credentials, payloads, filesystem or durable-state access, resource-cap claim, or OS isolation claim."
-  },
-  "af28_capacity_budget_source_receipt": {
-    "status": "SOURCE_AND_RECORDS_MERGED_VERIFIED_WRITER_RELEASED",
-    "source_sha": "86cb28ee9090bfeb4f2d7eeb64575e3fde306df0",
-    "source_tree_sha": "e010c7385a1586780d84b71eaf669b2f5ee71760",
-    "source_pr": 65,
-    "source_merge_sha": "31682f750a40055a45be49513d1d4b82df49454f",
-    "source_pr_ci_run": 39871905292,
-    "source_merged_main_ci_run": 39872066120,
-    "python": "3.11.17",
-    "product_tests": 489,
-    "product_failures": 0,
-    "product_skips": 0,
-    "scope": "Deterministic exact-evidence-bound recorded participant-event and distinct-resource counts checked against caller-declared caps.",
-    "limitations": "No execution, scheduling, waiting, allocation, enforcement, agents, threads, processes, tools, commands, external calls, credentials, payloads, filesystem, network, durable-state access, runtime resource-cap claim, or OS isolation claim."
-  },
-  "af28_capacity_budget_records_receipt": {
-    "records_pr": 66,
-    "records_head_sha": "aef8dd2769d1120d69c75d9678b1818d729e3239",
-    "records_pr_ci_run": 39872276338,
-    "merged_main_sha": "4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03",
-    "merged_main_ci_run": 39872366099,
-    "python": "3.11.17",
-    "product_tests": 489,
-    "product_failures": 0,
-    "product_skips": 0,
-    "release_receipt": "https://github.com/antonypaul98/-agentflight/pull/66#issuecomment-6353647830"
-  },
-  "af28_acceptance_closure": {
-    "status": "MERGED_AND_VERIFIED",
-    "accepted_checkpoints": 6,
-    "total_checkpoints": 12,
-    "reviewed_main_sha": "4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03",
-    "source_prs": [
-      57,
-      59,
-      61,
-      63,
-      65
-    ],
-    "records_prs": [
-      58,
-      60,
-      62,
-      64,
-      66
-    ],
-    "latest_records_pr_head": "aef8dd2769d1120d69c75d9678b1818d729e3239",
-    "latest_records_merge": "4f4d0ab2b90f4493ad5859b5e58a2d1ca746dd03",
-    "latest_records_pr_ci": 39872276338,
-    "latest_records_merged_main_ci": 39872366099,
-    "latest_product_tests": 489,
-    "product_failures": 0,
-    "product_skips": 0,
-    "scope": "Deterministic recorded-metadata verification for bounded concurrent scheduling, conflict/state lineage, tenant separation, causal handoffs, quorum barriers and capacity budgets.",
-    "limitations": "No real agents, threads, processes, tools, commands, waiting, scheduling, coordination, execution, allocation, enforcement, state/payload access, external calls, credentials, filesystem/network access, runtime resource-cap guarantee, or OS-isolation claim.",
-    "closure_pr": 67,
-    "closure_head": "af36e21f72191334bd694d177bab330fcc7b16a4",
-    "closure_merge": "f4b89eb8024ffdbac18e7dc6352b4c6235aeac0d",
-    "closure_pr_ci": 39895297515,
-    "closure_merged_main_ci": 39895403697,
-    "writer_release": "https://github.com/antonypaul98/-agentflight/pull/67#issuecomment-6356709988"
-  },
-  "af29_permission_boundary_source_receipt": {
-    "status": "SOURCE_AND_RECORDS_MERGED_VERIFIED_WRITER_RELEASED",
-    "source_sha": "01d73281f39afb7338137f3df10d6d29a8cf8b59",
-    "source_tree_sha": "7f6ba51744545bfc10902e4f907439afa73b0545",
-    "source_pr": 68,
-    "source_merge_sha": "5330726fd81bf1b6071fdd72b825e89ed47edd6b",
-    "source_pr_ci_run": 39900570012,
-    "source_merged_main_ci_run": 39900701428,
-    "python": "3.11.17",
-    "product_tests": 504,
-    "product_failures": 0,
-    "product_skips": 0,
-    "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-    "local_focused_tests": 15,
-    "scope": "Deterministic fail-closed verification of caller-supplied recorded tenant, scope, trust-boundary and injection decisions using hashed identities and bounded scope identifiers.",
-    "limitations": "Synthetic recorded metadata only; no raw prompts, payloads, credentials, project inspection, permission grant, tool/agent/command execution, filesystem/network access, external action, resource boundary, or OS-sandbox claim."
-  },
-  "af29_instruction_provenance_source_receipt": {
-    "status": "SOURCE_AND_RECORDS_MERGED_VERIFIED_WRITER_RELEASED",
-    "source_sha": "18d326c096671988f34162d98f2ed48e0344f2e9",
-    "source_tree_sha": "c6bd70346fdf515bbbf29c781a7c6db381a4bb95",
-    "source_pr": 70,
-    "source_merge_sha": "d3f8723f2269d22e905533df8aaeb3187af92dea",
-    "source_pr_ci_run": 39939002114,
-    "source_merged_main_ci_run": 39939139774,
-    "python": "3.11.17",
-    "product_tests": 516,
-    "product_failures": 0,
-    "product_skips": 0,
-    "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-    "local_focused_tests": 27,
-    "scope": "Deterministic exact-evidence-bound verification of recorded trusted instruction hashes, source boundaries and override-attempt dispositions over recomputed permission evidence.",
-    "limitations": "Synthetic recorded metadata only; no raw prompt/instruction text, injection detection, permission grant, project inspection, tool/agent/command execution, credential/payload handling, filesystem/network access, external action, resource enforcement, or OS-sandbox claim."
-  },
-  "af29_instruction_provenance_records_receipt": {
-    "status": "MERGED_VERIFIED_WRITER_RELEASED",
-    "records_pr": 71,
-    "records_head_sha": "24777ba85ff3766d41d29ed2b50a59b18f0ad280",
-    "records_pr_ci_run": 39939424922,
-    "records_merge_sha": "257ee922395eff7bb01ebf6e114fe46880cb64b3",
-    "records_merged_main_ci_run": 39939544550,
-    "python": "3.11.17",
-    "product_tests": 516,
-    "product_failures": 0,
-    "product_skips": 0,
-    "writer_release": "https://github.com/antonypaul98/-agentflight/pull/71#issuecomment-6362877043"
-  },
-  "af29_untrusted_influence_lineage_source_candidate": {
-    "status": "SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
-    "source_sha": "17a4481e04e1a3eab5e35144d2f2877159acae89",
-    "source_tree_sha": "307efa7409053d0d426dde7701204ca17870cae5",
-    "base_main_sha": "257ee922395eff7bb01ebf6e114fe46880cb64b3",
-    "source_pr": 72,
-    "source_pr_ci_run": 39978381724,
-    "source_merge_sha": "31a83bed71303cbf1dc02b8f5484e7b943f27dab",
-    "source_merged_main_ci_run": 40002769894,
-    "python": "3.11.17",
-    "focused_tests": 40,
-    "portable_tests_passed_once": 527,
-    "unfiltered_product_tests_passed": 527,
-    "clean_ci_product_tests": 529,
-    "clean_ci_product_failures": 0,
-    "clean_ci_product_skips": 0,
-    "unfiltered_environment_failures": 2,
-    "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
-    "diagnostics": "passed",
-    "scope": "Deterministic exact-evidence-bound verification of two to sixteen recorded instruction hops with hash continuity and downstream propagation of caller-recorded untrusted influence.",
-    "limitations": "Synthetic recorded metadata only; no raw prompt/instruction text, injection detection, permission grant, project inspection, tool/agent/command execution, credential/payload handling, filesystem/network access, external action, resource enforcement, or OS-sandbox claim."
-  }
-}
+YªçŠx-®éÜj×¢ëiºÚ+Š§j[h‘éÜ¢éíßM9í:-jZ.¶›­–)Ş³W°¢'66†VÖ÷fW'6–öâ#¢"À¢'&W÷6—F÷'’#¢&çFöç—VÃ“‚òÖvVçFfÆ–v‡B"À¢&7W'&VçEö6†V6·ö–çB#¢$bÓ#’W&Ö—76–öâæB&ö×BÖ–æ¦V7F–öâFW7F–ær"À¢&6†V6·ö–çE÷7FGW2#¢$”åõ$ôu$U55õ$T4õ$DTEõ4Tå4•D•dUõ4”äµõ4õU$4Uô4äD”DDR"À¢&7F—fUö'&æ6‚#¢'v÷&²öc#’×&V6÷&FVB×6Vç6—F—fR×6–æ²Ö&÷VæF'’"À¢'fW&–f–VEöÖ–å÷6†#¢#cF3#–#fc36SSC&s“&3“SvF&fVVcB"À¢&ö'6W'fVEöfVGW&U÷6†#¢&C“fC†3vcVV63CSc#3ƒ†VVCcfcF33VF3R"À¢&7W'&VçE÷&W÷6—F÷'•÷6†#¢&C“fC†3vcVV63CSc#3ƒ†VVCcfcF33VF3R"À¢&7W'&VçE÷&W÷6—F÷'•÷6†ö6öÖÖæB#¢&v—B&Wb×'6R„TB"À¢'6†÷6VÖçF–72#¢$ö'6W'fVB4„2&R&RÖVF—Bö'6W'fF–öç2â&W6öÇfR7W'&VçB6†V6¶÷WBæB&VÖ÷FR†VBg&W6‚â4’&V6V—G2Ç’öæÇ’FòF†RW†7B4„&V6÷&FVBâ"À¢&'&æ6…÷&VÖ÷FU÷7FGW2#¢$æò&RÖW†—7F–ær÷Vâ'2â"3s2&V6÷&G2ÖW&vVB2W†7BÖ–âcF3#–#fc36SSC&s“&3“SvF&fVVcC²W†7B—F†öâ2ã&V6÷&G2"æBÖW&vVBÖÖ–â4’V6‚76VBS#’&öGV7BFW7G2v—F‚¦W&ò&öGV7B6¶—2ÂæBw&—FW"c#’ÕTåE%U5DTBÔ”ädÅTTä4RÔÄ”äTtRÓ##c#2v2&VÆV6VBâF†R&÷VæFVBbÓ#’&V6÷&FVB6Vç6—F—fR×6–æ²6÷W&6R6æF–FFRC“fC†3vcVV63CSc#3ƒ†VVCcfcF33VF3R—26öææV7F÷"×V&Æ—6†VC²"æBW†7B4’&RVæF–ærâ"À¢'%öçVÖ&W"#¢çVÆÂÀ¢'%÷7FFR#¢&æ÷Eö7&VFVB"À¢&6•÷7FFR#¢°¢&c#u÷&W7VÖUö6Æ÷7W&U÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3“3ƒc3“s#RÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“3ƒc3“s#R"À¢&†VE÷6†#¢#6cSs33&C†c†“#“3†VCs“F6#cC6f&V&#sS6B"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CSÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#u÷&W7VÖUö6Æ÷7W&UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3“3ƒcScS‚À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“3ƒcScS‚"À¢&†VE÷6†#¢&V6FfF3“3&“SS#cs336&SsSF&cƒ&V32"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CSÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#u÷&W7VÖUöÆ–æVvU÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3“ƒSCs“sƒRÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“ƒSCs“sƒR"À¢&†VE÷6†#¢##ssScc&“#3c–#ƒ“V&FF#c6&3#–#†SVcfb"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CC"À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#u÷&W7VÖUöÆ–æVvUöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3“ƒSScCSRÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“ƒSScCSR"À¢&†VE÷6†#¢#VCCVv66VSSCf#C#““Ff#†#VCs3ƒ“3C†cƒ’"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CC"À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#u÷&W7VÖU÷G&ç6—F–öå÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3“S“C#SSrÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“S“C#SSr"À¢&†VE÷6†#¢#sC3&6S“†CCc“&C6&ccƒ3#F†R"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢C3’À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#u÷&W7VÖU÷G&ç6—F–öåöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3“S“3“c2À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“S“3“c2"À¢&†VE÷6†#¢&Ccƒsf##CV&C#&c6&V3ƒSF#c†3†cScF3VCb"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢C3’À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#u÷&W7VÖUöwV&E÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3“3Scs#ƒrÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“3Scs#ƒr"À¢&†VE÷6†#¢#vC““C#S“CssF#†cCcF33#v3sCFS3&CR"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢C#rÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#u÷&W7VÖUöwV&EöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3“3c33’À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“3c33’"À¢&†VE÷6†#¢&cCSƒƒCfCf3v6c&C–Sƒƒ“33ƒfccS36CVCcSSb"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢C#rÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#u÷7FFUö6†V6·ö–çE÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3“ƒ““srÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“ƒ““sr"À¢&†VE÷6†#¢&3SSc3“fC66“ƒ&Ss&S“F6VF##ƒF&6Ss2"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢C’À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#u÷7FFUö6†V6·ö–çEöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3“ƒ““Cs“cRÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“ƒ““Cs“cR"À¢&†VE÷6†#¢#“–fc“ƒ#VSssc3“v3ƒccS“V&&3ssC&CC"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢C’À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#u÷&WG'•ö'VFvWE÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3ƒƒƒcsScsRÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒƒƒcsScsR"À¢&†VE÷6†#¢&fCs6ccS“s“3VCSsVScV†#–f#sf33VS3’"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢C’À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#u÷&WG'•ö'VFvWEöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒƒƒcƒ3#“BÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒƒƒcƒ3#“B"À¢&†VE÷6†#¢#ƒ““&SvF&&#V3s3ƒCƒc“F3“s&#6F3s“–v""À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢C’À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#u÷&V6÷&FVE÷&V6÷fW'•÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3ƒƒSC“#C"À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒƒSC“#C""À¢&†VE÷6†#¢&6F&C3VSSSSvVS–C†V6CƒCV#vC–FFV#s3"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#u÷&V6÷&FVE÷&V6÷fW'•öÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒƒSSsC3sRÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒƒSSsC3sR"À¢&†VE÷6†#¢##3Ccs†fS#Fcƒc33cƒ3&C“–3V&S†SSƒ"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#e÷&WG'•÷6WVVæ6U÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3ƒs3Cs3“‚À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒs3Cs3“‚"À¢&†VE÷6†#¢#&&V#“S–cS3Ssc†6FcFF&FVc“S#f6&c#"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3ƒRÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#e÷&WG'•÷6WVVæ6UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒs3Cƒ#c"À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒs3Cƒ#c""À¢&†VE÷6†#¢&Sƒ–fCFC#““ƒƒSF6fCf3c3ƒs#3F3s“C3Cƒc2"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3ƒRÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#eöf—'7E÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3ƒc“ƒ#3“BÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒc“ƒ#3“B"À¢&†VE÷6†#¢#FV6FC#cƒ“†cfSc3##ssvv#fcS&3ssƒCc†F"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3sBÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#eöf—'7E÷6÷W&6UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒc“ƒ33Cs2À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒc“ƒ33Cs2"À¢&†VE÷6†#¢&#“SVc6S†6s#FCcVcSC6FSƒƒS†#ƒsc"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3sBÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#e÷&WG'•÷6WVVæ6U÷&V6÷&G5÷%÷'Vâ#¢°¢&–B#¢3ƒsssCsSƒ#RÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒsssCsSƒ#R"À¢&†VE÷6†#¢&VSScCƒƒƒ“s#C6&f##s&SƒVvcf3“66fVFcSB"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3ƒRÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢ ¢ÒÀ¢&c#e÷&WG'•÷6WVVæ6U÷&V6÷&G5öÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒsssScƒcrÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒsssScƒcr"À¢&†VE÷6†#¢#ƒ33C“S3sfcsVVƒcf#s†fC#ss3v#vFC“ƒs#ƒ62"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3ƒRÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#5÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3ƒ3“3ƒs32À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒ3“3ƒs32"À¢&†VE÷6†#¢&SS#vc33“3f6&cfFc“CSVfVS#C†CC“ƒcfR"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢#crÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#5÷6÷W&6UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒ3“###“bÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒ3“###“b"À¢&†VE÷6†#¢&CCs36C“#CvVC#v3Cf##6SC†csCs33f"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢#crÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢ ¢ÒÀ¢&c#5÷&Vv—7G'•÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3ƒC3#“Sƒ3rÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒC3#“Sƒ3r"À¢&†VE÷6†#¢#6Fccc&C6C#cs6cfV3#†#33“3&#cFCVcB"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢#ƒ‚À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#5÷&Vv—7G'•÷6÷W&6UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒC3Cs3s#"À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒC3Cs3s#""À¢&†VE÷6†#¢#f63SV#ƒV3SfSF3s#V#VS3†CFS–6FSV&&b"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢#ƒ‚À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#5ö6öæf÷&Öæ6U÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3ƒC3sƒs“sS2À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒC3sƒs“sS2"À¢&†VE÷6†#¢&f3“S#FSSC“Cs3sf6f#CvC–3&3CssV&#&&b"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3RÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#5ö6öæf÷&Öæ6U÷6÷W&6UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒC3ƒ#‚À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒC3ƒ#‚"À¢&†VE÷6†#¢##SSc†ScSVC3s†Sf#cVf#†CvSC63Sf#63""À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3RÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#5ö6öæf÷&Öæ6U÷&V6÷&G5÷%÷'Vâ#¢°¢&–B#¢3ƒC3ƒCsS“2À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒC3ƒCsS“2"À¢&†VE÷6†#¢&V3FV“CSS3cƒF3ƒf3#sFCƒƒ&F63–#–CB"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3RÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢ ¢ÒÀ¢&c#5ö6öæf÷&Öæ6U÷&V6÷&G5öÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒC3ƒc“3‚À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒC3ƒc“3‚"À¢&†VE÷6†#¢&F&FSs6VSvSVcf66#s#ƒ3V3SV#FSS–fƒƒ“c–b"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3RÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢ ¢ÒÀ¢&c#5ö6Æ÷7W&U÷%÷'Vâ#¢°¢&–B#¢3ƒCs““ƒƒ’À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒCs““ƒƒ’"À¢&†VE÷6†#¢&fSƒfCcC#ƒ†SS3ƒvf33SsF#f#v63cSCvFb"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3RÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢ ¢ÒÀ¢&c#5ö6Æ÷7W&UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒCs#3ƒÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒCs#3ƒ"À¢&†VE÷6†#¢#ƒcƒFC“s“3SVV63#C“S†&“#S3FCfcS–CFccB"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3RÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢ ¢ÒÀ¢&c#E÷G&¦V7F÷'•÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3ƒCsss“CS#"À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒCsss“CS#""À¢&†VE÷6†#¢#V3V#&V&FC†Sf3ƒv3ƒV#CFƒ#6#“3†FcF#6&B"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3BÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#E÷G&¦V7F÷'•÷6÷W&6UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒCss““3À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒCss““3"À¢&†VE÷6†#¢&#cSƒC3c–S3ƒ#6VCS“C&F3s–3#†F3c"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3BÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#E÷&WÆ•övFU÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3ƒS#s3sƒBÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒS#s3sƒB"À¢&†VE÷6†#¢&cFfFC6FC##&f3“Vc–CƒScSFV6fSVC–B"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3#"À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#E÷&WÆ•övFU÷6÷W&6UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒS3sƒSCbÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒS3sƒSCb"À¢&†VE÷6†#¢#&SV3csCƒ#CCƒ#6#66c3c3v6FSR"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3#"À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#E÷&WÆ•övFU÷&V6÷&G5÷%÷'Vâ#¢°¢&–B#¢3ƒSc##C#À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒSc##C#"À¢&†VE÷6†#¢#6&s–f6#3s#6S#ƒ36V#VcV6f&#fSVS6C#R"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3#"À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢ ¢ÒÀ¢&c#E÷&WÆ•övFU÷&V6÷&G5öÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒScƒCs3‚À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒScƒCs3‚"À¢&†VE÷6†#¢#3sFfCs3SfFSVCc36SCf#v&#3f33Ss66F†2"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3#"À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#Eö6Æ÷7W&U÷%÷'Vâ#¢°¢&–B#¢3ƒSS“3“s#rÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒSS“3“s#r"À¢&†VE÷6†#¢#FS&sf&#C#v#6f&SSSsƒF3C36#Vc‚"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3#"À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢ ¢ÒÀ¢&c#Eö6Æ÷7W&UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒSc##cƒ"À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒSc##cƒ""À¢&†VE÷6†#¢#ƒc†&#SF6#S#cCsc#&6C“&3v6Sƒ""À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3#"À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢ ¢ÒÀ¢&c#Uöf—‡GW&U÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3ƒS#ƒcc“RÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒS#ƒcc“R"À¢&†VE÷6†#¢&3–3ƒc63CF6&#F#cScSs&V33Ccƒ“–B"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3CÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#Uöf—‡GW&U÷6÷W&6UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒS#ƒs“ƒSÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒS#ƒs“ƒS"À¢&†VE÷6†#¢&V3f3†ffcsC“SS3#&&C6S6636Csƒ–S##6R"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3CÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#UöÆ–fV7–6ÆU÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3ƒS3SC#s“c’À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒS3SC#s“c’"À¢&†VE÷6†#¢##“ƒ#s“vC#cƒS6S63ƒ&#CfSƒ3Scc†CCb"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3SBÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#UöÆ–fV7–6ÆU÷6÷W&6UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒS3SS“““bÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒS3SS“““b"À¢&†VE÷6†#¢&#FcCs†VCS6fV#ScC6fC#S63#CscSsƒ"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3SBÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#UöÆ–fV7–6ÆU÷&V6÷&G5÷%÷'Vâ#¢°¢&–B#¢3ƒS3Sƒ3C“2À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒS3Sƒ3C“2"À¢&†VE÷6†#¢#S3F3&3–#SS#ccƒ“ƒv#Vf3ƒS†VSs†6c363’"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3SBÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢ ¢ÒÀ¢&c#UöÆ–fV7–6ÆU÷&V6÷&G5öÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒS3S“C“##"À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒS3S“C“##""À¢&†VE÷6†#¢#cƒCv3Cf3ƒ#C–CfCCc#c3Ssf&“&Vc#S#""À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢3SBÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢'6÷W&6U÷W6…÷'Vâ#¢°¢&–B#¢3ƒsSs#s“sbÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒsSs#s“sb"À¢&†VE÷6†#¢&c“Ff###3#“63#“sfFFSsS3Fc“C#C3&Sr"À¢&†VEö'&æ6‚#¢'v÷&²öc#"×v—BÖV–çG"×&W—""À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢#SÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢'6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3ƒsSs3C3“bÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒsSs3C3“b"À¢&†VE÷6†#¢&c“Ff###3#“63#“sfFFSsS3Fc“C#C3&Sr"À¢&†VEö'&æ6‚#¢'v÷&²öc#"×v—BÖV–çG"×&W—""À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢#SÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢'6÷W&6UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒƒSs#rÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒƒSs#r"À¢&†VE÷6†#¢#s&#sc–cvccCS“&#v33†6V6“vS“Csf&C†c"À¢&†VEö'&æ6‚#¢&Ö–â"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢#SÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢'&V6÷&G5÷%÷'Vâ#¢°¢&–B#¢3ƒ“3S#S“’À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒ“3S#S“’"À¢&†VE÷6†#¢#cCFCƒs6f3ƒC&Sfc#ƒfS†6c†3“SF#&#&3ƒr"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'&öGV7E÷FW7G2#¢#SÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢ ¢ÒÀ¢'&V6÷&G5öÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3ƒ“C“ƒrÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3ƒ“C“ƒr"À¢&†VE÷6†#¢&V#sC&SSF&F†c3“6CVcs&SSs†R"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'&öGV7E÷FW7G2#¢#SÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢ ¢ÒÀ¢&c#u÷&W7VÖUö6Æ÷7W&U÷&V6÷&G5÷%÷'Vâ#¢°¢&–B#¢3“3ƒcc#3CrÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“3ƒcc#3Cr"À¢&†VE÷6†#¢&fCcVv6cV6FV&#3#c“SCCSs##6f3C“F3"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CSÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#u÷&W7VÖUö6Æ÷7W&U÷&V6÷&G5öÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3“3ƒcc“Cc3"À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“3ƒcc“Cc3""À¢&†VE÷6†#¢#vs–3–#fCSS“vVC6&CcScƒ#f†&&2"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CSÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#uö6†V6·ö–çEö6Æ÷7W&R#¢°¢'7FGW2#¢'VæF–ær"À¢&6öæ6ÇW6–öâ#¢çVÆÂÀ¢&WfVçB#¢'VÆÅ÷&WVW7E÷F†Vå÷W6‚"À¢'&WV—&VEö†VB#¢çVÆÂÀ¢'&öGV7E÷FW7G5÷&WV—&VB#¢G'VRÀ¢'&öGV7E÷6¶—5÷&WV—&VB#¢ ¢ÒÀ¢&c#uö66WFæ6Uö6Æ÷7W&U÷%÷'Vâ#¢°¢&–B#¢3“Cs3“#3s’À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“Cs3“#3s’"À¢&†VE÷6†#¢#&&Sc“ffSFFf6##3c#“6S&#sF&3c“SSc2"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CSÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢ ¢ÒÀ¢&c#uö66WFæ6Uö6Æ÷7W&UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3“CsCƒ3s‚À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“CsCƒ3s‚"À¢&†VE÷6†#¢&fC–Fcf3ƒfSf&Vc&–#CFSƒ#&66f#&cf3FfB"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CSÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢ ¢ÒÀ¢&c#…÷&V6÷&FVEö6öæ7W'&Væ7•÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3“SC3#CcS‚À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“SC3#CcS‚"À¢&†VE÷6†#¢#CCv3†VccSc#&Ssc#s“SS“V#†fcv3csV6"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CcÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#…÷&V6÷&FVEö6öæ7W'&Væ7•öÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3“SC333C“ƒÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“SC333C“ƒ"À¢&†VE÷6†#¢#&36c6&Fc“v#“–VC“†S3cc3ƒSvFcScF6S6SR"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CcÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#…÷&W6÷W&6U÷7FFUöÆ–æVvU÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3“SƒCsss#‚À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“SƒCsss#‚"À¢&†VE÷6†#¢#v33#“C###––ƒ†FCc#ƒ–cSƒ–36CVFB"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CcbÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#…÷&W6÷W&6U÷7FFUöÆ–æVvUöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3“SƒC“3cS‚À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“SƒC“3cS‚"À¢&†VE÷6†#¢#V#3f6CC3cƒS3#CC†fSCFCfcc“CV6&SV3ƒVR"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CcbÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#…ö6W6Åö†æFöfg5÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3“ccs#ƒC“À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“ccs#ƒC“"À¢&†VE÷6†#¢#S–S“cF3&&ccSF6vƒƒ–cS““sCCCFcS6f""À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CsRÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#…ö6W6Åö†æFöfg5öÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3“csCSƒCƒ’À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“csCSƒCƒ’"À¢&†VE÷6†#¢&ffSsc6ƒ†Sƒ†CSSvcs†#f#v6V3VCcCsV#6c"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CsRÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#…ö6W6Åö†æFöfg5÷&V6÷&G5÷%÷'Vâ#¢°¢&–B#¢3“cƒssbÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“cƒssb"À¢&†VE÷6†#¢#v#v63SfC3Sc–Ffs“ƒ3ƒcƒvCCs#3633ƒcB"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CsRÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#…ö6W6Åö†æFöfg5÷&V6÷&G5öÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3“ƒ#ƒ“s“#RÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“ƒ#ƒ“s“#R"À¢&†VE÷6†#¢#c3#†S–&“ƒsfCc6C#“3†#–fF#–CcvS6#ƒ“b"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CsRÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#…÷V÷'VÕö&'&–W%÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3“ƒ3cSscBÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“ƒ3cSscB"À¢&†VE÷6†#¢&F&#C3“VCC–#3S3c3FV#S&&Sƒƒs#&#ƒS“ƒc""À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CƒRÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#…÷V÷'VÕö&'&–W%öÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3“ƒ3ssC#s’À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3“ƒ3ssC#s’"À¢&†VE÷6†#¢&cc3&#F#cCƒ†csV“ƒ6SF3ƒ36cscCsV#sFV3ƒB"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢CƒRÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#•÷W&Ö—76–öåö&÷VæF'•÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3““Ss"À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3““Ss""À¢&†VE÷6†#¢#Cs3#ƒc3–f#s33ƒ3vc6FcCfC#–†6c†#S’"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢SBÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#•÷W&Ö—76–öåö&÷VæF'•öÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3““sC#‚À¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3““sC#‚"À¢&†VE÷6†#¢#S33s#ffCƒ&c#csfFCs&#ƒ#VSƒ–VCCvVFCf""À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢SBÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#•ö–ç7G'V7F–öå÷&÷fVææ6U÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3““3“#BÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3““3“#B"À¢&†VE÷6†#¢#†C3#f3“ccs“ƒ†c3Cc&C“†c&VCC†S3CFc&S’"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢SbÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#•ö–ç7G'V7F–öå÷&÷fVææ6UöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3““3“3“ssBÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3““3“3“ssB"À¢&†VE÷6†#¢&C6cƒs#6c##c–C#&S“SS36Fc†V#3ƒvc“&FV"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢SbÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#•÷VçG'W7FVEö–æfÇVVæ6UöÆ–æVvU÷6÷W&6U÷%÷'Vâ#¢°¢&–B#¢3““sƒ3ƒs#BÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2ó3““sƒ3ƒs#B"À¢&†VE÷6†#¢#vCCƒSFS6V#VS3SCFC&c#ƒssS–6Sƒ’"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢S#’À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢ÒÀ¢&c#•÷VçG'W7FVEö–æfÇVVæ6UöÆ–æVvUöÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢C#sc“ƒ“BÀ¢'W&Â#¢&‡GG3¢òöv—F‡V"æ6öÒöçFöç—VÃ“‚òÖvVçFfÆ–v‡Bö7F–öç2÷'Vç2óC#sc“ƒ“B"À¢&†VE÷6†#¢#3ƒ6&VCs366&cF3&#†cSCƒFSv#“C6c#vF""À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢'—F†öâ#¢#2ããr"À¢'&öGV7E÷FW7G2#¢S#’À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&–æg&7G'V7GW&R#¢#‚W†V7WFVC¢r76VBÂ&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—"À¢&F–væ÷7F–72#¢'76VB ¢Ğ¢ÒÀ¢&Æö6Å÷FW7E÷7FGW2#¢%—F†öâ2ããr6÷W&6R6æF–FFS¢S2fö7W6VBFW7G276VC²÷'F&ÆR&öGV7B7V—FR76VBSCFW7G3²Væf–ÇFW&VB7V—FR76VBSCv—F‚öæÇ’F†RGvòW7F&Æ—6†VB6öçF–æW"×7V6–f–2÷&ö2FW66VæFçBÖö'6W'fF–öâf–ÇW&W2â–æg&7G'V7GW&RW†V7WFVB‚wV&G3¢r76VBæBöæR&6VÆ–æRÖVÖ÷'’ÖöæÇ’6¶—²F–væ÷7F–72ÂFWVæFVæ7’6†V6·2Â¥4ôâfÆ–FF–öâÂF–fb6†V6·2æB6ö×–ÆR6†V6·276VBâ"À¢&ÖW&vU÷7FGW2#¢$c#•õ$T4õ$DTEõ4Tå4•D•dUõ4”äµõ4õU$4UõT$Ä•4„TEõ%ô4•õTäD”är"À¢&¶æ÷våö&Æö6¶W"#¢çVÆÂÀ¢&æW‡Eö7F–öâ#¢$÷Vâ÷"&WW6RF†RW†7BbÓ#’&V6÷&FVB6Vç6—F—fR×6–æ²6÷W&6R"æB&WV—&RW†7BÖ†VB—F†öâ2ã4’v—F‚¦W&ò&öGV7B6¶—2&Vf÷&RwV&FVBÖW&vRâ"À¢&fVGW&Uö6†V6·ö–çEöGfæ6VB#¢fÇ6RÀ¢'&öFÖöW‡ç6–öâ#¢°¢&WF†÷&—¦VEöB#¢###bÓÓ""À¢&6†V6·ö–çE÷&ævR#¢$bÓ#2âäbÓ3B"À¢&66WFVB#¢bÀ¢'F÷FÂ#¢"À¢'&öFÖ#¢&Fö72ô4ôÕUD•D•dUõ$ôDÔæÖB"À¢&&&—G&'•öW†V7WF–öåöWF†÷&—¦VB#¢fÇ6RÀ¢&c#5÷66÷R#¢$ÔU$tTEôäEõdU$”d”TB&V6÷&FVBöÖö6²g&ÖWv÷&²ÖæWWG&ÂFFW"ÂWF†÷&—¦VB&Vv—7G'’æBGfW'6&–Â6öæf÷&Öæ6RöæÇ’"À¢&c#E÷66÷R#¢$ÔU$tTEôäEõdU$”d”TBÖWFFFÖöæÇ’×VÇF’×7FW7FFRöWf–FVæ6R6öçF–çV—G’ÂFW&Ö–æÂ'F–ÂÖf–ÇW&R6VÖçF–72æBW†7BÖWf–FVæ6RFWFW&Ö–æ—7F–2&WÆ’"À¢&c#U÷66÷R#¢$ÔU$tTEôäEõdU$”d”TBÖWFFFÖöæÇ’fW'6–öæVB7–çF†WF–2f—‡GW&W2ÂFWFW&Ö–æ—7F–2&V6÷&FVB6WGWö6ÆVçWÂ&÷fVææ6RæBVçf—&öæÖVçBÖG&–gBWf–FVæ6R"À¢&c#e÷66÷R#¢$ÔU$tTEôäEõdU$”d”TBÖWFFFÖöæÇ’7–çF†WF–2æWGv÷&²ÂF–ÖV÷WBÂ&FRÖÆ–Ö—BæB’fVÇG2v—F‚W†7B&–æF–æw2æB&÷VæFVBFWFW&Ö–æ—7F–2&WG'’ö÷WFvRWf–FVæ6R"À¢&c#u÷66÷R#¢$ÔU$tTEôäEõdU$”d”TBÖWFFFÖöæÇ’–FV×÷FVæ7’Â7&6‚÷&V6÷fW'’Wf–FVæ6RÂ&÷VæFVB&WG'’'VFvWG2ÂW†7B7FFR6†V6·ö–çG2Â&W7VÖRwV&G2Â÷&FW&VBG&ç6—F–öâÆ–æVvRæBFW&Ö–æÂ6Æ÷7W&R"À¢&c#…÷66÷R#¢$ÔU$tTEôäEõdU$”d”TBÖWFFFÖöæÇ’FWFW&Ö–æ—7F–266†VGVÆ–ærÂ6öæfÆ–7B÷7FFRWf–FVæ6RÂFVæçB6W&F–öâÂ6W6Â†æFöfg2ÂV÷'VÒ&'&–W'2æB&V6÷&FVB66—G’'VFvWG2 ¢ÒÀ¢&6ö×ÆWFVEö6†V6·ö–çG2#¢°¢°¢&6†V6·ö–çB#¢$bÓ#‚6öæ7W'&VçBæB×VÇF’ÖvVçB66Væ&–÷2"À¢'7FGW2#¢$ÔU$tTEôäEõdU$”d”TB"À¢&66WFVE÷66÷R#¢$&÷VæFVBFWFW&Ö–æ—7F–2&V6÷&FVBÖWFFFf÷"6öæ7W'&VçB66†VGVÆ–ærÂ6öæfÆ–7B÷7FFRÆ–æVvRÂFVæçB6W&F–öâÂ6W6Â†æFöfg2ÂV÷'VÒ&'&–W'2æB66—G’Ö'VFvWBWf–FVæ6R"À¢'6÷W&6U÷'2#¢°¢SrÀ¢S’À¢cÀ¢c2À¢cP¢ÒÀ¢'&V6÷&G5÷'2#¢°¢S‚À¢cÀ¢c"À¢cBÀ¢c`¢ÒÀ¢&66WFVEöÖ–å÷6†#¢#FcFC#&#“cCC“6CSƒS–#VSS†&C6sCfFC2"À¢&f–æÅ÷&öGV7E÷FW7G2#¢Cƒ’À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&Æ–Ö—FF–öç2#¢%&V6÷&FVBÖWFFFöæÇ“¢æòvVçG2ÂF‡&VG2Â&ö6W76W2ÂFööÇ2Â6öÖÖæG2Âv—F–ærÂ66†VGVÆ–ærÂ6ö÷&F–æF–öâÂW†V7WF–öâÂÆÆö6F–öâÂVæf÷&6VÖVçBÂ7FFR÷–ÆöB66W72ÂW‡FW&æÂ6ÆÇ2Â7&VFVçF–Ç2Âf–ÆW7—7FVÒöæWGv÷&²66W72Â'VçF–ÖR&W6÷W&6RÖ6wV&çFVRÂ÷"õ2Ö—6öÆF–öâ6Æ–Òâ ¢ÒÀ¢°¢&6†V6·ö–çB#¢$bÓ#r&V6÷fW'’÷&WG'’÷7FFR6öç6—7FVæ7’"À¢'7FGW2#¢$ÔU$tTEôäEõdU$”d”TB"À¢&66WFVE÷66÷R#¢$&÷VæFVBFWFW&Ö–æ—7F–2&V6÷&FVBÖWFFFf÷"–FV×÷FVæ7’Â7FFR6†–ç2ö6†V6·ö–çG2Â&WG'’'VFvWG2Â&W7VÖRwV&G2ÂG&ç6—F–öâÆ–æVvRæBFW&Ö–æÂ6Æ÷7W&R"À¢'6÷W&6U÷'2#¢°¢C"À¢CBÀ¢CbÀ¢C‚À¢SÀ¢S"À¢S@¢ÒÀ¢'&V6÷&G5÷'2#¢°¢C2À¢CRÀ¢CrÀ¢C’À¢SÀ¢S2À¢SP¢ÒÀ¢&66WFæ6U÷"#¢SbÀ¢&66WFVEöÖ–å÷6†#¢&fC–Fcf3ƒfSf&Vc&–#CFSƒ#&66f#&cf3FfB"À¢&f–æÅ÷&öGV7E÷FW7G2#¢CSÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&Æ–Ö—FF–öç2#¢$æò&WG'’Â&V6÷fW'’Â&W7F÷&RÂGW&&ÆR×7FFR66W72ÂvVçB÷FööÂö6öÖÖæB÷&ö¦V7BW†V7WF–öâÂW‡FW&æÂ6ÆÂÂ7&VFVçF–Â÷–ÆöB†æFÆ–ærÂ&&—G&'’W†V7WF–öâÂ÷"f–ÆW7—7FVÒ÷&ö6W72öæWGv÷&²ôõ2—6öÆF–öâWF†÷&—G’â ¢ÒÀ¢°¢&6†V6·ö–çB#¢$bÓ#b6öçG&öÆÆVBf–ÇW&R–æ¦V7F–öâ"À¢'7FGW2#¢$ÔU$tTEôäEõdU$”d”TB"À¢&66WFVE÷66÷R#¢$&÷VæFVBÖWFFFÖöæÇ’7–çF†WF–2æWGv÷&²ÂF–ÖV÷WBÂ&FRÖÆ–Ö—BæB’fVÇG2v—F‚W†7BVçf—&öæÖVçBÂÆâæBG&¦V7F÷'’&–æF–æw2ÇW2FWFW&Ö–æ—7F–2&V6÷&FVB&WG'’ö÷WFvRWf–FVæ6R"À¢'6÷W&6U÷'2#¢°¢3rÀ¢3¢ÒÀ¢'&V6÷&G5÷'2#¢°¢3‚À¢C ¢ÒÀ¢&f–æÅ÷6÷W&6U÷6†#¢#&&V#“S–cS3Ssc†6FcFF&FVc“S#f6&c#"À¢&f–æÅ÷6÷W&6U÷G&VU÷6†#¢#S“V3†Cf&c#VCfc“6&6cc“C6†3#–#S–#“sr"À¢&66WFVEöÖ–å÷6†#¢#ƒ33C“S3sfcsVVƒcf#s†fC#ss3v#vFC“ƒs#ƒ62"À¢&f–æÅ÷&öGV7E÷FW7G2#¢3ƒRÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&Æ–Ö—FF–öç2#¢$æòæWGv÷&²6ÆÇ2ÂDå2Â6ÆVW–ærÂvVçB÷FööÂö6öÖÖæBW†V7WF–öâÂ&V6÷fW'’7F–öâÂÆ—fR&ö¦V7B66W72Â7&VFVçF–Ç2Â–ÆöG2Âf–ÆW7—7FVÒ÷&ö6W72ôõ2—6öÆF–öâÂ†&Gv&R÷"&öGV7F–öâWF†÷&—G’â ¢ÒÀ¢°¢&6†V6·ö–çB#¢$bÓ#R&W&öGV6–&ÆRVçf—&öæÖVçG2æBf—‡GW&W2"À¢'7FGW2#¢$ÔU$tTEôäEõdU$”d”TB"À¢&66WFVE÷66÷R#¢$&÷VæFVBÖWFFFÖöæÇ’fW'6–öæVB7–çF†WF–2f—‡GW&W2ÂFWFW&Ö–æ—7F–2&V6÷&FVB6WGWö6ÆVçWÂW†7B&÷fVææ6RæBVçf—&öæÖVçBÖG&–gBWf–FVæ6R"À¢'6÷W&6U÷'2#¢°¢3"À¢3@¢ÒÀ¢'&V6÷&G5÷'2#¢°¢32À¢3P¢ÒÀ¢&f–æÅ÷6÷W&6U÷6†#¢##“ƒ#s“vC#cƒS6S63ƒ&#CfSƒ3Scc†CCb"À¢&f–æÅ÷6÷W&6U÷G&VU÷6†#¢&V63sƒcSCƒ#S&&s&FC#SC“v6S&3F’"À¢&66WFVEöÖ–å÷6†#¢#cƒCv3Cf3ƒ#C–CfCCc#c3Ssf&“&Vc#S#""À¢&f–æÅ÷&öGV7E÷FW7G2#¢3SBÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&Æ–Ö—FF–öç2#¢$æò6WGWö6ÆVçW6öÖÖæBW†V7WF–öâÂÆ—fR&ö¦V7B66W72Â†÷7B–ç7V7F–öâÂ7&VFVçF–Ç2ÂæWGv÷&²Â&&—G&'’vVçB÷FööÂW†V7WF–öâÂf–ÆW7—7FVÒ÷&ö6W72ôõ2—6öÆF–öâÂ†&Gv&R÷"&öGV7F–öâWF†÷&—G’â ¢ÒÀ¢°¢&6†V6·ö–çB#¢$bÓ#B×VÇF’×7FWG&¦V7F÷'’fW&–f–6F–öâ"À¢'7FGW2#¢$ÔU$tTEôäEõdU$”d”TB"À¢&66WFVE÷66÷R#¢$&÷VæFVBÖWFFFÖöæÇ’÷&FW&VB7FFRöWf–FVæ6RG&ç6—F–öç2ÂFW&Ö–æÂ'F–ÂÖf–ÇW&R6VÖçF–72æBFWFW&Ö–æ—7F–2W†7BÖWf–FVæ6R&WÆ’"À¢'6÷W&6U÷'2#¢°¢#rÀ¢#¢ÒÀ¢'&V6÷&G5÷'2#¢°¢#‚À¢3 ¢ÒÀ¢&f–æÅ÷6÷W&6U÷6†#¢&cFfFC6FC##&f3“Vc–CƒScSFV6fSVC–B"À¢&f–æÅ÷6÷W&6U÷G&VU÷6†#¢&#6F3vCFCSFCSc#6cF3s&##†CFC–cfc“&3B"À¢&66WFVEöÖ–å÷6†#¢#3sFfCs3SfFSVCc36SCf#v&#3f33Ss66F†2"À¢&f–æÅ÷&öGV7E÷FW7G2#¢3#"À¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&Æ–Ö—FF–öç2#¢$æòÆ—fRvVçB÷FööÂW†V7WF–öâÂg&ÖWv÷&²÷"&ö¦V7B66W72Â7&VFVçF–Ç2ÂæWGv÷&²Â–ÆöB–ç7V7F–öâÂf–ÆW7—7FVÒ÷&ö6W72—6öÆF–öâÂ†&Gv&R÷"&öGV7F–öâWF†÷&—G’â ¢ÒÀ¢°¢&6†V6·ö–çB#¢$bÓ#2g&ÖWv÷&²ÖæWWG&ÂvVçBFFW""À¢'7FGW2#¢$ÔU$tTEôäEõdU$”d”TB"À¢&66WFVE÷66÷R#¢$&÷VæFVBÖWFFFÖöæÇ’&V6÷&FVBöÖö6²G&¦V7F÷&–W2Âf–ÂÖ6Æ÷6VBWF†÷&—¦VB&V6÷&FVBÖFFW"&Vv—7G'’ÂæBfW'6–öæVB÷6—F—fRöGfW'6&–Â6öæf÷&Öæ6RWf–FVæ6R"À¢'6÷W&6U÷'2#¢°¢#À¢#"À¢#@¢ÒÀ¢'&V6÷&G5÷'2#¢°¢#À¢#2À¢#P¢ÒÀ¢&f–æÅ÷6÷W&6U÷6†#¢&f3“S#FSSC“Cs3sf6f#CvC–3&3CssV&#&&b"À¢&f–æÅ÷6÷W&6U÷G&VU÷6†#¢&6S#sVS##cFC–3Vsc–Sss&VCFSƒ†C6Sr"À¢&66WFVEöÖ–å÷6†#¢#ƒcƒFC“s“3SVV63#C“S†&“#S3FCfcS–CFccB"À¢&f–æÅ÷&öGV7E÷FW7G2#¢3RÀ¢'&öGV7Eöf–ÇW&W2#¢À¢'&öGV7E÷6¶—2#¢À¢&Æ–Ö—FF–öç2#¢$æòÆ—fRg&ÖWv÷&²÷&ö¦V7BFFW"Â&&—G&'’vVçB÷FööÂW†V7WF–öâÂ7&VFVçF–Ç2ÂæWGv÷&²Âf–ÆW7—7FVÒ÷&ö6W72—6öÆF–öâÂ&W6÷W&6RVæf÷&6VÖVçBÂ†&Gv&R÷"&öGV7F–öâWF†÷&—G’â ¢ÒÀ¢°¢&6†V6·ö–çB#¢$bÓ’GfW'6&–Â&ö×B–æ¦V7F–öâ"À¢'"#¢BÀ¢&ÖW&vR#¢$ÔU$tTBäBdU$”d”TB"À¢'fW&–f–VEöÖ–å÷6†#¢#c“ƒƒC#SC–CF6FffVcCS“&VVCcFb"À¢&6•÷7FFR#¢°¢'%÷'Vâ#¢°¢&–B#¢3sSS““csrÀ¢'6†#¢#&FVF#vCscvcVfS33SvVfcSC&6Sscc#Sv"À¢&WfVçB#¢'VÆÅ÷&WVW7B"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72 ¢ÒÀ¢&ÖW&vVEöÖ–å÷'Vâ#¢°¢&–B#¢3sSS3ƒƒSrÀ¢'6†#¢#Sv&FS†&S3C6SC#V3–fSs6V6##3&CCV663"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72 ¢ÒÀ¢&6ö×ÆWF–öåöÖ–å÷'Vâ#¢°¢&–B#¢3sScSSSƒ’À¢'6†#¢#c“ƒƒC#SC–CF6FffVcCS“&VVCcFb"À¢&WfVçB#¢'W6‚"À¢'7FGW2#¢&6ö×ÆWFVB"À¢&6öæ6ÇW6–öâ#¢'7V66W72"À¢{¶‰ËkºwµçYİ[Y[[™[ÜH‹ˆ˜ÚXÚÜÚ[Üİ]\Èˆ“QT‘ÑQĞS‘Õ‘T’Q’QQ‹ˆ™\šYšYYÛXZ[—ÜÚHˆYÎLLLNX™M™XÙNŒ˜LŒH‹ˆ›ØœÙ\™YÙ™X]\™WÜÚHˆŒNÌY™L™˜MÌÙLÌY™MXÍMÎÍØMXØÈ‹ˆœ—Û[X™\ˆˆKˆœ—Üİ]HˆÂˆ›[X™\ˆˆKˆœİ]Hˆ›Y\™ÙY‹ˆšXYÜÚHˆŒNÌY™L™˜MÌÙLÌY™MXÍMÎÍØMXØÈ‹ˆ\›ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚÜ[ÍH‹ˆ›Y\™ÙWØÛÛ[Z]ÜÚHˆYÎLLLNX™M™XÙNŒ˜LŒH‚ˆKˆ˜ÚWÜİ]HˆÂˆœ—Ü[ˆˆÂˆšYˆÍÎNMŒÍNM‹ˆœÚHˆŒNÌY™L™˜MÌÙLÌY™MXÍMÎÍØMXØÈ‹ˆ™]™[ˆœ[Ü™\]Y\İ‹ˆœİ]\Èˆ˜ÛÛ\]Y‹ˆ˜ÛÛ˜Û\Ú[ÛˆˆœİXØÙ\ÜÈ‹ˆ\›ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚØXİ[ÛœËÜ[œËÌÍÎNMŒÍNMˆ‚ˆKˆ›Y\™ÙYÛXZ[—Ü[ˆˆÂˆšYˆÍÎŒÍLNˆœÚHˆYÎLLLNX™M™XÙNŒ˜LŒH‹ˆ™]™[ˆœ\Ú‹ˆœİ]\Èˆ˜ÛÛ\]Y‹ˆ˜ÛÛ˜Û\Ú[ÛˆˆœİXØÙ\ÜÈ‹ˆ\›ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚØXİ[ÛœËÜ[œËÌÍÎŒÍLN‚ˆKˆš\İÜšXØ[Ù˜Z[\™HˆÂˆšYˆÍÍÌŒNLÍŒËˆœÚHˆ™LÌMM™NLXLØÍØÍŒÙÙ˜™LŒÍL˜YÈ‹ˆ™]™[ˆœ[Ü™\]Y\İ‹ˆœİ]\Èˆ˜ÛÛ\]Y‹ˆ˜ÛÛ˜Û\Ú[Ûˆˆ™˜Z[\™H‹ˆ˜Ø]\ÙHˆ˜ÚWÙXYÛ›ÜİXÜËœHÙ^Q\œ›ÜˆXYÛ›ÜİX×Ú[\ÜÈİ]HØÚ[XH™\İÜ™Y[ˆ›ÛİÚ[™ÈÛÛ[Z]‚ˆKˆœ\ÚÜ[ˆˆÂˆšYˆÍÎÍŒÎNNKˆœÚHˆ˜MÌØŒLÍ™MYYÍÍÎLŒÍ™ÍÍXÌÍMMÍ™NXˆ‹ˆ™]™[ˆœ\Ú‹ˆœİ]\Èˆ˜ÛÛ\]Y‹ˆ˜ÛÛ˜Û\Ú[ÛˆˆœİXØÙ\ÜÈ‹ˆ\›ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚØXİ[ÛœËÜ[œËÌÍÎÍŒÎNNH‹ˆ\İÈˆŒLˆ›ÙXİ\İÈ\ÜÙYÈ[™œ˜\İXİ\™HN^Xİ]YHÚÚ\Y
+š[Üˆ[ˆ]šY[˜ÙJH‚ˆBˆKˆ˜ÚXÚÜÚ[ˆQ‹LŒ›İ[™YÛÛXØ[\™İ[Y[[™[ÜH‹ˆ˜ÛÛ\][Û—ÛXZ[—Ü[ˆˆÂˆšYˆÍÎÎLLˆœÚHˆÌØLLØLÍL˜MMNMXÍ˜YŒØÍLŒØ™NMH‹ˆ™]™[ˆœ\Ú‹ˆœİ]\Èˆ˜ÛÛ\]Y‹ˆ˜ÛÛ˜Û\Ú[ÛˆˆœİXØÙ\ÜÈ‹ˆ\İÈˆŒLˆ›ÙXİ\İÈ\ÜÙYÈN[™œ˜\İXİ\™H\İÈ^Xİ]Y[˜ÛY[™ÈHÚÚ\‚ˆBˆKˆÂˆ˜ÚXÚÜÚ[ˆQ‹LŒHİXİ\™Y™\^K\İZ]H™\Ü[™È‹ˆœİ]\Èˆ“QT‘ÑQĞS‘Õ‘T’Q’QQ‹ˆœÛİ\˜ÙWÜÚHˆYÍXÙ™MÌLÙXÎNLLÍÍNŒL™ŒÌÌØH‹ˆœÛİ\˜ÙWİ™YWÜÚHˆŒMYLØMÍLYŒLXÍÌÙXXÙŒ˜ŒÌ˜ŒŒÌŒXH‹ˆ™\šYšYYÛXZ[—ÜÚHˆ˜˜˜ØÎLØÌL˜ÍLÍMYLYMÍMXÎMH‹ˆœ—Üİ]HˆÂˆ›[X™\ˆˆ‹ˆœİ]Hˆ›Y\™ÙY‹ˆšXYÜÚHˆYÍXÙ™MÌLÙXÎNLLÍÍNŒL™ŒÌÌØH‹ˆ\›ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚÜ[Íˆ‹ˆ›Y\™ÙWØÛÛ[Z]ÜÚHˆ˜˜˜ØÎLØÌL˜ÍLÍMYLYMÍMXÎMH‚ˆKˆ˜ÚWÜİ]HˆÂˆœ\ÚÜ[ˆˆÂˆšYˆÍÎLÍÎKˆœÚHˆYÍXÙ™MÌLÙXÎNLLÍÍNŒL™ŒÌÌØH‹ˆ™]™[ˆœ\Ú‹ˆœİ]\Èˆ˜ÛÛ\]Y‹ˆ˜ÛÛ˜Û\Ú[ÛˆˆœİXØÙ\ÜÈ‹ˆ˜][\ˆKˆš›Ø—ÚYˆLLÍNLÌMÌ‹ˆ\›ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚØXİ[ÛœËÜ[œËÌÍÎLÍÎH‹ˆ\İÈˆŒMŒ›ÙXİ\İÈ\ÜÙY˜Z[YÈN[™œ˜\İXİ\™H^Xİ]YMÈ\ÜÙY[™H˜\Ù[[™HÚÚ\ÈXYÛ›ÜİXÜÈ\ÜÙYÛˆ]ÛˆËŒLKŒMÈ‚ˆKˆœ—Ü[ˆˆÂˆšYˆÍÎNNKˆœÚHˆYÍXÙ™MÌLÙXÎNLLÍÍNŒL™ŒÌÌØH‹ˆ™]™[ˆœ[Ü™\]Y\İ‹ˆœİ]\Èˆ˜ÛÛ\]Y‹ˆ˜ÛÛ˜Û\Ú[ÛˆˆœİXØÙ\ÜÈ‹ˆ˜][\ˆKˆš›Ø—ÚYˆLLÍNLÎÍÎLËˆ\›ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚØXİ[ÛœËÜ[œËÌÍÎNNH‹ˆ\İÈˆŒMŒ›ÙXİ\İÈ\ÜÙY˜Z[YÈN[™œ˜\İXİ\™H^Xİ]YMÈ\ÜÙY[™H˜\Ù[[™HÚÚ\ÈXYÛ›ÜİXÜÈ\ÜÙYÛˆ]ÛˆËŒLKŒMÈ‚ˆKˆ›Y\™ÙYÛXZ[—Ü[ˆˆÂˆšYˆÍÎÎÍKˆœÚHˆ˜˜˜ØÎLØÌL˜ÍLÍMYLYMÍMXÎMH‹ˆ™]™[ˆœ\Ú‹ˆœİ]\Èˆ˜ÛÛ\]Y‹ˆ˜ÛÛ˜Û\Ú[ÛˆˆœİXØÙ\ÜÈ‹ˆ˜][\ˆKˆš›Ø—ÚYˆLLÍNNÍˆ\›ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚØXİ[ÛœËÜ[œËÌÍÎÎÍH‹ˆ\İÈˆŒMŒ›ÙXİ\İÈ\ÜÙY˜Z[YÈN[™œ˜\İXİ\™H^Xİ]YMÈ\ÜÙY[™H˜\Ù[[™HÚÚ\ÈXYÛ›ÜİXÜÈ\ÜÙYÛˆ]ÛˆËŒLKŒMÈ‚ˆBˆKˆ›[Z]][ÛœÈˆ”™XÛÜ™YXØ[ÛÛ˜Xİ™\šYšXØ][ÛˆÛ›NÈ›È™]\›‹]˜[YH\ÜÙ\[ÛœË\˜š]˜\H›Ú™Xİ^Xİ][Û‹Ø[™›Ş[™Ë™X[\›Ú™XİY\\ˆÜˆ\™Ø\™HXØÙ\[˜ÙKˆ‚ˆBˆKˆ›\İÜÙ\ÜÚ[Û—Ù^]ˆÂˆ“ĞÒÑQÓVQTˆˆ[ˆ“ĞÒÑTˆˆ[ˆ”ĞQ‘WÕÓÔ’×ĞÓÓTUQˆQ‹LH™XÛÜ™YÙ[œÚ]]™K\Ú[šÈÛİ\˜ÙHØ[™Y]HM™XLNXÍÙŒLYXØÌYMŒŒÎYY™ÌÍYÍH\ÈÛÛ›™XİÜ‹\X›\ÚYˆÛˆ]ÛˆËŒLKŒMËLÈ›Øİ\ÙY[™MÜX›H›ÙXİ\İÈ\ÜÙYÈH[™š[\™YİZ]HYÛ›HHÛÈ\İX›\ÚYÛÛZ[™\‹\ÜXÚYšXÈÜ›ØÈ˜Z[\™\Ëˆ[™œ˜\İXİ\™KXYÛ›ÜİXÜË\[™[˜ŞK”ÓÓ‹Y™ˆ[™ÛÛ\[HÚXÚÜÈ\ÜÙYˆ‹ˆ”‘SSÕWÔÒHˆ™M™XLNXÍÙŒLYXØÌYMŒŒÎYY™ÌÍYÍH‹ˆ“‘VĞPÕSÓˆˆ“Ü[ˆÜˆ™]\ÙHH^XİÛİ\˜ÙHˆ[™™\]Z\™H^XİZXY]ÛˆËŒLHÒH™Y›Ü™HİX\™YY\™ÙKˆ‚ˆKˆ™XYÛ›ÜİX×Ú[\Üˆ˜YÙ[›YÚ‹ˆ™XYÛ›ÜİX×ÜÜİÜ™\×İ˜\šXX›\Èˆ×Kˆ›ØœÙ\™YØœ˜[˜ÚÜÚHˆŒMÙYNLŒŒÎMYY™Ø˜ŒYX™™LLM™MØŒÈ‹ˆš\İÜšXØ[ÜÙ\ÜÚ[Û—Ù^]ÈˆÂˆÂˆ“ĞÒÑQÓVQTˆˆ™[š\›Û›Y[
+Ú[Ú]”ÊNÈÛÛ›™XİYÜš]HØY™]H‹ˆ“ĞÒÑTˆˆ”Ú[Ú]™]ÚØ[››İ™\ÛÛ™HÚ]X‹˜ÛÛNÈÜ™X]WÙš[H›Üˆ™\\™Y™YÜ™\ÜÚ[Ûˆ\İÈØ\È™Z™XİYHØY™]HÚXÚÜËˆ‹ˆ”ĞQ‘WÕÓÔ’×ĞÓÓTUQˆ”™XY]™HXZ[‹QÑS•Ë›Y[™ÚXÚÜÚ[İ]NÈÛÛ™š\›YYÛİ\˜ÙHÛÛ[Z]MÌØŒH[™^XİZXYÒHÌÍÎÍŒÎNNHİXØÙ\ÜÎÈ™YÜ™\ÜÚ[Ûˆ]Ú™\Ù\™Y]›İX›\ÚYˆ‹ˆ”‘SSÕWÔÒHˆ˜MÌØŒLÍ™MYYÍÍÎLŒÍ™ÍÍXÌÍMMÍ™NXˆ‹ˆ“‘VĞPÕSÓˆˆ”X›\Ú™\Ù\™YØÜš\Ëİ\İËİ\İÜ™Y›YÚÛYØXŞWÜİ]\ËœH™YÜ™\ÜÚ[Ûˆ\İÈ›İYÚ[ˆ\›İ™YÜš]H›İ]NÈ™\šYH^XİZXYÒK™XÛÛ˜Ú[Hİ]K[ˆYš[™HQ‹LŒHXØÙ\[˜ÙHÜš]\šXKˆ‚ˆKˆÂˆ“ĞÒÑQÓVQTˆˆœÚ[”È[™ÛÛ›™XİYÛİ\˜ÙKİ\İÜš]HØY™]H‹ˆ“ĞÒÑTˆˆØ[›ÛšXØ[™Y›YÚÚ]™]ÚØ[››İ™\ÛÛ™HÚ]X‹˜ÛÛNÈÛÛ›™XİYÜ™X]WØ›Øˆ™Z™XİYÛİ\˜ÙH[™™YÜ™\ÜÚ[ÛˆÛÛ[Ëˆ‹ˆ”ĞQ‘WÕÓÔ’×ĞÓÓTUQˆ•™\šYšYYİ\œ™[XZ[ˆ[™^XİZXYÒH
+\ÜÙY
+K^Xİ]YØ[›ÛšXØ[™Y›YÚ[™\[™[H™\›ÙXÙY™YÙÜ™Y[ˆØZ]QRS•ˆ\İÈ
+È™YÌÈÜ™Y[ŠK™\Ù\™YÛİ\˜ÙH]Ú[™\İÎÈ[™[™ÈÛİ\˜ÙH™[XZ[œÈ[œX›\ÚYˆ‹ˆ”‘SSÕWÔÒHˆXXÌØYMÌXYXÌ˜LŒÌÎLM™ÍMYŒŒXYMÙY‹ˆ“‘VĞPÕSÓˆˆ•\ÙH[ˆ]]Üš^™YÛİ\˜ÙKXÛÙHX›XØ][Ûˆ]È\HH™\Ù\™YØZ]QRS•ˆ]Ú[™È™YÜ™\ÜÚ[ÛœÈÈ^\İ[™ÈXZ[È[ˆ[]ÛˆËŒLHİZ]H[™™\šYH^XİXÛÛ[Z]ÒKˆ‚ˆBˆKˆœİ\[™×ÛXZ[—ÜÚHˆ™™NY˜Î™M˜˜YYŒ˜LXNŒ˜ØÙ˜Œ™˜ÍM™‹ˆ›ØØ[İ˜[Y][ÛˆˆÂˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆ™›Øİ\ÙYØ™Y›Ü™WÙš^ˆŒÈ˜Z[Y‹ˆ™›Øİ\ÙYØY\—Ùš^ˆŒÈ\ÜÙY˜Z[Y‹ˆ™[ÜİZ]HˆÂˆœ\ÜÙYˆKˆ™˜Z[Yˆ‹ˆœÚÚ\Yˆˆ™[š\›Û›Y[Ú\ÜİYHˆ‘^Xİ][Ûˆ[š\›Û›Y[Q™\œİ\ÈÜ›ØÈY[]HZ\ÛX]ÚÈ›İ^\İ[™È\ØÙ[™[\İÈ™\›ÙXÙHÛˆ˜\Ù[[™HÍLLØYMÈ‹ˆ˜˜\Ù[[™WÜ™\›ÙXÙYˆYBˆKˆš[™œ˜\İXİ\™HˆÂˆœ\ÜÙYˆMËˆœÚÚ\YˆKˆ™˜Z[YˆˆKˆ™XYÛ›ÜİXÜÈˆœ\ÜÙY‹ˆœØÛÜHˆØ[›ÛšXØ[]ÛˆËŒLKŒMÈ™\ÜÚ]ÜNÈØØ[™\İ[È™\Ù\™YÛ™\İKˆÛÛ\]H™[[İH[^İZ]H\ÜÙ\ÈÛˆH^XİÛİ\˜ÙH[™Y\™ÙYXZ[‹ˆ‹ˆ˜ÛÛ[X[™ÈˆÂˆÂˆ˜ÛÛ[X[™ˆœ]Ûˆ[H]\İ\İËİ\İØØ\\™WİØZ]Ú[\œ\[ÛœËœHK]\ÚÜ‹ˆœ™\İ[ˆŒÈ˜Z[Y™Y›Ü™Hš^ÈÈ\ÜÙYY\ˆš^‚ˆKˆÂˆ˜ÛÛ[X[™ˆœ]Ûˆ[H]\İK]\ÚÜ‹ˆœ™\İ[ˆŒH\ÜÙYˆ˜Z[YÚÚ\YÈ›İ˜Z[\™\È™\›ÙXÙYÛˆ[İXÚY˜\Ù[[™HYHÈØØ[QÜ›ØÈZ\ÛX]Ú‚ˆKˆÂˆ˜ÛÛ[X[™ˆœ]Ûˆ[H[š]\İ\ØÛİ™\ˆ\ÈØÜš\Ëİ\İÈ\	İ\İÊ‹œIÈ‹ˆœ™\İ[ˆŒN^Xİ]YMÈ\ÜÙYH˜\Ù[[™HÚÚ\‚ˆKˆÂˆ˜ÛÛ[X[™ˆœ]ÛˆØÜš\ËØÚWÙXYÛ›ÜİXÜËœH‹ˆœ™\İ[ˆ™^]ˆ\ÚXÚÈ[™XÚØYÙH[\Ü\ÜÙY‚ˆKˆÂˆ˜ÛÛ[X[™ˆ™Ú]Y™ˆKXÚXÚÈ‹ˆœ™\İ[ˆ™^]‚ˆBˆBˆKˆ\ØYÙWØ[İØ[˜ÙHˆ•QÑUS’Ó“ÕÓˆXİX[™[XZ[š[™È\İ˜KÕÛÜšÈ[İØ[˜ÙH\È›İ^ÜÙYˆ™\Z\ˆØÛÜH\È›İ[™YÈØ\XÚ]H\È™\Ù\™Y›Üˆ^XİZXYÒKØ[›ÛšXØ[™XÛÜ™È[™Üš]\ˆ[™Ù™‹ˆ‹ˆ˜Ú[™ÙYÙš[\ÈˆÂˆÒPÒÔÒS•ÔÕUKšœÛÛˆ‹ˆœÜ˜ËØYÙ[›YÚÜÙXİ\š]WÜ›Ø™\ËœH‹ˆ\İËİ\İÜÙXİ\š]WÜ›Ø™\ËœH‹ˆ™ØÜËĞQŒWĞÒPÒÔÒS•›Y‹ˆ™ØÜËÕÓÔ’Ñ“Õ×Ô‘SPP’SUK›Y‚ˆKˆœÚ[Ü™Y›YÚÜ™XÙZ\ˆÂˆ“ĞÒÑQÓVQTˆˆ™^\›˜[‹ˆ“ĞÒÑTˆˆ‘Ú]XˆTNˆÚ[˜]˜Z[X›NÈÛÛ›™XİÜˆ]]Üš^˜][Ûˆ]\İ™HÚXÚÙYÙ\\˜][NÈÚ]\Úˆ]][XØ][Û‹Ø]]Üš^˜][Ûˆ[˜]˜Z[X›H‹ˆ”ĞQ‘WÕÓÔ’×ĞÓÓTUQˆÛX[ˆÛÛ™H[™[›™Y]ÛˆËŒLKŒMÈÙ]\ÈØÛÜH[™ÛÛ›™XİÜˆÜš]H™[[İ[H™\šYšYYÈ›İ[™Y™\^K\İZ]H[\[Y[][Ûˆ\ÜÙYMŒ›ÙXİ\İÈ\È[™œ˜\İXİ\™H[™XYÛ›ÜİXÜËˆ™X]\™HX›XØ][Ûˆ[™^XİZXYÒH[™[™Ëˆ‹ˆ”‘SSÕWÔÒHˆÌØLLØLÍL˜MMNMXÍ˜YŒØÍLŒØ™NMH‹ˆ“‘VĞPÕSÓˆˆ”X›\ÚH™]šY]ÙY[\[Y[][Ûˆ™YKÜ™X]HÜˆ™]\ÙHHQ‹LŒH‹[™™\šYH^XİZXYÒH™Y›Ü™HY\™ÙH[™^XİY\™ÙY[XZ[ˆ™\šYšXØ][Û‹ˆ‚ˆKˆ˜XØÙ\YØ]ˆŒŒ‹LLLUÎNŒLKLÌNJÌŒ‹ˆœÛİ\˜ÙWİ™YWÜÚHˆÙ˜˜MLMÍMX™˜ÌLL™MLÍÎXY˜MÌØŒMH‹ˆœ™\Ù\™YÛØØ[ØÛÛ[Z]ÈˆÂˆœØÛÜHˆ™Œ™Y˜LÌÙMLYŒNÙ™™ÎÎ™˜XÎL™H‹ˆš[\[Y[][Ûˆˆ™˜MXÙ™M˜LL™X™ÍÎXÌŒÍÌ™LYØMXLÙˆ‹ˆœ™[[İWÚ[\[Y[][Û—İ™YWÙ\]X[×ÛØØ[ˆYBˆKˆ››Û—Ü›ÙXİÙ[š\›Û›Y[Ú\ÜİY\ÈˆÂˆÂˆš\ÜİYHˆ™ÚXœÙ[[™Ú[Ú]\Ú]][XØ][Ûˆ[˜]˜Z[X›H‹ˆÛÜšØ\›İ[™ˆ‘Ú]XˆÛÛ›™XİÜˆXİX[Üš]\Ë^Xİ™Y\Ëœ˜[˜ÚX\Ù\È[™Ú[™ÙYYš[H\İÈ™\šYšYY‹ˆ˜›ØÚÜ×ØÚXÚÜÚ[ˆ˜[ÙKˆ˜[ÛWÚ[\™[[Û—Ü™\]Z\™Yˆ˜[ÙBˆBˆKˆ˜İ\œ™[ØYŒŒ—ÜÛXÙHˆÂˆ]Hˆ›İ[™YÜİ\ÚYÛ˜[›ØÙ\ÜÈ™X\[™È‹ˆœİ]\ÈˆPĞÑTQ‹ˆ˜˜\ÙWÜÚHˆŒØLØØÙMŒŒÍYŒMÌYÙÍŒYÙMLXM™H‹ˆœÛİ\˜ÙWÜÚHˆ™ÍLÎÌØNMXLŒŒÌŒÙYÍYØLÎNM˜ˆ‹ˆœÛİ\˜ÙWİ™YWÜÚHˆŒLXMYØØŒÙØÌ™™MXŒŒÌÌLNMØMXÍŒØH‹ˆœˆˆMKˆ›Y\™ÙWÜÚHˆŒÌL™XLÍNLYYŒÍYXMÍNX™LÍ˜ÍÎ‹ˆœ\ÚØÚWÜ[ˆˆÎMÌNNKˆœ—ØÚWÜ[ˆˆÎMÌNMMMÌ‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎMÌNŒÍ‹ˆœ™[[İWİ\İÜ™\İ[ˆ‘XXÚ^Xİ\ÚH]ÛˆËŒLKŒMÈ[ˆ\ÜÙYLH›ÙXİ\İË˜Z[YÚÚ\YÈN[™œ˜\İXİ\™H^Xİ]YÚ]H^\İ[™ÈY[[ÜK[Û›HÚÚ\ÈXYÛ›ÜİXÜÈ\ÜÙY‹ˆ›ØØ[İ\İÜ™\İ[ˆŒNH›Øİ\ÙY\İÈ\ÜÙYÈH›ÙXİ\İÈ\ÜÙYÚ]ˆ[˜Ú[™ÙYÜ›ØÈØœÙ\˜][Ûˆ˜Z[\™\ÎÈ[İZ]Hİ\Ú\ÙH\ÜÙYÛˆ]ÛˆËŒLKŒMÈ‹ˆœØÛÜHˆ›İ[™Üİ\ÚYÛ˜[›ØÙ\ÜËØZ]ÈH^\İ[™ÈX^[][HŞ[]XËXØ\ÙH[Y[İ][™™\Ù\™HHÜšYÚ[˜[XY[™HXÜ›ÜÜÈRS•ˆ™]šY\ÎÈ›È›ØÙ\ÜËYÜ›İ\™K\ÚYÛ˜[[İÛ\İ^[œÚ[Û‹\İÙXZÙ[š[™ÈÜˆØ[™›ŞÛZ[H‚ˆKˆœ[™[™×ØYŒŒ—ÜÛXÙHˆÂˆ]Hˆ’[\œ\Y›ØÙ\ÜËØZ]Y\ˆ\HSÑˆ‹ˆœÛİ\˜ÙWÜ]ÚˆØ[›ÛšXØ[^\İ[™ÈØØ\\™WØ›İ[™YØZ]™]HYØZ[œİHÜšYÚ[˜[[Û›İÛšXÈXY[™NÈÜšYÚ[˜[\˜Ú]™Y’T[˜]˜Z[X›H›İYÚXØÙ\ÜÚX›HÛÜšÜÜXÙKÓXœ˜\H‹ˆ›™]×İ\İˆ\İËİ\İØØ\\™WİØZ]Ú[\œ\[ÛœËœH‹ˆœX›\ÚYˆYKˆ›ØØ[İ\İÜØÛÜHˆ˜Ø[›ÛšXØ[™\ÜÚ]ÜH[™]ÛˆËŒLKŒMÈ‹ˆ›ØØ[İ\İÜ™\İ[ˆŒÈ™Y™Y›Ü™Hš^ÈÜ™Y[ˆY\È[İZ]HH\ÜÙY[™ˆ˜\Ù[[™H[š\›Û›Y[˜Z[\™\È‹ˆœ™[[İWØÚHˆ•™\šYšYYÛİ\˜ÙH\ÚÌÎÌŒ‹ˆÌÎÌÍÈ[™Y\™ÙY[XZ[ˆÌÎÌÌLÍMNˆÈ\ÜÙY˜Z[Y›ÙXİÚÚ\È‹ˆ˜˜\ÙWÜÚHˆŒÍLLØYMÙ™ŒYØXXYL™LMÎX˜ÍÍYŒYŒ™L˜È‹ˆœÛİ\˜ÙWÜÚHˆŒMŒÍYNYYYLNYMÍLNÍY˜MØMH‹ˆ›Y\™ÙWÜÚHˆ˜LŒNMXMÍ˜ÍYMÙXY˜ÍÍÌÙMÍÍÙYNL˜XH‹ˆ˜XØÙ\[˜ÙWÜİ]\ÈˆPĞÑTQ›İ[™YØZ]QRS•ˆ™\Z\È›Èİ™\˜[Q‹LŒˆÛÛ\][ÛˆÛZ[H‚ˆKˆœš[Ü—İØZ]ÙZ[—Ü™XÛİ™\WÜ™XÛÜ™ˆÂˆ]Hˆ’[\œ\Y›ØÙ\ÜËØZ]Y\ˆ\HSÑˆ‹ˆœÛİ\˜ÙWÜ]ÚˆœÛİ\˜ÙKœ]Ú[ˆYÙ[›YÚ\[ŒÎK]ØZ]YZ[‹Z[™Ù™‹š\‹ˆ›™]×İ\İˆ\İËİ\İØØ\\™WİØZ]Ú[\œ\[ÛœËœH‹ˆœX›\ÚYˆ˜[ÙKˆ›ØØ[İ\İÜØÛÜHˆ™›Øİ\ÙY™XÛÛœİXİY[˜İ[ÛˆÛ›H‹ˆ›ØØ[İ\İÜ™\İ[ˆŒÈ˜Z[Y™Y›Ü™H]ÚÈ\ÜÙYY\ˆ]Ú‹ˆœ™[[İWØÚHˆ››İšYÙÙ\™Y‹ˆ˜˜\ÙWÜÚHˆXXÌØYMÌXYXÌ˜LŒÌÎLM™ÍMYŒŒXYMÙY‚ˆKˆÜš]\—Ú[™Ù™ˆˆÂˆ›İÛ™\ˆˆYÙ[›YÚİ\›HZ[‹ˆ›İÛ™\œÚ\ÚYˆQŒKT‘PÓÔ‘QTÑS”ÒUU‘KTÒS’ËLŒŒL‹ˆœİ]\ÈˆœÛİ\˜ÙWØØ[™Y]WÜX›\ÚY‹ˆšİ\›WÛ[ÙHˆœÚ[™ÛWİÜš]\ˆ‹ˆ›™^ÛİÛ™\ˆˆYÙ[›YÚİ\›HZ[‹ˆœÛİ\˜ÙWİÜš][™×ÜİÜYˆ˜[ÙKˆ˜˜\ÙWÛXZ[—ÜÚHˆŒMÌXXŒ™ŒÌXÙMLY˜MÎL˜XXÎMLÙ™™XMY‹ˆ˜œ˜[˜ÚˆÛÜšËØYŒK\™XÛÜ™Y\Ù[œÚ]]™K\Ú[šËX›İ[™\H‹ˆœÛİ\˜ÙWÚXYˆ™M™XLNXÍÙŒLYXØÌYMŒŒÎYY™ÌÍYÍH‹ˆœÛİ\˜ÙWİ™YHˆ™XÍLÌM™ŒÙMNLLNÎYXØÍÍMÙYMÎNMŒ‹ˆœÛİ\˜ÙWÛY\™ÙHˆ[ˆœÛİ\˜ÙWÜˆˆ[ˆœÛİ\˜ÙWÜ—ØÚHˆ[ˆœÛİ\˜ÙWÛY\™ÙYÛXZ[—ØÚHˆ[ˆœš[Ü—Ü™[X\ÙWÜ™XÙZ\ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚÜ[ÍÌÈÚ\ÜİYXÛÛ[Y[MŒÍÌŒNLH‹ˆœ™[X\ÙWÜ™\]Z\™[Y[ˆ‘^XİQ‹LH™XÛÜ™YÙ[œÚ]]™K\Ú[šÈÛİ\˜ÙH[™™XÛÜ™È‹ÛY\™ÙY[XZ[ˆ]ÛˆËŒLHÒHÜ™Y[‹›ÛİÙYH^XÚ]Üš]\ˆ™[X\ÙKˆ‹ˆ››×Ü™X[Ù^Xİ][ÛˆˆYKˆ››×Üš]˜]WÙ]WÛÜ—ÜÙXÜ™]×ØÛÛ[Z]YˆYKˆœ™XÛÜ™YØ]ˆŒŒ‹LLLŒNŒÍVˆ‚ˆKˆœ™XÛÜ™YØ]İ]ÈˆŒŒ‹LLLŒNŒÍVˆ‹ˆœ™Y›YÚÜ™XÙZ\ˆÂˆ˜ÛÛ[X[™ˆœ]ÛˆØÜš\ËÜÙ\ÜÚ[Û—Ü™Y›YÚœH
+[š]X[™K\X›XØ][Ûˆ™XÙZ\
+H‹ˆ™^]ØÛÙHˆKˆ˜İ\œ™[Ü™\ÜÚ]ÜWÜÚHˆŒMX˜LØLÍŒŒL˜ÙL˜XLÌLMØÙLNˆ‹ˆœ™[[İWÜÚHˆL˜LMÌL˜˜ŒMØXŒØM˜L™LMMMÎXXÍÌØXY‹ˆ™\HˆYKˆ›ØØ[ÛÛ›Hˆˆœ™[[İWÛÛ›Hˆˆ˜™Z[™ÛXZ[ˆˆˆ“ĞÒÑQÓVQTˆˆ‘Ú]Y]Y]H
+™\ÛÛ™Y
+H‹ˆ“ĞÒÑTˆˆ”™Y›YÚ˜[YYH\İÜšXØ[Q‹Lœ˜[˜Úœ›ÛHH™K\™[X\ÙHİ]Kˆ]™HˆÌÌH^XİÒKY\™ÙY[XZ[ˆÒH[™^XÚ]™[X\ÙH[™\[™[H]]Üš^™HHQ‹LHœ˜[˜ÚÜ™X]Yœ›ÛHİ\œ™[XZ[‹ˆ‚ˆKˆœX›XØ][Û—Ü™XÛİ™\WÜ™XÙZ\ˆÂˆœÚ[Ü\Úˆ”™Z™XİY™XØ]\ÙH\›Z[˜[Ú]Ü™Y[X[ÈÙ\™H[˜]˜Z[X›H‹ˆ˜]]Üš^™YÜ]ˆ”™\ÜÚ]ÜKX]]Üš^™YÚ]XˆÛÛ›™XİÜˆ‹ˆœ™[[İWØœ˜[˜ÚˆÛÜšËØYŒ[][K\İ\]˜Z™XİÜH‹ˆœ™[[İWÜÚHˆXÍXŒ™X™YM˜ÎØÎYXNXŒØLÎŒMŒØ™‹ˆœ™[[İWİ™YWÜÚHˆNNMÎXL˜ÙÍÌŒXŒÙ˜LLÎNYY˜LÌYM™H‹ˆ˜˜\ÙWÜÚHˆMÎLÍMYXØÌŒMMN˜NLLÍ˜YNYŒM‹ˆ˜ÛÛ\\™Hˆ˜ZXYK™Z[™È^Xİš]™KYš[HÛİ\˜ÙHY™ˆ™\šYšYY‹ˆœ™\ÛÛ™YˆYBˆKˆ˜YŒWÜX›XØ][Û—Ü™XÛİ™\WÜ™XÙZ\ˆÂˆœÚ[Ü\Úˆ”™Z™XİY™XØ]\ÙH\›Z[˜[Ú]Ü™Y[X[ÈÙ\™H[˜]˜Z[X›H‹ˆ˜]]Üš^™YÜ]ˆ”™\ÜÚ]ÜKX]]Üš^™YÚ]XˆÛÛ›™XİÜˆ‹ˆœ™[[İWØœ˜[˜ÚˆÛÜšËØYŒK\™\›ÙXÚX›KYš^\™\È‹ˆœ™[[İWÜÚHˆ˜ÌNXÎYŒØÍØ˜ŒMLMMÌ˜MXLÌÍŒNY‹ˆœ™[[İWİ™YWÜÚHˆNMLÌMYMXÌÌXŒŒØYY™MÎM˜˜™Ì™NNXXÍ‹ˆ˜˜\ÙWÜÚHˆŒMX˜LØLÍŒŒL˜ÙL˜XLÌLMØÙLNˆ‹ˆ˜ÛÛ\\™Hˆ˜ZXYK™Z[™È^Xİš]™KYš[HÛİ\˜ÙHY™ˆ™\šYšYY‹ˆœ™\ÛÛ™YˆYBˆKˆ˜YŒWÙš^\™WÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœØÛÜHˆ›İ[™YY]Y]K[Û›H™\œÚ[Û™YŞ[]XËYš^\™H[š\›Û›Y[X[šY™\İÚ]^Xİ›İ™[˜[˜ÙH\Ú\È[™]\›Z[š\İXÈšY]šY[˜ÙH‹ˆœÛİ\˜ÙWÜÚHˆ˜ÌNXÎYŒØÍØ˜ŒMLMMÌ˜MXLÌÍŒNY‹ˆœÛİ\˜ÙWİ™YWÜÚHˆNMLÌMYMXÌÌXŒŒØYY™MÎM˜˜™Ì™NNXXÍ‹ˆœÛİ\˜ÙWÜˆˆÌ‹ˆ›Y\™ÙWÜÚHˆ™XLÍ˜ÌN™™ÍXNLMLÌŒ˜™ÙLLØØÌÙÎYLŒŒÙH‹ˆœ—ØÚWÜ[ˆˆÎLLMKˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎLÎLLˆœ›ÙXİİ\İÈˆÍKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\Èˆˆ˜ÚXÚÜÚ[Üİ]\Èˆ’S—Ô“ÑÔ‘TÔÈ‹ˆœ›ØYX\Ü›ÙÜ™\ÜÈˆŒ‹ÌLˆ‹ˆ›[Z]][ÛœÈˆ“›ÈÜİ[œÜXİ[Û‹š[H™XYË\[™[˜ŞH[œİ[][Û‹Ù]\ØÛX[\^Xİ][Û‹]™Hœ˜[Y]ÛÜšËÜ›Ú™XİY\\‹\˜š]˜\HYÙ[İÛÛ^Xİ][Û‹Ü™Y[X[Ë™]ÛÜšËš[\Ş\İ[KÜ›ØÙ\ÜÈ\ÛÛ][Û‹\™Ø\™HÜˆ›ÙXİ[Ûˆ]]Üš]Kˆ‚ˆKˆ˜YŒWÛY™XŞXÛWÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœØÛÜHˆ›İ[™YY]Y]K[Û›HÙ]\ØÛX[\Y™XŞXÛH™\šYšXØ][Ûˆ›İ[™ÈÛ™H^Xİ›Ü›X[^™YŞ[]XÈš^\™H[š\›Û›Y[‹ˆœÛİ\˜ÙWÜÚHˆŒNÎMØMLLYLØMLØÎ˜™NÌLYMMˆ‹ˆœÛİ\˜ÙWİ™YWÜÚHˆ™XØÍÌNŒMMNLL˜L˜MÌ™ŒMMMØÙL˜LLÍNH‹ˆœÛİ\˜ÙWÜˆˆÍˆ›Y\™ÙWÜÚHˆ˜XŒMÎYLÙ™XXLLŒÙ™ŒLØÌÌYŒMÎH‹ˆœ—ØÚWÜ[ˆˆÎLÍMÎMKˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎLÍMLNNM‹ˆœ›ÙXİİ\İÈˆÍMˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\Èˆˆ˜ÚXÚÜÚ[Üİ]\Èˆ’S—Ô“ÑÔ‘TÔÈ‹ˆœ›ØYX\Ü›ÙÜ™\ÜÈˆŒ‹ÌLˆ‹ˆ›[Z]][ÛœÈˆ”™XÛÜ™YY[YšY\œËÜ\˜][Ûˆ\Ú\È[™İ]ÛÛY\ÈÛ›NÈ›È›ÛÙˆ]Ù]\ØÛX[\˜[‹›ÈÛÛ[X[™Ë]Ë^[ØYËÙÜË[š\›Û›Y[˜[Y\ËÜ™Y[X[ËÜİ[œÜXİ[Û‹›Ú™XİXØÙ\ÜË™]ÛÜšË\˜š]˜\H^Xİ][ÛˆÜˆ\ÛÛ][ÛˆÛZ[Kˆ‚ˆKˆ˜YŒÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœØÛÜHˆ›İ[™YY]Y]K[Û›H™\šYšXØ][ÛˆÙˆÜ™\™YQ‹LŒÈ]]Üš^™Y™XÛÜ™Y˜Z™XİÜšY\ÈÚ]^XİY˜XÙ[İ]KZ\Úš[™[™È[™\›Z[˜[\X[Y˜Z[\™HÙ[X[XÜÈ‹ˆœÛİ\˜ÙWÜÚHˆXÍXŒ™X™YM˜ÎØÎYXNXŒØLÎŒMŒØ™‹ˆœÛİ\˜ÙWİ™YWÜÚHˆNNMÎXL˜ÙÍÌŒXŒÙ˜LLÎNYY˜LÌYM™H‹ˆœÛİ\˜ÙWÜˆˆËˆ›Y\™ÙWÜÚHˆ˜XNÍXYLÎLŒXØYYMNMX™ÍÌNXÌYÍŒH‹ˆœ—ØÚWÜ[ˆˆÎÍÍÎMLŒ‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎÍÎLNLÌKˆœ›ÙXİİ\İÈˆÌMˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\Èˆˆ˜ÚXÚÜÚ[Üİ]\Èˆ’S—Ô“ÑÔ‘TÔÈ‹ˆœ›ØYX\Ü›ÙÜ™\ÜÈˆŒKÌLˆ‹ˆ›[Z]][ÛœÈˆ“›È]™Hœ˜[Y]ÛÜšËÜ›Ú™XİY\\‹\˜š]˜\HYÙ[İÛÛ^Xİ][Û‹^[ØY\™Y™\™[˜ÙKÜ™Y[X[Ë™]ÛÜšËš[\Ş\İ[KÜ›ØÙ\ÜÈ\ÛÛ][Û‹™\Ûİ\˜ÙH[™›Ü˜Ù[Y[\™Ø\™HÜˆ›ÙXİ[Ûˆ]]Üš]Kˆ‚ˆKˆœÚ[ÙÚ]İÜš]WÜ›Ø™HˆÂˆ˜ÛÛ[X[™ˆ‘ÒUÕT“RSSÔ“ÓTLÚ]\ÚKYK\[ˆÜšYÚ[ˆPQœ™YœËÚXYËİÛÜšËØYŒŒ‹]ØZ]YZ[‹\™\Z\ˆ‹ˆ™^]ØÛÙHˆLˆœ™\İ[ˆ˜Ûİ[›İ™XY\Ù\›˜[YH›ÜˆÎ‹ËÙÚ]X‹˜ÛÛNˆ\›Z[˜[›Û\È\ØX›Y‹ˆœ™XÛİ™\HˆQÑS•Ë›Y]]Üš^™YÛÛ›™XİYZ[YÜ˜][Ûˆ™\Ù\˜][ÛˆÚ]ØœÙ\™Y\™[Ø˜\ÙH™YK›Ü˜ÙOY˜[ÙK^Xİ™YKÜ™Yˆ[™š[K[\İ™\šYšXØ][Û‹ˆ˜]]™H™\ÜÚ]ÜH\›Z\ÜÚ[ÛœÈ™\Ü\Ú]YKˆ‚ˆKˆš\İÜšXØ[ØÚWÜİ]\ÈˆÂˆÂˆœ\ÚÜ[ˆˆÂˆšYˆÍÎLÍÎKˆœÚHˆYÍXÙ™MÌLÙXÎNLLÍÍNŒL™ŒÌÌØH‹ˆ™]™[ˆœ\Ú‹ˆœİ]\Èˆ˜ÛÛ\]Y‹ˆ˜ÛÛ˜Û\Ú[ÛˆˆœİXØÙ\ÜÈ‹ˆ˜][\ˆKˆš›Ø—ÚYˆLLÍNLÌMÌ‹ˆ\›ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚØXİ[ÛœËÜ[œËÌÍÎLÍÎH‹ˆ\İÈˆŒMŒ›ÙXİ\İÈ\ÜÙY˜Z[YÈN[™œ˜\İXİ\™H^Xİ]YMÈ\ÜÙY[™H˜\Ù[[™HÚÚ\ÈXYÛ›ÜİXÜÈ\ÜÙYÛˆ]ÛˆËŒLKŒMÈ‚ˆKˆœ—Ü[ˆˆÂˆšYˆÍÎNNKˆœÚHˆYÍXÙ™MÌLÙXÎNLLÍÍNŒL™ŒÌÌØH‹ˆ™]™[ˆœ[Ü™\]Y\İ‹ˆœİ]\Èˆ˜ÛÛ\]Y‹ˆ˜ÛÛ˜Û\Ú[ÛˆˆœİXØÙ\ÜÈ‹ˆ˜][\ˆKˆš›Ø—ÚYˆLLÍNLÎÍÎLËˆ\›ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚØXİ[ÛœËÜ[œËÌÍÎNNH‹ˆ\İÈˆŒMŒ›ÙXİ\İÈ\ÜÙY˜Z[YÈN[™œ˜\İXİ\™H^Xİ]YMÈ\ÜÙY[™H˜\Ù[[™HÚÚ\ÈXYÛ›ÜİXÜÈ\ÜÙYÛˆ]ÛˆËŒLKŒMÈ‚ˆKˆ›Y\™ÙYÛXZ[—Ü[ˆˆÂˆšYˆÍÎÎÍKˆœÚHˆ˜˜˜ØÎLØÌL˜ÍLÍMYLYMÍMXÎMH‹ˆ™]™[ˆœ\Ú‹ˆœİ]\Èˆ˜ÛÛ\]Y‹ˆ˜ÛÛ˜Û\Ú[ÛˆˆœİXØÙ\ÜÈ‹ˆ˜][\ˆKˆš›Ø—ÚYˆLLÍNNÍˆ\›ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚØXİ[ÛœËÜ[œËÌÍÎÎÍH‹ˆ\İÈˆŒMŒ›ÙXİ\İÈ\ÜÙY˜Z[YÈN[™œ˜\İXİ\™H^Xİ]YMÈ\ÜÙY[™H˜\Ù[[™HÚÚ\ÈXYÛ›ÜİXÜÈ\ÜÙYÛˆ]ÛˆËŒLKŒMÈ‚ˆKˆ˜YŒŒ—Û]\İİ™\šYšYYÛXZ[—Ü[ˆˆÂˆšYˆÎNLLNNKˆœÚHˆXXÌØYMÌXYXÌ˜LŒÌÎLM™ÍMYŒŒXYMÙY‹ˆ™]™[ˆœ\Ú‹ˆœİ]\Èˆ˜ÛÛ\]Y‹ˆ˜ÛÛ˜Û\Ú[ÛˆˆœİXØÙ\ÜÈ‹ˆš›Ø—ÚYˆLMŒÌÍMÎMËˆ\›ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚØXİ[ÛœËÜ[œËÌÎNLLNNH‹ˆ\İÈˆŒ›ÙXİ\İÈ\ÜÙY˜Z[YÈ[™œ˜\İXİ\™H[™XYÛ›ÜİXÜÈİ\ÈİXØÙ\ÜÙ[Ûˆ]ÛˆËŒLKŒMËˆ‚ˆBˆBˆKˆ˜XØÙ\YØYŒŒ—Ü™\Z\œÈˆÂˆÂˆ]Hˆ’[\œ\Y›ØÙ\ÜËØZ]Y\ˆ\HSÑˆ‹ˆœİ]\ÈˆPĞÑTQ‹ˆœÛİ\˜ÙWÜÚHˆŒMŒÍYNYYYLNYMÍLNÍY˜MØMH‹ˆœˆˆËˆ›Y\™ÙWÜÚHˆ˜LŒNMXMÍ˜ÍYMÙXY˜ÍÍÌÙMÍÍÙYNL˜XH‹ˆœ—ØÚWÜ[ˆˆÎÌÍËˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎÌÌLÍMKˆœ›ÙXİİ\İÈˆËˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ›İ[™Y™]H™\Ù\™\ÈÜšYÚ[˜[XY[™H[™[Y[İ]™YXİ[ÛÈ^XİH™YHŞ[]XÈ™YÜ™\ÜÚ[ÛœÎÈ›ÈÛÜšÙ\ˆ[İÛ\İÙXİ\š]H›İ[™\HÜˆÛX[\\İÙXZÙ[š[™È‚ˆKˆÂˆ]Hˆ’[\œ\YÛX[\™X\[™ÈY\ˆÜ›İ\\›Z[˜][Ûˆ‹ˆœİ]\ÈˆPĞÑTQ‹ˆœÛİ\˜ÙWÜÚHˆ™ŒŒÎLLLLXÍÌŒLÎLXÙXÎYÌYMMMMÈ‹ˆœˆˆKˆ›Y\™ÙWÜÚHˆMŒŒXMÙXMÙ™XYŒÍMMŒLÍLÍ˜ˆ‹ˆœ\ÚØÚWÜ[ˆˆÎLNLLËˆœ—ØÚWÜ[ˆˆÎLÌŒLŒ‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎLŒÌÎM‹ˆœ›ÙXİİ\İÈˆKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ›İ[™YÛX[\ØZ]™]HY\ˆÜ›İ\\›Z[˜][ÛÈÛÈŞ[]XÈ™YÜ™\ÜÚ[ÛœÎÈ›ÈÜ›İ\™K\ÚYÛ˜[[İÛ\İ^[œÚ[Û‹\İÙXZÙ[š[™ÈÜˆØ[™›ŞÛZ[H‚ˆKˆÂˆ]Hˆ’[\œ\Y\™[]™[™\ÜÈÛ\š[™È˜[˜XÚÈÛX[\‹ˆœİ]\ÈˆPĞÑTQ‹ˆœÛİ\˜ÙWÜÚHˆ™NY™ÌÎLLÙXØØ™˜XŒMØÎNMXŒØÈ‹ˆœˆˆLKˆ›Y\™ÙWÜÚHˆŒMX™M˜XØ™ŒMØØM˜ÎM™™M™ÎY™N‹ˆœ\ÚØÚWÜ[ˆˆÎLÌMÌŒMÍLKˆœ—ØÚWÜ[ˆˆÎLÌMÌÌÌ‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎMÌMÌÌLËˆœ›ÙXİİ\İÈˆËˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ›İ[™Y\™[Û™]H™Y›Ü™H˜[˜XÚÈÚYÛ˜[[™ÎÈÛÈŞ[]XÈ™YÜ™\ÜÚ[ÛœÎÈ›ÈÚYÛ˜[ÜˆØZ]Ú[H]™[™\ÜÈ\È[šÛ›İÛÈ›È[İÛ\İ^[œÚ[Û‹\İÙXZÙ[š[™ÈÜˆØ[™›ŞÛZ[H‚ˆKˆÂˆ]Hˆ’[\œ\YØ\\™Y\\HÛÜÙH\š[™Èš[˜[ÛX[\‹ˆœİ]\ÈˆPĞÑTQ‹ˆœÛİ\˜ÙWÜÚHˆ˜NMXŒY™ŒYYŒ™˜YLYNLLYŒLˆ‹ˆœˆˆLËˆ›Y\™ÙWÜÚHˆÍŒŒ˜ŒÎXMLMØYÍ™ÍÍXÍYŒÌŒÙˆ‹ˆœ\ÚØÚWÜ[ˆˆÎMLLNLLKˆœ—ØÚWÜ[ˆˆÎMLLÌMÌLÌËˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎMLLÍÌŒŒNKˆœ›ÙXİİ\İÈˆKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ›İ[™Y\KXÛÜÙH™]HY\ˆİXœ›ØÙ\ÜÈÛX[\È˜[œÚY[[\œ\[Ûˆ™\Ù\™\ÈH™\™Xİ[™\œÚ\İ[[\œ\[Ûˆ™[XZ[œÈ]\›Z[š\İXÈÚ[HHÙXÛÛ™\HÛÜÙ\ÎÈÛÈŞ[]XÈ™YÜ™\ÜÚ[ÛœÎÈ›È[İÛ\İ^[œÚ[Û‹\İÙXZÙ[š[™ÈÜˆØ[™›ŞÛZ[H‚ˆKˆÂˆ]Hˆ›İ[™YÜİ\ÚYÛ˜[›ØÙ\ÜÈ™X\[™È‹ˆœİ]\ÈˆPĞÑTQ‹ˆœÛİ\˜ÙWÜÚHˆ™ÍLÎÌØNMXLŒŒÌŒÙYÍYØLÎNM˜ˆ‹ˆœÛİ\˜ÙWİ™YWÜÚHˆŒLXMYØØŒÙØÌ™™MXŒŒÌÌLNMØMXÍŒØH‹ˆœˆˆMKˆ›Y\™ÙWÜÚHˆŒÌL™XLÍNLYYŒÍYXMÍNX™LÍ˜ÍÎ‹ˆœ\ÚØÚWÜ[ˆˆÎMÌNNKˆœ—ØÚWÜ[ˆˆÎMÌNMMMÌ‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎMÌNŒÍ‹ˆœ›ÙXİİ\İÈˆLKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ›İ[™Üİ\ÚYÛ˜[›ØÙ\ÜËØZ]ÈH^\İ[™ÈX^[][HŞ[]XËXØ\ÙH[Y[İ][™™\Ù\™HÛ™HXY[™HXÜ›ÜÜÈ[\œ\Y™]šY\ÎÈÛÈŞ[]XÈ™YÜ™\ÜÚ[ÛœÎÈ›È›ØÙ\ÜËYÜ›İ\™K\ÚYÛ˜[[İÛ\İ^[œÚ[Û‹\İÙXZÙ[š[™ÈÜˆØ[™›ŞÛZ[H‚ˆBˆKˆ˜YŒ×Ü™XÛÜ™YÜ™XÛİ™\WÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœÛİ\˜ÙWÜˆˆ‹ˆœÛİ\˜ÙWÚXYÜÚHˆ˜ØM™ÍXLYMMMMÙYNXMXÙNMXÙYXÌÌH‹ˆœÛİ\˜ÙWİ™YWÜÚHˆXLÍXØXY™MMÍL˜ÌXYMÙÍ™YÍÙ˜LÌ˜NÈ‹ˆœ—ØÚWÜ[ˆˆÎLLL‹ˆ›Y\™ÙYÛXZ[—ÜÚHˆŒŒÍÎ™LŒMŒÌÍÌ™XNLXNXÍX™NMMNXXH‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎLMÍÍÍKˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ›İ[™Y™XÛÜ™Y™XÛİ™\HY]Y]HÚ]^Xİ˜Z[\™K\[‹˜Z™XİÜKÜ\˜][Ûˆ[™Y[\İ[˜ŞHš[™[™ÜÎÈÛÛYİ[İ\Èİ]HÚZ[È][ÜİÛ™HÛÛ[Z]È˜Z[Y[™\XØ]H][\ÈÈ›İ]]]Hİ]Kˆ‹ˆ›[Z]][ÛœÈˆ“›È™]šY\Ë™XÛİ™\HXİ[Û‹YÙ[İÛÛØÛÛ[X[™^Xİ][Û‹\˜X›K\İ]HÜˆ›Ú™XİXØÙ\ÜËÜ™Y[X[Ë^[ØYË™]ÛÜšÈØ[ËÜˆ\ÛÛ][ÛˆÛZ[Kˆ‚ˆKˆ˜YŒ×Ü™XÛÜ™YÜ™XÛİ™\WÜ™XÛÜ™×Ü™XÙZ\ˆÂˆœ™XÛÜ™×ÜˆˆËˆœ™XÛÜ™×ÚXYÜÚHˆ˜ÍÌØÍXYÎŒLÎ™LŒÍ™ØLMŒÙMØ˜LÌÍH‹ˆœ™XÛÜ™×İ™YWÜÚHˆŒMÌÍL˜˜Ù˜NNXNMØÌ˜YXÙŒŒ™YLÎLH‹ˆœ—ØÚWÜ[ˆˆÎÎMLÍMˆ›Y\™ÙYÛXZ[—ÜÚHˆN™LŒL™NYNXMÍMÍÍ™˜ÍLNM™H‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎÎNÌËˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\Èˆˆœ™[X\ÙWÜ™XÙZ\ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚÜ[ÍÈÚ\ÜİYXÛÛ[Y[MŒŒLŒÌN‚ˆKˆ˜YŒ×Ü™]WØYÙ]ÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœÛİ\˜ÙWÜˆˆˆœÛİ\˜ÙWÚXYÜÚHˆ™™ÌXÙŒŒMNMÎLÌYYMÍYLMXNLY˜Í˜ÌÍYLÎH‹ˆœÛİ\˜ÙWİ™YWÜÚHˆØXML˜LÍLØXŒLŒMXYYÍŒÍYLŒ™ÍÍH‹ˆœ—ØÚWÜ[ˆˆÎÍMŒÍKˆ›Y\™ÙYÛXZ[—ÜÚHˆNL˜XLMÙ˜˜XŒXÍÌÎMÎMÌ˜ŒÙXÍÎNXMØˆ‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎÌMˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ‘^Xİ™XÛİ™\K\™\ÜX›İ[™Y]Y]K[Û›H™]HYÙ]ÈÚ][ˆZYÚX][\Ø\[™]\›Z[š\İXÈ™XÛİ™\™Y^]\İYÜˆ™]K\\›Z]Y\ÜÜÚ][ÛœËˆ‹ˆ›[Z]][ÛœÈˆ“›È™]K™XÛİ™\KÛY\[™ËYÙ[İÛÛØÛÛ[X[™^Xİ][Û‹\˜X›K\İ]HÜˆ›Ú™XİXØÙ\ÜË^\›˜[Ø[ËÜ™Y[X[Ë^[ØYËÜˆ\ÛÛ][ÛˆÛZ[Kˆ‚ˆKˆ˜YŒ×Üİ]WØÚXÚÜÚ[ÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœÛİ\˜ÙWÜˆˆ‹ˆœÛİ\˜ÙWÚXYÜÚHˆ˜ÍMMŒÎM™ØØXNN™MÌ™NLMÙYŒLŒL˜ÙMÌÈ‹ˆœÛİ\˜ÙWİ™YWÜÚHˆ™XŒÍXÙX˜XÎŒÍYXŒŒÍÙŒŒÎLÎXH‹ˆœ—ØÚWÜ[ˆˆÎLNLÌMËˆ›Y\™ÙYÛXZ[—ÜÚHˆNY™ŒNYMÍÍŒLÎLMØÎNLYX˜˜LÍÍÌL™‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎLNMÎMKˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆNKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ‘^Xİ™XÛİ™\K\™\ÜX›İ[™Y]Y]K[Û›Hİ]HÚXÚÜÚ[ÈÚ]H›İ[™YÜÚ]]™HÙ[™\˜][Ûˆ[™[š]X[Ùš[˜[İ]H\ÚÛÛ[Z]Kˆ‹ˆ›[Z]][ÛœÈˆ“›È\˜X›K\İ]H™XYÜš]K™\İÜ™HÜˆ\œÚ\İ[˜ÙHÛZ[NÈ›È›Ú™XİXØÙ\ÜË™]KÜ™XÛİ™\HXİ[Û‹YÙ[İÛÛØÛÛ[X[™^Xİ][Û‹^\›˜[Ø[Ü™Y[X[Ë^[ØYËÜˆ\ÛÛ][ÛˆÛZ[Kˆ‚ˆKˆ˜YŒ×Ü™\İ[YWÙİX\™ÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœÛİ\˜ÙWÜˆˆˆœÛİ\˜ÙWÚXYÜÚHˆÙNMLNMÍÍXXŒYXXÌXÌØÍÍLÌ˜MH‹ˆœÛİ\˜ÙWİ™YWÜÚHˆ˜ÙNMXLXÌLÎMMLLLÎŒ˜XLYŒLXŒÈ‹ˆœ—ØÚWÜ[ˆˆÎLLÌMMÌËˆ›Y\™ÙYÛXZ[—ÜÚHˆ™N™˜ÍØÙŒL™YNLÌÎ™ŒLLÌÙYMMˆ‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎLLÌMŒÌÌNKˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆËˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ‘]\›Z[š\İXÈY]Y]K[Û›H\ÜÜÚ][Ûˆš[™[™È^Xİ™XÛİ™\K™]KXYÙ][™İ]KXÚXÚÜÚ[]šY[˜ÙH\ÈÛÜÙY\™XÛİ™\™YÛÜÙYY^]\İYÜˆH›Û‹X]]Üš]]]™H™XÛÜ™Y™\İ[YHØ[™Y]Kˆ‹ˆ›[Z]][ÛœÈˆ“›È™]K™XÛİ™\K™\İÜ™KYÙ[İÛÛØÛÛ[X[™^Xİ][Û‹›Ú™XİÜˆ\˜X›K\İ]HXØÙ\ÜË^\›˜[Ø[ËÜ™Y[X[Ë^[ØYËÜˆ\ÛÛ][ÛˆÛZ[Kˆ‚ˆKˆ˜YŒ×Ü™\İ[YWİ˜[œÚ][Û—ÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœÛİ\˜ÙWÜˆˆLˆœÛİ\˜ÙWÚXYÜÚHˆÍÌLL˜XØMLLLLNL˜LØ˜MÌLNYH‹ˆœÛİ\˜ÙWİ™YWÜÚHˆŒNNMŒ˜MÌÌÎNLØÙ™YNM™NÙL™L‹ˆœ—ØÚWÜ[ˆˆÎLMNLMMËˆ›Y\™ÙYÛXZ[—ÜÚHˆ™Ì˜ŒX™Œ˜MŒØ™XÎMÌŒYLYŒYÍYˆ‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎLMNLLÎMŒËˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆÎKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ‘]\›Z[š\İXÈY]Y]K[Û›HÛÛ[Z]H™\šYšXØ][Ûˆ™\]Z\š[™È[ˆ^Xİš[Üˆ™\İ[YHØ[™Y]KÛ™H\[™Y™XÛİ™\H]™[™\Ù\™Y™XÛİ™\Hš[™[™ÜË[™Û™HÚXÚÜÚ[YÙ[™\˜][ÛˆY˜[˜ÙKˆ‹ˆ›[Z]][ÛœÈˆ“›È™]K™XÛİ™\K™\İÜ™KYÙ[İÛÛØÛÛ[X[™^Xİ][Û‹›Ú™XİÜˆ\˜X›K\İ]HXØÙ\ÜË^\›˜[Ø[ËÜ™Y[X[Ë^[ØYËÜˆ\ÛÛ][ÛˆÛZ[Kˆ‚ˆKˆ˜YŒ×Ü™\İ[YWÛ[™XYÙWÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœÛİ\˜ÙWÜˆˆL‹ˆœÛİ\˜ÙWÚXYÜÚHˆŒŒMÍÍMŒLŒ˜NLŒÍXMX™ŒØ˜ÌXLYMY™ˆ‹ˆœÛİ\˜ÙWİ™YWÜÚHˆ˜MMYÍÙM˜ÌMYNNLÙ™MNLMLÍLÌØˆ‹ˆœ—ØÚWÜ[ˆˆÎLNMÎMÎKˆ›Y\™ÙYÛXZ[—ÜÚHˆYXMØØÙYMLM˜XLM˜YÌÎLÍNH‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎLNMMLKˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆ‹ˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ‘]\›Z[š\İXÈY]Y]K[Û›H[™XYÙH™\šYšXØ][Ûˆ›ÜˆÛ™H›İYÚÙ]™[ˆÜ™\™YÛÛ[XY™\ÜÙY™\İ[YH˜[œÚ][ÛœÈÚ]^XİİX\™]šY[˜ÙK][\XÛİ[[™ÚXÚÜÚ[YÙ[™\˜][ÛˆÛÛ[Z]Kˆ‹ˆ›[Z]][ÛœÈˆ“›È™]K™XÛİ™\K™\İÜ™KYÙ[İÛÛØÛÛ[X[™^Xİ][Û‹›Ú™XİÜˆ\˜X›K\İ]HXØÙ\ÜË^\›˜[Ø[ËÜ™Y[X[Ë^[ØYËÜˆ\ÛÛ][ÛˆÛZ[Kˆ‚ˆKˆ˜YŒ×Ü™\İ[YWØÛÜİ\™WÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœÛİ\˜ÙWÜˆˆMˆœÛİ\˜ÙWÚXYÜÚHˆŒÙŒMÌÌÌ™NLLÌNYÎMØŒMÙ˜™X˜ÍLÙ‹ˆœÛİ\˜ÙWİ™YWÜÚHˆ˜YLÙXLX˜YLYYY™YXLÙLŒ™™ØŒÍLŒ™™ŒL‹ˆœ—ØÚWÜ[ˆˆÎLÎŒÎMÌKˆ›Y\™ÙYÛXZ[—ÜÚHˆ™XÙ™ÎLÌ˜NMLMLŒÌÌÌLØL˜YMÍLM˜M™XÌÈ‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎLÎŒMMLNˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆLˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆÛÛ[XY™\ÜÙYY]Y]K[Û›HÛÜİ\™H]XØÙ\ÈÛ›H^Xİ\›Z[˜[ÛÜÙY\™XÛİ™\™YÜˆÛÜÙYY^]\İY™\İ[YH[™XYÙ\È[™™Z™XİÈ[™š[š\ÚYØ[™Y]\Ëˆ‹ˆ›[Z]][ÛœÈˆ“›È™]K™XÛİ™\K™\İÜ™KYÙ[İÛÛØÛÛ[X[™^Xİ][Û‹›Ú™XİÜˆ\˜X›K\İ]HXØÙ\ÜË^\›˜[Ø[ËÜ™Y[X[Ë^[ØYËÜˆ\ÛÛ][ÛˆÛZ[Kˆ‚ˆKˆ˜YŒ×ØXØÙ\[˜ÙWØÛÜİ\™HˆÂˆœİ]\Èˆ“QT‘ÑQĞS‘Õ‘T’Q’QQ‹ˆ˜XØÙ\YØÚXÚÜÚ[ÈˆKˆİ[ØÚXÚÜÚ[ÈˆL‹ˆœ™]šY]ÙYÛXZ[—ÜÚHˆŒØMÎXÎXŒY™MNMÙYLXØX™LŒLY˜L˜˜È‹ˆœÛİ\˜ÙWÜœÈˆÂˆ‹ˆˆ‹ˆˆLˆL‹ˆMˆKˆœ™XÛÜ™×ÜœÈˆÂˆËˆKˆËˆKˆLKˆLËˆMBˆKˆ›]\İÜ™XÛÜ™×Ü—ÚXYˆ™™XMØÙXXÙX˜ŒÌMMLMÌŒŒÙ˜ÍMLLÌH‹ˆ›]\İÜ™XÛÜ™×ÛY\™ÙHˆŒØMÎXÎXŒY™MNMÙYLXØX™LŒLY˜L˜˜È‹ˆ›]\İÜ™XÛÜ™×Ü—ØÚHˆÎLÎŒŒÍMËˆ›]\İÜ™XÛÜ™×ÛY\™ÙYÛXZ[—ØÚHˆÎLÎMŒÌ‹ˆ›]\İÜ›ÙXİİ\İÈˆLˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ‘]\›Z[š\İXÈ™XÛÜ™Y[Y]Y]H™\šYšXØ][Ûˆ›ÜˆY[\İ[˜ŞK›İ[™Y™]šY\Ë^Xİİ]HÚZ[œËØÚXÚÜÚ[Ë™\İ[YH\ÜÜÚ][ÛœËÜ™\™Y˜[œÚ][Ûˆ[™XYÙH[™\›Z[˜[ÛÜİ\™Kˆ‹ˆ›[Z]][ÛœÈˆ“›È™]K™XÛİ™\K™\İÜ™K\˜X›K\İ]HXØÙ\ÜËYÙ[İÛÛØÛÛ[X[™Ü›Ú™Xİ^Xİ][Û‹^\›˜[Ø[Ü™Y[X[Ü^[ØY[™[™ËÜˆš[\Ş\İ[KÜ›ØÙ\ÜËÛ™]ÛÜšËÓÔÈ\ÛÛ][ÛˆÛZ[Kˆ‹ˆ˜ÛÜİ\™WÜˆˆM‹ˆ˜ÛÜİ\™WÚXYˆŒ˜™MLM™™M˜ØŒŒÍŒLØYL˜XÍL˜XÍMMMŒLÈ‹ˆ˜ÛÜİ\™WÛY\™ÙHˆ™™NY˜Î™M˜˜YYŒ˜LXNŒ˜ØÙ˜Œ™˜ÍM™‹ˆ˜ÛÜİ\™WÜ—ØÚHˆÎMÌÎLŒÌÎKˆ˜ÛÜİ\™WÛY\™ÙYÛXZ[—ØÚHˆÎMÍÍÎˆÜš]\—Ü™[X\ÙHˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚÜ[ÍMˆÚ\ÜİYXÛÛ[Y[MŒNŒŒ‚ˆKˆ˜YŒÜ™XÛÜ™YØÛÛ˜İ\œ™[˜ŞWÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœİ]\Èˆ”ÓÕTÑWĞS‘Ô‘PÓÔ‘×ÓQT‘ÑQĞS‘Õ‘T’Q’QQ‹ˆœÛİ\˜ÙWÜÚHˆØXÎYMŒŒ™MÍŒÎMLYNMX˜MØÍÌXMXØH‹ˆœÛİ\˜ÙWÜˆˆMËˆœÛİ\˜ÙWÛY\™ÙWÜÚHˆŒL˜ÌÙŒØL™MØLNYYNLÍŒÌMÙMÙLÙMH‹ˆœÛİ\˜ÙWÜ—ØÚWÜ[ˆˆÎMMÌNˆœÛİ\˜ÙWÛY\™ÙYÛXZ[—ØÚWÜ[ˆˆÎMMÌÌÍNKˆœ›ÙXİİ\İÈˆŒKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ‘]\›Z[š\İXÈ›İ[™Y™XÛÜ™YÛÛ˜İ\œ™[\ØÙ[˜\š[ÈY]Y]HÚ]Ú[™ÛK][˜[\Ú\ËİX›HØÚY[[™Ë\XÚ\[ÚZ[œÈ[™ÛÛ™›Xİ™Z™Xİ[ÛÈ›È^Xİ][ÛˆÜˆ\ÛÛ][Ûˆ]]Üš]Kˆ‚ˆKˆ˜YŒÜ™XÛÜ™YØÛÛ˜İ\œ™[˜ŞWÜ™XÛÜ™×Ü™XÙZ\ˆÂˆœ™XÛÜ™×ÜˆˆNˆœ™XÛÜ™×ÚXYÜÚHˆYL™LŒMÍXÎNMMYXÎMŒ™ÙÌŒÎŒŒ‹ˆœ™XÛÜ™×Ü—ØÚWÜ[ˆˆÎMMÍLÌ‹ˆ›Y\™ÙYÛXZ[—ÜÚHˆLXYŒYNNMŒ™YLYÍŒ˜ÙŒXÍ™Œ‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎMMÍŒŒMKˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆŒKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\Èˆˆœ™[X\ÙWÜ™XÙZ\ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚÜ[ÍNÚ\ÜİYXÛÛ[Y[MŒÌÎNŒH‚ˆKˆ˜YŒÜ™\Ûİ\˜ÙWÜİ]WÛ[™XYÙWÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœİ]\Èˆ”ÓÕTÑWĞS‘Ô‘PÓÔ‘×ÓQT‘ÑQĞS‘Õ‘T’Q’QQ‹ˆœÛİ\˜ÙWÜÚHˆØÌÌMŒŒXNXNLŒXŒNYŒYNXÌÙY‹ˆœÛİ\˜ÙWİ™YWÜÚHˆ˜™YL˜ÍÙMLM˜YXMLÎLÎÌLLØÍYH‹ˆœÛİ\˜ÙWÜˆˆNKˆœÛİ\˜ÙWÛY\™ÙWÜÚHˆXŒÍ˜ØYÍLÌL™MM™MXØ™MXÎYH‹ˆœÛİ\˜ÙWÜ—ØÚWÜ[ˆˆÎMNÍÍÌˆœÛİ\˜ÙWÛY\™ÙYÛXZ[—ØÚWÜ[ˆˆÎMNLÍLNˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆ‹ˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ‘]\›Z[š\İXÈ^XİY]šY[˜ÙKX›İ[™™XÛÜ™Y™\Ûİ\˜ÙK\İ]H[™XYÙHÚ]Ú\™YÛÛ[™\ˆ™K\İ]KÛ™HXØÙ\Y]™[\ˆ›İ[™Ü›ÜÜË\›İ[™İ]HÛÛ[Z]H[™\ÛÛ]YXÛÛ™›Xİ™Z™Xİ[Û‹ˆ‹ˆ›[Z]][ÛœÈˆ“›È™XYË›ØÙ\ÜÙ\ËYÙ[ËÛÛË›Ú™XİËÛÛ[X[™Ë^\›˜[Ø[ËÜ™Y[X[Ë^[ØYËš[\Ş\İ[HÜˆ\˜X›K\İ]HXØÙ\ÜË™]KÜ™XÛİ™\HXİ[Û‹™\Ûİ\˜ÙKXØ\ÛZ[KÜˆÔÈ\ÛÛ][ÛˆÛZ[Kˆ‚ˆKˆ˜YŒÜ™\Ûİ\˜ÙWÜİ]WÛ[™XYÙWÜ™XÛÜ™×Ü™XÙZ\ˆÂˆœ™XÛÜ™×ÜˆˆŒˆœ™XÛÜ™×ÚXYÜÚHˆYMÎØŒÙ˜ŒXÍŒÎ˜MÍŒ˜L˜˜M˜YLYŒH‹ˆœ™XÛÜ™×Ü—ØÚWÜ[ˆˆÎMNLŒÍÎLËˆ›Y\™ÙYÛXZ[—ÜÚHˆ™MØØÙYX˜ÍMÎXŒÍ˜ÍÌÌLY™ÌLØŒL™™NÈ‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎMNLÍŒŒˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆ‹ˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\Èˆˆœ™[X\ÙWÜ™XÙZ\ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚÜ[ÍŒÚ\ÜİYXÛÛ[Y[MŒÌLÎLÌÌH‚ˆKˆ˜YŒØØ]\Ø[Ú[™Ù™œ×ÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœİ]\Èˆ”ÓÕTÑWĞS‘Ô‘PÓÔ‘×ÓQT‘ÑQÕ‘T’Q’QQÕÔ’UT—Ô‘SPTÑQ‹ˆœÛİ\˜ÙWÜÚHˆNYNMÌ˜™ŒMØLØNXYLNLNMÍLÙ˜ˆ‹ˆœÛİ\˜ÙWİ™YWÜÚHˆ˜ÎNNM™N˜ÎXYNMLYX™™Œ˜LÍLÍLÌMÍˆ‹ˆœÛİ\˜ÙWÜˆˆŒKˆœÛİ\˜ÙWÛY\™ÙWÜÚHˆ™™™MÍŒØLNNMMØMÎ˜ØÙXÍYÍXŒÙŒ‹ˆœÛİ\˜ÙWÜ—ØÚWÜ[ˆˆÎMŒMÌLˆœÛİ\˜ÙWÛY\™ÙYÛXZ[—ØÚWÜ[ˆˆÎMŒMÍNKˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆÍKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ‘]\›Z[š\İXÈ›İ[™Y™XÛÜ™YÜ›ÜÜËXYÙ[Ø]\Ø[[™Ù™œÈ›İ[™È^Xİ˜[Y]Y]™[Y[]Y\Ë™YÚ\İ\™Y\İ[˜İ\XÚ\[ËÛÛ\]Y[™Ú[È[™İšXİ[\Ü˜[Ü™\‹ˆ‹ˆ›[Z]][ÛœÈˆ“›ÈYÙ[Ë™XYË›ØÙ\ÜÙ\ËÛÛË›Ú™XİËÛÛ[X[™Ëİ]HXØÙ\ÜËY\ÜØYÙHÜˆ\Y˜Xİ˜[œÙ™\‹^\›˜[Ø[ËÜ™Y[X[Ë^[ØYË™]šY\Ë™XÛİ™\K™\Ûİ\˜ÙKXØ\ÛZ[KÜˆÔÈ\ÛÛ][ÛˆÛZ[Kˆ‚ˆKˆ˜YŒØØ]\Ø[Ú[™Ù™œ×Ü™XÛÜ™×Ü™XÙZ\ˆÂˆœ™XÛÜ™×ÜˆˆŒ‹ˆœ™XÛÜ™×ÚXYÜÚHˆØLØØLÍM™LÍMY˜XMÎNÎŒÙÌŒÌØÌÎ‹ˆœ™XÛÜ™×Ü—ØÚWÜ[ˆˆÎMŒNÌLMÍ‹ˆ›Y\™ÙYÛXZ[—ÜÚHˆŒÌNX˜NNÌY™ŒÙXLÎLY™YÙLØLMˆ‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎNŒNMÎLKˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆÍKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\Èˆˆœ™[X\ÙWÜ™XÙZ\ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚÜ[ÍŒˆÚ\ÜİYXÛÛ[Y[MŒÍLMÍˆ‚ˆKˆ˜YŒÜ][Ü[WØ˜\œšY\—ÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœİ]\Èˆ”ÓÕTÑWÓQT‘ÑQĞS‘Õ‘T’Q’QQÔ‘PÓÔ‘×ÔS‘S‘È‹ˆœÛİ\˜ÙWÜÚHˆ™˜ÎLYYXŒÍLÍŒLÌYXL˜™NÌŒ˜NNŒˆ‹ˆœÛİ\˜ÙWİ™YWÜÚHˆ™LØÎMLYXLŒØNLÌXÎ˜ŒÍŒÍØXÎMŒYXÍÍH‹ˆœÛİ\˜ÙWÜˆˆŒËˆœÛİ\˜ÙWÛY\™ÙWÜÚHˆ™ŒÌ˜XLÍXNNXÙMÎÌÙÍÍXÍXÎ‹ˆœÛİ\˜ÙWÜ—ØÚWÜ[ˆˆÎNÌMŒMMÍˆœÛİ\˜ÙWÛY\™ÙYÛXZ[—ØÚWÜ[ˆˆÎNÌMÍÍÎKˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ‘]\›Z[š\İXÈ^XİY]™[X›İ[™™XÛÜ™Y][Ü[H˜\œšY\œÈÚ]›İ[™Y\XÚ\[ËÛÛ\]Y\œš]˜[ÈYY][™È][Ü[KİšXİH]\ˆÛÛ\]Y™[X\ÙH]™[Ë]\›Z[š\İXÈÜ™\š[™È[™ÛÛ[XY™\ÜÙY]šY[˜ÙKˆ‹ˆ›[Z]][ÛœÈˆ“›ÈØZ][™ËØÚY[[™ËÛÛÜ™[˜][Û‹^Xİ][Û‹˜[œÙ™\‹YÙ[Ë™XYË›ØÙ\ÜÙ\ËÛÛË›Ú™XİËÛÛ[X[™Ë^\›˜[Ø[ËÜ™Y[X[Ë^[ØYËš[\Ş\İ[HÜˆ\˜X›K\İ]HXØÙ\ÜË™\Ûİ\˜ÙKXØ\ÛZ[KÜˆÔÈ\ÛÛ][ÛˆÛZ[Kˆ‚ˆKˆ˜YŒØØ\XÚ]WØYÙ]ÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœİ]\Èˆ”ÓÕTÑWĞS‘Ô‘PÓÔ‘×ÓQT‘ÑQÕ‘T’Q’QQÕÔ’UT—Ô‘SPTÑQ‹ˆœÛİ\˜ÙWÜÚHˆ˜ØŒYNLL™™XŒ™ÙYXMÍYLÙ™LÌ™Œ‹ˆœÛİ\˜ÙWİ™YWÜÚHˆ™LLÍÌÎXLMNÎÌYXYXŒ™YYMÌMÍŒ‹ˆœÛİ\˜ÙWÜˆˆKˆœÛİ\˜ÙWÛY\™ÙWÜÚHˆŒÌM™ÍLMMXMX™MMLLÙY™MMˆ‹ˆœÛİ\˜ÙWÜ—ØÚWÜ[ˆˆÎNÌNLLL‹ˆœÛİ\˜ÙWÛY\™ÙYÛXZ[—ØÚWÜ[ˆˆÎNÌŒŒLŒˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ‘]\›Z[š\İXÈ^XİY]šY[˜ÙKX›İ[™™XÛÜ™Y\XÚ\[Y]™[[™\İ[˜İ\™\Ûİ\˜ÙHÛİ[ÈÚXÚÙYYØZ[œİØ[\‹YXÛ\™YØ\Ëˆ‹ˆ›[Z]][ÛœÈˆ“›È^Xİ][Û‹ØÚY[[™ËØZ][™Ë[ØØ][Û‹[™›Ü˜Ù[Y[YÙ[Ë™XYË›ØÙ\ÜÙ\ËÛÛËÛÛ[X[™Ë^\›˜[Ø[ËÜ™Y[X[Ë^[ØYËš[\Ş\İ[K™]ÛÜšË\˜X›K\İ]HXØÙ\ÜË[[YH™\Ûİ\˜ÙKXØ\ÛZ[KÜˆÔÈ\ÛÛ][ÛˆÛZ[Kˆ‚ˆKˆ˜YŒØØ\XÚ]WØYÙ]Ü™XÛÜ™×Ü™XÙZ\ˆÂˆœ™XÛÜ™×Üˆˆ‹ˆœ™XÛÜ™×ÚXYÜÚHˆ˜YYÍYLLŒXÍÍYMÎŒNNÌYLÌŒÎH‹ˆœ™XÛÜ™×Ü—ØÚWÜ[ˆˆÎNÌŒÍŒÌÎˆ›Y\™ÙYÛXZ[—ÜÚHˆXŒ˜LLØYNNXYMNL™XØMÍ™È‹ˆ›Y\™ÙYÛXZ[—ØÚWÜ[ˆˆÎNÌŒÍŒNKˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\Èˆˆœ™[X\ÙWÜ™XÙZ\ˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚÜ[ÍˆÚ\ÜİYXÛÛ[Y[MŒÍLÍÎÌ‚ˆKˆ˜YŒØXØÙ\[˜ÙWØÛÜİ\™HˆÂˆœİ]\Èˆ“QT‘ÑQĞS‘Õ‘T’Q’QQ‹ˆ˜XØÙ\YØÚXÚÜÚ[Èˆ‹ˆİ[ØÚXÚÜÚ[ÈˆL‹ˆœ™]šY]ÙYÛXZ[—ÜÚHˆXŒ˜LLØYNNXYMNL™XØMÍ™È‹ˆœÛİ\˜ÙWÜœÈˆÂˆMËˆNKˆŒKˆŒËˆBˆKˆœ™XÛÜ™×ÜœÈˆÂˆNˆŒˆŒ‹ˆˆ‚ˆKˆ›]\İÜ™XÛÜ™×Ü—ÚXYˆ˜YYÍYLLŒXÍÍYMÎŒNNÌYLÌŒÎH‹ˆ›]\İÜ™XÛÜ™×ÛY\™ÙHˆXŒ˜LLØYNNXYMNL™XØMÍ™È‹ˆ›]\İÜ™XÛÜ™×Ü—ØÚHˆÎNÌŒÍŒÌÎˆ›]\İÜ™XÛÜ™×ÛY\™ÙYÛXZ[—ØÚHˆÎNÌŒÍŒNKˆ›]\İÜ›ÙXİİ\İÈˆKˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆœØÛÜHˆ‘]\›Z[š\İXÈ™XÛÜ™Y[Y]Y]H™\šYšXØ][Ûˆ›Üˆ›İ[™YÛÛ˜İ\œ™[ØÚY[[™ËÛÛ™›XİÜİ]H[™XYÙK[˜[Ù\\˜][Û‹Ø]\Ø[[™Ù™œË][Ü[H˜\œšY\œÈ[™Ø\XÚ]HYÙ]Ëˆ‹ˆ›[Z]][ÛœÈˆ“›È™X[YÙ[Ë™XYË›ØÙ\ÜÙ\ËÛÛËÛÛ[X[™ËØZ][™ËØÚY[[™ËÛÛÜ™[˜][Û‹^Xİ][Û‹[ØØ][Û‹[™›Ü˜Ù[Y[İ]KÜ^[ØYXØÙ\ÜË^\›˜[Ø[ËÜ™Y[X[Ëš[\Ş\İ[KÛ™]ÛÜšÈXØÙ\ÜË[[YH™\Ûİ\˜ÙKXØ\İX\˜[YKÜˆÔËZ\ÛÛ][ÛˆÛZ[Kˆ‹ˆ˜ÛÜİ\™WÜˆˆËˆ˜ÛÜİ\™WÚXYˆ˜YŒÍ™LŒYÌŒNLLÌÍ™MMÍØ˜XŒÌÌ˜ØÍØŒM˜M‹ˆ˜ÛÜİ\™WÛY\™ÙHˆ™YX™™˜XÌNMÙÍŒÍL˜ÍŒŒÍXYXXÌ‹ˆ˜ÛÜİ\™WÜ—ØÚHˆÎNMLMÍLMKˆ˜ÛÜİ\™WÛY\™ÙYÛXZ[—ØÚHˆÎNMMÍMËˆÜš]\—Ü™[X\ÙHˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚÜ[ÍÈÚ\ÜİYXÛÛ[Y[MŒÍMÌNN‚ˆKˆ˜YŒWÜ\›Z\ÜÚ[Û—Ø›İ[™\WÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœİ]\Èˆ”ÓÕTÑWĞS‘Ô‘PÓÔ‘×ÓQT‘ÑQÕ‘T’Q’QQÕÔ’UT—Ô‘SPTÑQ‹ˆœÛİ\˜ÙWÜÚHˆŒYÌÌYŒÎXY˜ÌÌÎLÍÙŒÙŒL™XNÙNH‹ˆœÛİ\˜ÙWİ™YWÜÚHˆÙ˜˜MLMÍMX™˜ÌLL™MLÍÎXY˜MÌØŒMH‹ˆœÛİ\˜ÙWÜˆˆˆœÛİ\˜ÙWÛY\™ÙWÜÚHˆLÌÌÌ™™X™ŒXŒÌY™Ì˜YNYYÙY˜ˆ‹ˆœÛİ\˜ÙWÜ—ØÚWÜ[ˆˆÎNLMÌL‹ˆœÛİ\˜ÙWÛY\™ÙYÛXZ[—ØÚWÜ[ˆˆÎNLÌMˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆLˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\Èˆˆš[™œ˜\İXİ\™HˆŒN^Xİ]YˆMÈ\ÜÙYH˜\Ù[[™HY[[ÜK[Û›HÚÚ\‹ˆ›ØØ[Ù›Øİ\ÙYİ\İÈˆMKˆœØÛÜHˆ‘]\›Z[š\İXÈ˜Z[XÛÜÙY™\šYšXØ][ÛˆÙˆØ[\‹\İ\YY™XÛÜ™Y[˜[ØÛÜK\İX›İ[™\H[™[š™Xİ[ÛˆXÚ\Ú[ÛœÈ\Ú[™È\ÚYY[]Y\È[™›İ[™YØÛÜHY[YšY\œËˆ‹ˆ›[Z]][ÛœÈˆ”Ş[]XÈ™XÛÜ™YY]Y]HÛ›NÈ›È˜]È›Û\Ë^[ØYËÜ™Y[X[Ë›Ú™Xİ[œÜXİ[Û‹\›Z\ÜÚ[ÛˆÜ˜[ÛÛØYÙ[ØÛÛ[X[™^Xİ][Û‹š[\Ş\İ[KÛ™]ÛÜšÈXØÙ\ÜË^\›˜[Xİ[Û‹™\Ûİ\˜ÙH›İ[™\KÜˆÔË\Ø[™›ŞÛZ[Kˆ‚ˆKˆ˜YŒWÚ[œİXİ[Û—Ü›İ™[˜[˜ÙWÜÛİ\˜ÙWÜ™XÙZ\ˆÂˆœİ]\Èˆ”ÓÕTÑWĞS‘Ô‘PÓÔ‘×ÓQT‘ÑQÕ‘T’Q’QQÕÔ’UT—Ô‘SPTÑQ‹ˆœÛİ\˜ÙWÜÚHˆŒNÌ˜ÌMÌNNŒÍMŒ™NŒ™YLÍŒ™NH‹ˆœÛİ\˜ÙWİ™YWÜÚHˆ˜Í˜™ÌÍ™™LMX˜˜™ŒXÍÎXMØÍ™ŒÎXM˜MH‹ˆœÛİ\˜ÙWÜˆˆÌˆœÛİ\˜ÙWÛY\™ÙWÜÚHˆ™ÙÌŒÙŒŒYŒ™NLMLÌÙXYXŒÌNØYL™XH‹ˆœÛİ\˜ÙWÜ—ØÚWÜ[ˆˆÎNLÎLŒLMˆœÛİ\˜ÙWÛY\™ÙYÛXZ[—ØÚWÜ[ˆˆÎNLÎLLÎMÍÍˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆLM‹ˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\Èˆˆš[™œ˜\İXİ\™HˆŒN^Xİ]YˆMÈ\ÜÙYH˜\Ù[[™HY[[ÜK[Û›HÚÚ\‹ˆ›ØØ[Ù›Øİ\ÙYİ\İÈˆËˆœØÛÜHˆ‘]\›Z[š\İXÈ^XİY]šY[˜ÙKX›İ[™™\šYšXØ][ÛˆÙˆ™XÛÜ™Y\İY[œİXİ[Ûˆ\Ú\ËÛİ\˜ÙH›İ[™\šY\È[™İ™\œšYKX][\\ÜÜÚ][ÛœÈİ™\ˆ™XÛÛ\]Y\›Z\ÜÚ[Ûˆ]šY[˜ÙKˆ‹ˆ›[Z]][ÛœÈˆ”Ş[]XÈ™XÛÜ™YY]Y]HÛ›NÈ›È˜]È›Û\Ú[œİXİ[Ûˆ^[š™Xİ[Ûˆ]Xİ[Û‹\›Z\ÜÚ[ÛˆÜ˜[›Ú™Xİ[œÜXİ[Û‹ÛÛØYÙ[ØÛÛ[X[™^Xİ][Û‹Ü™Y[X[Ü^[ØY[™[™Ëš[\Ş\İ[KÛ™]ÛÜšÈXØÙ\ÜË^\›˜[Xİ[Û‹™\Ûİ\˜ÙH[™›Ü˜Ù[Y[ÜˆÔË\Ø[™›ŞÛZ[Kˆ‚ˆKˆ˜YŒWÚ[œİXİ[Û—Ü›İ™[˜[˜ÙWÜ™XÛÜ™×Ü™XÙZ\ˆÂˆœİ]\Èˆ“QT‘ÑQÕ‘T’Q’QQÕÔ’UT—Ô‘SPTÑQ‹ˆœ™XÛÜ™×ÜˆˆÌKˆœ™XÛÜ™×ÚXYÜÚHˆŒÍÍØ˜NY™ŒÍÍ™YYY˜LMNXŒNŒY‹ˆœ™XÛÜ™×Ü—ØÚWÜ[ˆˆÎNLÎMLŒ‹ˆœ™XÛÜ™×ÛY\™ÙWÜÚHˆŒMÙYNLŒŒÎMYY™Ø˜ŒYX™™LLM™MØŒÈ‹ˆœ™XÛÜ™×ÛY\™ÙYÛXZ[—ØÚWÜ[ˆˆÎNLÎMMMLˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆœ›ÙXİİ\İÈˆLM‹ˆœ›ÙXİÙ˜Z[\™\Èˆˆœ›ÙXİÜÚÚ\ÈˆˆÜš]\—Ü™[X\ÙHˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚÜ[ÍÌHÚ\ÜİYXÛÛ[Y[MŒÍŒÍÌÈ‚ˆKˆ˜YŒWİ[\İYÚ[™›Y[˜ÙWÛ[™XYÙWÜÛİ\˜ÙWØØ[™Y]HˆÂˆœİ]\Èˆ”ÓÕTÑWĞS‘Ô‘PÓÔ‘×ÓQT‘ÑQÕ‘T’Q’QQÕÔ’UT—Ô‘SPTÑQ‹ˆœÛİ\˜ÙWÜÚHˆŒMØMYLLXLÙXXYLÍLM™ŒÍÌMNXXØYNH‹ˆœÛİ\˜ÙWİ™YWÜÚHˆŒÌÙY˜MÍLLÙ™MÍÌLŒØLMÎÌØYMH‹ˆ˜˜\ÙWÛXZ[—ÜÚHˆŒMÙYNLŒŒÎMYY™Ø˜ŒYX™™LLM™MØŒÈ‹ˆœÛİ\˜ÙWÜˆˆÌ‹ˆœÛİ\˜ÙWÜ—ØÚWÜ[ˆˆÎNMÎÎMÌˆœÛİ\˜ÙWÛY\™ÙWÜÚHˆŒÌXNØ™YÌLÌØØ™ŒYÌ˜MMØMÙŒÙXˆ‹ˆœÛİ\˜ÙWÛY\™ÙYÛXZ[—ØÚWÜ[ˆˆÍNMˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆ™›Øİ\ÙYİ\İÈˆˆœÜX›Wİ\İ×Ü\ÜÙYÛÛ˜ÙHˆLËˆ[™š[\™YÜ›ÙXİİ\İ×Ü\ÜÙYˆLËˆ˜ÛX[—ØÚWÜ›ÙXİİ\İÈˆLKˆ˜ÛX[—ØÚWÜ›ÙXİÙ˜Z[\™\Èˆˆ˜ÛX[—ØÚWÜ›ÙXİÜÚÚ\Èˆˆœ™XÛÜ™×ÜˆˆÌËˆœ™XÛÜ™×ÚXYÜÚHˆŒÌMMM˜ÌØŒX˜ÍXÌLÌØÍMLX˜MMLH‹ˆœ™XÛÜ™×Ü—ØÚWÜ[ˆˆÎLÌÌKˆœ™XÛÜ™×ÛY\™ÙWÜÚHˆŒMÌXXŒ™ŒÌXÙMLY˜MÎL˜XXÎMLÙ™™XMY‹ˆœ™XÛÜ™×ÛY\™ÙYÛXZ[—ØÚWÜ[ˆˆÌMÌÌËˆÜš]\—Ü™[X\ÙHˆšÎ‹ËÙÚ]X‹˜ÛÛKØ[Û\][NËXYÙ[›YÚÜ[ÍÌÈÚ\ÜİYXÛÛ[Y[MŒÍÌŒNLH‹ˆ[™š[\™YÙ[š\›Û›Y[Ù˜Z[\™\Èˆ‹ˆš[™œ˜\İXİ\™HˆŒN^Xİ]YˆMÈ\ÜÙYH˜\Ù[[™HY[[ÜK[Û›HÚÚ\‹ˆ™XYÛ›ÜİXÜÈˆœ\ÜÙY‹ˆœØÛÜHˆ‘]\›Z[š\İXÈ^XİY]šY[˜ÙKX›İ[™™\šYšXØ][ÛˆÙˆÛÈÈÚ^Y[ˆ™XÛÜ™Y[œİXİ[ÛˆÜÈÚ]\ÚÛÛ[Z]H[™İÛœİ™X[H›ÜYØ][ÛˆÙˆØ[\‹\™XÛÜ™Y[\İY[™›Y[˜ÙKˆ‹ˆ›[Z]][ÛœÈˆ”Ş[]XÈ™XÛÜ™YY]Y]HÛ›NÈ›È˜]È›Û\Ú[œİXİ[Ûˆ^[š™Xİ[Ûˆ]Xİ[Û‹\›Z\ÜÚ[ÛˆÜ˜[›Ú™Xİ[œÜXİ[Û‹ÛÛØYÙ[ØÛÛ[X[™^Xİ][Û‹Ü™Y[X[Ü^[ØY[™[™Ëš[\Ş\İ[KÛ™]ÛÜšÈXØÙ\ÜË^\›˜[Xİ[Û‹™\Ûİ\˜ÙH[™›Ü˜Ù[Y[ÜˆÔË\Ø[™›ŞÛZ[Kˆ‚ˆKˆ˜YŒWÜ™XÛÜ™YÜÙ[œÚ]]™WÜÚ[š×ÜÛİ\˜ÙWØØ[™Y]HˆÂˆœİ]\ÈˆÓÓ“‘PÕÔ—ÔP“TÒQÔ—ĞÒWÔS‘S‘È‹ˆœÛİ\˜ÙWÜÚHˆ™M™XLNXÍÙŒLYXØÌYMŒŒÎYY™ÌÍYÍH‹ˆœÛİ\˜ÙWİ™YWÜÚHˆ™XÍLÌM™ŒÙMNLLNÎYXØÍÍMÙYMÎNMŒ‹ˆ˜˜\ÙWÛXZ[—ÜÚHˆŒMÌXXŒ™ŒÌXÙMLY˜MÎL˜XXÎMLÙ™™XMY‹ˆœ]ÛˆˆŒËŒLKŒMÈ‹ˆ™›Øİ\ÙYİ\İÈˆLËˆœÜX›Wİ\İ×Ü\ÜÙYˆMˆ[™š[\™YÜ›ÙXİİ\İ×Ü\ÜÙYˆMˆ[™š[\™YÙ[š\›Û›Y[Ù˜Z[\™\Èˆ‹ˆš[™œ˜\İXİ\™HˆŒN^Xİ]YˆMÈ\ÜÙYH˜\Ù[[™HY[[ÜK[Û›HÚÚ\‹ˆ™XYÛ›ÜİXÜÈˆœ\ÜÙY‹ˆœØÛÜHˆ‘]\›Z[š\İXÈ^XİY]šY[˜ÙKX›İ[™™\šYšXØ][Ûˆ]™XÛÜ™Y][KZÜ[™›Y[˜ÙH[™\›Z[˜[]]Üš^˜][Ûˆ\™HØY™H[™X\İ\š]š[YÙY›ÜˆÛ™HÙˆ›İ\ˆš^YÙ[œÚ]]™K\Ú[šÈÛ\ÜÙ\Ëˆ‹ˆ›[Z]][ÛœÈˆ”Ş[]XÈ™XÛÜ™YY]Y]HÛ›NÈ›È˜]È›Û\Ú[œİXİ[Û‹Ü^[ØYØÜ™Y[X[XØÙ\ÜË[š™Xİ[Ûˆ]Xİ[Û‹\›Z\ÜÚ[ÛˆÜ˜[›Ú™Xİ[œÜXİ[Û‹ÛÛØYÙ[ØÛÛ[X[™^Xİ][Û‹š[\Ş\İ[KÛ™]ÛÜšÈXØÙ\ÜË^\›˜[Xİ[Û‹™\Ûİ\˜ÙH[™›Ü˜Ù[Y[ÜˆÔË\Ø[™›ŞÛZ[Kˆ‚ˆBŸB
