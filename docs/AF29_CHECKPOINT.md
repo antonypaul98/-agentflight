@@ -219,3 +219,14 @@ permission, inspect raw content, detect injection, execute an agent, tool or
 command, access a project or external system, or establish resource or OS
 isolation. Exact Python 3.11 source and records PR/merged-main CI remain
 required before writer release. AF-29 remains in progress at 6/12.
+
+## Recorded delegation-validity source receipt
+
+PR #80 head `87842fca19c6fbc94179f7895159ee16133e1961`, tree
+`d211bb98677ff3f2e14aa018dea1e94991613641`, passed exact Python
+3.11.17 PR CI 40107157624 with 584 product tests and zero product skips.
+Its guarded merge `013bf40d3dd7c1676c2ab43fb83f587ccd66dd13`
+passed exact push CI 40107229166 with the same product result. Both runs
+executed all 18 infrastructure guards: 17 passed and one established
+Memory-only case skipped. Canonical records and their exact CI remain required
+before writer release.
