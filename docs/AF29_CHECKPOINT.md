@@ -154,3 +154,18 @@ credential, project, filesystem, or network; grants no permission; invokes no
 agent, tool, or command; and performs no external action, resource enforcement,
 or OS-sandbox validation. Exact Python 3.11 source and records PR/merged-main
 CI remain required before writer release. AF-29 remains in progress at 6/12.
+
+## Recorded sensitive-sink binding source receipt
+
+Source PR #76 head `8734496bb7ce3c4b07712dbe5393f4fd68a56667`, tree
+`96e6a716565872e176216d14fbe093bf6336375b`, passed exact-head run
+40085375517 on Python 3.11.17 with 553 product tests and zero product skips.
+Guarded merge produced main `2af2b3b1610d7757b68f359a022c583d15b79b0f`;
+exact push run 40085452875 passed the same suite. Both runs executed 18
+infrastructure guards: 17 passed and one baseline Memory-only case was skipped.
+
+The slice remains synthetic recorded-metadata verification only and does not
+authorize or execute a tool, access secrets or raw content, or claim arbitrary
+execution, resource enforcement, or OS isolation. Canonical records require
+independent exact PR and merged-main CI before writer release. AF-29 remains in
+progress and roadmap acceptance remains 6/12.
