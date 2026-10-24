@@ -133,3 +133,24 @@ prompts, payloads or credentials; grants no permissions; and performs no
 project inspection, tool/agent/command execution, filesystem/network access,
 external action, resource enforcement or OS-sandbox validation. AF-29 remains
 in progress and roadmap acceptance remains 6/12.
+
+## Recorded sensitive-sink records receipt and binding candidate
+
+Records PR #75 head `6d65ac5c8b0d052b90ad245097f438b0c3cf2cb6`, tree
+`92e4ff90be773e19449527560fa4155ef86b586b`, passed run 40045393444
+with 542 product tests and zero skips. Guarded merge produced exact main
+`6352831c9d88f0da482394b45bd58db0c47286c9`; run 40045473396 passed
+the same suite, and the prior writer was explicitly released.
+
+The new bounded candidate recomputes exact sensitive-sink evidence, then binds
+the recorded sink input hash to the terminal lineage output and the authorized
+tool identifier to the terminal authorization tool. Input substitution,
+confused-deputy tool substitution, inconsistent boundary evidence, malformed
+metadata, and false recorded acceptance fail closed.
+
+Only bounded hashes, identifiers, dispositions, and recomputed recorded
+evidence are processed. The verifier reads no prompt, instruction, payload,
+credential, project, filesystem, or network; grants no permission; invokes no
+agent, tool, or command; and performs no external action, resource enforcement,
+or OS-sandbox validation. Exact Python 3.11 source and records PR/merged-main
+CI remain required before writer release. AF-29 remains in progress at 6/12.
