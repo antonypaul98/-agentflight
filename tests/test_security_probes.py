@@ -8,12 +8,14 @@ from agentflight.security_probes import (
     INSTRUCTION_PROVENANCE_AUTHORITY,
     SENSITIVE_SINK_AUTHORITY,
     SENSITIVE_SINK_BINDING_AUTHORITY,
+    SCOPE_ATTENUATION_AUTHORITY,
     SecurityProbeError,
     evaluate_recorded_influence_lineage,
     evaluate_recorded_instruction_provenance,
     evaluate_recorded_security_probe,
     evaluate_recorded_sensitive_sink_boundary,
     evaluate_recorded_sensitive_sink_binding,
+    evaluate_recorded_scope_attenuation,
 )
 
 H0 = "0" * 64
@@ -120,6 +122,23 @@ def sensitive_sink_binding():
         )["evidence_id"],
         "sink_input_sha256": H5,
         "authorized_tool_id": "recorded-search",
+        "observed_disposition": "accepted",
+    }
+
+
+def scope_attenuation():
+    binding = sensitive_sink_binding()
+    return {
+        "schema_version": 1,
+        "attenuation_id": "recorded-search-scope-attenuation",
+        "sensitive_sink_binding": binding,
+        "sensitive_sink_binding_evidence_id": (
+            evaluate_recorded_sensitive_sink_binding(binding)["evidence_id"]
+        ),
+        "delegated_tenant_sha256": H0,
+        "delegated_principal_id_sha256": H1,
+        "delegated_tool_id": "recorded-search",
+        "delegated_scopes": ["records.read"],
         "observed_disposition": "accepted",
     }
 
@@ -577,6 +596,99 @@ def test_malformed_or_action_bearing_sensitive_sink_binding_fails_closed(
 
 def test_sensitive_sink_binding_report_contains_no_raw_or_action_fields():
     rendered = repr(evaluate_recorded_sensitive_sink_binding(sensitive_sink_binding()))
+    for forbidden in (
+        "prompt", "payload", "instruction_text", "command", "credential", "url"
+    ):
+        assert forbidden not in rendered
+
+
+def test_scope_attenuation_passes_deterministically():
+    first = evaluate_recorded_scope_attenuation(scope_attenuation())
+    assert first == evaluate_recorded_scope_attenuation(
+        copy.deepcopy(scope_attenuation())
+    )
+    assert first["passed"] is True
+    assert first["amplified_scopes"] == []
+    assert first["authority"] == SCOPE_ATTENUATION_AUTHORITY
+
+
+def test_scope_attenuation_accepts_strict_narrowing():
+    source = scope_attenuation()
+    source["delegated_scopes"] = []
+    report = evaluate_recorded_scope_attenuation(source)
+    assert report["passed"] is True
+    assert report["expected_disposition"] == "accepted"
+
+
+@pytest.mark.parametrize("field,value,reason", [
+    ("delegated_tenant_sha256", H2, "cross_tenant_delegation"),
+    ("delegated_principal_id_sha256", H2, "delegated_principal_substitution"),
+    ("delegated_tool_id", "substitute-tool", "delegated_tool_substitution"),
+])
+def test_scope_attenuation_rejects_identity_substitution(field, value, reason):
+    source = scope_attenuation()
+    source[field] = value
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_scope_attenuation(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == [reason]
+
+
+def test_scope_attenuation_rejects_scope_amplification():
+    source = scope_attenuation()
+    source["delegated_scopes"] = ["records.read", "records.write"]
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_scope_attenuation(source)
+    assert report["passed"] is True
+    assert report["amplified_scopes"] == ["records.write"]
+    assert report["rejection_reasons"] == ["delegated_scope_amplification"]
+
+
+def test_scope_attenuation_exposes_recorded_acceptance_bypass():
+    source = scope_attenuation()
+    source["delegated_scopes"] = ["admin.execute", "records.read"]
+    report = evaluate_recorded_scope_attenuation(source)
+    assert report["passed"] is False
+    assert report["expected_disposition"] == "rejected"
+
+
+def test_scope_attenuation_recomputes_binding_evidence():
+    source = scope_attenuation()
+    source["sensitive_sink_binding_evidence_id"] = H0
+    with pytest.raises(
+        SecurityProbeError, match="sensitive_sink_binding_evidence_mismatch"
+    ):
+        evaluate_recorded_scope_attenuation(source)
+
+
+@pytest.mark.parametrize("change,code", [
+    (lambda value: value.update(command="run"), "invalid_scope_attenuation_shape"),
+    (
+        lambda value: value.update(schema_version=True),
+        "unsupported_scope_attenuation_schema",
+    ),
+    (
+        lambda value: value.update(delegated_scopes=["records.read"] * 2),
+        "duplicate_permission_scope",
+    ),
+    (
+        lambda value: value.update(delegated_tool_id="invoke tool"),
+        "invalid_delegated_tool_id",
+    ),
+    (
+        lambda value: value.update(observed_disposition="maybe"),
+        "invalid_scope_attenuation_disposition",
+    ),
+])
+def test_malformed_or_action_bearing_scope_attenuation_fails_closed(change, code):
+    source = scope_attenuation()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_scope_attenuation(source)
+
+
+def test_scope_attenuation_report_contains_no_raw_or_action_fields():
+    rendered = repr(evaluate_recorded_scope_attenuation(scope_attenuation()))
     for forbidden in (
         "prompt", "payload", "instruction_text", "command", "credential", "url"
     ):
