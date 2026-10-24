@@ -591,3 +591,30 @@ authorization or execution, secret or raw-content access, external action,
 resource-enforcement claim, or OS-sandbox claim. Independent records PR and
 merged-main CI remain required before writer release. AF-29 remains in progress
 at 6/12 accepted.
+
+## AF-29 recorded scope-attenuation source candidate (2026-10-24)
+
+The prior sensitive-sink binding slice is fully recorded and writer-released:
+records PR #77 head `9f4063464435895a20cf13fba4b8029c0e0cbbea`
+and resulting main `f71508e7d616fa5e02f1429c9ce8c68b0bbd9ad4`
+passed exact Python 3.11.17 CI runs 40085669930 and 40085736916 with
+553 product tests and zero product skips.
+
+This bounded candidate recomputes that complete sink-binding evidence before
+checking one caller-supplied recorded delegation. Tenant, principal and tool
+identity must remain exact, and delegated scopes must be a subset of the
+terminal authorization's requested scopes. Cross-tenant delegation, identity
+substitution, tool substitution, scope amplification, inconsistent evidence,
+malformed metadata and false recorded acceptance fail closed.
+
+Local Python 3.11.17 validation passed 78 focused security tests and 565
+portable product tests. Infrastructure executed 18 guards: 17 passed and the
+documented Memory-only case was skipped. Diagnostics, dependency checks,
+compile, JSON validation and diff checks passed.
+
+This is synthetic recorded-metadata verification only. It delegates and grants
+nothing, reads no raw prompt, instruction, payload or credential, detects no
+injection, invokes no project, agent, tool or command, accesses no filesystem,
+network or external system, and makes no resource-enforcement or OS-isolation
+claim. Exact source PR and merged-main CI plus independent canonical records
+remain required before writer release. AF-29 remains in progress at 6/12.

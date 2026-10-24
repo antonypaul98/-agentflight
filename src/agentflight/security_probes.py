@@ -14,6 +14,7 @@ INSTRUCTION_PROVENANCE_SCHEMA_VERSION = 1
 INFLUENCE_LINEAGE_SCHEMA_VERSION = 1
 SENSITIVE_SINK_SCHEMA_VERSION = 1
 SENSITIVE_SINK_BINDING_SCHEMA_VERSION = 1
+SCOPE_ATTENUATION_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
 MAX_INFLUENCE_HOPS = 16
 MAX_REPORT_BYTES = 8_192
@@ -29,6 +30,9 @@ SENSITIVE_SINK_AUTHORITY = (
 )
 SENSITIVE_SINK_BINDING_AUTHORITY = (
     "recorded_sensitive_sink_binding_evidence_only_no_authorization_or_execution"
+)
+SCOPE_ATTENUATION_AUTHORITY = (
+    "recorded_scope_attenuation_evidence_only_no_authorization_or_execution"
 )
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -527,5 +531,115 @@ def evaluate_recorded_sensitive_sink_binding(binding: Mapping[str, object]) -> d
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise SecurityProbeError("sensitive_sink_binding_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_scope_attenuation(attenuation: Mapping[str, object]) -> dict:
+    """Verify that one recorded delegation can only narrow upstream authority."""
+
+    keys = frozenset({
+        "schema_version", "attenuation_id", "sensitive_sink_binding",
+        "sensitive_sink_binding_evidence_id", "delegated_tenant_sha256",
+        "delegated_principal_id_sha256", "delegated_tool_id",
+        "delegated_scopes", "observed_disposition",
+    })
+    if type(attenuation) is not dict or frozenset(attenuation) != keys:
+        raise SecurityProbeError("invalid_scope_attenuation_shape")
+    if (
+        type(attenuation["schema_version"]) is not int
+        or attenuation["schema_version"] != SCOPE_ATTENUATION_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError("unsupported_scope_attenuation_schema")
+
+    binding_report = evaluate_recorded_sensitive_sink_binding(
+        attenuation["sensitive_sink_binding"]
+    )
+    binding_evidence_id = _text(
+        attenuation["sensitive_sink_binding_evidence_id"],
+        _SHA256,
+        "invalid_sensitive_sink_binding_evidence_id",
+    )
+    if binding_evidence_id != binding_report["evidence_id"]:
+        raise SecurityProbeError("sensitive_sink_binding_evidence_mismatch")
+
+    binding = attenuation["sensitive_sink_binding"]
+    terminal_probe = binding["sensitive_sink_boundary"]["influence_lineage"][
+        "hops"
+    ][-1]["instruction_provenance"]["security_probe"]
+    terminal_security = evaluate_recorded_security_probe(terminal_probe)
+    delegated_tenant = _text(
+        attenuation["delegated_tenant_sha256"],
+        _SHA256,
+        "invalid_delegated_tenant_hash",
+    )
+    delegated_principal = _text(
+        attenuation["delegated_principal_id_sha256"],
+        _SHA256,
+        "invalid_delegated_principal_hash",
+    )
+    delegated_tool = _text(
+        attenuation["delegated_tool_id"],
+        _IDENTIFIER,
+        "invalid_delegated_tool_id",
+    )
+    delegated_scopes = _scopes(
+        attenuation["delegated_scopes"], "invalid_delegated_scopes"
+    )
+    observed = attenuation["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError("invalid_scope_attenuation_disposition")
+
+    upstream_scopes = terminal_security["requested_scopes"]
+    amplified_scopes = sorted(set(delegated_scopes) - set(upstream_scopes))
+    reasons = []
+    if not binding_report["passed"]:
+        reasons.append("sensitive_sink_binding_failed")
+    if binding_report["expected_disposition"] != "accepted":
+        reasons.append("sensitive_sink_binding_requires_rejection")
+    if delegated_tenant != terminal_security["tenant_id_sha256"]:
+        reasons.append("cross_tenant_delegation")
+    if delegated_principal != terminal_security["principal_id_sha256"]:
+        reasons.append("delegated_principal_substitution")
+    if delegated_tool != binding_report["authorized_tool_id"]:
+        reasons.append("delegated_tool_substitution")
+    if amplified_scopes:
+        reasons.append("delegated_scope_amplification")
+
+    expected = "rejected" if reasons else "accepted"
+    report = {
+        "scope_attenuation_schema_version": SCOPE_ATTENUATION_SCHEMA_VERSION,
+        "attenuation_id": _text(
+            attenuation["attenuation_id"],
+            _IDENTIFIER,
+            "invalid_scope_attenuation_id",
+        ),
+        "sensitive_sink_binding_evidence_id": binding_evidence_id,
+        "delegated_tenant_sha256": delegated_tenant,
+        "upstream_tenant_sha256": terminal_security["tenant_id_sha256"],
+        "delegated_principal_id_sha256": delegated_principal,
+        "upstream_principal_id_sha256": terminal_security["principal_id_sha256"],
+        "delegated_tool_id": delegated_tool,
+        "upstream_tool_id": binding_report["authorized_tool_id"],
+        "delegated_scopes": delegated_scopes,
+        "upstream_scopes": upstream_scopes,
+        "amplified_scopes": amplified_scopes,
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": reasons,
+        "coverage": {
+            "sensitive_sink_binding_evidence_recomputed": True,
+            "tenant_continuity_checked": True,
+            "principal_continuity_checked": True,
+            "tool_continuity_checked": True,
+            "scope_subset_checked": True,
+            "scope": "bounded_recorded_scope_attenuation_metadata_only",
+        },
+        "authority": SCOPE_ATTENUATION_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError("scope_attenuation_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report

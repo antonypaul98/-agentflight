@@ -169,3 +169,19 @@ authorize or execute a tool, access secrets or raw content, or claim arbitrary
 execution, resource enforcement, or OS isolation. Canonical records require
 independent exact PR and merged-main CI before writer release. AF-29 remains in
 progress and roadmap acceptance remains 6/12.
+
+## Recorded scope-attenuation candidate
+
+The prior binding source is now recorded and released by PR #77 and exact CI.
+This candidate recomputes that evidence and verifies that a bounded recorded
+delegation preserves tenant, principal and tool identity while delegating only
+a subset of the terminal requested scopes. Scope amplification, identity
+substitution, cross-tenant delegation, evidence substitution, malformed fields
+and false recorded acceptance fail closed.
+
+The verifier processes bounded recorded hashes, identifiers, scopes and
+dispositions only. It does not delegate authority, grant permission, inspect
+raw content, detect injection, execute a tool, agent or command, access a
+project or external system, or establish resource or OS isolation. Exact
+Python 3.11 source and records PR/merged-main CI remain required before writer
+release. AF-29 remains in progress at 6/12.
