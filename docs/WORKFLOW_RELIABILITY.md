@@ -664,3 +664,20 @@ detects no injection; invokes no project, agent, tool or command; accesses no
 filesystem, network or external system; and makes no resource-enforcement or
 OS-isolation claim. Exact source PR and merged-main CI plus independent records
 remain required before writer release. AF-29 remains in progress at 6/12.
+
+## AF-29 recorded delegation-validity source receipt (2026-10-24)
+
+Source PR #80 head `87842fca19c6fbc94179f7895159ee16133e1961`,
+tree `d211bb98677ff3f2e14aa018dea1e94991613641`, passed exact-head run
+40107157624 on Python 3.11.17 with 584 product tests and zero product skips.
+Guarded merge produced main `013bf40d3dd7c1676c2ab43fb83f587ccd66dd13`;
+exact push run 40107229166 passed the same suite. Both runs executed 18
+infrastructure guards: 17 passed and one baseline Memory-only case was skipped.
+
+This remains bounded synthetic recorded-metadata verification only. It grants,
+delegates or revokes nothing; reads no wall clock, raw prompt, instruction,
+payload or credential; schedules no expiry; detects no injection; invokes no
+project, agent, tool or command; accesses no filesystem, network or external
+system; and makes no resource-enforcement or OS-isolation claim. Independent
+canonical records and their exact CI remain required before writer release.
+AF-29 remains in progress at 6/12.
