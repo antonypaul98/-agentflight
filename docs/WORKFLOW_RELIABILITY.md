@@ -550,5 +550,10 @@ This is synthetic recorded-metadata verification only. It reads no prompt,
 instruction, payload, credential, project, filesystem, or network; detects no
 injection; grants no permission; invokes no agent, tool, or command; and performs
 no external action or OS-sandbox validation. Exact Python 3.11 PR and
-merged-main CI remain required before canonical records or writer release.
+merged-main CI passed at source head and exact merged main. PR #74 head
+`4ff776c745f496b3d1774b617e42c48f10250756` passed run 40045081892 with
+542 product tests and zero product skips; guarded merge produced main
+`da712d3da89d0a6bb2b4e31cf4a19231163c847a`, whose push run 40045159092
+passed the same suite. Canonical records still require independent exact PR and
+merged-main CI before writer release.
 AF-29 remains in progress and roadmap acceptance remains 6/12.
