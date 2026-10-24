@@ -14,9 +14,9 @@ bounded scope identifiers. Raw prompts, payloads and credentials are excluded.
 This is synthetic recorded-metadata verification, not an authorization system.
 It does not read prompts, inspect projects, invoke tools, execute agents or
 commands, access filesystems or networks, grant permissions, or establish an OS
-sandbox. The prior influence-lineage source and records are verified and its
-writer is released. The sensitive-sink candidate requires exact Python 3.11 PR
-and merged-main CI before canonical records. AF-29 remains in progress at 6/12.
+sandbox. The sensitive-sink source PR and merged-main CI are verified; canonical
+records and their independent CI remain required. AF-29 remains in progress at
+6/12.
 
 ## Recorded sensitive-sink boundary candidate
 
@@ -33,8 +33,23 @@ Only bounded caller-supplied hashes, identifiers, booleans, dispositions, and
 scope names are processed. The verifier reads no prompt, instruction, payload,
 credential, project, filesystem, or network; it detects no injection, grants no
 permission, invokes nothing, and performs no external action. Exact Python 3.11
-source PR and merged-main CI remain required before a source receipt or
-canonical records can be claimed.
+source PR and merged-main CI are complete. Canonical records and their
+independent PR/merged-main CI remain required before writer release.
+
+## Recorded sensitive-sink boundary source receipt
+
+PR #74 exact head `4ff776c745f496b3d1774b617e42c48f10250756`
+passed run 40045081892 on Python 3.11.17 with 542 product tests and zero
+product skips. Guarded merge produced exact main
+`da712d3da89d0a6bb2b4e31cf4a19231163c847a`; push run 40045159092 passed
+the same 542-test suite with zero product skips. Both runs executed all 18
+infrastructure guards: 17 passed and one established Memory-only case skipped.
+
+The slice remains synthetic recorded-metadata verification only. It reads no
+raw prompt, instruction, payload or credential, detects no injection, grants no
+permission, and performs no project inspection, execution, external action,
+resource enforcement or OS-sandbox validation. AF-29 remains in progress at
+6/12.
 
 ## Recorded multi-hop untrusted-influence lineage candidate
 
