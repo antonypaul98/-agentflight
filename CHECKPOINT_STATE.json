@@ -2,17 +2,45 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "AF-29 permission and prompt-injection testing",
-  "checkpoint_status": "IN_PROGRESS_RECORDED_SCOPE_ATTENUATION_RECORDS_PENDING",
-  "active_branch": "work/af29-recorded-scope-attenuation-records",
-  "verified_main_sha": "1ed9e1554a6c2a47caf73cc7b42046a245a4780f",
+  "checkpoint_status": "IN_PROGRESS_RECORDED_DELEGATION_VALIDITY_SOURCE_CANDIDATE_LOCAL",
+  "active_branch": "work/af29-recorded-delegation-validity",
+  "verified_main_sha": "9ab2d9a9d1256f617fd917bca03234303818fa14",
   "observed_feature_sha": null,
-  "current_repository_sha": "1ed9e1554a6c2a47caf73cc7b42046a245a4780f",
+  "current_repository_sha": "9ab2d9a9d1256f617fd917bca03234303818fa14",
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "Scope-attenuation source PR #78 head fc1c298805379052326ed1ed73a7784c08e7152d and merge 1ed9e1554a6c2a47caf73cc7b42046a245a4780f passed exact Python 3.11 CI. Canonical records and writer release remain pending.",
+  "branch_remote_status": "Scope-attenuation source/records PRs #78/#79 and exact Python 3.11 CI are green through main 9ab2d9a9d1256f617fd917bca03234303818fa14; writer AF29-SCOPE-ATTENUATION-20261024 is released. A recorded delegation-validity source candidate is local only.",
   "pr_number": null,
   "pr_state": "not_created",
   "ci_state": {
+    "af29_scope_attenuation_records_pr_run": {
+      "id": 40103172689,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/40103172689",
+      "head_sha": "fd5bdf070525fb1aa5e839cc782356afa7d9af63",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 567,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
+    "af29_scope_attenuation_records_merged_main_run": {
+      "id": 40103257328,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/40103257328",
+      "head_sha": "9ab2d9a9d1256f617fd917bca03234303818fa14",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 567,
+      "product_failures": 0,
+      "product_skips": 0,
+      "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+      "diagnostics": "passed"
+    },
     "af29_scope_attenuation_source_pr_run": {
       "id": 40102865929,
       "url": "https://github.com/antonypaul98/-agentflight/actions/runs/40102865929",
@@ -1073,10 +1101,10 @@
       "diagnostics": "passed"
     }
   },
-  "local_test_status": "Python 3.11.17 source candidate: 78 focused security tests and 565 portable product tests passed. Infrastructure executed 18 guards: 17 passed and one baseline Memory-only skip; diagnostics, dependency checks, compile, JSON validation and diff checks passed.",
-  "merge_status": "AF29_RECORDED_SCOPE_ATTENUATION_SOURCE_MERGED_VERIFIED_RECORDS_PENDING",
+  "local_test_status": "Python 3.11.17 delegation-validity source candidate: 95 focused security tests and 582 portable product tests passed. Unfiltered local run had two baseline-reproduced descendant-observation failures and one transient read-race failure that passed isolated and on the clean portable rerun. Infrastructure executed 18 guards: 17 passed and one baseline Memory-only skip; diagnostics, dependency checks, compile, JSON validation and diff checks passed.",
+  "merge_status": "AF29_RECORDED_DELEGATION_VALIDITY_SOURCE_CANDIDATE_LOCAL",
   "known_blocker": null,
-  "next_action": "Publish canonical AF-29 recorded scope-attenuation records, require exact Python 3.11 PR and merged-main CI, then release the writer claim.",
+  "next_action": "Publish the exact AF-29 recorded delegation-validity source tree, require exact Python 3.11 PR and merged-main CI, then record that evidence separately before writer release.",
   "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
@@ -1370,13 +1398,13 @@
   "last_session_exit": {
     "BLOCKED_LAYER": null,
     "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "AF-29 source PR #74 exact head 4ff776c745f496b3d1774b617e42c48f10250756 passed run 40045081892 with 542 product tests and zero skips on Python 3.11.17. Guarded merge produced exact main da712d3da89d0a6bb2b4e31cf4a19231163c847a, whose push run 40045159092 passed the same suite. Canonical records and writer release are pending.",
-    "REMOTE_SHA": "da712d3da89d0a6bb2b4e31cf4a19231163c847a",
-    "NEXT_ACTION": "Publish canonical records from exact merged main, require exact PR and merged-main CI, then release writer AF29-RECORDED-SENSITIVE-SINK-20261024."
+    "SAFE_WORK_COMPLETED": "Scope-attenuation source/records PRs #78/#79 are merged, exact CI is green through main 9ab2d9a9d1256f617fd917bca03234303818fa14, and the prior writer is released. A bounded recorded delegation-validity source candidate passed 95 focused and 582 portable Python 3.11.17 tests locally.",
+    "REMOTE_SHA": "9ab2d9a9d1256f617fd917bca03234303818fa14",
+    "NEXT_ACTION": "Publish the exact delegation-validity source tree, require exact PR and merged-main CI, then record that evidence independently before writer release."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
-  "observed_branch_sha": "257ee922395eff7bb01ebf6e114fe46880cb64b3",
+  "observed_branch_sha": "9ab2d9a9d1256f617fd917bca03234303818fa14",
   "historical_session_exits": [
     {
       "BLOCKED_LAYER": "environment (shell Git DNS); connected write safety",
@@ -1393,17 +1421,18 @@
       "NEXT_ACTION": "Use an authorized source-code publication path to apply the preserved wait-EINTR patch and 3 regressions to existing main; run full Python 3.11 suite and verify exact-commit CI."
     }
   ],
-  "starting_main_sha": "fd0a9df6c86e6baef2a09b44e822ccfb2f6c4a6d",
+  "starting_main_sha": "9ab2d9a9d1256f617fd917bca03234303818fa14",
   "local_validation": {
     "python": "3.11.17",
-    "focused_before_fix": "3 failed",
-    "focused_after_fix": "3 passed, 0 failed",
+    "focused": "95 passed, 0 failed",
+    "portable": "582 passed, 0 failed",
     "full_suite": {
-      "passed": 241,
-      "failed": 2,
+      "passed": 581,
+      "failed": 3,
       "skipped": 0,
-      "environment_issue": "Execution environment PID versus /proc identity mismatch; both existing descendant tests reproduce on baseline 36913ae7",
-      "baseline_reproduced": true
+      "environment_issue": "Two descendant-observation failures reproduced on untouched main. One nonblocking read-race failure passed isolated and on the clean 582-test portable rerun.",
+      "baseline_reproduced_failures": 2,
+      "transient_failures_passed_on_rerun": 1
     },
     "infrastructure": {
       "passed": 17,
@@ -1411,22 +1440,22 @@
       "failed": 0
     },
     "diagnostics": "passed",
-    "scope": "Canonical Python 3.11.17 repository; local results preserved honestly. Complete remote Linux suite passes on the exact source and merged main.",
+    "scope": "Canonical Python 3.11.17 metadata-only delegation-validity candidate; local environmental results preserved honestly. Exact clean remote CI remains required.",
     "commands": [
       {
-        "command": "python -m pytest tests/test_capture_wait_interruptions.py --tb=short",
-        "result": "3 failed before fix; 3 passed after fix"
+        "command": ".venv/bin/python -m pytest tests/test_security_probes.py -q",
+        "result": "95 passed, 0 failed"
       },
       {
-        "command": "python -m pytest --tb=short",
-        "result": "241 passed, 2 failed, 0 skipped; both failures reproduced on untouched baseline due to local PID/proc mismatch"
+        "command": ".venv/bin/python -m pytest --ignore=tests/test_descendant_termination_linux.py -q",
+        "result": "582 passed, 0 failed"
       },
       {
-        "command": "python -m unittest discover -s scripts/tests -p 'test_*.py'",
+        "command": ".venv/bin/python -m unittest discover -s scripts/tests -p 'test_*.py'",
         "result": "18 executed, 17 passed, 1 baseline skip"
       },
       {
-        "command": "python scripts/ci_diagnostics.py",
+        "command": ".venv/bin/python scripts/ci_diagnostics.py",
         "result": "exit 0: pip check and package import passed"
       },
       {
@@ -1505,37 +1534,37 @@
   },
   "writer_handoff": {
     "owner": "AgentFlight Hourly Build",
-    "ownership_id": "AF29-SCOPE-ATTENUATION-20261024",
-    "status": "records_pending",
+    "ownership_id": "AF29-DELEGATION-VALIDITY-20261024",
+    "status": "source_candidate_local",
     "hourly_mode": "single_writer",
     "next_owner": "AgentFlight Hourly Build",
-    "source_writing_stopped": true,
-    "base_main_sha": "f71508e7d616fa5e02f1429c9ce8c68b0bbd9ad4",
-    "branch": "work/af29-recorded-scope-attenuation-records",
-    "source_head": "fc1c298805379052326ed1ed73a7784c08e7152d",
-    "source_tree": "e2b18ffe41ba3e02a8f8d5119e5cf0a9cdf8064b",
-    "source_merge": "1ed9e1554a6c2a47caf73cc7b42046a245a4780f",
-    "source_pr": 78,
-    "source_pr_ci": 40102865929,
-    "source_merged_main_ci": 40102928767,
-    "prior_release_receipt": "https://github.com/antonypaul98/-agentflight/pull/77#issuecomment-6383082006",
-    "release_requirement": "Exact AF-29 recorded scope-attenuation source and records PR/merged-main Python 3.11 CI green, followed by explicit writer release.",
+    "source_writing_stopped": false,
+    "base_main_sha": "9ab2d9a9d1256f617fd917bca03234303818fa14",
+    "branch": "work/af29-recorded-delegation-validity",
+    "source_head": null,
+    "source_tree": null,
+    "source_merge": null,
+    "source_pr": null,
+    "source_pr_ci": null,
+    "source_merged_main_ci": null,
+    "prior_release_receipt": "https://github.com/antonypaul98/-agentflight/pull/79#issuecomment-6385497078",
+    "release_requirement": "Exact AF-29 recorded delegation-validity source and records PR/merged-main Python 3.11 CI green, followed by explicit writer release.",
     "no_real_execution": true,
     "no_private_data_or_secrets_committed": true,
-    "recorded_at": "2026-10-24T14:34:00Z"
+    "recorded_at": "2026-10-24T15:26:28Z"
   },
-  "recorded_at_utc": "2026-10-24T14:34:00Z",
+  "recorded_at_utc": "2026-10-24T15:26:28Z",
   "preflight_receipt": {
-    "command": "python scripts/session_preflight.py (initial pre-publication receipt)",
+    "command": ".venv/bin/python scripts/session_preflight.py",
     "exit_code": 1,
-    "current_repository_sha": "08168abb50dcb526476210bcd92aa0c117ce1802",
-    "remote_sha": "4e2a1710fbb4217ab3a6a2e155784aac433b5af8",
-    "dirty": true,
+    "current_repository_sha": "9ab2d9a9d1256f617fd917bca03234303818fa14",
+    "remote_sha": null,
+    "dirty": false,
     "local_only": 0,
     "remote_only": 0,
     "behind_main": 0,
-    "BLOCKED_LAYER": "Git metadata (resolved)",
-    "BLOCKER": "Preflight named the historical AF-24 branch from the pre-release state. Live PR #31 exact CI, merged-main CI and explicit release independently authorize the AF-25 branch created from current main."
+    "BLOCKED_LAYER": "Git metadata (resolved by live reconciliation)",
+    "BLOCKER": "Canonical state still named the deleted, writer-released scope-attenuation records branch. Live PR #79, exact CI, release comment, open-PR search and main SHA independently authorized this clean branch from current main."
   },
   "publication_recovery_receipt": {
     "shell_push": "Rejected because terminal Git credentials were unavailable",
@@ -2168,7 +2197,7 @@
     "limitations": "Synthetic recorded metadata only; no raw prompt/instruction/payload/credential access, injection detection, permission grant, project inspection, tool/agent/command execution, filesystem/network access, external action, resource enforcement, or OS-sandbox claim."
   },
   "af29_scope_attenuation_source_candidate": {
-    "status": "SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
+    "status": "SOURCE_AND_RECORDS_MERGED_VERIFIED_WRITER_RELEASED",
     "base_main_sha": "f71508e7d616fa5e02f1429c9ce8c68b0bbd9ad4",
     "branch": "work/af29-recorded-scope-attenuation",
     "source_pr": 78,
@@ -2185,7 +2214,30 @@
     "clean_ci_product_skips": 0,
     "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
     "diagnostics": "passed",
+    "records_pr": 79,
+    "records_head_sha": "fd5bdf070525fb1aa5e839cc782356afa7d9af63",
+    "records_tree_sha": "d81bbf0cd98f9f83b5ded6baa5e61e32033b4b64",
+    "records_pr_ci_run": 40103172689,
+    "records_merge_sha": "9ab2d9a9d1256f617fd917bca03234303818fa14",
+    "records_merged_main_ci_run": 40103257328,
+    "writer_release": "https://github.com/antonypaul98/-agentflight/pull/79#issuecomment-6385497078",
     "scope": "Deterministic exact-evidence verification that one bounded recorded delegation preserves tenant, principal and tool identity while delegated scopes remain a subset of the terminal authorization's requested scopes.",
     "limitations": "Synthetic recorded metadata only; no delegation, permission grant, raw prompt/instruction/payload/credential access, injection detection, project inspection, tool/agent/command execution, filesystem/network access, external action, resource enforcement, or OS-sandbox claim."
+  },
+  "af29_delegation_validity_source_candidate": {
+    "status": "SOURCE_CANDIDATE_LOCAL",
+    "base_main_sha": "9ab2d9a9d1256f617fd917bca03234303818fa14",
+    "branch": "work/af29-recorded-delegation-validity",
+    "python": "3.11.17",
+    "focused_tests": 95,
+    "portable_tests_passed": 582,
+    "unfiltered_product_tests_passed": 581,
+    "unfiltered_environment_failures": 3,
+    "baseline_reproduced_environment_failures": 2,
+    "transient_failures_passed_on_rerun": 1,
+    "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+    "diagnostics": "passed",
+    "scope": "Deterministic exact-evidence verification of one bounded recorded delegation validity window using caller-supplied logical ticks plus an explicit revocation flag.",
+    "limitations": "Synthetic recorded metadata only; no wall-clock access, expiry scheduling, revocation action, delegation, permission grant, raw prompt/instruction/payload/credential access, injection detection, project inspection, tool/agent/command execution, filesystem/network access, external action, resource enforcement, or OS-sandbox claim."
   }
 }

@@ -194,3 +194,28 @@ PR #78 head `fc1c298805379052326ed1ed73a7784c08e7152d`, tree
 merge `1ed9e1554a6c2a47caf73cc7b42046a245a4780f` passed exact push CI
 40102928767 with the same product result. Canonical records and their exact CI
 remain required before the writer can be released.
+
+## Recorded scope-attenuation records and release receipt
+
+Records PR #79 head `fd5bdf070525fb1aa5e839cc782356afa7d9af63`,
+tree `d81bbf0cd98f9f83b5ded6baa5e61e32033b4b64`, passed exact Python
+3.11.17 PR CI 40103172689 with 567 product tests and zero product skips.
+Its guarded merge `9ab2d9a9d1256f617fd917bca03234303818fa14`
+passed exact push CI 40103257328 with the same product result. Writer
+`AF29-SCOPE-ATTENUATION-20261024` was explicitly released on PR #79.
+
+## Recorded delegation-validity candidate
+
+This bounded candidate recomputes exact scope-attenuation evidence before
+checking caller-supplied integer logical ticks and an explicit revocation flag.
+The observation must be at or after issuance and strictly before expiry; an
+expired, not-yet-valid, revoked, inconsistent, malformed, or falsely accepted
+record fails closed. Logical ticks are bounded and booleans are not accepted as
+integers. No wall clock is read and expiry does not schedule or perform action.
+
+Only bounded caller-supplied metadata and content-addressed upstream evidence
+are processed. The verifier does not delegate or revoke authority, grant a
+permission, inspect raw content, detect injection, execute an agent, tool or
+command, access a project or external system, or establish resource or OS
+isolation. Exact Python 3.11 source and records PR/merged-main CI remain
+required before writer release. AF-29 remains in progress at 6/12.

@@ -9,6 +9,7 @@ from agentflight.security_probes import (
     SENSITIVE_SINK_AUTHORITY,
     SENSITIVE_SINK_BINDING_AUTHORITY,
     SCOPE_ATTENUATION_AUTHORITY,
+    DELEGATION_VALIDITY_AUTHORITY,
     SecurityProbeError,
     evaluate_recorded_influence_lineage,
     evaluate_recorded_instruction_provenance,
@@ -16,6 +17,7 @@ from agentflight.security_probes import (
     evaluate_recorded_sensitive_sink_boundary,
     evaluate_recorded_sensitive_sink_binding,
     evaluate_recorded_scope_attenuation,
+    evaluate_recorded_delegation_validity,
 )
 
 H0 = "0" * 64
@@ -139,6 +141,23 @@ def scope_attenuation():
         "delegated_principal_id_sha256": H1,
         "delegated_tool_id": "recorded-search",
         "delegated_scopes": ["records.read"],
+        "observed_disposition": "accepted",
+    }
+
+
+def delegation_validity():
+    attenuation = scope_attenuation()
+    return {
+        "schema_version": 1,
+        "validity_id": "recorded-search-delegation-validity",
+        "scope_attenuation": attenuation,
+        "scope_attenuation_evidence_id": evaluate_recorded_scope_attenuation(
+            attenuation
+        )["evidence_id"],
+        "issued_at_tick": 100,
+        "expires_at_tick": 200,
+        "observed_at_tick": 150,
+        "revoked": False,
         "observed_disposition": "accepted",
     }
 
@@ -691,5 +710,120 @@ def test_scope_attenuation_report_contains_no_raw_or_action_fields():
     rendered = repr(evaluate_recorded_scope_attenuation(scope_attenuation()))
     for forbidden in (
         "prompt", "payload", "instruction_text", "command", "credential", "url"
+    ):
+        assert forbidden not in rendered
+
+
+def test_delegation_validity_passes_deterministically():
+    first = evaluate_recorded_delegation_validity(delegation_validity())
+    assert first == evaluate_recorded_delegation_validity(
+        copy.deepcopy(delegation_validity())
+    )
+    assert first["passed"] is True
+    assert first["expected_disposition"] == "accepted"
+    assert first["rejection_reasons"] == []
+    assert first["authority"] == DELEGATION_VALIDITY_AUTHORITY
+    assert first["coverage"]["wall_clock_accessed"] is False
+
+
+@pytest.mark.parametrize("field,value,reason", [
+    ("observed_at_tick", 99, "delegation_not_yet_valid"),
+    ("observed_at_tick", 200, "delegation_expired"),
+    ("observed_at_tick", 201, "delegation_expired"),
+    ("revoked", True, "delegation_revoked"),
+])
+def test_delegation_validity_rejects_outside_window_or_revoked(
+    field, value, reason
+):
+    source = delegation_validity()
+    source[field] = value
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_validity(source)
+    assert report["passed"] is True
+    assert report["expected_disposition"] == "rejected"
+    assert report["rejection_reasons"] == [reason]
+
+
+def test_delegation_validity_exposes_recorded_acceptance_bypass():
+    source = delegation_validity()
+    source["revoked"] = True
+    report = evaluate_recorded_delegation_validity(source)
+    assert report["passed"] is False
+    assert report["expected_disposition"] == "rejected"
+
+
+def test_delegation_validity_propagates_scope_attenuation_rejection():
+    source = delegation_validity()
+    attenuation = source["scope_attenuation"]
+    attenuation["delegated_scopes"] = ["records.read", "records.write"]
+    attenuation["observed_disposition"] = "rejected"
+    source["scope_attenuation_evidence_id"] = evaluate_recorded_scope_attenuation(
+        attenuation
+    )["evidence_id"]
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_validity(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == [
+        "scope_attenuation_requires_rejection"
+    ]
+
+
+def test_delegation_validity_recomputes_attenuation_evidence():
+    source = delegation_validity()
+    source["scope_attenuation_evidence_id"] = H0
+    with pytest.raises(
+        SecurityProbeError, match="scope_attenuation_evidence_mismatch"
+    ):
+        evaluate_recorded_delegation_validity(source)
+
+
+@pytest.mark.parametrize("change,code", [
+    (
+        lambda value: value.update(command="run"),
+        "invalid_delegation_validity_shape",
+    ),
+    (
+        lambda value: value.update(schema_version=True),
+        "unsupported_delegation_validity_schema",
+    ),
+    (
+        lambda value: value.update(issued_at_tick=True),
+        "invalid_delegation_issued_tick",
+    ),
+    (
+        lambda value: value.update(expires_at_tick=1_000_000_001),
+        "invalid_delegation_expiry_tick",
+    ),
+    (
+        lambda value: value.update(observed_at_tick=-1),
+        "invalid_delegation_observed_tick",
+    ),
+    (
+        lambda value: value.update(issued_at_tick=200),
+        "invalid_delegation_validity_window",
+    ),
+    (
+        lambda value: value.update(revoked=0),
+        "invalid_delegation_revoked_flag",
+    ),
+    (
+        lambda value: value.update(observed_disposition="maybe"),
+        "invalid_delegation_validity_disposition",
+    ),
+])
+def test_malformed_or_action_bearing_delegation_validity_fails_closed(
+    change, code
+):
+    source = delegation_validity()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_delegation_validity(source)
+
+
+def test_delegation_validity_report_contains_no_raw_or_action_fields():
+    rendered = repr(evaluate_recorded_delegation_validity(delegation_validity()))
+    for forbidden in (
+        "prompt", "payload", "instruction_text", "command", "credential",
+        "url", "timestamp", "datetime",
     ):
         assert forbidden not in rendered

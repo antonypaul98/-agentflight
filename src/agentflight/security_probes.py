@@ -15,8 +15,10 @@ INFLUENCE_LINEAGE_SCHEMA_VERSION = 1
 SENSITIVE_SINK_SCHEMA_VERSION = 1
 SENSITIVE_SINK_BINDING_SCHEMA_VERSION = 1
 SCOPE_ATTENUATION_SCHEMA_VERSION = 1
+DELEGATION_VALIDITY_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
 MAX_INFLUENCE_HOPS = 16
+MAX_LOGICAL_TICK = 1_000_000_000
 MAX_REPORT_BYTES = 8_192
 AUTHORITY = "recorded_security_probe_evidence_only_no_authorization_or_execution"
 INSTRUCTION_PROVENANCE_AUTHORITY = (
@@ -33,6 +35,9 @@ SENSITIVE_SINK_BINDING_AUTHORITY = (
 )
 SCOPE_ATTENUATION_AUTHORITY = (
     "recorded_scope_attenuation_evidence_only_no_authorization_or_execution"
+)
+DELEGATION_VALIDITY_AUTHORITY = (
+    "recorded_delegation_validity_evidence_only_no_authorization_or_execution"
 )
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -70,6 +75,12 @@ def _scopes(value: object, code: str) -> list[str]:
     if len(set(normalized)) != len(normalized):
         raise SecurityProbeError("duplicate_permission_scope")
     return sorted(normalized)
+
+
+def _logical_tick(value: object, code: str) -> int:
+    if type(value) is not int or not 0 <= value <= MAX_LOGICAL_TICK:
+        raise SecurityProbeError(code)
+    return value
 
 
 def evaluate_recorded_security_probe(probe: Mapping[str, object]) -> dict:
@@ -641,5 +652,96 @@ def evaluate_recorded_scope_attenuation(attenuation: Mapping[str, object]) -> di
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise SecurityProbeError("scope_attenuation_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_delegation_validity(validity: Mapping[str, object]) -> dict:
+    """Verify one recorded delegation's bounded logical validity window."""
+
+    keys = frozenset({
+        "schema_version", "validity_id", "scope_attenuation",
+        "scope_attenuation_evidence_id", "issued_at_tick", "expires_at_tick",
+        "observed_at_tick", "revoked", "observed_disposition",
+    })
+    if type(validity) is not dict or frozenset(validity) != keys:
+        raise SecurityProbeError("invalid_delegation_validity_shape")
+    if (
+        type(validity["schema_version"]) is not int
+        or validity["schema_version"] != DELEGATION_VALIDITY_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError("unsupported_delegation_validity_schema")
+
+    attenuation_report = evaluate_recorded_scope_attenuation(
+        validity["scope_attenuation"]
+    )
+    attenuation_evidence_id = _text(
+        validity["scope_attenuation_evidence_id"],
+        _SHA256,
+        "invalid_scope_attenuation_evidence_id",
+    )
+    if attenuation_evidence_id != attenuation_report["evidence_id"]:
+        raise SecurityProbeError("scope_attenuation_evidence_mismatch")
+
+    issued_at_tick = _logical_tick(
+        validity["issued_at_tick"], "invalid_delegation_issued_tick"
+    )
+    expires_at_tick = _logical_tick(
+        validity["expires_at_tick"], "invalid_delegation_expiry_tick"
+    )
+    observed_at_tick = _logical_tick(
+        validity["observed_at_tick"], "invalid_delegation_observed_tick"
+    )
+    if issued_at_tick >= expires_at_tick:
+        raise SecurityProbeError("invalid_delegation_validity_window")
+    revoked = validity["revoked"]
+    if type(revoked) is not bool:
+        raise SecurityProbeError("invalid_delegation_revoked_flag")
+    observed = validity["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError("invalid_delegation_validity_disposition")
+
+    reasons = []
+    if not attenuation_report["passed"]:
+        reasons.append("scope_attenuation_failed")
+    if attenuation_report["expected_disposition"] != "accepted":
+        reasons.append("scope_attenuation_requires_rejection")
+    if observed_at_tick < issued_at_tick:
+        reasons.append("delegation_not_yet_valid")
+    if observed_at_tick >= expires_at_tick:
+        reasons.append("delegation_expired")
+    if revoked:
+        reasons.append("delegation_revoked")
+
+    expected = "rejected" if reasons else "accepted"
+    report = {
+        "delegation_validity_schema_version": DELEGATION_VALIDITY_SCHEMA_VERSION,
+        "validity_id": _text(
+            validity["validity_id"],
+            _IDENTIFIER,
+            "invalid_delegation_validity_id",
+        ),
+        "scope_attenuation_evidence_id": attenuation_evidence_id,
+        "issued_at_tick": issued_at_tick,
+        "expires_at_tick": expires_at_tick,
+        "observed_at_tick": observed_at_tick,
+        "revoked": revoked,
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": reasons,
+        "coverage": {
+            "scope_attenuation_evidence_recomputed": True,
+            "logical_validity_window_checked": True,
+            "expiry_boundary_checked": True,
+            "revocation_flag_checked": True,
+            "wall_clock_accessed": False,
+            "scope": "bounded_recorded_delegation_validity_metadata_only",
+        },
+        "authority": DELEGATION_VALIDITY_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError("delegation_validity_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report

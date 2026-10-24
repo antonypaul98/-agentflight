@@ -636,3 +636,31 @@ accesses no filesystem, network or external system, and makes no
 resource-enforcement or OS-isolation claim. Independent canonical records and
 their exact CI remain required before writer release. AF-29 remains in progress
 at 6/12.
+
+## AF-29 recorded delegation-validity source candidate (2026-10-24)
+
+Scope-attenuation records PR #79 and resulting main
+`9ab2d9a9d1256f617fd917bca03234303818fa14` passed exact Python 3.11.17
+CI runs 40103172689 and 40103257328 with 567 product tests and zero product
+skips. Writer `AF29-SCOPE-ATTENUATION-20261024` was explicitly released.
+
+The new bounded candidate recomputes exact scope-attenuation evidence and
+checks one caller-supplied logical validity window plus an explicit revocation
+flag. Observation is valid only at or after issuance and strictly before
+expiry. Pre-issuance, expiry, revocation, inconsistent upstream evidence,
+malformed ticks, and false recorded acceptance fail closed. It uses no system
+clock and takes no expiry or revocation action.
+
+Local Python 3.11.17 validation passed 95 focused security tests and 582
+portable product tests. Infrastructure executed 18 guards: 17 passed and one
+documented Memory-only case skipped. Two unfiltered descendant-observation
+failures reproduced on untouched main; one read-race failure passed isolated
+and on the clean portable rerun. Diagnostics, dependency checks, compile, JSON
+validation and diff checks passed.
+
+This is synthetic recorded-metadata verification only. It grants, delegates or
+revokes nothing; reads no raw prompt, instruction, payload or credential;
+detects no injection; invokes no project, agent, tool or command; accesses no
+filesystem, network or external system; and makes no resource-enforcement or
+OS-isolation claim. Exact source PR and merged-main CI plus independent records
+remain required before writer release. AF-29 remains in progress at 6/12.
