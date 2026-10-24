@@ -185,3 +185,12 @@ raw content, detect injection, execute a tool, agent or command, access a
 project or external system, or establish resource or OS isolation. Exact
 Python 3.11 source and records PR/merged-main CI remain required before writer
 release. AF-29 remains in progress at 6/12.
+
+## Recorded scope-attenuation source receipt
+
+PR #78 head `fc1c298805379052326ed1ed73a7784c08e7152d`, tree
+`e2b18ffe41ba3e02a8f8d5119e5cf0a9cdf8064b`, passed exact Python
+3.11.17 PR CI 40102865929 with 567 product tests and zero skips. Its guarded
+merge `1ed9e1554a6c2a47caf73cc7b42046a245a4780f` passed exact push CI
+40102928767 with the same product result. Canonical records and their exact CI
+remain required before the writer can be released.

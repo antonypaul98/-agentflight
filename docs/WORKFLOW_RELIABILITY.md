@@ -618,3 +618,21 @@ injection, invokes no project, agent, tool or command, accesses no filesystem,
 network or external system, and makes no resource-enforcement or OS-isolation
 claim. Exact source PR and merged-main CI plus independent canonical records
 remain required before writer release. AF-29 remains in progress at 6/12.
+
+## AF-29 recorded scope-attenuation source receipt (2026-10-24)
+
+Source PR #78 head `fc1c298805379052326ed1ed73a7784c08e7152d`,
+tree `e2b18ffe41ba3e02a8f8d5119e5cf0a9cdf8064b`, passed exact-head
+run 40102865929 on Python 3.11.17 with 567 product tests and zero product
+skips. Guarded merge produced main
+`1ed9e1554a6c2a47caf73cc7b42046a245a4780f`; exact push run
+40102928767 passed the same suite. Both runs executed 18 infrastructure guards:
+17 passed and one baseline Memory-only case was skipped.
+
+This remains bounded synthetic recorded-metadata verification only. It grants
+or delegates no permission, reads no raw prompt, instruction, payload or
+credential, detects no injection, invokes no project, agent, tool or command,
+accesses no filesystem, network or external system, and makes no
+resource-enforcement or OS-isolation claim. Independent canonical records and
+their exact CI remain required before writer release. AF-29 remains in progress
+at 6/12.
