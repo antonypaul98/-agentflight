@@ -12,6 +12,7 @@ from collections.abc import Mapping
 SCHEMA_VERSION = 1
 INSTRUCTION_PROVENANCE_SCHEMA_VERSION = 1
 INFLUENCE_LINEAGE_SCHEMA_VERSION = 1
+SENSITIVE_SINK_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
 MAX_INFLUENCE_HOPS = 16
 MAX_REPORT_BYTES = 8_192
@@ -22,11 +23,20 @@ INSTRUCTION_PROVENANCE_AUTHORITY = (
 INFLUENCE_LINEAGE_AUTHORITY = (
     "recorded_untrusted_influence_lineage_only_no_detection_authorization_or_execution"
 )
+SENSITIVE_SINK_AUTHORITY = (
+    "recorded_sensitive_sink_evidence_only_no_authorization_or_execution"
+)
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _BOUNDARIES = frozenset({"trusted_control", "untrusted_content"})
 _DECISIONS = frozenset({"authorized", "denied"})
 _DISPOSITIONS = frozenset({"accepted", "rejected"})
+_SENSITIVE_SINK_SCOPES = {
+    "read_only": "records.read",
+    "state_change": "records.write",
+    "external_effect": "external.execute",
+    "privileged_control": "admin.execute",
+}
 
 
 class SecurityProbeError(ValueError):
@@ -332,5 +342,94 @@ def evaluate_recorded_influence_lineage(lineage: Mapping[str, object]) -> dict:
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise SecurityProbeError("influence_lineage_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_sensitive_sink_boundary(
+    boundary: Mapping[str, object],
+) -> dict:
+    """Verify recorded lineage and least privilege at one sensitive sink."""
+
+    keys = frozenset({
+        "schema_version", "boundary_id", "influence_lineage",
+        "influence_lineage_evidence_id", "sink_id", "sink_class",
+        "observed_disposition",
+    })
+    if type(boundary) is not dict or frozenset(boundary) != keys:
+        raise SecurityProbeError("invalid_sensitive_sink_boundary_shape")
+    if (
+        type(boundary["schema_version"]) is not int
+        or boundary["schema_version"] != SENSITIVE_SINK_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError("unsupported_sensitive_sink_boundary_schema")
+
+    lineage_report = evaluate_recorded_influence_lineage(
+        boundary["influence_lineage"]
+    )
+    lineage_evidence_id = _text(
+        boundary["influence_lineage_evidence_id"],
+        _SHA256,
+        "invalid_influence_lineage_evidence_id",
+    )
+    if lineage_evidence_id != lineage_report["evidence_id"]:
+        raise SecurityProbeError("influence_lineage_evidence_mismatch")
+
+    sink_class = boundary["sink_class"]
+    if type(sink_class) is not str or sink_class not in _SENSITIVE_SINK_SCOPES:
+        raise SecurityProbeError("invalid_sensitive_sink_class")
+    observed = boundary["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError("invalid_sensitive_sink_disposition")
+
+    lineage = boundary["influence_lineage"]
+    terminal_hop = lineage["hops"][-1]
+    terminal_security = evaluate_recorded_security_probe(
+        terminal_hop["instruction_provenance"]["security_probe"]
+    )
+    required_scope = _SENSITIVE_SINK_SCOPES[sink_class]
+    reasons = []
+    if not lineage_report["passed"]:
+        reasons.append("lineage_verification_failed")
+    if lineage_report["expected_disposition"] != "accepted":
+        reasons.append("lineage_requires_rejection")
+    if lineage_report["influenced_hop_ids"]:
+        reasons.append("untrusted_influence_reaches_sink")
+    if not terminal_security["passed"]:
+        reasons.append("terminal_authorization_failed")
+    if terminal_security["expected_decision"] != "authorized":
+        reasons.append("terminal_authorization_requires_denial")
+    if required_scope not in terminal_security["requested_scopes"]:
+        reasons.append("missing_sensitive_sink_scope")
+
+    expected = "rejected" if reasons else "accepted"
+    report = {
+        "sensitive_sink_schema_version": SENSITIVE_SINK_SCHEMA_VERSION,
+        "boundary_id": _text(
+            boundary["boundary_id"], _IDENTIFIER, "invalid_sensitive_boundary_id"
+        ),
+        "influence_lineage_evidence_id": lineage_evidence_id,
+        "terminal_hop_id": terminal_hop["hop_id"],
+        "sink_id": _text(
+            boundary["sink_id"], _IDENTIFIER, "invalid_sensitive_sink_id"
+        ),
+        "sink_class": sink_class,
+        "required_scope": required_scope,
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": reasons,
+        "coverage": {
+            "lineage_evidence_recomputed": True,
+            "untrusted_influence_checked": True,
+            "terminal_authorization_recomputed": True,
+            "sink_scope_checked": True,
+            "scope": "bounded_recorded_sensitive_sink_metadata_only",
+        },
+        "authority": SENSITIVE_SINK_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError("sensitive_sink_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report
