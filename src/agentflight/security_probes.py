@@ -13,6 +13,7 @@ SCHEMA_VERSION = 1
 INSTRUCTION_PROVENANCE_SCHEMA_VERSION = 1
 INFLUENCE_LINEAGE_SCHEMA_VERSION = 1
 SENSITIVE_SINK_SCHEMA_VERSION = 1
+SENSITIVE_SINK_BINDING_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
 MAX_INFLUENCE_HOPS = 16
 MAX_REPORT_BYTES = 8_192
@@ -25,6 +26,9 @@ INFLUENCE_LINEAGE_AUTHORITY = (
 )
 SENSITIVE_SINK_AUTHORITY = (
     "recorded_sensitive_sink_evidence_only_no_authorization_or_execution"
+)
+SENSITIVE_SINK_BINDING_AUTHORITY = (
+    "recorded_sensitive_sink_binding_evidence_only_no_authorization_or_execution"
 )
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -431,5 +435,97 @@ def evaluate_recorded_sensitive_sink_boundary(
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise SecurityProbeError("sensitive_sink_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_sensitive_sink_binding(binding: Mapping[str, object]) -> dict:
+    """Bind one recorded sink decision to its exact input and authorized tool."""
+
+    keys = frozenset({
+        "schema_version", "binding_id", "sensitive_sink_boundary",
+        "sensitive_sink_evidence_id", "sink_input_sha256",
+        "authorized_tool_id", "observed_disposition",
+    })
+    if type(binding) is not dict or frozenset(binding) != keys:
+        raise SecurityProbeError("invalid_sensitive_sink_binding_shape")
+    if (
+        type(binding["schema_version"]) is not int
+        or binding["schema_version"] != SENSITIVE_SINK_BINDING_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError("unsupported_sensitive_sink_binding_schema")
+
+    boundary_report = evaluate_recorded_sensitive_sink_boundary(
+        binding["sensitive_sink_boundary"]
+    )
+    boundary_evidence_id = _text(
+        binding["sensitive_sink_evidence_id"],
+        _SHA256,
+        "invalid_sensitive_sink_evidence_id",
+    )
+    if boundary_evidence_id != boundary_report["evidence_id"]:
+        raise SecurityProbeError("sensitive_sink_evidence_mismatch")
+
+    boundary = binding["sensitive_sink_boundary"]
+    lineage = boundary["influence_lineage"]
+    terminal_hop = lineage["hops"][-1]
+    terminal_output_sha256 = _text(
+        terminal_hop["output_sha256"],
+        _SHA256,
+        "invalid_terminal_output_hash",
+    )
+    terminal_security = evaluate_recorded_security_probe(
+        terminal_hop["instruction_provenance"]["security_probe"]
+    )
+    sink_input_sha256 = _text(
+        binding["sink_input_sha256"], _SHA256, "invalid_sink_input_hash"
+    )
+    authorized_tool_id = _text(
+        binding["authorized_tool_id"], _IDENTIFIER, "invalid_authorized_tool_id"
+    )
+    observed = binding["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError("invalid_sensitive_sink_binding_disposition")
+
+    reasons = []
+    if not boundary_report["passed"]:
+        reasons.append("sensitive_sink_boundary_failed")
+    if boundary_report["expected_disposition"] != "accepted":
+        reasons.append("sensitive_sink_requires_rejection")
+    if sink_input_sha256 != terminal_output_sha256:
+        reasons.append("sink_input_lineage_mismatch")
+    if authorized_tool_id != terminal_security["tool_id"]:
+        reasons.append("confused_deputy_tool_substitution")
+
+    expected = "rejected" if reasons else "accepted"
+    report = {
+        "sensitive_sink_binding_schema_version": (
+            SENSITIVE_SINK_BINDING_SCHEMA_VERSION
+        ),
+        "binding_id": _text(
+            binding["binding_id"], _IDENTIFIER, "invalid_sensitive_binding_id"
+        ),
+        "sensitive_sink_evidence_id": boundary_evidence_id,
+        "sink_id": boundary_report["sink_id"],
+        "terminal_hop_id": boundary_report["terminal_hop_id"],
+        "sink_input_sha256": sink_input_sha256,
+        "terminal_output_sha256": terminal_output_sha256,
+        "authorized_tool_id": authorized_tool_id,
+        "terminal_tool_id": terminal_security["tool_id"],
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": reasons,
+        "coverage": {
+            "sensitive_sink_evidence_recomputed": True,
+            "terminal_input_hash_checked": True,
+            "terminal_tool_identity_checked": True,
+            "scope": "bounded_recorded_sensitive_sink_binding_metadata_only",
+        },
+        "authority": SENSITIVE_SINK_BINDING_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError("sensitive_sink_binding_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report

@@ -554,6 +554,24 @@ merged-main CI passed at source head and exact merged main. PR #74 head
 `4ff776c745f496b3d1774b617e42c48f10250756` passed run 40045081892 with
 542 product tests and zero product skips; guarded merge produced main
 `da712d3da89d0a6bb2b4e31cf4a19231163c847a`, whose push run 40045159092
-passed the same suite. Canonical records still require independent exact PR and
-merged-main CI before writer release.
-AF-29 remains in progress and roadmap acceptance remains 6/12.
+passed the same suite. Records PR #75 head
+`6d65ac5c8b0d052b90ad245097f438b0c3cf2cb6` passed exact run
+40045393444; guarded merge produced main
+`6352831c9d88f0da482394b45bd58db0c47286c9`, whose exact push run
+40045473396 passed 542 product tests with zero skips. The writer was explicitly
+released on PR #75. AF-29 remains in progress at 6/12.
+
+## AF-29 recorded sensitive-sink binding candidate (2026-10-24)
+
+This bounded candidate recomputes the exact sensitive-sink boundary and binds
+its input to the terminal lineage output hash and its authorized tool identity
+to the terminal authorization decision. It requires rejection for substituted
+inputs, confused-deputy tool substitution, inconsistent upstream evidence, or
+false recorded acceptance.
+
+This is synthetic recorded-metadata verification only. It reads no raw prompt,
+instruction, payload, credential, project, filesystem, or network; detects no
+injection; grants no permission; invokes no agent, tool, or command; and makes
+no execution, external-action, resource-enforcement, or OS-isolation claim.
+Exact Python 3.11 PR and merged-main CI are required before canonical records
+or writer release. AF-29 remains in progress at 6/12 accepted.

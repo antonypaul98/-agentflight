@@ -7,11 +7,13 @@ from agentflight.security_probes import (
     INFLUENCE_LINEAGE_AUTHORITY,
     INSTRUCTION_PROVENANCE_AUTHORITY,
     SENSITIVE_SINK_AUTHORITY,
+    SENSITIVE_SINK_BINDING_AUTHORITY,
     SecurityProbeError,
     evaluate_recorded_influence_lineage,
     evaluate_recorded_instruction_provenance,
     evaluate_recorded_security_probe,
     evaluate_recorded_sensitive_sink_boundary,
+    evaluate_recorded_sensitive_sink_binding,
 )
 
 H0 = "0" * 64
@@ -103,6 +105,21 @@ def sensitive_sink():
         )["evidence_id"],
         "sink_id": "recorded-search-results",
         "sink_class": "read_only",
+        "observed_disposition": "accepted",
+    }
+
+
+def sensitive_sink_binding():
+    boundary = sensitive_sink()
+    return {
+        "schema_version": 1,
+        "binding_id": "recorded-search-tool-binding",
+        "sensitive_sink_boundary": boundary,
+        "sensitive_sink_evidence_id": evaluate_recorded_sensitive_sink_boundary(
+            boundary
+        )["evidence_id"],
+        "sink_input_sha256": H5,
+        "authorized_tool_id": "recorded-search",
         "observed_disposition": "accepted",
     }
 
@@ -479,6 +496,87 @@ def test_malformed_or_action_bearing_sensitive_sink_fails_closed(change, code):
 
 def test_sensitive_sink_report_contains_no_raw_or_action_fields():
     rendered = repr(evaluate_recorded_sensitive_sink_boundary(sensitive_sink()))
+    for forbidden in (
+        "prompt", "payload", "instruction_text", "command", "credential", "url"
+    ):
+        assert forbidden not in rendered
+
+
+def test_sensitive_sink_binding_passes_deterministically():
+    first = evaluate_recorded_sensitive_sink_binding(sensitive_sink_binding())
+    assert first == evaluate_recorded_sensitive_sink_binding(
+        copy.deepcopy(sensitive_sink_binding())
+    )
+    assert first["passed"] is True
+    assert first["expected_disposition"] == "accepted"
+    assert first["rejection_reasons"] == []
+    assert first["authority"] == SENSITIVE_SINK_BINDING_AUTHORITY
+
+
+@pytest.mark.parametrize("field,value,reason", [
+    ("sink_input_sha256", H0, "sink_input_lineage_mismatch"),
+    ("authorized_tool_id", "substitute-tool", "confused_deputy_tool_substitution"),
+])
+def test_sensitive_sink_binding_rejects_input_or_tool_substitution(
+    field, value, reason
+):
+    source = sensitive_sink_binding()
+    source[field] = value
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_sensitive_sink_binding(source)
+    assert report["passed"] is True
+    assert report["expected_disposition"] == "rejected"
+    assert report["rejection_reasons"] == [reason]
+
+
+def test_sensitive_sink_binding_exposes_recorded_acceptance_bypass():
+    source = sensitive_sink_binding()
+    source["authorized_tool_id"] = "substitute-tool"
+    report = evaluate_recorded_sensitive_sink_binding(source)
+    assert report["passed"] is False
+    assert report["expected_disposition"] == "rejected"
+
+
+def test_sensitive_sink_binding_is_bound_to_recomputed_boundary_evidence():
+    source = sensitive_sink_binding()
+    source["sensitive_sink_evidence_id"] = H0
+    with pytest.raises(SecurityProbeError, match="sensitive_sink_evidence_mismatch"):
+        evaluate_recorded_sensitive_sink_binding(source)
+
+
+@pytest.mark.parametrize("change,code", [
+    (
+        lambda value: value.update(command="run"),
+        "invalid_sensitive_sink_binding_shape",
+    ),
+    (
+        lambda value: value.update(schema_version=True),
+        "unsupported_sensitive_sink_binding_schema",
+    ),
+    (
+        lambda value: value.update(sink_input_sha256="raw-input"),
+        "invalid_sink_input_hash",
+    ),
+    (
+        lambda value: value.update(authorized_tool_id="invoke tool"),
+        "invalid_authorized_tool_id",
+    ),
+    (
+        lambda value: value.update(observed_disposition="maybe"),
+        "invalid_sensitive_sink_binding_disposition",
+    ),
+])
+def test_malformed_or_action_bearing_sensitive_sink_binding_fails_closed(
+    change, code
+):
+    source = sensitive_sink_binding()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_sensitive_sink_binding(source)
+
+
+def test_sensitive_sink_binding_report_contains_no_raw_or_action_fields():
+    rendered = repr(evaluate_recorded_sensitive_sink_binding(sensitive_sink_binding()))
     for forbidden in (
         "prompt", "payload", "instruction_text", "command", "credential", "url"
     ):
