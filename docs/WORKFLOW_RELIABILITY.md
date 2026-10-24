@@ -575,3 +575,19 @@ injection; grants no permission; invokes no agent, tool, or command; and makes
 no execution, external-action, resource-enforcement, or OS-isolation claim.
 Exact Python 3.11 PR and merged-main CI are required before canonical records
 or writer release. AF-29 remains in progress at 6/12 accepted.
+
+## AF-29 recorded sensitive-sink binding source receipt (2026-10-24)
+
+Source PR #76 head `8734496bb7ce3c4b07712dbe5393f4fd68a56667`, tree
+`96e6a716565872e176216d14fbe093bf6336375b`, passed exact-head run
+40085375517 on Python 3.11.17 with 553 product tests and zero product skips.
+Guarded merge produced exact main
+`2af2b3b1610d7757b68f359a022c583d15b79b0f`; push run 40085452875 passed
+the same suite. Both runs executed 18 infrastructure guards: 17 passed and one
+baseline Memory-only case was skipped.
+
+This remains bounded synthetic recorded-metadata verification with no tool
+authorization or execution, secret or raw-content access, external action,
+resource-enforcement claim, or OS-sandbox claim. Independent records PR and
+merged-main CI remain required before writer release. AF-29 remains in progress
+at 6/12 accepted.
