@@ -774,3 +774,21 @@ invokes no project, agent, tool or command; accesses no filesystem, network or
 external system; and makes no resource-enforcement or OS-isolation claim.
 Independent canonical records and their exact CI remain required before writer
 release. AF-29 remains in progress at 6/12.
+
+## AF-29 redelegation-depth attenuation source candidate (2026-10-25)
+
+Delegation-time attenuation records PR #85 head
+`2b9a221cdb9187a97300a1912971793d75aea07e` passed exact run
+40216399903. Guarded merge produced final main
+`be1ab1b2b2bbffb38d44601aefaed56a67310542`; run 40216466618 passed.
+Python 3.11.17 executed 609 product tests with zero product skips, and the prior
+writer is explicitly released.
+
+The new candidate verifies a strict decrease in bounded recorded remaining
+redelegation capacity at every child hop after recomputing exact chain evidence.
+Local Python 3.11.17 validation passed 135 focused and 622 portable tests;
+infrastructure executed 18 guards, with 17 passed and one established
+Memory-only skip. It is synthetic recorded metadata only and adds no live
+authorization, delegation, revocation, execution, clock, raw-content, secret,
+resource-enforcement or OS-isolation capability. Exact source PR and
+merged-main CI plus separate canonical records remain required.

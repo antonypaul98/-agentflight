@@ -230,3 +230,28 @@ passed exact push CI 40107229166 with the same product result. Both runs
 executed all 18 infrastructure guards: 17 passed and one established
 Memory-only case skipped. Canonical records and their exact CI remain required
 before writer release.
+
+## AF-29 redelegation-depth attenuation candidate (2026-10-25)
+
+Delegation-time attenuation source/records PRs #84/#85 and final main
+`be1ab1b2b2bbffb38d44601aefaed56a67310542` passed exact Python 3.11.17
+CI runs 40197618231, 40197704994, 40216399903 and 40216466618 with
+609 product tests and zero product skips. Writer
+`AF29-DELEGATION-TIME-ATTENUATION-20261025` is explicitly released.
+
+The new bounded candidate recomputes exact delegation-chain evidence and
+requires recorded remaining redelegation capacity to decrease strictly at each
+child hop. Preserved or increased capacity, inconsistent evidence, malformed
+or action-bearing metadata, and false recorded acceptance fail closed. Values
+are bounded integers aligned one-for-one with the existing two-to-eight-hop
+chain; booleans are rejected.
+
+Local Python 3.11.17 validation passed 135 focused security tests and 622
+portable product tests. Infrastructure executed 18 guards: 17 passed and the
+documented Memory-only case skipped. The two established container-specific
+descendant-observation failures remain outside the portable command. This
+synthetic metadata-only verifier grants or exercises no authority, reads no
+raw content or secrets, and performs no tool, command, filesystem, network,
+resource-enforcement or OS-sandbox action. Exact source PR and merged-main CI
+plus independent records remain required before writer release. AF-29 remains
+in progress at 6/12.

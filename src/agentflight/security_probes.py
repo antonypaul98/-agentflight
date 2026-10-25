@@ -18,6 +18,7 @@ SCOPE_ATTENUATION_SCHEMA_VERSION = 1
 DELEGATION_VALIDITY_SCHEMA_VERSION = 1
 DELEGATION_CHAIN_SCHEMA_VERSION = 1
 DELEGATION_TIME_ATTENUATION_SCHEMA_VERSION = 1
+REDELEGATION_DEPTH_ATTENUATION_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
 MAX_INFLUENCE_HOPS = 16
 MAX_DELEGATION_HOPS = 8
@@ -47,6 +48,10 @@ DELEGATION_CHAIN_AUTHORITY = (
 )
 DELEGATION_TIME_ATTENUATION_AUTHORITY = (
     "recorded_delegation_time_attenuation_evidence_only_"
+    "no_authorization_or_execution"
+)
+REDELEGATION_DEPTH_ATTENUATION_AUTHORITY = (
+    "recorded_redelegation_depth_attenuation_evidence_only_"
     "no_authorization_or_execution"
 )
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
@@ -958,5 +963,105 @@ def evaluate_recorded_delegation_time_attenuation(
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise SecurityProbeError("delegation_time_attenuation_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_redelegation_depth_attenuation(
+    attenuation: Mapping[str, object],
+) -> dict:
+    """Verify that every recorded child has less redelegation capacity."""
+
+    keys = frozenset({
+        "schema_version", "attenuation_id", "delegation_chain",
+        "delegation_chain_evidence_id", "remaining_delegations",
+        "observed_disposition",
+    })
+    if type(attenuation) is not dict or frozenset(attenuation) != keys:
+        raise SecurityProbeError("invalid_redelegation_depth_attenuation_shape")
+    if (
+        type(attenuation["schema_version"]) is not int
+        or attenuation["schema_version"]
+        != REDELEGATION_DEPTH_ATTENUATION_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError(
+            "unsupported_redelegation_depth_attenuation_schema"
+        )
+
+    chain = attenuation["delegation_chain"]
+    chain_report = evaluate_recorded_delegation_chain(chain)
+    chain_evidence_id = _text(
+        attenuation["delegation_chain_evidence_id"],
+        _SHA256,
+        "invalid_delegation_chain_evidence_id",
+    )
+    if chain_evidence_id != chain_report["evidence_id"]:
+        raise SecurityProbeError("delegation_chain_evidence_mismatch")
+    remaining = attenuation["remaining_delegations"]
+    if (
+        type(remaining) is not list
+        or len(remaining) != len(chain["hops"])
+        or any(
+            type(value) is not int or not 0 <= value <= MAX_DELEGATION_HOPS
+            for value in remaining
+        )
+    ):
+        raise SecurityProbeError("invalid_remaining_delegations")
+    observed = attenuation["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError(
+            "invalid_redelegation_depth_attenuation_disposition"
+        )
+
+    reasons = []
+    if chain_report["expected_disposition"] != "accepted":
+        reasons.append("delegation_chain_requires_rejection")
+    if not chain_report["passed"]:
+        reasons.append("delegation_chain_observation_mismatch")
+    summaries = []
+    previous_remaining = None
+    for hop, value in zip(chain["hops"], remaining, strict=True):
+        if previous_remaining is not None and value >= previous_remaining:
+            reasons.append("redelegation_depth_not_attenuated")
+        summaries.append({
+            "hop_id": hop["hop_id"],
+            "remaining_delegations": value,
+            "delegation_validity_evidence_id": hop[
+                "delegation_validity_evidence_id"
+            ],
+        })
+        previous_remaining = value
+
+    reasons = list(dict.fromkeys(reasons))
+    expected = "rejected" if reasons else "accepted"
+    report = {
+        "redelegation_depth_attenuation_schema_version": (
+            REDELEGATION_DEPTH_ATTENUATION_SCHEMA_VERSION
+        ),
+        "attenuation_id": _text(
+            attenuation["attenuation_id"],
+            _IDENTIFIER,
+            "invalid_redelegation_depth_attenuation_id",
+        ),
+        "delegation_chain_evidence_id": chain_evidence_id,
+        "hop_count": len(summaries),
+        "hops": summaries,
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": reasons,
+        "coverage": {
+            "delegation_chain_evidence_recomputed": True,
+            "child_redelegation_depth_strictly_attenuated": True,
+            "live_authorization_checked": False,
+            "scope": "bounded_recorded_redelegation_depth_metadata_only",
+        },
+        "authority": REDELEGATION_DEPTH_ATTENUATION_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError(
+            "redelegation_depth_attenuation_report_too_large"
+        )
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report
