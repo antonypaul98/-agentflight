@@ -12,6 +12,7 @@ from agentflight.security_probes import (
     DELEGATION_VALIDITY_AUTHORITY,
     DELEGATION_CHAIN_AUTHORITY,
     DELEGATION_TIME_ATTENUATION_AUTHORITY,
+    REDELEGATION_DEPTH_ATTENUATION_AUTHORITY,
     SecurityProbeError,
     evaluate_recorded_influence_lineage,
     evaluate_recorded_instruction_provenance,
@@ -22,6 +23,7 @@ from agentflight.security_probes import (
     evaluate_recorded_delegation_validity,
     evaluate_recorded_delegation_chain,
     evaluate_recorded_delegation_time_attenuation,
+    evaluate_recorded_redelegation_depth_attenuation,
 )
 
 H0 = "0" * 64
@@ -237,6 +239,20 @@ def delegation_time_attenuation():
         "delegation_chain_evidence_id": evaluate_recorded_delegation_chain(
             chain
         )["evidence_id"],
+        "observed_disposition": "accepted",
+    }
+
+
+def redelegation_depth_attenuation():
+    chain = delegation_chain()
+    return {
+        "schema_version": 1,
+        "attenuation_id": "two-hop-redelegation-depth-attenuation",
+        "delegation_chain": chain,
+        "delegation_chain_evidence_id": evaluate_recorded_delegation_chain(
+            chain
+        )["evidence_id"],
+        "remaining_delegations": [1, 0],
         "observed_disposition": "accepted",
     }
 
@@ -1164,5 +1180,111 @@ def test_delegation_time_attenuation_report_has_no_raw_or_action_fields():
     for forbidden in (
         "prompt", "payload", "instruction_text", "command", "credential",
         "url", "timestamp", "datetime",
+    ):
+        assert forbidden not in rendered
+
+
+def test_redelegation_depth_attenuation_passes_deterministically():
+    first = evaluate_recorded_redelegation_depth_attenuation(
+        redelegation_depth_attenuation()
+    )
+    second = evaluate_recorded_redelegation_depth_attenuation(
+        copy.deepcopy(redelegation_depth_attenuation())
+    )
+    assert first == second
+    assert first["passed"] is True
+    assert first["expected_disposition"] == "accepted"
+    assert first["rejection_reasons"] == []
+    assert first["authority"] == REDELEGATION_DEPTH_ATTENUATION_AUTHORITY
+
+
+@pytest.mark.parametrize("remaining", ([2, 2], [1, 1], [0, 0], [1, 2]))
+def test_redelegation_depth_rejects_preserved_or_amplified_capacity(remaining):
+    source = redelegation_depth_attenuation()
+    source["remaining_delegations"] = remaining
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_redelegation_depth_attenuation(source)
+    assert report["passed"] is True
+    assert report["expected_disposition"] == "rejected"
+    assert report["rejection_reasons"] == [
+        "redelegation_depth_not_attenuated"
+    ]
+
+
+def test_redelegation_depth_exposes_recorded_acceptance_bypass():
+    source = redelegation_depth_attenuation()
+    source["remaining_delegations"] = [1, 1]
+    report = evaluate_recorded_redelegation_depth_attenuation(source)
+    assert report["passed"] is False
+    assert report["expected_disposition"] == "rejected"
+
+
+def test_redelegation_depth_propagates_chain_mismatch():
+    source = redelegation_depth_attenuation()
+    source["delegation_chain"]["observed_disposition"] = "rejected"
+    source["delegation_chain_evidence_id"] = evaluate_recorded_delegation_chain(
+        source["delegation_chain"]
+    )["evidence_id"]
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_redelegation_depth_attenuation(source)
+    assert report["rejection_reasons"] == [
+        "delegation_chain_observation_mismatch"
+    ]
+
+
+def test_redelegation_depth_recomputes_chain_evidence():
+    source = redelegation_depth_attenuation()
+    source["delegation_chain_evidence_id"] = H0
+    with pytest.raises(SecurityProbeError, match="delegation_chain_evidence_mismatch"):
+        evaluate_recorded_redelegation_depth_attenuation(source)
+
+
+@pytest.mark.parametrize(
+    ("change", "code"),
+    [
+        (
+            lambda value: value.update(command="run"),
+            "invalid_redelegation_depth_attenuation_shape",
+        ),
+        (
+            lambda value: value.update(schema_version=2),
+            "unsupported_redelegation_depth_attenuation_schema",
+        ),
+        (
+            lambda value: value.update(remaining_delegations=[1]),
+            "invalid_remaining_delegations",
+        ),
+        (
+            lambda value: value.update(remaining_delegations=[9, 0]),
+            "invalid_remaining_delegations",
+        ),
+        (
+            lambda value: value.update(remaining_delegations=[True, 0]),
+            "invalid_remaining_delegations",
+        ),
+        (
+            lambda value: value.update(observed_disposition="authorized"),
+            "invalid_redelegation_depth_attenuation_disposition",
+        ),
+    ],
+)
+def test_malformed_or_action_bearing_redelegation_depth_fails_closed(
+    change, code
+):
+    source = redelegation_depth_attenuation()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=f"^{code}$"):
+        evaluate_recorded_redelegation_depth_attenuation(source)
+
+
+def test_redelegation_depth_report_has_no_raw_or_action_fields():
+    rendered = repr(
+        evaluate_recorded_redelegation_depth_attenuation(
+            redelegation_depth_attenuation()
+        )
+    )
+    for forbidden in (
+        "command", "prompt", "payload", "credential", "secret", "url",
+        "timestamp", "datetime",
     ):
         assert forbidden not in rendered
