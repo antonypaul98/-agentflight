@@ -756,3 +756,21 @@ project, agent, tool or command; accesses no filesystem, network or external
 system; and makes no resource-enforcement or OS-isolation claim. Exact source
 PR and merged-main CI plus independent canonical records remain required before
 writer release. AF-29 remains in progress at 6/12.
+
+## AF-29 recorded delegation-time attenuation source receipt (2026-10-25)
+
+Source PR #84 exact head `44f886036886daa9f78f1c4121275647e28c2ac7`,
+tree `2257db4dbb28227f7919f262d65082ced938ab4d`, passed exact-head run
+40197618231 on Python 3.11.17 with 609 product tests and zero product skips.
+Guarded merge produced exact main
+`41ae378777927fc3f3c34712afc047c2cf01f7bf`; push run 40197704994 passed
+the same suite. Both runs executed 18 infrastructure guards: 17 passed and one
+baseline Memory-only case was skipped.
+
+This remains bounded synthetic recorded-metadata verification only. It grants,
+delegates, revokes or executes nothing; reads no wall clock, raw prompt,
+instruction, payload or credential; schedules no expiry; detects no injection;
+invokes no project, agent, tool or command; accesses no filesystem, network or
+external system; and makes no resource-enforcement or OS-isolation claim.
+Independent canonical records and their exact CI remain required before writer
+release. AF-29 remains in progress at 6/12.
