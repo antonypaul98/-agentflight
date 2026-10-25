@@ -10,6 +10,7 @@ from agentflight.security_probes import (
     SENSITIVE_SINK_BINDING_AUTHORITY,
     SCOPE_ATTENUATION_AUTHORITY,
     DELEGATION_VALIDITY_AUTHORITY,
+    DELEGATION_CHAIN_AUTHORITY,
     SecurityProbeError,
     evaluate_recorded_influence_lineage,
     evaluate_recorded_instruction_provenance,
@@ -18,6 +19,7 @@ from agentflight.security_probes import (
     evaluate_recorded_sensitive_sink_binding,
     evaluate_recorded_scope_attenuation,
     evaluate_recorded_delegation_validity,
+    evaluate_recorded_delegation_chain,
 )
 
 H0 = "0" * 64
@@ -158,6 +160,68 @@ def delegation_validity():
         "expires_at_tick": 200,
         "observed_at_tick": 150,
         "revoked": False,
+        "observed_disposition": "accepted",
+    }
+
+
+def refresh_validity_evidence(validity):
+    attenuation = validity["scope_attenuation"]
+    binding = attenuation["sensitive_sink_binding"]
+    boundary = binding["sensitive_sink_boundary"]
+    lineage_value = boundary["influence_lineage"]
+    for hop in lineage_value["hops"]:
+        provenance_value = hop["instruction_provenance"]
+        provenance_value["security_probe_evidence_id"] = (
+            evaluate_recorded_security_probe(
+                provenance_value["security_probe"]
+            )["evidence_id"]
+        )
+        hop["instruction_provenance_evidence_id"] = (
+            evaluate_recorded_instruction_provenance(provenance_value)[
+                "evidence_id"
+            ]
+        )
+    boundary["influence_lineage_evidence_id"] = (
+        evaluate_recorded_influence_lineage(lineage_value)["evidence_id"]
+    )
+    binding["sensitive_sink_evidence_id"] = (
+        evaluate_recorded_sensitive_sink_boundary(boundary)["evidence_id"]
+    )
+    attenuation["sensitive_sink_binding_evidence_id"] = (
+        evaluate_recorded_sensitive_sink_binding(binding)["evidence_id"]
+    )
+    validity["scope_attenuation_evidence_id"] = (
+        evaluate_recorded_scope_attenuation(attenuation)["evidence_id"]
+    )
+
+
+def delegation_chain():
+    first = delegation_validity()
+    first["validity_id"] = "chain-validity-one"
+    second = delegation_validity()
+    second["validity_id"] = "chain-validity-two"
+    second["issued_at_tick"] = 151
+    second["expires_at_tick"] = 250
+    second["observed_at_tick"] = 175
+    return {
+        "schema_version": 1,
+        "chain_id": "two-hop-delegation-chain",
+        "hops": [
+            {
+                "hop_id": "delegation-hop-one",
+                "delegation_validity": first,
+                "delegation_validity_evidence_id": (
+                    evaluate_recorded_delegation_validity(first)["evidence_id"]
+                ),
+            },
+            {
+                "hop_id": "delegation-hop-two",
+                "delegation_validity": second,
+                "delegation_validity_evidence_id": (
+                    evaluate_recorded_delegation_validity(second)["evidence_id"]
+                ),
+            },
+        ],
         "observed_disposition": "accepted",
     }
 
@@ -822,6 +886,124 @@ def test_malformed_or_action_bearing_delegation_validity_fails_closed(
 
 def test_delegation_validity_report_contains_no_raw_or_action_fields():
     rendered = repr(evaluate_recorded_delegation_validity(delegation_validity()))
+    for forbidden in (
+        "prompt", "payload", "instruction_text", "command", "credential",
+        "url", "timestamp", "datetime",
+    ):
+        assert forbidden not in rendered
+
+
+def test_delegation_chain_passes_deterministically():
+    first = evaluate_recorded_delegation_chain(delegation_chain())
+    assert first == evaluate_recorded_delegation_chain(
+        copy.deepcopy(delegation_chain())
+    )
+    assert first["passed"] is True
+    assert first["hop_count"] == 2
+    assert first["rejection_reasons"] == []
+    assert first["authority"] == DELEGATION_CHAIN_AUTHORITY
+
+
+@pytest.mark.parametrize("field,value,reason", [
+    ("tenant_id_sha256", H2, "delegation_chain_tenant_discontinuity"),
+    ("principal_id_sha256", H2, "delegation_chain_principal_discontinuity"),
+    ("tool_id", "substitute-tool", "delegation_chain_tool_discontinuity"),
+])
+def test_delegation_chain_rejects_identity_discontinuity(field, value, reason):
+    source = delegation_chain()
+    validity = source["hops"][1]["delegation_validity"]
+    terminal_probe = validity["scope_attenuation"]["sensitive_sink_binding"][
+        "sensitive_sink_boundary"
+    ]["influence_lineage"]["hops"][-1]["instruction_provenance"][
+        "security_probe"
+    ]
+    terminal_probe[field] = value
+    if field == "tenant_id_sha256":
+        terminal_probe["authorization_tenant_sha256"] = value
+    attenuation = validity["scope_attenuation"]
+    delegated_field = {
+        "tenant_id_sha256": "delegated_tenant_sha256",
+        "principal_id_sha256": "delegated_principal_id_sha256",
+        "tool_id": "delegated_tool_id",
+    }[field]
+    attenuation[delegated_field] = value
+    if field == "tool_id":
+        attenuation["sensitive_sink_binding"]["authorized_tool_id"] = value
+    refresh_validity_evidence(validity)
+    source["hops"][1]["delegation_validity_evidence_id"] = (
+        evaluate_recorded_delegation_validity(validity)["evidence_id"]
+    )
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_chain(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == [reason]
+
+
+def test_delegation_chain_rejects_scope_discontinuity():
+    source = delegation_chain()
+    validity = source["hops"][0]["delegation_validity"]
+    validity["scope_attenuation"]["delegated_scopes"] = []
+    refresh_validity_evidence(validity)
+    source["hops"][0]["delegation_validity_evidence_id"] = (
+        evaluate_recorded_delegation_validity(validity)["evidence_id"]
+    )
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_chain(source)
+    assert report["rejection_reasons"] == [
+        "delegation_chain_scope_discontinuity"
+    ]
+
+
+def test_delegation_chain_propagates_rejected_hop():
+    source = delegation_chain()
+    validity = source["hops"][1]["delegation_validity"]
+    validity["revoked"] = True
+    validity["observed_disposition"] = "rejected"
+    source["hops"][1]["delegation_validity_evidence_id"] = (
+        evaluate_recorded_delegation_validity(validity)["evidence_id"]
+    )
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_chain(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == ["delegation_hop_requires_rejection"]
+
+
+def test_delegation_chain_recomputes_validity_evidence():
+    source = delegation_chain()
+    source["hops"][1]["delegation_validity_evidence_id"] = H0
+    with pytest.raises(
+        SecurityProbeError, match="delegation_validity_evidence_mismatch"
+    ):
+        evaluate_recorded_delegation_chain(source)
+
+
+@pytest.mark.parametrize("change,code", [
+    (lambda value: value.update(command="run"), "invalid_delegation_chain_shape"),
+    (
+        lambda value: value.update(schema_version=True),
+        "unsupported_delegation_chain_schema",
+    ),
+    (lambda value: value.update(hops=[]), "invalid_delegation_chain_hops"),
+    (
+        lambda value: value["hops"][1].update(
+            hop_id=value["hops"][0]["hop_id"]
+        ),
+        "duplicate_delegation_hop_id",
+    ),
+    (
+        lambda value: value.update(observed_disposition="maybe"),
+        "invalid_delegation_chain_disposition",
+    ),
+])
+def test_malformed_or_action_bearing_delegation_chain_fails_closed(change, code):
+    source = delegation_chain()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_delegation_chain(source)
+
+
+def test_delegation_chain_report_contains_no_raw_or_action_fields():
+    rendered = repr(evaluate_recorded_delegation_chain(delegation_chain()))
     for forbidden in (
         "prompt", "payload", "instruction_text", "command", "credential",
         "url", "timestamp", "datetime",

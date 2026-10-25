@@ -681,3 +681,31 @@ project, agent, tool or command; accesses no filesystem, network or external
 system; and makes no resource-enforcement or OS-isolation claim. Independent
 canonical records and their exact CI remain required before writer release.
 AF-29 remains in progress at 6/12.
+
+## AF-29 recorded delegation-chain consistency candidate (2026-10-24)
+
+Delegation-validity records PR #81 and final main
+`7ceb9012fb29dbf822a98bb8308f038a0df47fb5` passed exact Python 3.11.17
+CI runs 40107462361 and 40107550251 with 584 product tests and zero product
+skips. Writer `AF29-DELEGATION-VALIDITY-20261024` was explicitly released.
+
+This bounded candidate recomputes exact delegation-validity evidence for two
+to eight recorded hops and verifies that each hop's upstream tenant, principal,
+tool and scope set exactly matches the prior hop's delegated endpoint. It fails
+closed for independently self-consistent but disconnected or substituted hops,
+rejected validity windows, inconsistent evidence, duplicate hop identifiers,
+malformed metadata and false recorded acceptance.
+
+Local Python 3.11.17 validation passed 108 focused security tests and 595
+portable product tests. The unfiltered run retained the two established
+container-specific descendant-observation failures. Infrastructure executed 18
+guards: 17 passed and the documented Memory-only case skipped. Diagnostics,
+dependency checks, compile and diff checks passed.
+
+This is synthetic recorded-metadata verification only. It grants, delegates,
+revokes or executes nothing; reads no wall clock, raw prompt, instruction,
+payload or credential; detects no injection; invokes no project, agent, tool or
+command; accesses no filesystem, network or external system; and makes no
+resource-enforcement or OS-isolation claim. Exact source PR and merged-main CI
+plus independent canonical records remain required before writer release.
+AF-29 remains in progress at 6/12.
