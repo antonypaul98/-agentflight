@@ -727,3 +727,32 @@ command; accesses no filesystem, network or external system; and makes no
 resource-enforcement or OS-isolation claim. Exact source PR and merged-main CI
 plus independent canonical records remain required before writer release.
 AF-29 remains in progress at 6/12.
+
+## AF-29 recorded delegation-time attenuation candidate (2026-10-25)
+
+Delegation-chain consistency records PR #83 and final main
+`35724f76632e4fde961719a34d6df5c2005f6667` passed exact Python 3.11.17
+CI runs 40169050783 and 40169108584 with 597 product tests and zero product
+skips. Writer `AF29-DELEGATION-CHAIN-CONSISTENCY-20261024` was explicitly
+released.
+
+The new bounded candidate recomputes exact delegation-chain evidence and
+checks that every recorded child validity window is contained by its parent.
+It fails closed when a child is issued before its parent, is issued at or after
+the parent expiry boundary, outlives its parent, carries inconsistent evidence,
+uses malformed or action-bearing metadata, or records a false acceptance. Equal
+parent/child boundaries are accepted. Only caller-supplied logical ticks are
+used; no wall clock is accessed.
+
+Local Python 3.11.17 validation passed 120 focused security tests and 607
+portable product tests. Infrastructure executed 18 guards: 17 passed and the
+documented Memory-only case skipped. Diagnostics, dependency checks, compile,
+JSON validation and diff checks passed.
+
+This is synthetic recorded-metadata verification only. It grants, delegates,
+revokes or executes nothing; reads no wall clock, raw prompt, instruction,
+payload or credential; schedules no expiry; detects no injection; invokes no
+project, agent, tool or command; accesses no filesystem, network or external
+system; and makes no resource-enforcement or OS-isolation claim. Exact source
+PR and merged-main CI plus independent canonical records remain required before
+writer release. AF-29 remains in progress at 6/12.

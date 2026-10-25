@@ -11,6 +11,7 @@ from agentflight.security_probes import (
     SCOPE_ATTENUATION_AUTHORITY,
     DELEGATION_VALIDITY_AUTHORITY,
     DELEGATION_CHAIN_AUTHORITY,
+    DELEGATION_TIME_ATTENUATION_AUTHORITY,
     SecurityProbeError,
     evaluate_recorded_influence_lineage,
     evaluate_recorded_instruction_provenance,
@@ -20,6 +21,7 @@ from agentflight.security_probes import (
     evaluate_recorded_scope_attenuation,
     evaluate_recorded_delegation_validity,
     evaluate_recorded_delegation_chain,
+    evaluate_recorded_delegation_time_attenuation,
 )
 
 H0 = "0" * 64
@@ -201,7 +203,7 @@ def delegation_chain():
     second = delegation_validity()
     second["validity_id"] = "chain-validity-two"
     second["issued_at_tick"] = 151
-    second["expires_at_tick"] = 250
+    second["expires_at_tick"] = 190
     second["observed_at_tick"] = 175
     return {
         "schema_version": 1,
@@ -224,6 +226,32 @@ def delegation_chain():
         ],
         "observed_disposition": "accepted",
     }
+
+
+def delegation_time_attenuation():
+    chain = delegation_chain()
+    return {
+        "schema_version": 1,
+        "attenuation_id": "two-hop-delegation-time-attenuation",
+        "delegation_chain": chain,
+        "delegation_chain_evidence_id": evaluate_recorded_delegation_chain(
+            chain
+        )["evidence_id"],
+        "observed_disposition": "accepted",
+    }
+
+
+def refresh_chain_evidence(attenuation):
+    chain = attenuation["delegation_chain"]
+    for hop in chain["hops"]:
+        validity = hop["delegation_validity"]
+        refresh_validity_evidence(validity)
+        hop["delegation_validity_evidence_id"] = (
+            evaluate_recorded_delegation_validity(validity)["evidence_id"]
+        )
+    attenuation["delegation_chain_evidence_id"] = (
+        evaluate_recorded_delegation_chain(chain)["evidence_id"]
+    )
 
 
 def test_trusted_least_privilege_decision_passes_deterministically():
@@ -1004,6 +1032,135 @@ def test_malformed_or_action_bearing_delegation_chain_fails_closed(change, code)
 
 def test_delegation_chain_report_contains_no_raw_or_action_fields():
     rendered = repr(evaluate_recorded_delegation_chain(delegation_chain()))
+    for forbidden in (
+        "prompt", "payload", "instruction_text", "command", "credential",
+        "url", "timestamp", "datetime",
+    ):
+        assert forbidden not in rendered
+
+
+def test_delegation_time_attenuation_passes_deterministically():
+    first = evaluate_recorded_delegation_time_attenuation(
+        delegation_time_attenuation()
+    )
+    assert first == evaluate_recorded_delegation_time_attenuation(
+        copy.deepcopy(delegation_time_attenuation())
+    )
+    assert first["passed"] is True
+    assert first["hop_count"] == 2
+    assert first["rejection_reasons"] == []
+    assert first["authority"] == DELEGATION_TIME_ATTENUATION_AUTHORITY
+    assert first["coverage"]["wall_clock_accessed"] is False
+
+
+def test_delegation_time_attenuation_allows_equal_parent_boundaries():
+    source = delegation_time_attenuation()
+    child = source["delegation_chain"]["hops"][1]["delegation_validity"]
+    child.update(issued_at_tick=100, expires_at_tick=200, observed_at_tick=150)
+    refresh_chain_evidence(source)
+    report = evaluate_recorded_delegation_time_attenuation(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == []
+
+
+def test_delegation_time_attenuation_rejects_issuance_regression():
+    source = delegation_time_attenuation()
+    child = source["delegation_chain"]["hops"][1]["delegation_validity"]
+    child.update(issued_at_tick=90, observed_at_tick=150)
+    refresh_chain_evidence(source)
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_time_attenuation(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == [
+        "delegation_chain_issuance_regression"
+    ]
+
+
+def test_delegation_time_attenuation_rejects_expiry_amplification():
+    source = delegation_time_attenuation()
+    child = source["delegation_chain"]["hops"][1]["delegation_validity"]
+    child["expires_at_tick"] = 250
+    refresh_chain_evidence(source)
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_time_attenuation(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == [
+        "delegation_chain_expiry_amplification"
+    ]
+
+
+def test_delegation_time_attenuation_rejects_issuance_after_parent_expiry():
+    source = delegation_time_attenuation()
+    child = source["delegation_chain"]["hops"][1]["delegation_validity"]
+    child.update(issued_at_tick=200, expires_at_tick=210, observed_at_tick=205)
+    refresh_chain_evidence(source)
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_time_attenuation(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == [
+        "delegation_chain_issuance_outside_parent_window",
+        "delegation_chain_expiry_amplification",
+    ]
+
+
+def test_delegation_time_attenuation_detects_observation_mismatch():
+    source = delegation_time_attenuation()
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_time_attenuation(source)
+    assert report["expected_disposition"] == "accepted"
+    assert report["passed"] is False
+
+
+def test_delegation_time_attenuation_propagates_chain_mismatch():
+    source = delegation_time_attenuation()
+    source["delegation_chain"]["observed_disposition"] = "rejected"
+    refresh_chain_evidence(source)
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_time_attenuation(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == [
+        "delegation_chain_observation_mismatch"
+    ]
+
+
+def test_delegation_time_attenuation_recomputes_chain_evidence():
+    source = delegation_time_attenuation()
+    source["delegation_chain_evidence_id"] = H0
+    with pytest.raises(
+        SecurityProbeError, match="delegation_chain_evidence_mismatch"
+    ):
+        evaluate_recorded_delegation_time_attenuation(source)
+
+
+@pytest.mark.parametrize("change,code", [
+    (
+        lambda value: value.update(command="run"),
+        "invalid_delegation_time_attenuation_shape",
+    ),
+    (
+        lambda value: value.update(schema_version=True),
+        "unsupported_delegation_time_attenuation_schema",
+    ),
+    (
+        lambda value: value.update(observed_disposition="maybe"),
+        "invalid_delegation_time_attenuation_disposition",
+    ),
+])
+def test_malformed_or_action_bearing_time_attenuation_fails_closed(
+    change, code
+):
+    source = delegation_time_attenuation()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_delegation_time_attenuation(source)
+
+
+def test_delegation_time_attenuation_report_has_no_raw_or_action_fields():
+    rendered = repr(
+        evaluate_recorded_delegation_time_attenuation(
+            delegation_time_attenuation()
+        )
+    )
     for forbidden in (
         "prompt", "payload", "instruction_text", "command", "credential",
         "url", "timestamp", "datetime",
