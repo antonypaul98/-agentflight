@@ -16,8 +16,10 @@ SENSITIVE_SINK_SCHEMA_VERSION = 1
 SENSITIVE_SINK_BINDING_SCHEMA_VERSION = 1
 SCOPE_ATTENUATION_SCHEMA_VERSION = 1
 DELEGATION_VALIDITY_SCHEMA_VERSION = 1
+DELEGATION_CHAIN_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
 MAX_INFLUENCE_HOPS = 16
+MAX_DELEGATION_HOPS = 8
 MAX_LOGICAL_TICK = 1_000_000_000
 MAX_REPORT_BYTES = 8_192
 AUTHORITY = "recorded_security_probe_evidence_only_no_authorization_or_execution"
@@ -38,6 +40,9 @@ SCOPE_ATTENUATION_AUTHORITY = (
 )
 DELEGATION_VALIDITY_AUTHORITY = (
     "recorded_delegation_validity_evidence_only_no_authorization_or_execution"
+)
+DELEGATION_CHAIN_AUTHORITY = (
+    "recorded_delegation_chain_evidence_only_no_authorization_or_execution"
 )
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -743,5 +748,114 @@ def evaluate_recorded_delegation_validity(validity: Mapping[str, object]) -> dic
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise SecurityProbeError("delegation_validity_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_delegation_chain(chain: Mapping[str, object]) -> dict:
+    """Verify continuity across a bounded recorded delegation chain."""
+
+    keys = frozenset({
+        "schema_version", "chain_id", "hops", "observed_disposition",
+    })
+    if type(chain) is not dict or frozenset(chain) != keys:
+        raise SecurityProbeError("invalid_delegation_chain_shape")
+    if (
+        type(chain["schema_version"]) is not int
+        or chain["schema_version"] != DELEGATION_CHAIN_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError("unsupported_delegation_chain_schema")
+    hops = chain["hops"]
+    if type(hops) is not list or not 2 <= len(hops) <= MAX_DELEGATION_HOPS:
+        raise SecurityProbeError("invalid_delegation_chain_hops")
+    observed = chain["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError("invalid_delegation_chain_disposition")
+
+    hop_keys = frozenset({
+        "hop_id", "delegation_validity", "delegation_validity_evidence_id",
+    })
+    seen_hop_ids = set()
+    summaries = []
+    reasons = []
+    previous_endpoint = None
+    for hop in hops:
+        if type(hop) is not dict or frozenset(hop) != hop_keys:
+            raise SecurityProbeError("invalid_delegation_chain_hop_shape")
+        hop_id = _text(hop["hop_id"], _IDENTIFIER, "invalid_delegation_hop_id")
+        if hop_id in seen_hop_ids:
+            raise SecurityProbeError("duplicate_delegation_hop_id")
+        seen_hop_ids.add(hop_id)
+
+        validity = hop["delegation_validity"]
+        validity_report = evaluate_recorded_delegation_validity(validity)
+        validity_evidence_id = _text(
+            hop["delegation_validity_evidence_id"],
+            _SHA256,
+            "invalid_delegation_validity_evidence_id",
+        )
+        if validity_evidence_id != validity_report["evidence_id"]:
+            raise SecurityProbeError("delegation_validity_evidence_mismatch")
+        attenuation_report = evaluate_recorded_scope_attenuation(
+            validity["scope_attenuation"]
+        )
+        upstream = (
+            attenuation_report["upstream_tenant_sha256"],
+            attenuation_report["upstream_principal_id_sha256"],
+            attenuation_report["upstream_tool_id"],
+            attenuation_report["upstream_scopes"],
+        )
+        endpoint = (
+            attenuation_report["delegated_tenant_sha256"],
+            attenuation_report["delegated_principal_id_sha256"],
+            attenuation_report["delegated_tool_id"],
+            attenuation_report["delegated_scopes"],
+        )
+        if validity_report["expected_disposition"] != "accepted":
+            reasons.append("delegation_hop_requires_rejection")
+        if not validity_report["passed"]:
+            reasons.append("delegation_hop_observation_mismatch")
+        if previous_endpoint is not None:
+            labels = ("tenant", "principal", "tool", "scope")
+            for label, expected_value, actual_value in zip(
+                labels, previous_endpoint, upstream, strict=True
+            ):
+                if actual_value != expected_value:
+                    reasons.append(f"delegation_chain_{label}_discontinuity")
+        summaries.append({
+            "hop_id": hop_id,
+            "delegation_validity_evidence_id": validity_evidence_id,
+            "validity_expected_disposition": validity_report[
+                "expected_disposition"
+            ],
+        })
+        previous_endpoint = endpoint
+
+    reasons = list(dict.fromkeys(reasons))
+    expected = "rejected" if reasons else "accepted"
+    report = {
+        "delegation_chain_schema_version": DELEGATION_CHAIN_SCHEMA_VERSION,
+        "chain_id": _text(
+            chain["chain_id"], _IDENTIFIER, "invalid_delegation_chain_id"
+        ),
+        "hop_count": len(summaries),
+        "hops": summaries,
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": reasons,
+        "coverage": {
+            "delegation_validity_evidence_recomputed": True,
+            "tenant_continuity_checked": True,
+            "principal_continuity_checked": True,
+            "tool_continuity_checked": True,
+            "scope_continuity_checked": True,
+            "scope": "bounded_recorded_delegation_chain_metadata_only",
+        },
+        "authority": DELEGATION_CHAIN_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError("delegation_chain_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report
