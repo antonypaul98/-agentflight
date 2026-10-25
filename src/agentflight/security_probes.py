@@ -17,6 +17,7 @@ SENSITIVE_SINK_BINDING_SCHEMA_VERSION = 1
 SCOPE_ATTENUATION_SCHEMA_VERSION = 1
 DELEGATION_VALIDITY_SCHEMA_VERSION = 1
 DELEGATION_CHAIN_SCHEMA_VERSION = 1
+DELEGATION_TIME_ATTENUATION_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
 MAX_INFLUENCE_HOPS = 16
 MAX_DELEGATION_HOPS = 8
@@ -43,6 +44,10 @@ DELEGATION_VALIDITY_AUTHORITY = (
 )
 DELEGATION_CHAIN_AUTHORITY = (
     "recorded_delegation_chain_evidence_only_no_authorization_or_execution"
+)
+DELEGATION_TIME_ATTENUATION_AUTHORITY = (
+    "recorded_delegation_time_attenuation_evidence_only_"
+    "no_authorization_or_execution"
 )
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -857,5 +862,101 @@ def evaluate_recorded_delegation_chain(chain: Mapping[str, object]) -> dict:
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise SecurityProbeError("delegation_chain_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_delegation_time_attenuation(
+    attenuation: Mapping[str, object],
+) -> dict:
+    """Verify that recorded child delegation windows stay within their parent."""
+
+    keys = frozenset({
+        "schema_version", "attenuation_id", "delegation_chain",
+        "delegation_chain_evidence_id", "observed_disposition",
+    })
+    if type(attenuation) is not dict or frozenset(attenuation) != keys:
+        raise SecurityProbeError("invalid_delegation_time_attenuation_shape")
+    if (
+        type(attenuation["schema_version"]) is not int
+        or attenuation["schema_version"]
+        != DELEGATION_TIME_ATTENUATION_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError("unsupported_delegation_time_attenuation_schema")
+
+    chain = attenuation["delegation_chain"]
+    chain_report = evaluate_recorded_delegation_chain(chain)
+    chain_evidence_id = _text(
+        attenuation["delegation_chain_evidence_id"],
+        _SHA256,
+        "invalid_delegation_chain_evidence_id",
+    )
+    if chain_evidence_id != chain_report["evidence_id"]:
+        raise SecurityProbeError("delegation_chain_evidence_mismatch")
+    observed = attenuation["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError("invalid_delegation_time_attenuation_disposition")
+
+    reasons = []
+    if chain_report["expected_disposition"] != "accepted":
+        reasons.append("delegation_chain_requires_rejection")
+    if not chain_report["passed"]:
+        reasons.append("delegation_chain_observation_mismatch")
+
+    summaries = []
+    previous_window = None
+    for hop in chain["hops"]:
+        validity = hop["delegation_validity"]
+        issued_at_tick = validity["issued_at_tick"]
+        expires_at_tick = validity["expires_at_tick"]
+        if previous_window is not None:
+            parent_issued_at_tick, parent_expires_at_tick = previous_window
+            if issued_at_tick < parent_issued_at_tick:
+                reasons.append("delegation_chain_issuance_regression")
+            if issued_at_tick >= parent_expires_at_tick:
+                reasons.append("delegation_chain_issuance_outside_parent_window")
+            if expires_at_tick > parent_expires_at_tick:
+                reasons.append("delegation_chain_expiry_amplification")
+        summaries.append({
+            "hop_id": hop["hop_id"],
+            "issued_at_tick": issued_at_tick,
+            "expires_at_tick": expires_at_tick,
+            "delegation_validity_evidence_id": hop[
+                "delegation_validity_evidence_id"
+            ],
+        })
+        previous_window = (issued_at_tick, expires_at_tick)
+
+    reasons = list(dict.fromkeys(reasons))
+    expected = "rejected" if reasons else "accepted"
+    report = {
+        "delegation_time_attenuation_schema_version": (
+            DELEGATION_TIME_ATTENUATION_SCHEMA_VERSION
+        ),
+        "attenuation_id": _text(
+            attenuation["attenuation_id"],
+            _IDENTIFIER,
+            "invalid_delegation_time_attenuation_id",
+        ),
+        "delegation_chain_evidence_id": chain_evidence_id,
+        "hop_count": len(summaries),
+        "hops": summaries,
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": reasons,
+        "coverage": {
+            "delegation_chain_evidence_recomputed": True,
+            "child_issuance_not_before_parent_checked": True,
+            "child_issuance_within_parent_window_checked": True,
+            "child_expiry_not_after_parent_checked": True,
+            "wall_clock_accessed": False,
+            "scope": "bounded_recorded_delegation_time_metadata_only",
+        },
+        "authority": DELEGATION_TIME_ATTENUATION_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError("delegation_time_attenuation_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report
