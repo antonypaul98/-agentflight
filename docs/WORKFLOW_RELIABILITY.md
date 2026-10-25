@@ -792,3 +792,18 @@ Memory-only skip. It is synthetic recorded metadata only and adds no live
 authorization, delegation, revocation, execution, clock, raw-content, secret,
 resource-enforcement or OS-isolation capability. Exact source PR and
 merged-main CI plus separate canonical records remain required.
+
+## AF-29 redelegation-depth attenuation source receipt (2026-10-25)
+
+Source PR #86 exact head `ea266d31fce48f2951dfaa604d99e7fa494befd4`,
+tree `d3e42e556039b8aa63d35c79abe2d2066f397840`, passed exact-head CI
+40221470617 on Python 3.11.17 with 624 product tests and zero skips. Its
+expected-head guarded merge produced main
+`64f57b1b61060617564aed2afa502fbff8f99f22`; exact push CI 40221547636
+passed the same product suite. Each run executed 18 infrastructure guards:
+17 passed and one established Memory-only case skipped.
+
+The verifier remains bounded and synthetic: it exercises no live authority,
+delegation, revocation, execution, clock, raw-content, secret, filesystem,
+network, resource-enforcement or OS-isolation capability. Separate canonical
+records and exact PR/final-main CI remain required before writer release.
