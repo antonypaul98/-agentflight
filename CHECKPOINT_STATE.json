@@ -2189,13 +2189,6 @@
     "unfiltered_environment_failures": 2,
     "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
     "diagnostics": "passed",
-    "records_pr": 85,
-    "records_head_sha": "2b9a221cdb9187a97300a1912971793d75aea07e",
-    "records_tree_sha": "728068924c36adb3ec0d3bfc0975e477427b2147",
-    "records_pr_ci_run": 40216399903,
-    "records_merge_sha": "be1ab1b2b2bbffb38d44601aefaed56a67310542",
-    "records_merged_main_ci_run": 40216466618,
-    "writer_release": "https://github.com/antonypaul98/-agentflight/pull/85#issuecomment-6400803640",
     "scope": "Deterministic exact-evidence-bound verification of two to sixteen recorded instruction hops with hash continuity and downstream propagation of caller-recorded untrusted influence.",
     "limitations": "Synthetic recorded metadata only; no raw prompt/instruction text, injection detection, permission grant, project inspection, tool/agent/command execution, credential/payload handling, filesystem/network access, external action, resource enforcement, or OS-sandbox claim."
   },
@@ -2350,7 +2343,7 @@
     "limitations": "Synthetic recorded metadata only; no live authorization, delegation, revocation, clock access, scheduling, secret/raw-content access, injection detection, agent/tool/command execution, external action, resource enforcement, or OS-isolation claim."
   },
   "af29_delegation_time_attenuation_candidate": {
-    "status": "SOURCE_MERGED_AND_VERIFIED_RECORDS_PENDING",
+    "status": "SOURCE_AND_RECORDS_MERGED_VERIFIED_WRITER_RELEASED",
     "base_main_sha": "35724f76632e4fde961719a34d6df5c2005f6667",
     "branch": "work/af29-delegation-time-attenuation",
     "source_pr": 84,
@@ -2367,6 +2360,13 @@
     "clean_ci_product_skips": 0,
     "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
     "diagnostics": "passed",
+    "records_pr": 85,
+    "records_head_sha": "2b9a221cdb9187a97300a1912971793d75aea07e",
+    "records_tree_sha": "728068924c36adb3ec0d3bfc0975e477427b2147",
+    "records_pr_ci_run": 40216399903,
+    "records_merge_sha": "be1ab1b2b2bbffb38d44601aefaed56a67310542",
+    "records_merged_main_ci_run": 40216466618,
+    "writer_release": "https://github.com/antonypaul98/-agentflight/pull/85#issuecomment-6400803640",
     "scope": "Deterministic exact-evidence verification that each recorded child delegation validity window is contained by its parent window across a bounded delegation chain.",
     "limitations": "Synthetic recorded metadata only; no wall-clock access, expiry scheduling, authorization, delegation, revocation, secret/raw-content access, injection detection, agent/tool/command execution, filesystem/network access, external action, resource enforcement, or OS-isolation claim."
   },
