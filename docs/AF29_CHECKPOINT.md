@@ -255,3 +255,19 @@ raw content or secrets, and performs no tool, command, filesystem, network,
 resource-enforcement or OS-sandbox action. Exact source PR and merged-main CI
 plus independent records remain required before writer release. AF-29 remains
 in progress at 6/12.
+
+## Redelegation-depth attenuation source receipt
+
+Source PR #86 exact head `ea266d31fce48f2951dfaa604d99e7fa494befd4`, tree
+`d3e42e556039b8aa63d35c79abe2d2066f397840`, passed exact-head run
+40221470617 on Python 3.11.17 with 624 product tests and zero product skips.
+The expected-head guarded merge produced exact main
+`64f57b1b61060617564aed2afa502fbff8f99f22`; push run 40221547636 passed
+the same suite. Both runs executed all 18 infrastructure guards: 17 passed and
+one established Memory-only case skipped.
+
+This remains bounded synthetic recorded-metadata verification only. It grants,
+delegates, revokes or executes nothing; reads no wall clock, raw prompt,
+instruction, payload, credential or secret; and makes no resource-enforcement
+or OS-isolation claim. Independent canonical records and their exact CI remain
+required before writer release. AF-29 remains in progress at 6/12.
