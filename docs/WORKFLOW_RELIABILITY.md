@@ -928,3 +928,26 @@ no live identity or audience possession, grants or exercises no authority,
 executes nothing, reads no raw content or secrets, and makes no resource or OS
 isolation claim. Independent canonical records and exact PR/final-main CI are
 required before writer release. AF-29 remains in progress at 6/12.
+
+## AF-29 delegation identity-binding source candidate (2026-10-26)
+
+Delegation issuer-binding source/records PRs #92/#93 passed their exact Python
+3.11.17 PR and merged-main CI gates. Final main is
+`d70385a85222b4018f9cd32bcfbeab99b377b7ac`, and writer
+`AF29-DELEGATION-ISSUER-BINDING-20261026` is explicitly released.
+
+The new candidate independently recomputes exact issuer- and audience-binding
+evidence, requires both components to be accepted, and rejects substitution
+between otherwise valid reports for different delegation chains. Local Python
+3.11.17 validation passed 175 focused security tests and 662 portable product
+tests. All 18 infrastructure guards executed: 17 passed and the established
+Memory-only case skipped. Diagnostics, dependency, import, compile, JSON and
+diff checks passed. The unrestricted suite reproduced only the two established
+container-specific descendant-observation failures.
+
+This is bounded synthetic recorded-metadata verification only. It performs no
+live authentication or identity proof, grants or exercises no authority,
+executes nothing, reads no raw content or secrets, and makes no resource or
+OS-isolation claim. Exact source PR and merged-main CI plus independent
+canonical records remain required before writer release. AF-29 remains in
+progress at 6/12.
