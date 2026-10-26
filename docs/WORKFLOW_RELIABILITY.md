@@ -825,3 +825,21 @@ Memory-only skip. It is synthetic recorded metadata only and provides no live
 replay prevention, authorization, delegation, revocation, execution, clock,
 raw-content, secret, resource-enforcement or OS-isolation capability. Exact
 source PR and merged-main CI plus separate canonical records remain required.
+
+## AF-29 delegation replay-guard source receipt (2026-10-26)
+
+Source PR #88 exact head `534178dfe7d365e2a13e389fb343d29945f176d8`,
+tree `6cec8fb37515259d5f17d61be1d489b6dc07d29f`, passed exact-head run
+40268771803 on Python 3.11.17 with 633 product tests and zero product skips.
+Its expected-head guarded merge produced exact main
+`8d3d50d98f7ceaf454ff99937d6b81b7d693bc57`; exact push run
+40268830559 passed the same product suite. Each run executed 18 infrastructure
+guards: 17 passed and one established Memory-only case skipped. Diagnostics
+passed.
+
+This remains bounded synthetic recorded-metadata verification only. It does
+not prevent live replay, grant, delegate or revoke authority, execute an agent,
+tool or command, read a wall clock or raw content, access secrets, filesystems,
+networks or external systems, or establish resource enforcement or OS
+isolation. Independent canonical records and exact PR/final-main CI remain
+required before writer release. AF-29 remains in progress at 6/12.

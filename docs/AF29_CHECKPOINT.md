@@ -2,7 +2,7 @@
 
 Status: **IN PROGRESS**. The first bounded slice verifies caller-supplied,
 recorded authorization decisions against a deterministic fail-closed oracle.
-The latest bounded source candidate verifies that an exact, content-addressed
+The latest bounded source slice verifies that an exact, content-addressed
 multi-hop lineage and its terminal authorization are safe for one recorded
 sensitive sink class.
 
@@ -220,7 +220,7 @@ command, access a project or external system, or establish resource or OS
 isolation. Exact Python 3.11 source and records PR/merged-main CI remain
 required before writer release. AF-29 remains in progress at 6/12.
 
-## Delegation replay-guard candidate
+## Delegation replay-guard source receipt and records candidate
 
 Redelegation-depth source/records PRs #86/#87 and final main
 `202e98f2bb1ea601d1ead6ebdd012a834a6ac5be` passed exact Python 3.11.17
@@ -228,7 +228,15 @@ CI runs 40221470617, 40221547636, 40240133717 and 40240212181 with
 624 product tests and zero product skips. Writer
 `AF29-REDELEGATION-DEPTH-ATTENUATION-20261025` is explicitly released.
 
-The new bounded candidate recomputes exact delegation-chain evidence and
+Source PR #88 exact head `534178dfe7d365e2a13e389fb343d29945f176d8`,
+tree `6cec8fb37515259d5f17d61be1d489b6dc07d29f`, passed exact-head run
+40268771803 on Python 3.11.17 with 633 product tests and zero product skips.
+Its expected-head guarded merge produced exact main
+`8d3d50d98f7ceaf454ff99937d6b81b7d693bc57`; push run 40268830559
+passed the same suite. Both runs executed 18 infrastructure guards: 17 passed
+and one established Memory-only case skipped.
+
+The bounded slice recomputes exact delegation-chain evidence and
 rejects reuse of a recorded delegation-validity identity or evidence ID across
 multiple hops. Duplicate hop labels were already rejected; this closes the
 separate case where distinct hop labels replay the same underlying validity
@@ -237,10 +245,12 @@ fails closed.
 
 Local Python 3.11.17 validation passed 144 focused security tests and 631
 portable product tests. Infrastructure executed 18 guards: 17 passed and the
-documented Memory-only case skipped. The verifier records evidence only; it
+documented Memory-only case skipped. This records-only candidate pins those
+source receipts. The verifier records evidence only; it
 does not prevent live replay, grant or revoke authority, execute tools, access
 raw content or secrets, or establish resource or OS isolation. Exact source
-and records PR/merged-main CI remain required before writer release.
+CI is complete; exact records PR/merged-main CI remain required before writer
+release.
 
 ## Recorded delegation-validity source receipt
 
