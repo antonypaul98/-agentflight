@@ -913,6 +913,23 @@ OS-isolation claim. Exact source PR and merged-main CI plus independent
 canonical records remain required before writer release. AF-29 remains in
 progress at 6/12.
 
+## AF-29 delegation identity-binding source receipt (2026-10-26)
+
+Source PR #94 head `7d3ee69f74aaf364c850ade40060e2b1e5577137`,
+tree `d3e83723d5e8684f2dced9045ebc902c07ff6cd5`, passed exact Python
+3.11.17 PR run 40367858343 with 664 product tests and zero product skips.
+Expected-head guarded merge `16c3980c6f41e440f3294a02da9f92cb8a549a13`
+passed exact main-push run 40403503108 with the same result. Both runs executed
+18 infrastructure guards: 17 passed and one established Memory-only case
+skipped. Diagnostics passed.
+
+This remains bounded synthetic recorded-metadata verification only. It proves
+no live identity, authentication, audience possession or authorization, grants
+or exercises no authority, executes nothing, reads no raw content or secrets,
+and makes no resource or OS-isolation claim. Independent canonical records and
+exact PR/final-main CI are required before writer release. AF-29 remains in
+progress at 6/12.
+
 ## AF-29 delegation audience-binding source receipt (2026-10-26)
 
 Source PR #90 head `8885ec92e591dcc49dd5ac6cea046ada383cca35`,
