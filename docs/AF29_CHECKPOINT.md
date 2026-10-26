@@ -220,6 +220,28 @@ command, access a project or external system, or establish resource or OS
 isolation. Exact Python 3.11 source and records PR/merged-main CI remain
 required before writer release. AF-29 remains in progress at 6/12.
 
+## Delegation replay-guard candidate
+
+Redelegation-depth source/records PRs #86/#87 and final main
+`202e98f2bb1ea601d1ead6ebdd012a834a6ac5be` passed exact Python 3.11.17
+CI runs 40221470617, 40221547636, 40240133717 and 40240212181 with
+624 product tests and zero product skips. Writer
+`AF29-REDELEGATION-DEPTH-ATTENUATION-20261025` is explicitly released.
+
+The new bounded candidate recomputes exact delegation-chain evidence and
+rejects reuse of a recorded delegation-validity identity or evidence ID across
+multiple hops. Duplicate hop labels were already rejected; this closes the
+separate case where distinct hop labels replay the same underlying validity
+record. Malformed, action-bearing, mismatched and falsely accepted metadata
+fails closed.
+
+Local Python 3.11.17 validation passed 144 focused security tests and 631
+portable product tests. Infrastructure executed 18 guards: 17 passed and the
+documented Memory-only case skipped. The verifier records evidence only; it
+does not prevent live replay, grant or revoke authority, execute tools, access
+raw content or secrets, or establish resource or OS isolation. Exact source
+and records PR/merged-main CI remain required before writer release.
+
 ## Recorded delegation-validity source receipt
 
 PR #80 head `87842fca19c6fbc94179f7895159ee16133e1961`, tree
