@@ -220,6 +220,35 @@ command, access a project or external system, or establish resource or OS
 isolation. Exact Python 3.11 source and records PR/merged-main CI remain
 required before writer release. AF-29 remains in progress at 6/12.
 
+## Delegation audience-binding release and issuer-binding candidate (2026-10-26)
+
+Audience-binding records PR #91 exact head
+`5f7a4bf2eff04dafe7856a844331d0e419573226`, tree
+`92abb4db5c2503e4bc8a5b4c5ac0d100ca4a861b`, passed Python 3.11.17
+exact-head run 40281102603 with 643 product tests and zero product skips. Its
+guarded merge produced final main
+`f9fe538e09c716b971afbf93f8dd1ed5de93b641`; exact push run 40281193243
+passed the same suite. Each run executed 18 infrastructure guards: 17 passed
+and one established Memory-only case skipped. Writer
+`AF29-DELEGATION-AUDIENCE-BINDING-20261026` is explicitly released on PR #91.
+
+The new bounded issuer-binding candidate recomputes exact delegation-chain and
+per-hop scope-attenuation evidence, then requires every caller-supplied issuer
+principal hash to equal the upstream principal already bound by that hop.
+Issuer substitution, evidence substitution, malformed or action-bearing
+metadata, and false recorded acceptance fail closed. Local Python 3.11.17
+validation passed 164 focused security tests and 651 portable product tests;
+infrastructure executed 18 guards, with 17 passed and one established
+Memory-only skip. Diagnostics, dependency, import, compile, JSON and diff
+checks passed.
+
+This is synthetic recorded-metadata verification only. It proves no live
+authentication or identity possession, grants or exercises no authority,
+executes nothing, reads no raw content or secrets, and makes no resource or
+OS-isolation claim. Exact source PR and merged-main CI plus independent
+canonical records remain required before writer release. AF-29 remains in
+progress at 6/12.
+
 ## Recorded delegation audience-binding source receipt
 
 Source PR #90 exact head `8885ec92e591dcc49dd5ac6cea046ada383cca35`,

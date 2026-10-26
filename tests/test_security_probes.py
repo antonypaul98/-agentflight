@@ -15,6 +15,7 @@ from agentflight.security_probes import (
     REDELEGATION_DEPTH_ATTENUATION_AUTHORITY,
     DELEGATION_REPLAY_GUARD_AUTHORITY,
     DELEGATION_AUDIENCE_BINDING_AUTHORITY,
+    DELEGATION_ISSUER_BINDING_AUTHORITY,
     SecurityProbeError,
     evaluate_recorded_influence_lineage,
     evaluate_recorded_instruction_provenance,
@@ -28,6 +29,7 @@ from agentflight.security_probes import (
     evaluate_recorded_redelegation_depth_attenuation,
     evaluate_recorded_delegation_replay_guard,
     evaluate_recorded_delegation_audience_binding,
+    evaluate_recorded_delegation_issuer_binding,
 )
 
 H0 = "0" * 64
@@ -297,6 +299,20 @@ def delegation_audience_binding():
             chain
         )["evidence_id"],
         "intended_audience_sha256": [H1, H1],
+        "observed_disposition": "accepted",
+    }
+
+
+def delegation_issuer_binding():
+    chain = delegation_chain()
+    return {
+        "schema_version": 1,
+        "binding_id": "two-hop-delegation-issuer-binding",
+        "delegation_chain": chain,
+        "delegation_chain_evidence_id": evaluate_recorded_delegation_chain(
+            chain
+        )["evidence_id"],
+        "issuer_principal_id_sha256": [H1, H1],
         "observed_disposition": "accepted",
     }
 
@@ -1488,6 +1504,85 @@ def test_malformed_or_action_bearing_delegation_audience_binding_fails_closed(
 def test_delegation_audience_binding_report_has_no_raw_or_action_fields():
     rendered = repr(evaluate_recorded_delegation_audience_binding(
         delegation_audience_binding()
+    ))
+    for forbidden in ("payload", "url", "endpoint", "command", "credential"):
+        assert forbidden not in rendered
+
+
+def test_delegation_issuer_binding_passes_deterministically():
+    first = evaluate_recorded_delegation_issuer_binding(
+        delegation_issuer_binding()
+    )
+    second = evaluate_recorded_delegation_issuer_binding(
+        copy.deepcopy(delegation_issuer_binding())
+    )
+    assert first == second
+    assert first["passed"] is True
+    assert first["expected_disposition"] == "accepted"
+    assert first["rejection_reasons"] == []
+    assert first["authority"] == DELEGATION_ISSUER_BINDING_AUTHORITY
+
+
+def test_delegation_issuer_binding_rejects_issuer_substitution():
+    source = delegation_issuer_binding()
+    source["issuer_principal_id_sha256"][1] = H2
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_issuer_binding(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == ["delegation_issuer_mismatch"]
+
+
+def test_delegation_issuer_binding_exposes_false_acceptance():
+    source = delegation_issuer_binding()
+    source["issuer_principal_id_sha256"][0] = H2
+    report = evaluate_recorded_delegation_issuer_binding(source)
+    assert report["passed"] is False
+    assert report["expected_disposition"] == "rejected"
+
+
+def test_delegation_issuer_binding_recomputes_chain_evidence():
+    source = delegation_issuer_binding()
+    source["delegation_chain_evidence_id"] = H0
+    with pytest.raises(
+        SecurityProbeError, match="delegation_chain_evidence_mismatch"
+    ):
+        evaluate_recorded_delegation_issuer_binding(source)
+
+
+@pytest.mark.parametrize("change,code", [
+    (
+        lambda value: value.update(command="run"),
+        "invalid_delegation_issuer_binding_shape",
+    ),
+    (
+        lambda value: value.update(schema_version=True),
+        "unsupported_delegation_issuer_binding_schema",
+    ),
+    (
+        lambda value: value.update(issuer_principal_id_sha256=[H1]),
+        "invalid_delegation_issuers",
+    ),
+    (
+        lambda value: value.update(issuer_principal_id_sha256=[H1, "raw-user"]),
+        "invalid_delegation_issuers",
+    ),
+    (
+        lambda value: value.update(observed_disposition="authorized"),
+        "invalid_delegation_issuer_binding_disposition",
+    ),
+])
+def test_malformed_or_action_bearing_delegation_issuer_binding_fails_closed(
+    change, code
+):
+    source = delegation_issuer_binding()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_delegation_issuer_binding(source)
+
+
+def test_delegation_issuer_binding_report_has_no_raw_or_action_fields():
+    rendered = repr(evaluate_recorded_delegation_issuer_binding(
+        delegation_issuer_binding()
     ))
     for forbidden in ("payload", "url", "endpoint", "command", "credential"):
         assert forbidden not in rendered
