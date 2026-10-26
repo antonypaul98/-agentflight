@@ -757,6 +757,22 @@ system; and makes no resource-enforcement or OS-isolation claim. Exact source
 PR and merged-main CI plus independent canonical records remain required before
 writer release. AF-29 remains in progress at 6/12.
 
+## AF-29 delegation issuer-binding source receipt (2026-10-26)
+
+Source PR #92 exact head `18e02e4e0fe8a1711a9c97a5ddd42fb4047050ad`,
+tree `5cf0c99bec86b43210f2d65a0a4f40ffd458ade6`, passed exact-head
+Python 3.11.17 run 40314961276 with 653 product tests and zero product skips.
+Its expected-head guarded merge produced main
+`8308ce0c5cd06e7cf3bf552793e5a0641eb59313`; push run 40315063097 passed
+the same result. Both ran 18 infrastructure guards: 17 passed and one
+established Memory-only case skipped. Diagnostics passed.
+
+This remains synthetic recorded evidence only: no live authentication,
+identity proof, authorization, delegation, revocation, execution, raw-content
+or secret access, resource enforcement, or OS isolation is claimed.
+Independent canonical records and exact PR/final-main CI remain required
+before writer release. AF-29 remains in progress at 6/12.
+
 ## AF-29 recorded delegation-time attenuation source receipt (2026-10-25)
 
 Source PR #84 exact head `44f886036886daa9f78f1c4121275647e28c2ac7`,
