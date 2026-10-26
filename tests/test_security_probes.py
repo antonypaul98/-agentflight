@@ -16,6 +16,7 @@ from agentflight.security_probes import (
     DELEGATION_REPLAY_GUARD_AUTHORITY,
     DELEGATION_AUDIENCE_BINDING_AUTHORITY,
     DELEGATION_ISSUER_BINDING_AUTHORITY,
+    DELEGATION_IDENTITY_BINDING_AUTHORITY,
     SecurityProbeError,
     evaluate_recorded_influence_lineage,
     evaluate_recorded_instruction_provenance,
@@ -30,6 +31,7 @@ from agentflight.security_probes import (
     evaluate_recorded_delegation_replay_guard,
     evaluate_recorded_delegation_audience_binding,
     evaluate_recorded_delegation_issuer_binding,
+    evaluate_recorded_delegation_identity_binding,
 )
 
 H0 = "0" * 64
@@ -313,6 +315,24 @@ def delegation_issuer_binding():
             chain
         )["evidence_id"],
         "issuer_principal_id_sha256": [H1, H1],
+        "observed_disposition": "accepted",
+    }
+
+
+def delegation_identity_binding():
+    issuer = delegation_issuer_binding()
+    audience = delegation_audience_binding()
+    return {
+        "schema_version": 1,
+        "binding_id": "two-hop-delegation-identity-binding",
+        "issuer_binding": issuer,
+        "issuer_binding_evidence_id": evaluate_recorded_delegation_issuer_binding(
+            issuer
+        )["evidence_id"],
+        "audience_binding": audience,
+        "audience_binding_evidence_id": (
+            evaluate_recorded_delegation_audience_binding(audience)["evidence_id"]
+        ),
         "observed_disposition": "accepted",
     }
 
@@ -1583,6 +1603,120 @@ def test_malformed_or_action_bearing_delegation_issuer_binding_fails_closed(
 def test_delegation_issuer_binding_report_has_no_raw_or_action_fields():
     rendered = repr(evaluate_recorded_delegation_issuer_binding(
         delegation_issuer_binding()
+    ))
+    for forbidden in ("payload", "url", "endpoint", "command", "credential"):
+        assert forbidden not in rendered
+
+
+def test_delegation_identity_binding_passes_deterministically():
+    first = evaluate_recorded_delegation_identity_binding(
+        delegation_identity_binding()
+    )
+    second = evaluate_recorded_delegation_identity_binding(
+        copy.deepcopy(delegation_identity_binding())
+    )
+    assert first == second
+    assert first["passed"] is True
+    assert first["expected_disposition"] == "accepted"
+    assert first["rejection_reasons"] == []
+    assert first["authority"] == DELEGATION_IDENTITY_BINDING_AUTHORITY
+
+
+def test_delegation_identity_binding_rejects_mixed_chains():
+    source = delegation_identity_binding()
+    audience = source["audience_binding"]
+    audience["delegation_chain"]["chain_id"] = "substituted-chain"
+    audience["delegation_chain_evidence_id"] = evaluate_recorded_delegation_chain(
+        audience["delegation_chain"]
+    )["evidence_id"]
+    source["audience_binding_evidence_id"] = (
+        evaluate_recorded_delegation_audience_binding(audience)["evidence_id"]
+    )
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_identity_binding(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == ["delegation_identity_chain_mismatch"]
+    assert report["delegation_chain_evidence_id"] is None
+
+
+def test_delegation_identity_binding_exposes_false_acceptance():
+    source = delegation_identity_binding()
+    audience = source["audience_binding"]
+    audience["delegation_chain"]["chain_id"] = "substituted-chain"
+    audience["delegation_chain_evidence_id"] = evaluate_recorded_delegation_chain(
+        audience["delegation_chain"]
+    )["evidence_id"]
+    source["audience_binding_evidence_id"] = (
+        evaluate_recorded_delegation_audience_binding(audience)["evidence_id"]
+    )
+    report = evaluate_recorded_delegation_identity_binding(source)
+    assert report["passed"] is False
+    assert report["expected_disposition"] == "rejected"
+
+
+@pytest.mark.parametrize("field,code", [
+    (
+        "issuer_binding_evidence_id",
+        "delegation_issuer_binding_evidence_mismatch",
+    ),
+    (
+        "audience_binding_evidence_id",
+        "delegation_audience_binding_evidence_mismatch",
+    ),
+])
+def test_delegation_identity_binding_recomputes_component_evidence(field, code):
+    source = delegation_identity_binding()
+    source[field] = H0
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_delegation_identity_binding(source)
+
+
+def test_delegation_identity_binding_requires_accepted_components():
+    source = delegation_identity_binding()
+    audience = source["audience_binding"]
+    audience["intended_audience_sha256"][0] = H2
+    audience["observed_disposition"] = "rejected"
+    source["audience_binding_evidence_id"] = (
+        evaluate_recorded_delegation_audience_binding(audience)["evidence_id"]
+    )
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_identity_binding(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == [
+        "delegation_audience_requires_rejection"
+    ]
+
+
+@pytest.mark.parametrize("change,code", [
+    (
+        lambda value: value.update(command="run"),
+        "invalid_delegation_identity_binding_shape",
+    ),
+    (
+        lambda value: value.update(schema_version=True),
+        "unsupported_delegation_identity_binding_schema",
+    ),
+    (
+        lambda value: value.update(observed_disposition="authorized"),
+        "invalid_delegation_identity_binding_disposition",
+    ),
+    (
+        lambda value: value.update(binding_id="raw user"),
+        "invalid_delegation_identity_binding_id",
+    ),
+])
+def test_malformed_or_action_bearing_delegation_identity_binding_fails_closed(
+    change, code
+):
+    source = delegation_identity_binding()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_delegation_identity_binding(source)
+
+
+def test_delegation_identity_binding_report_has_no_raw_or_action_fields():
+    rendered = repr(evaluate_recorded_delegation_identity_binding(
+        delegation_identity_binding()
     ))
     for forbidden in ("payload", "url", "endpoint", "command", "credential"):
         assert forbidden not in rendered
