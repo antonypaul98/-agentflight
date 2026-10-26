@@ -843,3 +843,30 @@ tool or command, read a wall clock or raw content, access secrets, filesystems,
 networks or external systems, or establish resource enforcement or OS
 isolation. Independent canonical records and exact PR/final-main CI remain
 required before writer release. AF-29 remains in progress at 6/12.
+
+## AF-29 delegation replay-guard release and audience-binding candidate (2026-10-26)
+
+Replay-guard records PR #89 head
+`b6662d39e79c116d0ffcbba0ec23efb1cd08717a`, tree
+`f5a79a6f0efbf98147d9c9a2e9ebf0a97bb35413`, passed exact-head run
+40269186419 on Python 3.11.17 with 633 product tests and zero product skips.
+Its guarded merge `a14dcbc1f181cf0c4f6b90f116c146ec53fb2564`
+passed exact push run 40269255336 with the same product result. Both runs
+executed 18 infrastructure guards: 17 passed and one established Memory-only
+case skipped. Writer `AF29-DELEGATION-REPLAY-GUARD-20261025` is explicitly
+released on PR #89.
+
+The new audience-binding candidate recomputes exact delegation-chain evidence
+and requires each hop's intended-audience hash to equal its already-bound
+delegated-principal hash. Recipient substitution, evidence substitution,
+malformed or action-bearing metadata, and false recorded acceptance fail
+closed. Local Python 3.11.17 validation passed 154 focused and 641 portable
+product tests; infrastructure executed 18 guards, with 17 passed and one
+established Memory-only skip. Diagnostics, compile, JSON and diff checks passed.
+
+This remains bounded synthetic recorded-metadata verification only. It proves
+no live identity or audience possession, grants or exercises no authority,
+executes nothing, reads no raw content or secrets, and makes no resource or
+OS-isolation claim. Exact source PR and merged-main CI plus independent
+canonical records remain required before writer release. AF-29 remains in
+progress at 6/12.
