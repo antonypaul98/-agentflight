@@ -220,6 +220,36 @@ command, access a project or external system, or establish resource or OS
 isolation. Exact Python 3.11 source and records PR/merged-main CI remain
 required before writer release. AF-29 remains in progress at 6/12.
 
+## Delegation replay-guard records and release receipt
+
+Records PR #89 exact head `b6662d39e79c116d0ffcbba0ec23efb1cd08717a`,
+tree `f5a79a6f0efbf98147d9c9a2e9ebf0a97bb35413`, passed exact-head run
+40269186419 on Python 3.11.17 with 633 product tests and zero product skips.
+Its expected-head guarded merge produced exact main
+`a14dcbc1f181cf0c4f6b90f116c146ec53fb2564`; exact push run 40269255336
+passed the same product suite. Both runs executed 18 infrastructure guards:
+17 passed and one established Memory-only case skipped. Writer
+`AF29-DELEGATION-REPLAY-GUARD-20261025` was explicitly released on PR #89.
+
+## Recorded delegation audience-binding candidate
+
+This bounded candidate recomputes exact delegation-chain evidence and requires
+one intended-audience SHA-256 value per hop. Each value must equal the
+delegated-principal hash already bound by that hop's recomputed scope-attenuation
+evidence. A substituted recipient, missing or extra audience, inconsistent
+chain evidence, malformed or action-bearing metadata, and false recorded
+acceptance fail closed.
+
+Local Python 3.11.17 validation passed 154 focused security tests and 641
+portable product tests. Infrastructure executed 18 guards: 17 passed and the
+established Memory-only case skipped. Diagnostics, compile, JSON and diff checks passed.
+This is synthetic recorded-metadata verification only: it proves no live
+identity, audience possession, authorization, delegation, revocation or
+execution; reads no raw content or secrets; and establishes no resource or OS
+isolation. Exact source PR and merged-main CI plus independent canonical
+records remain required before writer release. AF-29 remains in progress at
+6/12.
+
 ## Delegation replay-guard source receipt and records candidate
 
 Redelegation-depth source/records PRs #86/#87 and final main

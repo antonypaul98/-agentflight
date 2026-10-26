@@ -20,6 +20,7 @@ DELEGATION_CHAIN_SCHEMA_VERSION = 1
 DELEGATION_TIME_ATTENUATION_SCHEMA_VERSION = 1
 REDELEGATION_DEPTH_ATTENUATION_SCHEMA_VERSION = 1
 DELEGATION_REPLAY_GUARD_SCHEMA_VERSION = 1
+DELEGATION_AUDIENCE_BINDING_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
 MAX_INFLUENCE_HOPS = 16
 MAX_DELEGATION_HOPS = 8
@@ -57,6 +58,9 @@ REDELEGATION_DEPTH_ATTENUATION_AUTHORITY = (
 )
 DELEGATION_REPLAY_GUARD_AUTHORITY = (
     "recorded_delegation_replay_evidence_only_no_authorization_or_execution"
+)
+DELEGATION_AUDIENCE_BINDING_AUTHORITY = (
+    "recorded_delegation_audience_evidence_only_no_authorization_or_execution"
 )
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -1154,5 +1158,97 @@ def evaluate_recorded_delegation_replay_guard(guard: Mapping[str, object]) -> di
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise SecurityProbeError("delegation_replay_guard_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_delegation_audience_binding(
+    binding: Mapping[str, object],
+) -> dict:
+    """Bind each recorded delegation hop to one hashed intended audience."""
+
+    keys = frozenset({
+        "schema_version", "binding_id", "delegation_chain",
+        "delegation_chain_evidence_id", "intended_audience_sha256",
+        "observed_disposition",
+    })
+    if type(binding) is not dict or frozenset(binding) != keys:
+        raise SecurityProbeError("invalid_delegation_audience_binding_shape")
+    if (
+        type(binding["schema_version"]) is not int
+        or binding["schema_version"]
+        != DELEGATION_AUDIENCE_BINDING_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError("unsupported_delegation_audience_binding_schema")
+
+    chain = binding["delegation_chain"]
+    chain_report = evaluate_recorded_delegation_chain(chain)
+    chain_evidence_id = _text(
+        binding["delegation_chain_evidence_id"],
+        _SHA256,
+        "invalid_delegation_chain_evidence_id",
+    )
+    if chain_evidence_id != chain_report["evidence_id"]:
+        raise SecurityProbeError("delegation_chain_evidence_mismatch")
+    audiences = binding["intended_audience_sha256"]
+    if (
+        type(audiences) is not list
+        or len(audiences) != len(chain["hops"])
+        or any(type(value) is not str or not _SHA256.fullmatch(value) for value in audiences)
+    ):
+        raise SecurityProbeError("invalid_delegation_audiences")
+    observed = binding["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError("invalid_delegation_audience_binding_disposition")
+
+    reasons = []
+    if chain_report["expected_disposition"] != "accepted":
+        reasons.append("delegation_chain_requires_rejection")
+    if not chain_report["passed"]:
+        reasons.append("delegation_chain_observation_mismatch")
+    summaries = []
+    for hop, audience in zip(chain["hops"], audiences, strict=True):
+        delegated_principal = hop["delegation_validity"]["scope_attenuation"][
+            "delegated_principal_id_sha256"
+        ]
+        if audience != delegated_principal:
+            reasons.append("delegation_audience_mismatch")
+        summaries.append({
+            "hop_id": hop["hop_id"],
+            "intended_audience_sha256": audience,
+            "delegation_validity_evidence_id": hop[
+                "delegation_validity_evidence_id"
+            ],
+        })
+
+    reasons = list(dict.fromkeys(reasons))
+    expected = "rejected" if reasons else "accepted"
+    report = {
+        "delegation_audience_binding_schema_version": (
+            DELEGATION_AUDIENCE_BINDING_SCHEMA_VERSION
+        ),
+        "binding_id": _text(
+            binding["binding_id"],
+            _IDENTIFIER,
+            "invalid_delegation_audience_binding_id",
+        ),
+        "delegation_chain_evidence_id": chain_evidence_id,
+        "hop_count": len(summaries),
+        "hops": summaries,
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": reasons,
+        "coverage": {
+            "delegation_chain_evidence_recomputed": True,
+            "intended_audience_bound_to_delegated_principal": True,
+            "live_authorization_checked": False,
+            "scope": "bounded_recorded_delegation_audience_metadata_only",
+        },
+        "authority": DELEGATION_AUDIENCE_BINDING_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError("delegation_audience_binding_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report
