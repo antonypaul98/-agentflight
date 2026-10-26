@@ -220,6 +220,22 @@ command, access a project or external system, or establish resource or OS
 isolation. Exact Python 3.11 source and records PR/merged-main CI remain
 required before writer release. AF-29 remains in progress at 6/12.
 
+## Recorded delegation audience-binding source receipt
+
+Source PR #90 exact head `8885ec92e591dcc49dd5ac6cea046ada383cca35`,
+tree `9852461c1cc595ded45110e9c056fc8fec0550f0`, passed exact-head run
+40280206622 on Python 3.11.17 with 643 product tests and zero product skips.
+Its expected-head guarded merge produced exact main
+`2e63a17d2eda38f05883053789e071493455b1fb`; exact push run 40280324997
+passed the same suite. Both runs executed all 18 infrastructure guards: 17
+passed and one established Memory-only case skipped. Diagnostics passed.
+
+The slice remains synthetic recorded-metadata verification only. It proves no
+live identity or audience possession, grants or exercises no authority,
+executes nothing, reads no raw content or secrets, and makes no resource or OS
+isolation claim. Independent canonical records and exact PR/final-main CI
+remain required before writer release. AF-29 remains in progress at 6/12.
+
 ## Delegation replay-guard records and release receipt
 
 Records PR #89 exact head `b6662d39e79c116d0ffcbba0ec23efb1cd08717a`,

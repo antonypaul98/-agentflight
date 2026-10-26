@@ -870,3 +870,19 @@ executes nothing, reads no raw content or secrets, and makes no resource or
 OS-isolation claim. Exact source PR and merged-main CI plus independent
 canonical records remain required before writer release. AF-29 remains in
 progress at 6/12.
+
+## AF-29 delegation audience-binding source receipt (2026-10-26)
+
+Source PR #90 head `8885ec92e591dcc49dd5ac6cea046ada383cca35`,
+tree `9852461c1cc595ded45110e9c056fc8fec0550f0`, passed exact Python
+3.11.17 PR run 40280206622 with 643 product tests and zero product skips.
+Expected-head guarded merge `2e63a17d2eda38f05883053789e071493455b1fb`
+passed exact main-push run 40280324997 with the same result. Both runs executed
+18 infrastructure guards: 17 passed and one established Memory-only case
+skipped. Diagnostics passed.
+
+This remains bounded synthetic recorded-metadata verification only. It proves
+no live identity or audience possession, grants or exercises no authority,
+executes nothing, reads no raw content or secrets, and makes no resource or OS
+isolation claim. Independent canonical records and exact PR/final-main CI are
+required before writer release. AF-29 remains in progress at 6/12.
