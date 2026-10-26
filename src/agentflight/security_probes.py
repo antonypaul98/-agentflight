@@ -19,6 +19,7 @@ DELEGATION_VALIDITY_SCHEMA_VERSION = 1
 DELEGATION_CHAIN_SCHEMA_VERSION = 1
 DELEGATION_TIME_ATTENUATION_SCHEMA_VERSION = 1
 REDELEGATION_DEPTH_ATTENUATION_SCHEMA_VERSION = 1
+DELEGATION_REPLAY_GUARD_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
 MAX_INFLUENCE_HOPS = 16
 MAX_DELEGATION_HOPS = 8
@@ -53,6 +54,9 @@ DELEGATION_TIME_ATTENUATION_AUTHORITY = (
 REDELEGATION_DEPTH_ATTENUATION_AUTHORITY = (
     "recorded_redelegation_depth_attenuation_evidence_only_"
     "no_authorization_or_execution"
+)
+DELEGATION_REPLAY_GUARD_AUTHORITY = (
+    "recorded_delegation_replay_evidence_only_no_authorization_or_execution"
 )
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -1063,5 +1067,92 @@ def evaluate_recorded_redelegation_depth_attenuation(
         raise SecurityProbeError(
             "redelegation_depth_attenuation_report_too_large"
         )
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_delegation_replay_guard(guard: Mapping[str, object]) -> dict:
+    """Reject replayed validity identities or evidence in a recorded chain."""
+
+    keys = frozenset({
+        "schema_version", "guard_id", "delegation_chain",
+        "delegation_chain_evidence_id", "observed_disposition",
+    })
+    if type(guard) is not dict or frozenset(guard) != keys:
+        raise SecurityProbeError("invalid_delegation_replay_guard_shape")
+    if (
+        type(guard["schema_version"]) is not int
+        or guard["schema_version"] != DELEGATION_REPLAY_GUARD_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError("unsupported_delegation_replay_guard_schema")
+
+    chain = guard["delegation_chain"]
+    chain_report = evaluate_recorded_delegation_chain(chain)
+    chain_evidence_id = _text(
+        guard["delegation_chain_evidence_id"],
+        _SHA256,
+        "invalid_delegation_chain_evidence_id",
+    )
+    if chain_evidence_id != chain_report["evidence_id"]:
+        raise SecurityProbeError("delegation_chain_evidence_mismatch")
+    observed = guard["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError("invalid_delegation_replay_guard_disposition")
+
+    reasons = []
+    if chain_report["expected_disposition"] != "accepted":
+        reasons.append("delegation_chain_requires_rejection")
+    if not chain_report["passed"]:
+        reasons.append("delegation_chain_observation_mismatch")
+    seen_validity_ids = set()
+    seen_evidence_ids = set()
+    summaries = []
+    for hop in chain["hops"]:
+        validity_id = _text(
+            hop["delegation_validity"]["validity_id"],
+            _IDENTIFIER,
+            "invalid_delegation_validity_id",
+        )
+        evidence_id = hop["delegation_validity_evidence_id"]
+        if validity_id in seen_validity_ids:
+            reasons.append("delegation_validity_identity_replayed")
+        if evidence_id in seen_evidence_ids:
+            reasons.append("delegation_validity_evidence_replayed")
+        seen_validity_ids.add(validity_id)
+        seen_evidence_ids.add(evidence_id)
+        summaries.append({
+            "hop_id": hop["hop_id"],
+            "validity_id": validity_id,
+            "delegation_validity_evidence_id": evidence_id,
+        })
+
+    reasons = list(dict.fromkeys(reasons))
+    expected = "rejected" if reasons else "accepted"
+    report = {
+        "delegation_replay_guard_schema_version": (
+            DELEGATION_REPLAY_GUARD_SCHEMA_VERSION
+        ),
+        "guard_id": _text(
+            guard["guard_id"], _IDENTIFIER, "invalid_delegation_replay_guard_id"
+        ),
+        "delegation_chain_evidence_id": chain_evidence_id,
+        "hop_count": len(summaries),
+        "hops": summaries,
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": reasons,
+        "coverage": {
+            "delegation_chain_evidence_recomputed": True,
+            "validity_identity_uniqueness_checked": True,
+            "validity_evidence_uniqueness_checked": True,
+            "live_authorization_checked": False,
+            "scope": "bounded_recorded_delegation_replay_metadata_only",
+        },
+        "authority": DELEGATION_REPLAY_GUARD_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError("delegation_replay_guard_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report

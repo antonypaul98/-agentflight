@@ -13,6 +13,7 @@ from agentflight.security_probes import (
     DELEGATION_CHAIN_AUTHORITY,
     DELEGATION_TIME_ATTENUATION_AUTHORITY,
     REDELEGATION_DEPTH_ATTENUATION_AUTHORITY,
+    DELEGATION_REPLAY_GUARD_AUTHORITY,
     SecurityProbeError,
     evaluate_recorded_influence_lineage,
     evaluate_recorded_instruction_provenance,
@@ -24,6 +25,7 @@ from agentflight.security_probes import (
     evaluate_recorded_delegation_chain,
     evaluate_recorded_delegation_time_attenuation,
     evaluate_recorded_redelegation_depth_attenuation,
+    evaluate_recorded_delegation_replay_guard,
 )
 
 H0 = "0" * 64
@@ -268,6 +270,19 @@ def refresh_chain_evidence(attenuation):
     attenuation["delegation_chain_evidence_id"] = (
         evaluate_recorded_delegation_chain(chain)["evidence_id"]
     )
+
+
+def delegation_replay_guard():
+    chain = delegation_chain()
+    return {
+        "schema_version": 1,
+        "guard_id": "two-hop-delegation-replay-guard",
+        "delegation_chain": chain,
+        "delegation_chain_evidence_id": evaluate_recorded_delegation_chain(
+            chain
+        )["evidence_id"],
+        "observed_disposition": "accepted",
+    }
 
 
 def test_trusted_least_privilege_decision_passes_deterministically():
@@ -1287,4 +1302,97 @@ def test_redelegation_depth_report_has_no_raw_or_action_fields():
         "command", "prompt", "payload", "credential", "secret", "url",
         "timestamp", "datetime",
     ):
+        assert forbidden not in rendered
+
+
+def test_delegation_replay_guard_passes_deterministically():
+    first = evaluate_recorded_delegation_replay_guard(delegation_replay_guard())
+    second = evaluate_recorded_delegation_replay_guard(
+        copy.deepcopy(delegation_replay_guard())
+    )
+    assert first == second
+    assert first["passed"] is True
+    assert first["expected_disposition"] == "accepted"
+    assert first["rejection_reasons"] == []
+    assert first["authority"] == DELEGATION_REPLAY_GUARD_AUTHORITY
+
+
+@pytest.mark.parametrize("field,reason", [
+    ("validity_id", "delegation_validity_identity_replayed"),
+    ("evidence", "delegation_validity_evidence_replayed"),
+])
+def test_delegation_replay_guard_rejects_reused_validity(field, reason):
+    source = delegation_replay_guard()
+    first, second = source["delegation_chain"]["hops"]
+    if field == "validity_id":
+        second["delegation_validity"]["validity_id"] = first[
+            "delegation_validity"
+        ]["validity_id"]
+        second["delegation_validity_evidence_id"] = (
+            evaluate_recorded_delegation_validity(second["delegation_validity"])[
+                "evidence_id"
+            ]
+        )
+    else:
+        second["delegation_validity"] = copy.deepcopy(
+            first["delegation_validity"]
+        )
+        second["delegation_validity_evidence_id"] = first[
+            "delegation_validity_evidence_id"
+        ]
+    source["delegation_chain"]["observed_disposition"] = "accepted"
+    source["delegation_chain_evidence_id"] = evaluate_recorded_delegation_chain(
+        source["delegation_chain"]
+    )["evidence_id"]
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_replay_guard(source)
+    assert report["passed"] is True
+    assert reason in report["rejection_reasons"]
+
+
+def test_delegation_replay_guard_exposes_false_acceptance():
+    source = delegation_replay_guard()
+    first, second = source["delegation_chain"]["hops"]
+    second["delegation_validity"]["validity_id"] = first[
+        "delegation_validity"
+    ]["validity_id"]
+    second["delegation_validity_evidence_id"] = (
+        evaluate_recorded_delegation_validity(second["delegation_validity"])[
+            "evidence_id"
+        ]
+    )
+    source["delegation_chain_evidence_id"] = evaluate_recorded_delegation_chain(
+        source["delegation_chain"]
+    )["evidence_id"]
+    report = evaluate_recorded_delegation_replay_guard(source)
+    assert report["passed"] is False
+    assert report["expected_disposition"] == "rejected"
+
+
+def test_delegation_replay_guard_recomputes_chain_evidence():
+    source = delegation_replay_guard()
+    source["delegation_chain_evidence_id"] = H0
+    with pytest.raises(SecurityProbeError, match="delegation_chain_evidence_mismatch"):
+        evaluate_recorded_delegation_replay_guard(source)
+
+
+@pytest.mark.parametrize("change,code", [
+    (lambda value: value.update(command="run"), "invalid_delegation_replay_guard_shape"),
+    (lambda value: value.update(schema_version=True), "unsupported_delegation_replay_guard_schema"),
+    (lambda value: value.update(observed_disposition="maybe"), "invalid_delegation_replay_guard_disposition"),
+])
+def test_malformed_or_action_bearing_delegation_replay_guard_fails_closed(
+    change, code
+):
+    source = delegation_replay_guard()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_delegation_replay_guard(source)
+
+
+def test_delegation_replay_guard_report_has_no_raw_or_action_fields():
+    rendered = repr(evaluate_recorded_delegation_replay_guard(
+        delegation_replay_guard()
+    ))
+    for forbidden in ("payload", "url", "endpoint", "command", "credential"):
         assert forbidden not in rendered

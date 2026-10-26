@@ -807,3 +807,21 @@ The verifier remains bounded and synthetic: it exercises no live authority,
 delegation, revocation, execution, clock, raw-content, secret, filesystem,
 network, resource-enforcement or OS-isolation capability. Separate canonical
 records and exact PR/final-main CI remain required before writer release.
+
+## AF-29 delegation replay-guard source candidate (2026-10-25)
+
+Redelegation-depth records PR #87 head
+`916df600585e3b64a005d138d1d7d1e26ddfad1e` passed exact run
+40240133717. Its guarded merge produced final main
+`202e98f2bb1ea601d1ead6ebdd012a834a6ac5be`; run 40240212181 passed.
+Python 3.11.17 executed 624 product tests with zero skips, and writer
+`AF29-REDELEGATION-DEPTH-ATTENUATION-20261025` is explicitly released.
+
+The new candidate recomputes bounded delegation-chain evidence and rejects
+replayed delegation-validity identities or evidence across differently named
+hops. Local Python 3.11.17 validation passed 144 focused and 631 portable
+tests; infrastructure executed 18 guards, with 17 passed and one established
+Memory-only skip. It is synthetic recorded metadata only and provides no live
+replay prevention, authorization, delegation, revocation, execution, clock,
+raw-content, secret, resource-enforcement or OS-isolation capability. Exact
+source PR and merged-main CI plus separate canonical records remain required.
