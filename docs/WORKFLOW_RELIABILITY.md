@@ -844,6 +844,32 @@ networks or external systems, or establish resource enforcement or OS
 isolation. Independent canonical records and exact PR/final-main CI remain
 required before writer release. AF-29 remains in progress at 6/12.
 
+## AF-29 audience-binding release and issuer-binding source candidate (2026-10-26)
+
+Audience-binding records PR #91 head
+`5f7a4bf2eff04dafe7856a844331d0e419573226`, tree
+`92abb4db5c2503e4bc8a5b4c5ac0d100ca4a861b`, passed exact-head Python
+3.11.17 run 40281102603 with 643 product tests and zero product skips. Its
+guarded merge produced final main
+`f9fe538e09c716b971afbf93f8dd1ed5de93b641`; push run 40281193243 passed
+the same result. Both ran 18 infrastructure guards: 17 passed and one
+established Memory-only case skipped. Writer
+`AF29-DELEGATION-AUDIENCE-BINDING-20261026` is explicitly released on PR #91.
+
+The issuer-binding candidate recomputes bounded delegation-chain and per-hop
+scope-attenuation evidence, then requires each recorded issuer-principal hash
+to match the upstream principal bound by that hop. Local Python 3.11.17
+validation passed 164 focused security tests and 651 portable product tests;
+all 18 infrastructure guards executed, with 17 passed and the established
+Memory-only case skipped. Diagnostics, dependency, import, compile, JSON and
+diff checks passed.
+
+This is synthetic recorded evidence only: no live authentication, identity
+proof, authorization, delegation, revocation, execution, raw-content or secret
+access, resource enforcement, or OS isolation is claimed. Exact source PR and
+merged-main CI plus independent canonical records remain required before
+writer release. AF-29 remains in progress at 6/12.
+
 ## AF-29 delegation replay-guard release and audience-binding candidate (2026-10-26)
 
 Replay-guard records PR #89 head
