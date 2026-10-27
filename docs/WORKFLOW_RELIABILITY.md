@@ -1038,3 +1038,27 @@ live authorization, delegation, revocation, action or execution, reads no raw
 content or secrets, and makes no resource-enforcement or OS-isolation claim.
 Exact source PR and merged-main CI plus independent canonical records remain
 required before writer release. AF-29 remains in progress at 6/12.
+
+## AF-29 delegation action-scope-binding source receipt (2026-10-27)
+
+Source PR #98 exact head
+`a128cc12d18c17903ff76e580b1d58c6ef726b8e`, tree
+`f97b17c651b3c290ff4d0a3a0d8367c2835f434c`, passed Python 3.11.17
+exact-head run 40473660562 with 686 product tests, zero failures and zero
+product skips. Expected-head guarded merge
+`4fbc90411690d8ac488606afa8b16d3a4b8a6248` passed exact main-push
+run 40473743386 with the same result. Both runs executed all 18 infrastructure
+guards: 17 passed and one established Memory-only case skipped. Diagnostics
+passed.
+
+The verifier recomputes each bounded delegation chain and its nested
+scope-attenuation evidence, then requires each hop's recorded action scopes to
+equal the delegated scopes already bound by that hop. Scope substitution,
+stale nested evidence, malformed or action-bearing metadata and false recorded
+acceptance fail closed.
+
+This is bounded synthetic recorded-metadata verification only. It performs no
+live authorization, delegation, revocation, action or execution, reads no raw
+content or secrets, and makes no resource-enforcement or OS-isolation claim.
+Independent canonical records and their exact PR/final-main CI remain required
+before writer release. AF-29 remains in progress at 6/12.
