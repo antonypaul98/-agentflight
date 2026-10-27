@@ -682,6 +682,23 @@ system; and makes no resource-enforcement or OS-isolation claim. Independent
 canonical records and their exact CI remain required before writer release.
 AF-29 remains in progress at 6/12.
 
+## AF-29 delegation resource-binding source receipt (2026-10-26)
+
+Source PR #96 head `53d2d7e619f891cb82fd45c0b0ea3ee4f4b4a98f`,
+tree `93332a6232f178e37056ca0686bf9406c539958d`, passed exact Python
+3.11.17 PR run 40438330528 with 675 product tests and zero product skips.
+Expected-head guarded merge `475a9f0136d7dd6ef146dd01d6455e3e6bc9f0f1`
+passed exact main-push run 40438443643 with the same result. Both runs executed
+18 infrastructure guards: 17 passed and one established Memory-only case
+skipped. Diagnostics passed.
+
+This remains bounded synthetic recorded-metadata verification only. It proves
+no resource existence, ownership or accessibility, grants or exercises no
+authority, executes nothing, reads no raw content or secrets, and makes no
+resource-enforcement or OS-isolation claim. Independent canonical records and
+exact PR/final-main CI are required before writer release. AF-29 remains in
+progress at 6/12.
+
 ## AF-29 recorded delegation-chain consistency source receipt (2026-10-25)
 
 Source PR #82 exact head `b6dfe1a56d1fe3322357743c7559b33a08c52647`,
