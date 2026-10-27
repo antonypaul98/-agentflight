@@ -1062,3 +1062,33 @@ live authorization, delegation, revocation, action or execution, reads no raw
 content or secrets, and makes no resource-enforcement or OS-isolation claim.
 Independent canonical records and their exact PR/final-main CI remain required
 before writer release. AF-29 remains in progress at 6/12.
+
+## AF-29 action-scope release and action-target-binding candidate (2026-10-27)
+
+Action-scope-binding records PR #99 exact head
+`a3397769741dcedcbd3738c2811031e6b40ae6ba`, tree
+`9e5c1e93244e21330a9776fd4572fffb6f03aeeb`, passed Python 3.11.17
+exact-head run 40474296686 with 686 product tests and zero product skips. Its
+expected-head merge produced final main
+`a22ebc01d51121316a175ea9d1073744faaf1a99`; push run 40474410203 passed
+the same suite. Each run executed all 18 infrastructure guards: 17 passed and
+one established Memory-only case skipped. Writer
+`AF29-DELEGATION-ACTION-SCOPE-BINDING-20261026` is explicitly released on PR
+#99.
+
+The new bounded candidate recomputes exact delegation-chain and nested
+sensitive-sink evidence, then requires each caller-supplied action target
+identifier to equal the sensitive-sink identifier already bound by that hop.
+Target substitution, stale nested evidence, malformed or action-bearing
+metadata and false recorded acceptance fail closed. Local Python 3.11.17
+validation passed 208 focused security tests and 695 portable product tests.
+All 18 infrastructure guards executed: 17 passed and the established
+Memory-only case skipped. Diagnostics, dependency, import, compile, JSON and
+diff checks passed.
+
+This is bounded synthetic recorded-metadata verification only. It proves no
+target existence, ownership or accessibility, performs no live authorization,
+delegation, revocation, action or execution, reads no raw content or secrets,
+and makes no resource-enforcement or OS-isolation claim. Exact source PR and
+merged-main CI plus independent canonical records remain required before
+writer release. AF-29 remains in progress at 6/12.

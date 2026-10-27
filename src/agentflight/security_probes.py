@@ -25,6 +25,7 @@ DELEGATION_ISSUER_BINDING_SCHEMA_VERSION = 1
 DELEGATION_IDENTITY_BINDING_SCHEMA_VERSION = 1
 DELEGATION_RESOURCE_BINDING_SCHEMA_VERSION = 1
 DELEGATION_ACTION_SCOPE_BINDING_SCHEMA_VERSION = 1
+DELEGATION_ACTION_TARGET_BINDING_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
 MAX_INFLUENCE_HOPS = 16
 MAX_DELEGATION_HOPS = 8
@@ -77,6 +78,10 @@ DELEGATION_RESOURCE_BINDING_AUTHORITY = (
 )
 DELEGATION_ACTION_SCOPE_BINDING_AUTHORITY = (
     "recorded_delegation_action_scope_evidence_only_"
+    "no_authorization_or_execution"
+)
+DELEGATION_ACTION_TARGET_BINDING_AUTHORITY = (
+    "recorded_delegation_action_target_evidence_only_"
     "no_authorization_or_execution"
 )
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
@@ -1651,6 +1656,108 @@ def evaluate_recorded_delegation_action_scope_binding(
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise SecurityProbeError(
             "delegation_action_scope_binding_report_too_large"
+        )
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_delegation_action_target_binding(
+    binding: Mapping[str, object],
+) -> dict:
+    """Bind each recorded delegation hop to its declared sensitive sink."""
+
+    keys = frozenset({
+        "schema_version", "binding_id", "delegation_chain",
+        "delegation_chain_evidence_id", "action_target_ids",
+        "observed_disposition",
+    })
+    if type(binding) is not dict or frozenset(binding) != keys:
+        raise SecurityProbeError("invalid_delegation_action_target_binding_shape")
+    if (
+        type(binding["schema_version"]) is not int
+        or binding["schema_version"]
+        != DELEGATION_ACTION_TARGET_BINDING_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError(
+            "unsupported_delegation_action_target_binding_schema"
+        )
+
+    chain = binding["delegation_chain"]
+    chain_report = evaluate_recorded_delegation_chain(chain)
+    chain_evidence_id = _text(
+        binding["delegation_chain_evidence_id"],
+        _SHA256,
+        "invalid_delegation_chain_evidence_id",
+    )
+    if chain_evidence_id != chain_report["evidence_id"]:
+        raise SecurityProbeError("delegation_chain_evidence_mismatch")
+    targets = binding["action_target_ids"]
+    if type(targets) is not list or len(targets) != len(chain["hops"]):
+        raise SecurityProbeError("invalid_delegation_action_targets")
+    normalized_targets = [
+        _text(target, _IDENTIFIER, "invalid_delegation_action_target_id")
+        for target in targets
+    ]
+    observed = binding["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError(
+            "invalid_delegation_action_target_binding_disposition"
+        )
+
+    reasons = []
+    if chain_report["expected_disposition"] != "accepted":
+        reasons.append("delegation_chain_requires_rejection")
+    if not chain_report["passed"]:
+        reasons.append("delegation_chain_observation_mismatch")
+    summaries = []
+    for hop, action_target_id in zip(
+        chain["hops"], normalized_targets, strict=True
+    ):
+        sink_binding = hop["delegation_validity"]["scope_attenuation"][
+            "sensitive_sink_binding"
+        ]
+        sink_report = evaluate_recorded_sensitive_sink_binding(sink_binding)
+        if action_target_id != sink_report["sink_id"]:
+            reasons.append("delegation_action_target_mismatch")
+        summaries.append({
+            "hop_id": hop["hop_id"],
+            "action_target_id": action_target_id,
+            "sensitive_sink_id": sink_report["sink_id"],
+            "delegation_validity_evidence_id": hop[
+                "delegation_validity_evidence_id"
+            ],
+        })
+
+    reasons = list(dict.fromkeys(reasons))
+    expected = "rejected" if reasons else "accepted"
+    report = {
+        "delegation_action_target_binding_schema_version": (
+            DELEGATION_ACTION_TARGET_BINDING_SCHEMA_VERSION
+        ),
+        "binding_id": _text(
+            binding["binding_id"],
+            _IDENTIFIER,
+            "invalid_delegation_action_target_binding_id",
+        ),
+        "delegation_chain_evidence_id": chain_evidence_id,
+        "hop_count": len(summaries),
+        "hops": summaries,
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": reasons,
+        "coverage": {
+            "delegation_chain_evidence_recomputed": True,
+            "action_target_bound_to_sensitive_sink": True,
+            "live_action_or_target_access_checked": False,
+            "scope": "bounded_recorded_delegation_action_target_metadata_only",
+        },
+        "authority": DELEGATION_ACTION_TARGET_BINDING_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError(
+            "delegation_action_target_binding_report_too_large"
         )
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report
