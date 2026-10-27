@@ -968,3 +968,28 @@ executes nothing, reads no raw content or secrets, and makes no resource or
 OS-isolation claim. Exact source PR and merged-main CI plus independent
 canonical records remain required before writer release. AF-29 remains in
 progress at 6/12.
+
+## AF-29 delegation resource-binding source candidate (2026-10-26)
+
+Identity-binding source/records PRs #94/#95 passed their exact Python 3.11.17
+PR and merged-main gates through
+`d75b1c3104214a30302591e7eba61bfe840751b8`; writer
+`AF29-DELEGATION-IDENTITY-BINDING-20261026` is explicitly released.
+
+The new candidate independently recomputes exact delegation-chain evidence and
+each hop's nested sensitive-sink binding, then requires the caller-supplied
+recorded resource hash to equal the sink-input hash already bound by that hop.
+Resource substitution, stale nested evidence, malformed or action-bearing
+metadata, and false recorded acceptance fail closed. Local Python 3.11.17
+validation passed 186 focused security tests and 673 portable product tests.
+All 18 infrastructure guards executed: 17 passed and the established
+Memory-only case skipped. Diagnostics, dependency, import, compile, JSON and
+diff checks passed. The unrestricted suite reproduced only the two established
+container-specific descendant-observation failures.
+
+This is bounded synthetic recorded-metadata verification only. It proves no
+resource existence, ownership or accessibility, grants or exercises no
+authority, executes nothing, reads no raw content or secrets, and makes no
+resource-enforcement or OS-isolation claim. Exact source PR and merged-main CI
+plus independent canonical records remain required before writer release.
+AF-29 remains in progress at 6/12.

@@ -17,6 +17,7 @@ from agentflight.security_probes import (
     DELEGATION_AUDIENCE_BINDING_AUTHORITY,
     DELEGATION_ISSUER_BINDING_AUTHORITY,
     DELEGATION_IDENTITY_BINDING_AUTHORITY,
+    DELEGATION_RESOURCE_BINDING_AUTHORITY,
     SecurityProbeError,
     evaluate_recorded_influence_lineage,
     evaluate_recorded_instruction_provenance,
@@ -32,6 +33,7 @@ from agentflight.security_probes import (
     evaluate_recorded_delegation_audience_binding,
     evaluate_recorded_delegation_issuer_binding,
     evaluate_recorded_delegation_identity_binding,
+    evaluate_recorded_delegation_resource_binding,
 )
 
 H0 = "0" * 64
@@ -333,6 +335,20 @@ def delegation_identity_binding():
         "audience_binding_evidence_id": (
             evaluate_recorded_delegation_audience_binding(audience)["evidence_id"]
         ),
+        "observed_disposition": "accepted",
+    }
+
+
+def delegation_resource_binding():
+    chain = delegation_chain()
+    return {
+        "schema_version": 1,
+        "binding_id": "two-hop-delegation-resource-binding",
+        "delegation_chain": chain,
+        "delegation_chain_evidence_id": evaluate_recorded_delegation_chain(
+            chain
+        )["evidence_id"],
+        "resource_id_sha256": [H5, H5],
         "observed_disposition": "accepted",
     }
 
@@ -1717,6 +1733,98 @@ def test_malformed_or_action_bearing_delegation_identity_binding_fails_closed(
 def test_delegation_identity_binding_report_has_no_raw_or_action_fields():
     rendered = repr(evaluate_recorded_delegation_identity_binding(
         delegation_identity_binding()
+    ))
+    for forbidden in ("payload", "url", "endpoint", "command", "credential"):
+        assert forbidden not in rendered
+
+
+def test_delegation_resource_binding_passes_deterministically():
+    first = evaluate_recorded_delegation_resource_binding(
+        delegation_resource_binding()
+    )
+    second = evaluate_recorded_delegation_resource_binding(
+        copy.deepcopy(delegation_resource_binding())
+    )
+    assert first == second
+    assert first["passed"] is True
+    assert first["expected_disposition"] == "accepted"
+    assert first["rejection_reasons"] == []
+    assert first["authority"] == DELEGATION_RESOURCE_BINDING_AUTHORITY
+    assert first["coverage"]["live_resource_access_checked"] is False
+
+
+def test_delegation_resource_binding_rejects_resource_substitution():
+    source = delegation_resource_binding()
+    source["resource_id_sha256"][1] = H4
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_resource_binding(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == ["delegation_resource_mismatch"]
+
+
+def test_delegation_resource_binding_exposes_false_acceptance():
+    source = delegation_resource_binding()
+    source["resource_id_sha256"][0] = H4
+    report = evaluate_recorded_delegation_resource_binding(source)
+    assert report["passed"] is False
+    assert report["expected_disposition"] == "rejected"
+
+
+def test_delegation_resource_binding_recomputes_chain_evidence():
+    source = delegation_resource_binding()
+    source["delegation_chain_evidence_id"] = H0
+    with pytest.raises(
+        SecurityProbeError, match="delegation_chain_evidence_mismatch"
+    ):
+        evaluate_recorded_delegation_resource_binding(source)
+
+
+def test_delegation_resource_binding_recomputes_nested_sink_evidence():
+    source = delegation_resource_binding()
+    sink = source["delegation_chain"]["hops"][0]["delegation_validity"][
+        "scope_attenuation"
+    ]["sensitive_sink_binding"]
+    sink["sink_input_sha256"] = H4
+    with pytest.raises(
+        SecurityProbeError, match="sensitive_sink_binding_evidence_mismatch"
+    ):
+        evaluate_recorded_delegation_resource_binding(source)
+
+
+@pytest.mark.parametrize("change,code", [
+    (
+        lambda value: value.update(command="run"),
+        "invalid_delegation_resource_binding_shape",
+    ),
+    (
+        lambda value: value.update(schema_version=True),
+        "unsupported_delegation_resource_binding_schema",
+    ),
+    (
+        lambda value: value.update(resource_id_sha256=[H5]),
+        "invalid_delegation_resources",
+    ),
+    (
+        lambda value: value.update(resource_id_sha256=[H5, "raw-resource"]),
+        "invalid_delegation_resources",
+    ),
+    (
+        lambda value: value.update(observed_disposition="authorized"),
+        "invalid_delegation_resource_binding_disposition",
+    ),
+])
+def test_malformed_or_action_bearing_delegation_resource_binding_fails_closed(
+    change, code
+):
+    source = delegation_resource_binding()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_delegation_resource_binding(source)
+
+
+def test_delegation_resource_binding_report_has_no_raw_or_action_fields():
+    rendered = repr(evaluate_recorded_delegation_resource_binding(
+        delegation_resource_binding()
     ))
     for forbidden in ("payload", "url", "endpoint", "command", "credential"):
         assert forbidden not in rendered
