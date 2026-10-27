@@ -395,3 +395,26 @@ delegates, revokes or executes nothing; reads no wall clock, raw prompt,
 instruction, payload, credential or secret; and makes no resource-enforcement
 or OS-isolation claim. Independent canonical records and their exact CI remain
 required before writer release. AF-29 remains in progress at 6/12.
+
+## Delegation action-scope binding candidate (2026-10-26)
+
+Resource-binding source/records PRs #96/#97 are verified through final main
+`beea83cd38a884ac866b6dede7356e80ffbc4cbb`. Exact Python 3.11.17 CI runs
+40438330528, 40438443643, 40438868269 and 40438987232 passed 675 product
+tests with zero product skips. Writer
+`AF29-DELEGATION-RESOURCE-BINDING-20261026` is explicitly released.
+
+The new bounded verifier recomputes each two-to-eight-hop delegation chain and
+its nested scope-attenuation evidence. It requires the recorded action scopes
+for every hop to equal that hop's already-bound delegated scopes, rejecting
+scope substitution, stale evidence, malformed metadata and false acceptance.
+Local Python 3.11.17 validation passed 197 focused and 684 portable product
+tests. Infrastructure executed 18 guards: 17 passed and one established
+Memory-only case skipped. Diagnostics, dependency, import, compile, JSON and
+diff checks passed.
+
+This records metadata only. It does not grant or exercise authority, execute
+an action, tool or command, inspect raw prompts or secrets, access a resource,
+or establish resource enforcement or OS isolation. Exact source and records
+PR/merged-main CI remain required before writer release. AF-29 remains in
+progress at 6/12.
