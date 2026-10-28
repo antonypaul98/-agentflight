@@ -1063,6 +1063,36 @@ content or secrets, and makes no resource-enforcement or OS-isolation claim.
 Independent canonical records and their exact PR/final-main CI remain required
 before writer release. AF-29 remains in progress at 6/12.
 
+## AF-29 action-target release and action-coherence candidate (2026-10-28)
+
+Action-target-binding records PR #102 exact head
+`1ee81d73cac18cb125c8b0354c0bf369f1cc65c0`, tree
+`186ae707032c985f97d90292d2b35061c78b5077`, passed Python 3.11.17
+exact-head run 40649680025 with 697 product tests and zero product skips. Its
+expected-head merge produced final main
+`a2af7d7138f566fde3a36eeead57d37dfcf697cc`; push run 40649764547 passed
+the same suite. Writer `AF29-DELEGATION-ACTION-TARGET-BINDING-20261027` is
+explicitly released on PR #102.
+
+The new bounded candidate recomputes the existing recorded action-scope and
+action-target binding reports, requires exact component evidence IDs, and
+requires both accepted components to refer to the same delegation-chain
+evidence. Mixed-chain substitution, stale component evidence, a rejected or
+falsely accepted component, malformed/action-bearing metadata and false
+coherence acceptance fail closed. Local Python 3.11.17 validation passed 219
+focused security tests and 706 portable product tests. All 18 infrastructure
+guards executed: 17 passed and the established Memory-only case skipped.
+Dependency, compile, JSON and diff checks passed.
+
+Reuse-first review found the needed contracts already in this repository, so
+the slice introduces no third-party source, algorithm, model or dependency and
+performs no download, network call or account access. This is bounded synthetic
+recorded-metadata verification only. It performs no live authorization,
+delegation, revocation, action or execution, reads no raw content or secrets,
+and makes no resource-enforcement, sandboxing or OS-isolation claim. Exact
+source PR and merged-main CI plus independent canonical records remain required
+before writer release. AF-29 remains in progress at 6/12.
+
 ## AF-29 action-scope release and action-target-binding candidate (2026-10-27)
 
 Action-scope-binding records PR #99 exact head
