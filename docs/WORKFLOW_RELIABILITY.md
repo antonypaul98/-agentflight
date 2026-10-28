@@ -790,6 +790,30 @@ or secret access, resource enforcement, or OS isolation is claimed.
 Independent canonical records and exact PR/final-main CI remain required
 before writer release. AF-29 remains in progress at 6/12.
 
+## AF-29 delegation action-coherence source receipt (2026-10-28)
+
+Source PR #103 exact head
+`7de7f0d60501ba652396b34fcd8abfabacafbdac`, tree
+`76ea04c2ca54b75727daecfe0493305749713c0d`, passed Python 3.11.17
+exact-head run 40696268682 with 708 product tests, zero failures and zero
+product skips. Expected-head guarded merge
+`7a8d8d90e133e2a45f746745de6c06598de9665d` passed exact main-push run
+40696475743 with the same result. Both runs executed all 18 infrastructure
+guards: 17 passed and one established Memory-only case skipped. Dependency
+diagnostics passed.
+
+The verifier recomputes exact action-scope and action-target component evidence,
+requires accepted components and binds them to one delegation-chain evidence
+identifier. Mixed-chain substitution, stale evidence, component rejection or
+false acceptance, malformed metadata and false coherence acceptance fail
+closed.
+
+This remains bounded synthetic recorded-metadata verification only. It performs
+no live authorization, delegation, revocation, action or execution, reads no
+raw content or secrets, and makes no resource-enforcement, sandboxing or
+OS-isolation claim. Independent canonical records and their exact PR/final-main
+CI remain required before writer release. AF-29 remains in progress at 6/12.
+
 ## AF-29 recorded delegation-time attenuation source receipt (2026-10-25)
 
 Source PR #84 exact head `44f886036886daa9f78f1c4121275647e28c2ac7`,
