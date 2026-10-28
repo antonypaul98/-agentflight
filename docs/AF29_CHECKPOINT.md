@@ -468,6 +468,30 @@ Memory-only skip. Expected-head merge
 40736142715 with the same product result. Independent records and final-main CI
 remain required before writer release; AF-29 remains in progress at 6/12.
 
+## Delegation action envelope candidate (2026-10-28)
+
+Action-tuple source/records PRs #105/#106 and final main
+`f8a747adde7b0e4dc242c44b42318bef3a4ae781` are verified by exact Python
+3.11.17 CI runs 40735947845, 40736142715, 40736742812 and 40736937042;
+each passed 720 product tests with zero skips. Its writer is released.
+
+The new bounded verifier recomputes exact action-tuple, identity-binding and
+resource-binding evidence, requires every component to be accepted and requires
+all three to bind the same delegation-chain evidence. Stale component evidence,
+rejected or falsely accepted components, mixed chains, malformed metadata and
+action-bearing fields fail closed. Local Python 3.11.17 validation passed 242
+focused security tests and 729 portable product tests. Infrastructure executed
+18 guards: 17 passed and one established Memory-only case skipped. Dependency,
+import, diagnostics, compile, JSON and diff checks passed.
+
+Reuse-first review selected existing repository contracts; no third-party code,
+algorithm, model, dependency, external account or product network access is
+introduced. This synthetic metadata-only verifier grants or exercises no
+authority, reads no raw content or secrets, and performs no action, tool,
+command, filesystem or network execution. Exact source and records PR/merged-
+main CI remain required before writer release. AF-29 remains in progress at
+6/12.
+
 ## Delegation action coherence source receipt
 
 PR #103 head `7de7f0d60501ba652396b34fcd8abfabacafbdac`, tree

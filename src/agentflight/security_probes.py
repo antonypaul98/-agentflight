@@ -28,6 +28,7 @@ DELEGATION_ACTION_SCOPE_BINDING_SCHEMA_VERSION = 1
 DELEGATION_ACTION_TARGET_BINDING_SCHEMA_VERSION = 1
 DELEGATION_ACTION_COHERENCE_SCHEMA_VERSION = 1
 DELEGATION_ACTION_TUPLE_SCHEMA_VERSION = 1
+DELEGATION_ACTION_ENVELOPE_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
 MAX_INFLUENCE_HOPS = 16
 MAX_DELEGATION_HOPS = 8
@@ -92,6 +93,10 @@ DELEGATION_ACTION_COHERENCE_AUTHORITY = (
 )
 DELEGATION_ACTION_TUPLE_AUTHORITY = (
     "recorded_delegation_action_tuple_evidence_only_"
+    "no_authorization_or_execution"
+)
+DELEGATION_ACTION_ENVELOPE_AUTHORITY = (
+    "recorded_delegation_action_envelope_evidence_only_"
     "no_authorization_or_execution"
 )
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
@@ -1999,5 +2004,122 @@ def evaluate_recorded_delegation_action_tuple_binding(
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise SecurityProbeError("delegation_action_tuple_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_delegation_action_envelope(
+    envelope: Mapping[str, object],
+) -> dict:
+    """Require action, identity, and resource evidence for one delegation chain."""
+
+    keys = frozenset({
+        "schema_version", "binding_id", "action_tuple_binding",
+        "action_tuple_binding_evidence_id", "identity_binding",
+        "identity_binding_evidence_id", "resource_binding",
+        "resource_binding_evidence_id", "observed_disposition",
+    })
+    if type(envelope) is not dict or frozenset(envelope) != keys:
+        raise SecurityProbeError("invalid_delegation_action_envelope_shape")
+    if (
+        type(envelope["schema_version"]) is not int
+        or envelope["schema_version"]
+        != DELEGATION_ACTION_ENVELOPE_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError(
+            "unsupported_delegation_action_envelope_schema"
+        )
+
+    action_report = evaluate_recorded_delegation_action_tuple_binding(
+        envelope["action_tuple_binding"]
+    )
+    action_evidence_id = _text(
+        envelope["action_tuple_binding_evidence_id"],
+        _SHA256,
+        "invalid_delegation_action_tuple_evidence_id",
+    )
+    if action_evidence_id != action_report["evidence_id"]:
+        raise SecurityProbeError("delegation_action_tuple_evidence_mismatch")
+
+    identity_report = evaluate_recorded_delegation_identity_binding(
+        envelope["identity_binding"]
+    )
+    identity_evidence_id = _text(
+        envelope["identity_binding_evidence_id"],
+        _SHA256,
+        "invalid_delegation_identity_binding_evidence_id",
+    )
+    if identity_evidence_id != identity_report["evidence_id"]:
+        raise SecurityProbeError("delegation_identity_binding_evidence_mismatch")
+
+    resource_report = evaluate_recorded_delegation_resource_binding(
+        envelope["resource_binding"]
+    )
+    resource_evidence_id = _text(
+        envelope["resource_binding_evidence_id"],
+        _SHA256,
+        "invalid_delegation_resource_binding_evidence_id",
+    )
+    if resource_evidence_id != resource_report["evidence_id"]:
+        raise SecurityProbeError("delegation_resource_binding_evidence_mismatch")
+
+    observed = envelope["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError(
+            "invalid_delegation_action_envelope_disposition"
+        )
+
+    reasons = []
+    for report, prefix in (
+        (action_report, "delegation_action_tuple"),
+        (identity_report, "delegation_identity"),
+        (resource_report, "delegation_resource"),
+    ):
+        if report["expected_disposition"] != "accepted":
+            reasons.append(f"{prefix}_requires_rejection")
+        if not report["passed"]:
+            reasons.append(f"{prefix}_observation_mismatch")
+    chain_evidence_ids = {
+        report["delegation_chain_evidence_id"]
+        for report in (action_report, identity_report, resource_report)
+        if report["delegation_chain_evidence_id"] is not None
+    }
+    if len(chain_evidence_ids) != 1:
+        reasons.append("delegation_action_envelope_chain_mismatch")
+
+    reasons = list(dict.fromkeys(reasons))
+    expected = "rejected" if reasons else "accepted"
+    report = {
+        "delegation_action_envelope_schema_version": (
+            DELEGATION_ACTION_ENVELOPE_SCHEMA_VERSION
+        ),
+        "binding_id": _text(
+            envelope["binding_id"],
+            _IDENTIFIER,
+            "invalid_delegation_action_envelope_id",
+        ),
+        "action_tuple_binding_evidence_id": action_evidence_id,
+        "identity_binding_evidence_id": identity_evidence_id,
+        "resource_binding_evidence_id": resource_evidence_id,
+        "delegation_chain_evidence_id": (
+            next(iter(chain_evidence_ids)) if not reasons else None
+        ),
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": reasons,
+        "coverage": {
+            "action_tuple_evidence_recomputed": True,
+            "identity_binding_evidence_recomputed": True,
+            "resource_binding_evidence_recomputed": True,
+            "shared_delegation_chain_required": True,
+            "live_action_or_authorization_checked": False,
+            "scope": "bounded_recorded_delegation_action_envelope_only",
+        },
+        "authority": DELEGATION_ACTION_ENVELOPE_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError("delegation_action_envelope_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report

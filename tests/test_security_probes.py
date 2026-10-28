@@ -22,6 +22,7 @@ from agentflight.security_probes import (
     DELEGATION_ACTION_TARGET_BINDING_AUTHORITY,
     DELEGATION_ACTION_COHERENCE_AUTHORITY,
     DELEGATION_ACTION_TUPLE_AUTHORITY,
+    DELEGATION_ACTION_ENVELOPE_AUTHORITY,
     SecurityProbeError,
     evaluate_recorded_influence_lineage,
     evaluate_recorded_instruction_provenance,
@@ -42,6 +43,7 @@ from agentflight.security_probes import (
     evaluate_recorded_delegation_action_target_binding,
     evaluate_recorded_delegation_action_coherence,
     evaluate_recorded_delegation_action_tuple_binding,
+    evaluate_recorded_delegation_action_envelope,
 )
 
 H0 = "0" * 64
@@ -435,6 +437,29 @@ def delegation_action_tuple_binding():
                 "action_target_id": "recorded-search-results",
             },
         ],
+        "observed_disposition": "accepted",
+    }
+
+
+def delegation_action_envelope():
+    action = delegation_action_tuple_binding()
+    identity = delegation_identity_binding()
+    resource = delegation_resource_binding()
+    return {
+        "schema_version": 1,
+        "binding_id": "recorded-action-envelope",
+        "action_tuple_binding": action,
+        "action_tuple_binding_evidence_id": (
+            evaluate_recorded_delegation_action_tuple_binding(action)["evidence_id"]
+        ),
+        "identity_binding": identity,
+        "identity_binding_evidence_id": (
+            evaluate_recorded_delegation_identity_binding(identity)["evidence_id"]
+        ),
+        "resource_binding": resource,
+        "resource_binding_evidence_id": (
+            evaluate_recorded_delegation_resource_binding(resource)["evidence_id"]
+        ),
         "observed_disposition": "accepted",
     }
 
@@ -2295,6 +2320,115 @@ def test_malformed_delegation_action_tuple_binding_fails_closed(change, code):
 def test_delegation_action_tuple_report_has_no_raw_action_fields():
     rendered = repr(evaluate_recorded_delegation_action_tuple_binding(
         delegation_action_tuple_binding()
+    ))
+    for forbidden in ("payload", "url", "endpoint", "command", "credential"):
+        assert forbidden not in rendered
+
+
+def test_delegation_action_envelope_passes_deterministically():
+    first = evaluate_recorded_delegation_action_envelope(
+        delegation_action_envelope()
+    )
+    second = evaluate_recorded_delegation_action_envelope(
+        copy.deepcopy(delegation_action_envelope())
+    )
+    assert first == second
+    assert first["passed"] is True
+    assert first["expected_disposition"] == "accepted"
+    assert first["authority"] == DELEGATION_ACTION_ENVELOPE_AUTHORITY
+    assert first["delegation_chain_evidence_id"] is not None
+
+
+def test_delegation_action_envelope_requires_accepted_components():
+    source = delegation_action_envelope()
+    resource = source["resource_binding"]
+    resource["resource_id_sha256"][0] = H4
+    source["resource_binding_evidence_id"] = (
+        evaluate_recorded_delegation_resource_binding(resource)["evidence_id"]
+    )
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_action_envelope(source)
+    assert report["passed"] is True
+    assert "delegation_resource_requires_rejection" in report["rejection_reasons"]
+    assert report["delegation_chain_evidence_id"] is None
+
+
+def test_delegation_action_envelope_exposes_false_acceptance():
+    source = delegation_action_envelope()
+    resource = source["resource_binding"]
+    resource["resource_id_sha256"][0] = H4
+    source["resource_binding_evidence_id"] = (
+        evaluate_recorded_delegation_resource_binding(resource)["evidence_id"]
+    )
+    report = evaluate_recorded_delegation_action_envelope(source)
+    assert report["passed"] is False
+    assert report["expected_disposition"] == "rejected"
+
+
+def test_delegation_action_envelope_rejects_mixed_chains():
+    source = delegation_action_envelope()
+    resource = source["resource_binding"]
+    resource["delegation_chain"]["chain_id"] = "substituted-chain"
+    resource["delegation_chain_evidence_id"] = evaluate_recorded_delegation_chain(
+        resource["delegation_chain"]
+    )["evidence_id"]
+    source["resource_binding_evidence_id"] = (
+        evaluate_recorded_delegation_resource_binding(resource)["evidence_id"]
+    )
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_action_envelope(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == [
+        "delegation_action_envelope_chain_mismatch"
+    ]
+    assert report["delegation_chain_evidence_id"] is None
+
+
+@pytest.mark.parametrize("field,code", [
+    (
+        "action_tuple_binding_evidence_id",
+        "delegation_action_tuple_evidence_mismatch",
+    ),
+    (
+        "identity_binding_evidence_id",
+        "delegation_identity_binding_evidence_mismatch",
+    ),
+    (
+        "resource_binding_evidence_id",
+        "delegation_resource_binding_evidence_mismatch",
+    ),
+])
+def test_delegation_action_envelope_recomputes_component_evidence(field, code):
+    source = delegation_action_envelope()
+    source[field] = H0
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_delegation_action_envelope(source)
+
+
+@pytest.mark.parametrize("change,code", [
+    (
+        lambda value: value.update(command="run"),
+        "invalid_delegation_action_envelope_shape",
+    ),
+    (
+        lambda value: value.update(schema_version=True),
+        "unsupported_delegation_action_envelope_schema",
+    ),
+    (
+        lambda value: value.update(observed_disposition="authorized"),
+        "invalid_delegation_action_envelope_disposition",
+    ),
+])
+def test_malformed_delegation_action_envelope_fails_closed(change, code):
+    source = delegation_action_envelope()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_delegation_action_envelope(source)
+
+
+def test_delegation_action_envelope_report_has_no_raw_action_fields():
+    rendered = repr(evaluate_recorded_delegation_action_envelope(
+        delegation_action_envelope()
     ))
     for forbidden in ("payload", "url", "endpoint", "command", "credential"):
         assert forbidden not in rendered
