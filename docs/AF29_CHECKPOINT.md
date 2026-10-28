@@ -418,3 +418,27 @@ an action, tool or command, inspect raw prompts or secrets, access a resource,
 or establish resource enforcement or OS isolation. Exact source and records
 PR/merged-main CI remain required before writer release. AF-29 remains in
 progress at 6/12.
+
+## Delegation action coherence candidate (2026-10-28)
+
+Action-target-binding source/records PRs #100/#102 are verified through final
+main `a2af7d7138f566fde3a36eeead57d37dfcf697cc`. Their exact Python 3.11.17
+CI runs 40481370030, 40510992182, 40649680025 and 40649764547 passed 697
+product tests with zero product skips. Writer
+`AF29-DELEGATION-ACTION-TARGET-BINDING-20261027` is explicitly released.
+
+The new bounded verifier recomputes the existing action-scope and action-target
+reports, requires exact component evidence IDs and requires both accepted
+components to bind the same delegation chain. Mixed-chain substitution, stale
+evidence, rejected or falsely accepted components, malformed metadata and
+false coherence acceptance fail closed. Local Python 3.11.17 validation passed
+219 focused and 706 portable product tests. Infrastructure executed 18 guards:
+17 passed and one established Memory-only case skipped. Dependency, compile,
+JSON and diff checks passed.
+
+The reuse review selected existing repository contracts; no third-party code,
+model, dependency, network or account is involved. This synthetic metadata-only
+verifier grants or exercises no authority, reads no raw content or secrets, and
+performs no action, tool, command, filesystem or network execution. Exact
+source and records PR/merged-main CI remain required before writer release.
+AF-29 remains in progress at 6/12.

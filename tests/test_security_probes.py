@@ -20,6 +20,7 @@ from agentflight.security_probes import (
     DELEGATION_RESOURCE_BINDING_AUTHORITY,
     DELEGATION_ACTION_SCOPE_BINDING_AUTHORITY,
     DELEGATION_ACTION_TARGET_BINDING_AUTHORITY,
+    DELEGATION_ACTION_COHERENCE_AUTHORITY,
     SecurityProbeError,
     evaluate_recorded_influence_lineage,
     evaluate_recorded_instruction_provenance,
@@ -38,6 +39,7 @@ from agentflight.security_probes import (
     evaluate_recorded_delegation_resource_binding,
     evaluate_recorded_delegation_action_scope_binding,
     evaluate_recorded_delegation_action_target_binding,
+    evaluate_recorded_delegation_action_coherence,
 )
 
 H0 = "0" * 64
@@ -384,6 +386,28 @@ def delegation_action_target_binding():
             "recorded-search-results",
             "recorded-search-results",
         ],
+        "observed_disposition": "accepted",
+    }
+
+
+def delegation_action_coherence():
+    scope_binding = delegation_action_scope_binding()
+    target_binding = delegation_action_target_binding()
+    return {
+        "schema_version": 1,
+        "binding_id": "recorded-action-coherence",
+        "action_scope_binding": scope_binding,
+        "action_scope_binding_evidence_id": (
+            evaluate_recorded_delegation_action_scope_binding(scope_binding)[
+                "evidence_id"
+            ]
+        ),
+        "action_target_binding": target_binding,
+        "action_target_binding_evidence_id": (
+            evaluate_recorded_delegation_action_target_binding(target_binding)[
+                "evidence_id"
+            ]
+        ),
         "observed_disposition": "accepted",
     }
 
@@ -2043,6 +2067,119 @@ def test_malformed_delegation_action_target_binding_fails_closed(change, code):
 def test_delegation_action_target_binding_report_has_no_raw_action_fields():
     rendered = repr(evaluate_recorded_delegation_action_target_binding(
         delegation_action_target_binding()
+    ))
+    for forbidden in ("payload", "url", "endpoint", "command", "credential"):
+        assert forbidden not in rendered
+
+
+def test_delegation_action_coherence_passes_deterministically():
+    first = evaluate_recorded_delegation_action_coherence(
+        delegation_action_coherence()
+    )
+    second = evaluate_recorded_delegation_action_coherence(
+        copy.deepcopy(delegation_action_coherence())
+    )
+    assert first == second
+    assert first["passed"] is True
+    assert first["expected_disposition"] == "accepted"
+    assert first["rejection_reasons"] == []
+    assert first["authority"] == DELEGATION_ACTION_COHERENCE_AUTHORITY
+    assert first["coverage"]["live_action_or_authorization_checked"] is False
+
+
+def test_delegation_action_coherence_rejects_mixed_chains():
+    source = delegation_action_coherence()
+    target = source["action_target_binding"]
+    target["delegation_chain"]["chain_id"] = "substituted-chain"
+    target["delegation_chain_evidence_id"] = evaluate_recorded_delegation_chain(
+        target["delegation_chain"]
+    )["evidence_id"]
+    source["action_target_binding_evidence_id"] = (
+        evaluate_recorded_delegation_action_target_binding(target)["evidence_id"]
+    )
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_action_coherence(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == ["delegation_action_chain_mismatch"]
+    assert report["delegation_chain_evidence_id"] is None
+
+
+def test_delegation_action_coherence_exposes_false_acceptance():
+    source = delegation_action_coherence()
+    target = source["action_target_binding"]
+    target["delegation_chain"]["chain_id"] = "substituted-chain"
+    target["delegation_chain_evidence_id"] = evaluate_recorded_delegation_chain(
+        target["delegation_chain"]
+    )["evidence_id"]
+    source["action_target_binding_evidence_id"] = (
+        evaluate_recorded_delegation_action_target_binding(target)["evidence_id"]
+    )
+    report = evaluate_recorded_delegation_action_coherence(source)
+    assert report["passed"] is False
+    assert report["expected_disposition"] == "rejected"
+
+
+@pytest.mark.parametrize("field,code", [
+    (
+        "action_scope_binding_evidence_id",
+        "delegation_action_scope_binding_evidence_mismatch",
+    ),
+    (
+        "action_target_binding_evidence_id",
+        "delegation_action_target_binding_evidence_mismatch",
+    ),
+])
+def test_delegation_action_coherence_recomputes_component_evidence(field, code):
+    source = delegation_action_coherence()
+    source[field] = H0
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_delegation_action_coherence(source)
+
+
+def test_delegation_action_coherence_requires_accepted_components():
+    source = delegation_action_coherence()
+    target = source["action_target_binding"]
+    target["action_target_ids"][0] = "substitute-results"
+    target["observed_disposition"] = "rejected"
+    source["action_target_binding_evidence_id"] = (
+        evaluate_recorded_delegation_action_target_binding(target)["evidence_id"]
+    )
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_action_coherence(source)
+    assert report["passed"] is True
+    assert report["rejection_reasons"] == [
+        "delegation_action_target_requires_rejection"
+    ]
+
+
+@pytest.mark.parametrize("change,code", [
+    (
+        lambda value: value.update(command="run"),
+        "invalid_delegation_action_coherence_shape",
+    ),
+    (
+        lambda value: value.update(schema_version=True),
+        "unsupported_delegation_action_coherence_schema",
+    ),
+    (
+        lambda value: value.update(observed_disposition="authorized"),
+        "invalid_delegation_action_coherence_disposition",
+    ),
+    (
+        lambda value: value.update(binding_id="raw action"),
+        "invalid_delegation_action_coherence_id",
+    ),
+])
+def test_malformed_delegation_action_coherence_fails_closed(change, code):
+    source = delegation_action_coherence()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_delegation_action_coherence(source)
+
+
+def test_delegation_action_coherence_report_has_no_raw_action_fields():
+    rendered = repr(evaluate_recorded_delegation_action_coherence(
+        delegation_action_coherence()
     ))
     for forbidden in ("payload", "url", "endpoint", "command", "credential"):
         assert forbidden not in rendered

@@ -26,6 +26,7 @@ DELEGATION_IDENTITY_BINDING_SCHEMA_VERSION = 1
 DELEGATION_RESOURCE_BINDING_SCHEMA_VERSION = 1
 DELEGATION_ACTION_SCOPE_BINDING_SCHEMA_VERSION = 1
 DELEGATION_ACTION_TARGET_BINDING_SCHEMA_VERSION = 1
+DELEGATION_ACTION_COHERENCE_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
 MAX_INFLUENCE_HOPS = 16
 MAX_DELEGATION_HOPS = 8
@@ -82,6 +83,10 @@ DELEGATION_ACTION_SCOPE_BINDING_AUTHORITY = (
 )
 DELEGATION_ACTION_TARGET_BINDING_AUTHORITY = (
     "recorded_delegation_action_target_evidence_only_"
+    "no_authorization_or_execution"
+)
+DELEGATION_ACTION_COHERENCE_AUTHORITY = (
+    "recorded_delegation_action_coherence_evidence_only_"
     "no_authorization_or_execution"
 )
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
@@ -1759,5 +1764,109 @@ def evaluate_recorded_delegation_action_target_binding(
         raise SecurityProbeError(
             "delegation_action_target_binding_report_too_large"
         )
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_delegation_action_coherence(
+    binding: Mapping[str, object],
+) -> dict:
+    """Require recorded action scope and target evidence for one chain."""
+
+    keys = frozenset({
+        "schema_version", "binding_id", "action_scope_binding",
+        "action_scope_binding_evidence_id", "action_target_binding",
+        "action_target_binding_evidence_id", "observed_disposition",
+    })
+    if type(binding) is not dict or frozenset(binding) != keys:
+        raise SecurityProbeError("invalid_delegation_action_coherence_shape")
+    if (
+        type(binding["schema_version"]) is not int
+        or binding["schema_version"] != DELEGATION_ACTION_COHERENCE_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError(
+            "unsupported_delegation_action_coherence_schema"
+        )
+
+    scope_report = evaluate_recorded_delegation_action_scope_binding(
+        binding["action_scope_binding"]
+    )
+    scope_evidence_id = _text(
+        binding["action_scope_binding_evidence_id"],
+        _SHA256,
+        "invalid_delegation_action_scope_binding_evidence_id",
+    )
+    if scope_evidence_id != scope_report["evidence_id"]:
+        raise SecurityProbeError(
+            "delegation_action_scope_binding_evidence_mismatch"
+        )
+
+    target_report = evaluate_recorded_delegation_action_target_binding(
+        binding["action_target_binding"]
+    )
+    target_evidence_id = _text(
+        binding["action_target_binding_evidence_id"],
+        _SHA256,
+        "invalid_delegation_action_target_binding_evidence_id",
+    )
+    if target_evidence_id != target_report["evidence_id"]:
+        raise SecurityProbeError(
+            "delegation_action_target_binding_evidence_mismatch"
+        )
+
+    observed = binding["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError(
+            "invalid_delegation_action_coherence_disposition"
+        )
+
+    reasons = []
+    if scope_report["expected_disposition"] != "accepted":
+        reasons.append("delegation_action_scope_requires_rejection")
+    if not scope_report["passed"]:
+        reasons.append("delegation_action_scope_observation_mismatch")
+    if target_report["expected_disposition"] != "accepted":
+        reasons.append("delegation_action_target_requires_rejection")
+    if not target_report["passed"]:
+        reasons.append("delegation_action_target_observation_mismatch")
+    if (
+        scope_report["delegation_chain_evidence_id"]
+        != target_report["delegation_chain_evidence_id"]
+    ):
+        reasons.append("delegation_action_chain_mismatch")
+
+    expected = "rejected" if reasons else "accepted"
+    report = {
+        "delegation_action_coherence_schema_version": (
+            DELEGATION_ACTION_COHERENCE_SCHEMA_VERSION
+        ),
+        "binding_id": _text(
+            binding["binding_id"],
+            _IDENTIFIER,
+            "invalid_delegation_action_coherence_id",
+        ),
+        "action_scope_binding_evidence_id": scope_evidence_id,
+        "action_target_binding_evidence_id": target_evidence_id,
+        "delegation_chain_evidence_id": (
+            scope_report["delegation_chain_evidence_id"]
+            if not reasons
+            else None
+        ),
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": reasons,
+        "coverage": {
+            "action_scope_binding_evidence_recomputed": True,
+            "action_target_binding_evidence_recomputed": True,
+            "shared_delegation_chain_required": True,
+            "live_action_or_authorization_checked": False,
+            "scope": "bounded_recorded_delegation_action_coherence_only",
+        },
+        "authority": DELEGATION_ACTION_COHERENCE_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError("delegation_action_coherence_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report
