@@ -443,6 +443,20 @@ performs no action, tool, command, filesystem or network execution. Exact
 source and records PR/merged-main CI remain required before writer release.
 AF-29 remains in progress at 6/12.
 
+## Delegation action tuple candidate (2026-10-28)
+
+Action-coherence source/records PRs #103/#104 and final main
+`967b0a3f660146fa963e43d32950fb82bee4a84c` are verified by exact Python
+3.11.17 CI runs 40696268682, 40696475743, 40697005439 and 40697103371;
+each passed 708 product tests with zero skips. Its writer is released.
+
+The new bounded verifier reuses the exact scope, target and coherence contracts
+to commit each hop's scope-and-target tuple without exposing action payloads.
+Local validation passed 231 focused and 718 portable tests. It adds no live
+authorization, action, execution, secret access, resource enforcement,
+sandboxing or OS-isolation claim. Exact source and records CI remain required;
+AF-29 remains in progress at 6/12.
+
 ## Delegation action coherence source receipt
 
 PR #103 head `7de7f0d60501ba652396b34fcd8abfabacafbdac`, tree

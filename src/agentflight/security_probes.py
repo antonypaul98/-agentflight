@@ -27,6 +27,7 @@ DELEGATION_RESOURCE_BINDING_SCHEMA_VERSION = 1
 DELEGATION_ACTION_SCOPE_BINDING_SCHEMA_VERSION = 1
 DELEGATION_ACTION_TARGET_BINDING_SCHEMA_VERSION = 1
 DELEGATION_ACTION_COHERENCE_SCHEMA_VERSION = 1
+DELEGATION_ACTION_TUPLE_SCHEMA_VERSION = 1
 MAX_SCOPES = 16
 MAX_INFLUENCE_HOPS = 16
 MAX_DELEGATION_HOPS = 8
@@ -87,6 +88,10 @@ DELEGATION_ACTION_TARGET_BINDING_AUTHORITY = (
 )
 DELEGATION_ACTION_COHERENCE_AUTHORITY = (
     "recorded_delegation_action_coherence_evidence_only_"
+    "no_authorization_or_execution"
+)
+DELEGATION_ACTION_TUPLE_AUTHORITY = (
+    "recorded_delegation_action_tuple_evidence_only_"
     "no_authorization_or_execution"
 )
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
@@ -1868,5 +1873,131 @@ def evaluate_recorded_delegation_action_coherence(
     canonical = _canonical(report)
     if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
         raise SecurityProbeError("delegation_action_coherence_report_too_large")
+    report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return report
+
+
+def evaluate_recorded_delegation_action_tuple_binding(
+    binding: Mapping[str, object],
+) -> dict:
+    """Bind each recorded hop's exact action scopes and target as one tuple."""
+
+    keys = frozenset({
+        "schema_version", "binding_id", "action_coherence",
+        "action_coherence_evidence_id", "action_tuples",
+        "observed_disposition",
+    })
+    if type(binding) is not dict or frozenset(binding) != keys:
+        raise SecurityProbeError("invalid_delegation_action_tuple_shape")
+    if (
+        type(binding["schema_version"]) is not int
+        or binding["schema_version"] != DELEGATION_ACTION_TUPLE_SCHEMA_VERSION
+    ):
+        raise SecurityProbeError("unsupported_delegation_action_tuple_schema")
+
+    coherence = binding["action_coherence"]
+    coherence_report = evaluate_recorded_delegation_action_coherence(coherence)
+    coherence_evidence_id = _text(
+        binding["action_coherence_evidence_id"],
+        _SHA256,
+        "invalid_delegation_action_coherence_evidence_id",
+    )
+    if coherence_evidence_id != coherence_report["evidence_id"]:
+        raise SecurityProbeError("delegation_action_coherence_evidence_mismatch")
+
+    scope_report = evaluate_recorded_delegation_action_scope_binding(
+        coherence["action_scope_binding"]
+    )
+    target_report = evaluate_recorded_delegation_action_target_binding(
+        coherence["action_target_binding"]
+    )
+    action_tuples = binding["action_tuples"]
+    if type(action_tuples) is not list or len(action_tuples) != scope_report[
+        "hop_count"
+    ]:
+        raise SecurityProbeError("invalid_delegation_action_tuples")
+    observed = binding["observed_disposition"]
+    if type(observed) is not str or observed not in _DISPOSITIONS:
+        raise SecurityProbeError("invalid_delegation_action_tuple_disposition")
+
+    reasons = []
+    if coherence_report["expected_disposition"] != "accepted":
+        reasons.append("delegation_action_coherence_requires_rejection")
+    if not coherence_report["passed"]:
+        reasons.append("delegation_action_coherence_observation_mismatch")
+    summaries = []
+    for action_tuple, scope_hop, target_hop in zip(
+        action_tuples, scope_report["hops"], target_report["hops"], strict=True
+    ):
+        if type(action_tuple) is not dict or frozenset(action_tuple) != frozenset({
+            "hop_id", "action_scopes", "action_target_id",
+        }):
+            raise SecurityProbeError("invalid_delegation_action_tuple")
+        normalized = {
+            "hop_id": _text(
+                action_tuple["hop_id"],
+                _IDENTIFIER,
+                "invalid_delegation_action_tuple_hop_id",
+            ),
+            "action_scopes": _scopes(
+                action_tuple["action_scopes"],
+                "invalid_delegation_action_tuple_scopes",
+            ),
+            "action_target_id": _text(
+                action_tuple["action_target_id"],
+                _IDENTIFIER,
+                "invalid_delegation_action_tuple_target_id",
+            ),
+        }
+        if (
+            normalized["hop_id"] != scope_hop["hop_id"]
+            or normalized["hop_id"] != target_hop["hop_id"]
+        ):
+            reasons.append("delegation_action_tuple_hop_mismatch")
+        if normalized["action_scopes"] != scope_hop["action_scopes"]:
+            reasons.append("delegation_action_tuple_scope_mismatch")
+        if normalized["action_target_id"] != target_hop["action_target_id"]:
+            reasons.append("delegation_action_tuple_target_mismatch")
+        summaries.append({
+            "hop_id": normalized["hop_id"],
+            "action_tuple_sha256": hashlib.sha256(
+                _canonical(normalized).encode("utf-8")
+            ).hexdigest(),
+        })
+
+    reasons = list(dict.fromkeys(reasons))
+    expected = "rejected" if reasons else "accepted"
+    report = {
+        "delegation_action_tuple_schema_version": (
+            DELEGATION_ACTION_TUPLE_SCHEMA_VERSION
+        ),
+        "binding_id": _text(
+            binding["binding_id"],
+            _IDENTIFIER,
+            "invalid_delegation_action_tuple_binding_id",
+        ),
+        "action_coherence_evidence_id": coherence_evidence_id,
+        "delegation_chain_evidence_id": (
+            coherence_report["delegation_chain_evidence_id"]
+            if not reasons
+            else None
+        ),
+        "hop_count": len(summaries),
+        "action_tuple_commitments": summaries,
+        "observed_disposition": observed,
+        "expected_disposition": expected,
+        "passed": observed == expected,
+        "rejection_reasons": reasons,
+        "coverage": {
+            "action_coherence_evidence_recomputed": True,
+            "per_hop_scope_target_tuple_bound": True,
+            "live_action_or_authorization_checked": False,
+            "scope": "bounded_recorded_delegation_action_tuple_only",
+        },
+        "authority": DELEGATION_ACTION_TUPLE_AUTHORITY,
+    }
+    canonical = _canonical(report)
+    if len(canonical.encode("utf-8")) > MAX_REPORT_BYTES:
+        raise SecurityProbeError("delegation_action_tuple_report_too_large")
     report["evidence_id"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return report

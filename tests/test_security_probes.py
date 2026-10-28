@@ -21,6 +21,7 @@ from agentflight.security_probes import (
     DELEGATION_ACTION_SCOPE_BINDING_AUTHORITY,
     DELEGATION_ACTION_TARGET_BINDING_AUTHORITY,
     DELEGATION_ACTION_COHERENCE_AUTHORITY,
+    DELEGATION_ACTION_TUPLE_AUTHORITY,
     SecurityProbeError,
     evaluate_recorded_influence_lineage,
     evaluate_recorded_instruction_provenance,
@@ -40,6 +41,7 @@ from agentflight.security_probes import (
     evaluate_recorded_delegation_action_scope_binding,
     evaluate_recorded_delegation_action_target_binding,
     evaluate_recorded_delegation_action_coherence,
+    evaluate_recorded_delegation_action_tuple_binding,
 )
 
 H0 = "0" * 64
@@ -408,6 +410,31 @@ def delegation_action_coherence():
                 "evidence_id"
             ]
         ),
+        "observed_disposition": "accepted",
+    }
+
+
+def delegation_action_tuple_binding():
+    coherence = delegation_action_coherence()
+    return {
+        "schema_version": 1,
+        "binding_id": "recorded-action-tuple-binding",
+        "action_coherence": coherence,
+        "action_coherence_evidence_id": (
+            evaluate_recorded_delegation_action_coherence(coherence)["evidence_id"]
+        ),
+        "action_tuples": [
+            {
+                "hop_id": "delegation-hop-one",
+                "action_scopes": ["records.read"],
+                "action_target_id": "recorded-search-results",
+            },
+            {
+                "hop_id": "delegation-hop-two",
+                "action_scopes": ["records.read"],
+                "action_target_id": "recorded-search-results",
+            },
+        ],
         "observed_disposition": "accepted",
     }
 
@@ -2180,6 +2207,94 @@ def test_malformed_delegation_action_coherence_fails_closed(change, code):
 def test_delegation_action_coherence_report_has_no_raw_action_fields():
     rendered = repr(evaluate_recorded_delegation_action_coherence(
         delegation_action_coherence()
+    ))
+    for forbidden in ("payload", "url", "endpoint", "command", "credential"):
+        assert forbidden not in rendered
+
+
+def test_delegation_action_tuple_binding_passes_deterministically():
+    first = evaluate_recorded_delegation_action_tuple_binding(
+        delegation_action_tuple_binding()
+    )
+    second = evaluate_recorded_delegation_action_tuple_binding(
+        copy.deepcopy(delegation_action_tuple_binding())
+    )
+    assert first == second
+    assert first["passed"] is True
+    assert first["hop_count"] == 2
+    assert first["authority"] == DELEGATION_ACTION_TUPLE_AUTHORITY
+    assert len(first["action_tuple_commitments"]) == 2
+
+
+@pytest.mark.parametrize("field,reason", [
+    ("hop_id", "delegation_action_tuple_hop_mismatch"),
+    ("action_scopes", "delegation_action_tuple_scope_mismatch"),
+    ("action_target_id", "delegation_action_tuple_target_mismatch"),
+])
+def test_delegation_action_tuple_binding_rejects_substitution(field, reason):
+    source = delegation_action_tuple_binding()
+    replacements = {
+        "hop_id": "substituted-hop",
+        "action_scopes": ["records.write"],
+        "action_target_id": "substituted-results",
+    }
+    source["action_tuples"][0][field] = replacements[field]
+    source["observed_disposition"] = "rejected"
+    report = evaluate_recorded_delegation_action_tuple_binding(source)
+    assert report["passed"] is True
+    assert reason in report["rejection_reasons"]
+    assert report["delegation_chain_evidence_id"] is None
+
+
+def test_delegation_action_tuple_binding_exposes_false_acceptance():
+    source = delegation_action_tuple_binding()
+    source["action_tuples"][0]["action_target_id"] = "substituted-results"
+    report = evaluate_recorded_delegation_action_tuple_binding(source)
+    assert report["passed"] is False
+    assert report["expected_disposition"] == "rejected"
+
+
+def test_delegation_action_tuple_binding_recomputes_coherence_evidence():
+    source = delegation_action_tuple_binding()
+    source["action_coherence_evidence_id"] = H0
+    with pytest.raises(
+        SecurityProbeError, match="delegation_action_coherence_evidence_mismatch"
+    ):
+        evaluate_recorded_delegation_action_tuple_binding(source)
+
+
+@pytest.mark.parametrize("change,code", [
+    (
+        lambda value: value.update(command="run"),
+        "invalid_delegation_action_tuple_shape",
+    ),
+    (
+        lambda value: value.update(schema_version=True),
+        "unsupported_delegation_action_tuple_schema",
+    ),
+    (
+        lambda value: value.update(action_tuples=[]),
+        "invalid_delegation_action_tuples",
+    ),
+    (
+        lambda value: value["action_tuples"][0].update(payload="raw"),
+        "invalid_delegation_action_tuple",
+    ),
+    (
+        lambda value: value.update(observed_disposition="authorized"),
+        "invalid_delegation_action_tuple_disposition",
+    ),
+])
+def test_malformed_delegation_action_tuple_binding_fails_closed(change, code):
+    source = delegation_action_tuple_binding()
+    change(source)
+    with pytest.raises(SecurityProbeError, match=code):
+        evaluate_recorded_delegation_action_tuple_binding(source)
+
+
+def test_delegation_action_tuple_report_has_no_raw_action_fields():
+    rendered = repr(evaluate_recorded_delegation_action_tuple_binding(
+        delegation_action_tuple_binding()
     ))
     for forbidden in ("payload", "url", "endpoint", "command", "credential"):
         assert forbidden not in rendered

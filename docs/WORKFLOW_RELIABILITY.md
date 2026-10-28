@@ -1087,6 +1087,28 @@ content or secrets, and makes no resource-enforcement or OS-isolation claim.
 Independent canonical records and their exact PR/final-main CI remain required
 before writer release. AF-29 remains in progress at 6/12.
 
+## AF-29 action-coherence release and action-tuple candidate (2026-10-28)
+
+Action-coherence source/records PRs #103/#104 are verified through final main
+`967b0a3f660146fa963e43d32950fb82bee4a84c`. Exact Python 3.11.17 CI runs
+40696268682, 40696475743, 40697005439 and 40697103371 passed 708 product
+tests with zero product skips. Writer `AF29-DELEGATION-ACTION-COHERENCE-20261028`
+is explicitly released.
+
+The new bounded candidate recomputes exact action-coherence evidence and binds
+each hop's action scopes and target into one deterministic hash commitment.
+Hop, scope, target, evidence, malformed/action-bearing metadata and false
+acceptance substitutions fail closed. Local Python 3.11.17 validation passed
+231 focused security tests and 718 portable product tests. All 18 infrastructure
+guards executed: 17 passed and the established Memory-only case skipped.
+
+Reuse-first review found the required contracts in this repository; no external
+code, algorithm, model, dependency, download, account or network access is
+introduced. This is synthetic recorded-metadata verification only and grants no
+authorization, resource access, action, execution, sandboxing or OS-isolation
+authority. Exact source and records PR/merged-main CI remain required before
+writer release. AF-29 remains in progress at 6/12.
+
 ## AF-29 action-target release and action-coherence candidate (2026-10-28)
 
 Action-target-binding records PR #102 exact head
