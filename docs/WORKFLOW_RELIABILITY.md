@@ -1123,6 +1123,31 @@ documentation changes rooted at that exact merge. Its writer remains claimed
 until records exact-head CI, guarded merge and final-main CI all succeed.
 AF-29 remains in progress at 6/12.
 
+## AF-29 action-tuple release and action-envelope candidate (2026-10-28)
+
+Action-tuple records PR #106 exact head
+`5cd6a1e40db5e41c5a0388416f977c1b9ea315a1`, tree
+`eb6b3fe14bd098011597f7f78e80ec9992fb1f28`, passed exact-head CI
+40736742812 with 720 product tests and zero skips on Python 3.11.17. Its
+expected-head merge produced final main
+`f8a747adde7b0e4dc242c44b42318bef3a4ae781`; push CI 40736937042 passed
+the same suite. Writer `AF29-DELEGATION-ACTION-TUPLE-20261028` is explicitly
+released on PR #106.
+
+The new bounded candidate recomputes action-tuple, identity-binding and
+resource-binding evidence, requires accepted components, and requires one
+shared delegation-chain evidence ID. Local Python 3.11.17 validation passed 242
+focused security tests and 729 portable product tests. All 18 infrastructure
+guards executed: 17 passed and the established Memory-only case skipped.
+Dependency, import, diagnostics, compile, JSON and diff checks passed.
+
+Reuse-first review found the required contracts in this repository; no external
+code, algorithm, model, dependency, account or product network access is
+introduced. This is synthetic recorded-metadata verification only and grants
+no authentication, authorization, resource access, action, execution,
+sandboxing or OS-isolation authority. Exact source and records PR/merged-main CI
+remain required before writer release. AF-29 remains in progress at 6/12.
+
 ## AF-29 action-target release and action-coherence candidate (2026-10-28)
 
 Action-target-binding records PR #102 exact head
