@@ -457,6 +457,17 @@ authorization, action, execution, secret access, resource enforcement,
 sandboxing or OS-isolation claim. Exact source and records CI remain required;
 AF-29 remains in progress at 6/12.
 
+## Delegation action tuple source receipt
+
+PR #105 head `bfc3bd17d4fad98f0c2afb3daada5977f1cc16de`, tree
+`94cb2c9ad14f42fcc028ba8883aa887d1d5c373d`, passed exact-head CI
+40735947845 on Python 3.11.17. All 720 product tests passed with zero skips;
+all 18 infrastructure guards executed with 17 passes and the established
+Memory-only skip. Expected-head merge
+`646308ee758a61e402952d22a83ca65de8e2c553` passed merged-main CI
+40736142715 with the same product result. Independent records and final-main CI
+remain required before writer release; AF-29 remains in progress at 6/12.
+
 ## Delegation action coherence source receipt
 
 PR #103 head `7de7f0d60501ba652396b34fcd8abfabacafbdac`, tree
