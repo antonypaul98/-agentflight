@@ -1092,3 +1092,28 @@ delegation, revocation, action or execution, reads no raw content or secrets,
 and makes no resource-enforcement or OS-isolation claim. Exact source PR and
 merged-main CI plus independent canonical records remain required before
 writer release. AF-29 remains in progress at 6/12.
+
+## AF-29 delegation action-target-binding source receipt (2026-10-28)
+
+Source PR #100 exact head
+`cfe080ad2119978fbfbd22ffbe68b3a227f8f233`, tree
+`889b1429546e5ffd33735aaf24089f1c4e7f9ca6`, passed Python 3.11.17
+exact-head run 40481370030 with 697 product tests, zero failures and zero
+product skips. Expected-head guarded merge
+`44c286cd6fe109ea4786ffbf98e442217da32892` passed exact main-push run
+40510992182 with the same result. Both runs executed all 18 infrastructure
+guards: 17 passed and one established Memory-only case skipped. Diagnostics
+passed.
+
+The verifier recomputes each bounded delegation chain and its nested
+sensitive-sink evidence, then requires every hop's recorded action target to
+equal the sink identifier already bound by that hop. Target substitution,
+stale nested evidence, malformed or action-bearing metadata and false recorded
+acceptance fail closed.
+
+This remains bounded synthetic recorded-metadata verification only. It proves
+no target existence, ownership or accessibility, performs no live
+authorization, delegation, revocation, action or execution, reads no raw
+content or secrets, and makes no resource-enforcement or OS-isolation claim.
+Independent canonical records and their exact PR/final-main CI remain required
+before writer release. AF-29 remains in progress at 6/12.
