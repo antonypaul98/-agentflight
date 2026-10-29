@@ -492,6 +492,17 @@ command, filesystem or network execution. Exact source and records PR/merged-
 main CI remain required before writer release. AF-29 remains in progress at
 6/12.
 
+## Delegation action envelope source receipt
+
+PR #107 head `5d310e81e7f50dfa44a3bbbb9740ae170b960c5a`, tree
+`c9b0f9356a88f91a77fd977a13109f82768ba6b1`, passed exact-head CI
+40787653242 on Python 3.11.17. All 731 product tests passed with zero skips;
+all 18 infrastructure guards executed with 17 passes and the established
+Memory-only skip. Expected-head merge
+`9536bdf2c8ae9b15c16116d69aef31d3c12187be` passed merged-main CI
+40787797951 with the same product result. Independent records and final-main CI
+remain required before writer release; AF-29 remains in progress at 6/12.
+
 ## Delegation action coherence source receipt
 
 PR #103 head `7de7f0d60501ba652396b34fcd8abfabacafbdac`, tree
