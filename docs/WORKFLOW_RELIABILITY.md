@@ -1148,6 +1148,20 @@ no authentication, authorization, resource access, action, execution,
 sandboxing or OS-isolation authority. Exact source and records PR/merged-main CI
 remain required before writer release. AF-29 remains in progress at 6/12.
 
+## AF-29 action-envelope source receipt (2026-10-28)
+
+PR #107 head `5d310e81e7f50dfa44a3bbbb9740ae170b960c5a` has exact tree
+`c9b0f9356a88f91a77fd977a13109f82768ba6b1`. Exact-head CI 40787653242
+and merged-main CI 40787797951 at expected-head merge
+`9536bdf2c8ae9b15c16116d69aef31d3c12187be` each passed 731 product tests
+with zero skips on Python 3.11.17. Diagnostics passed, and all 18 infrastructure
+guards executed with 17 passes plus the established Memory-only skip.
+
+The independent records candidate contains only canonical state and workflow
+documentation changes rooted at that exact merge. Its writer remains claimed
+until records exact-head CI, guarded merge and final-main CI all succeed.
+AF-29 remains in progress at 6/12.
+
 ## AF-29 action-target release and action-coherence candidate (2026-10-28)
 
 Action-target-binding records PR #102 exact head
