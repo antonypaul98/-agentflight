@@ -11,9 +11,11 @@ and evidence before trusting recorded SHAs, test counts, PRs or CI conclusions.
 2. Run `python scripts/session_preflight.py` with the pinned interpreter. It
    checks canonical URLs, main/branch merge-base, ahead/behind, GitHub API write
    permission and a non-mutating Git push dry-run. Never create dummy commits.
-3. Resume the `active_branch` recorded in `CHECKPOINT_STATE.json` after reconciling it
-   against live GitHub PR/refs; AF-19 is historical and AF-20 currently uses
-   `work/af20-bounded-tool-call-envelope`. Do not create another
+3. Resume the `active_branch` recorded in `CHECKPOINT_STATE.json` only after
+   reconciling it against live GitHub PR/refs. Historical AF-19/AF-20 work is
+   complete; do not resurrect a merged branch or treat an old branch name as a
+   current writer claim. A released, accepted checkpoint may record `main` until
+   the next bounded workstream is explicitly claimed. Do not create a competing
    checkpoint branch to avoid drift or failed authentication. Inventory and
    preserve local work first; reconcile stale refs before significant edits.
    Never reset, discard, force-push or automatically rebase legitimate work.
