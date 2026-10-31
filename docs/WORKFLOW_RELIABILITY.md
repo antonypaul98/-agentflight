@@ -1,5 +1,11 @@
 # Workflow reliability — stabilization 2026-10-03
 
+## Offline crash-test demo: verified source, records and writer release (2026-10-31)
+
+Source PR #109 at head `ec4a5184be48e07c67434003f39c7b65e3932863` passed exact-head Python 3.11.17 CI [41184886556](https://github.com/antonypaul98/-agentflight/actions/runs/41184886556) and merged at `22cbac69cde051440fe81ea5be5169dde200c820`, with merged-main CI [41184950050](https://github.com/antonypaul98/-agentflight/actions/runs/41184950050) successful. Independent records PR #110 at head `98818da271d2515387546486c435476b104662b2` passed exact-head CI [41185079266](https://github.com/antonypaul98/-agentflight/actions/runs/41185079266), merged at `db9b4754540a181c8cd126e5e795780431ec1805`, and final-main CI [41185129074](https://github.com/antonypaul98/-agentflight/actions/runs/41185129074) succeeded. All four gates reported 739 product tests passed, zero product skips; infrastructure 17 passed and one established Memory-only skip. The demo writer was explicitly released in the [PR #110 conversation](https://github.com/antonypaul98/-agentflight/pull/110).
+
+Accepted scope is only a deterministic, redacted, offline JSON-to-recorded-call/inert-injection-probe demo. It does not execute live agents, models, tools, commands or network calls and does not establish authorization, secret access, sandboxing, OS isolation or real-project acceptance. AF-29 roadmap remains **in progress**, with six of twelve roadmap checkpoints accepted. This receipt corrects stale source-only/local-records state; it does not authorize new feature work or advance AF-29.
+
 No product checkpoint advanced. No feature source/test changed.
 
 ## Environment
