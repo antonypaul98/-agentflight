@@ -1688,7 +1688,7 @@
   "local_test_status": "Python 3.11.17 demo source passed exact PR and merged-main CI with 739 product tests and zero product skips. Local validation passed 59 focused and 737 portable tests; infrastructure executed 18 guards with 17 passed and one baseline Memory-only skip; dependency, import, diagnostics, compile, JSON and diff checks passed.",
   "merge_status": "DEMO_OFFLINE_CRASH_TEST_SOURCE_AND_RECORDS_MERGED_VERIFIED",
   "known_blocker": null,
-  "next_action": "Preserve the accepted bounded offline demo and released writer. AF-29 roadmap remains in progress at 6/12; review docs/COMPETITIVE_ROADMAP.md and accepted AF-29 evidence to define the next bounded, testable gap before any new source work. No live agent/tool execution or production authority.",
+  "next_action": "Preserve accepted AF-29 offline demo and published release; verify direct release-asset download/checksum with a capable authenticated client. AF-29 remains 6/12 formally accepted; no live agent execution.",
   "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
@@ -3261,5 +3261,35 @@
     "accepted_main_sha": "db9b4754540a181c8cd126e5e795780431ec1805",
     "scope": "bounded deterministic offline recorded-call and inert injection-probe demo only; no live execution",
     "next_owner": "unclaimed until next bounded checkpoint"
+  },
+  "demo_release_receipt": {
+    "status": "RELEASE_PUBLISHED; MAIN_CI_AND_CLEAN_ROOM_CLI_VERIFIED; DIRECT_RELEASE_ASSET_HTTP_DOWNLOAD_NOT_INDEPENDENTLY_VERIFIED",
+    "original_accepted_demo_preserved": true,
+    "release_tag": "offline-demo-ea05fdbc223f",
+    "release_url": "https://github.com/antonypaul98/-agentflight/releases/tag/offline-demo-ea05fdbc223f",
+    "release_source_sha": "ea05fdbc223f319181141951fbd92b930d30b053",
+    "source_pr": 113,
+    "source_pr_head_sha": "d286e7680d5f24a2c5c31cbdc515824a425b1785",
+    "source_pr_ci": [
+      41228390284,
+      41228390335
+    ],
+    "merged_main_ci": [
+      41228508062,
+      41228508074
+    ],
+    "product_tests": "739 passed on exact-head and merged-main CI",
+    "infrastructure_tests": "18 passed on exact-head and merged-main CI",
+    "clean_room_python": "3.11.17 in GitHub Actions",
+    "demo_smoke": "Two byte-identical successful reports; 2 recorded calls and 2 injection probes; redaction/hash and exit codes 0/1/2 verified on extracted archive",
+    "release_asset": "agentflight-offline-demo-ea05fdbc223f.tar.gz",
+    "release_asset_sha256": "b9e3c1a65fcebea5b14260d6941b06d50ac74859c95eef556f2c9758c9024414",
+    "release_asset_api_digest_matches_downloaded_main_actions_artifact": true,
+    "main_actions_run": 41228508074,
+    "main_actions_artifact_id": 13052118881,
+    "actions_artifact_expires_at": "2027-01-29T18:15:29Z",
+    "direct_release_asset_download": "not_verified; connector direct binary URL returned 404 despite GitHub release API listing asset",
+    "external_agent_execution": false,
+    "next_action": "Independently authenticate and download GitHub release asset via a capable client; verify SHA256SUMS. Preserve this release while AF-29 remains at 6/12 and evaluate next bounded gap only after the demo gate."
   }
 }
