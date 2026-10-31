@@ -1,17 +1,17 @@
 {
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
-  "current_checkpoint": "AF-29 permission and prompt-injection testing",
-  "checkpoint_status": "IN_PROGRESS_DELEGATION_ACTION_ENVELOPE_RECORDS_CANDIDATE",
-  "active_branch": "records/af29-delegation-action-envelope",
-  "verified_main_sha": "9536bdf2c8ae9b15c16116d69aef31d3c12187be",
-  "observed_feature_sha": "5d310e81e7f50dfa44a3bbbb9740ae170b960c5a",
-  "current_repository_sha": "9536bdf2c8ae9b15c16116d69aef31d3c12187be",
+  "current_checkpoint": "Demo-first offline crash-test workflow (AF-29 remains in progress)",
+  "checkpoint_status": "DEMO_OFFLINE_CRASH_TEST_SOURCE_CANDIDATE",
+  "active_branch": "work/demo-offline-crash-test",
+  "verified_main_sha": "1a2ee06167f8af101006e4844c2aca4a0f4e589d",
+  "observed_feature_sha": "1a2ee06167f8af101006e4844c2aca4a0f4e589d",
+  "current_repository_sha": "1a2ee06167f8af101006e4844c2aca4a0f4e589d",
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "Action-envelope source PR #107 head 5d310e81e7f50dfa44a3bbbb9740ae170b960c5a passed exact-head Python 3.11.17 CI 40787653242; expected-head merge 9536bdf2c8ae9b15c16116d69aef31d3c12187be passed main-push CI 40787797951. This independent records candidate is rooted at that exact merge; writer AF29-DELEGATION-ACTION-ENVELOPE-20261028 remains claimed.",
-  "pr_number": 107,
-  "pr_state": "source_merged_records_not_created",
+  "branch_remote_status": "No open PRs at demo preflight. Action-envelope records PR #108 passed exact-head CI 40848865573, merged as final main 1a2ee06167f8af101006e4844c2aca4a0f4e589d, passed final-main CI 40849008747, and writer AF29-DELEGATION-ACTION-ENVELOPE-20261028 was released. Writer DEMO-OFFLINE-CRASH-TEST-20261031 claims the local unpublished demo source candidate.",
+  "pr_number": null,
+  "pr_state": "not_created",
   "ci_state": {
     "af29_delegation_action_envelope_source_pr_run": {
       "id": 40787653242,
@@ -1633,10 +1633,10 @@
       "diagnostics": "passed"
     }
   },
-  "local_test_status": "Python 3.11.17 delegation action-envelope records candidate retains the source tree validated by 242 focused security tests and 729 portable product tests; exact source and merged-main CI passed 731 product tests with zero skips. Infrastructure executed 18 guards: 17 passed and one baseline Memory-only skip; dependency, import, diagnostics, compile, JSON and diff checks passed.",
-  "merge_status": "AF29_DELEGATION_ACTION_ENVELOPE_SOURCE_MERGED_VERIFIED_RECORDS_LOCAL",
+  "local_test_status": "Python 3.11.17 demo candidate passed 59 focused and 737 portable product tests. The unrestricted local suite reproduced only the two established container-specific descendant-observation failures. Infrastructure executed 18 guards: 17 passed and one baseline Memory-only skip; dependency, import, diagnostics, compile, JSON and diff checks passed.",
+  "merge_status": "DEMO_OFFLINE_CRASH_TEST_LOCAL_SOURCE_CANDIDATE",
   "known_blocker": null,
-  "next_action": "Publish this independent records candidate, require exact-head Python 3.11 CI, merge only with the expected head, verify final-main CI, then explicitly release the writer.",
+  "next_action": "Publish the bounded offline demo source candidate, require exact-head Python 3.11 CI, guard the expected-head merge, verify merged-main CI, then create independent canonical records.",
   "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
@@ -1930,9 +1930,9 @@
   "last_session_exit": {
     "BLOCKED_LAYER": null,
     "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "AF-29 action-envelope source PR #107 and merged-main CI are verified: 731 product tests passed with zero skips on Python 3.11.17. Independent canonical records are prepared from exact merge 9536bdf2c8ae9b15c16116d69aef31d3c12187be.",
-    "REMOTE_SHA": "9536bdf2c8ae9b15c16116d69aef31d3c12187be",
-    "NEXT_ACTION": "Publish and validate the action-envelope records candidate, verify final-main CI, then explicitly release its writer."
+    "SAFE_WORK_COMPLETED": "Prior AF-29 action-envelope source and records are merged, exact-head verified and explicitly released. The bounded offline demo candidate passed 59 focused and 737 portable product tests; infrastructure, dependency, import, diagnostics, compile, JSON and diff checks passed.",
+    "REMOTE_SHA": "1a2ee06167f8af101006e4844c2aca4a0f4e589d",
+    "NEXT_ACTION": "Complete local validation, publish the demo source candidate, and require exact-head CI before any merge."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
@@ -3139,7 +3139,7 @@
     "limitations": "Synthetic recorded metadata only; no live action, authorization, delegation, revocation, execution, raw-content or secret access, resource enforcement, sandboxing or OS-isolation claim."
   },
   "af29_delegation_action_envelope_candidate": {
-    "status": "SOURCE_MERGED_VERIFIED_RECORDS_LOCAL",
+    "status": "MERGED_VERIFIED_WRITER_RELEASED",
     "base_main_sha": "f8a747adde7b0e4dc242c44b42318bef3a4ae781",
     "branch": "work/af29-delegation-action-tuple-chain",
     "python": "3.11.17",
@@ -3157,8 +3157,33 @@
     "clean_ci_product_tests": 731,
     "clean_ci_product_failures": 0,
     "clean_ci_product_skips": 0,
+    "records_pr": 108,
+    "records_head_sha": "7b84c2f8e8af99b5fc95327d01953a21870dfcd6",
+    "records_pr_ci_run": 40848865573,
+    "records_merge_sha": "1a2ee06167f8af101006e4844c2aca4a0f4e589d",
+    "records_merged_main_ci_run": 40849008747,
+    "writer_release": "https://github.com/antonypaul98/-agentflight/pull/108#issuecomment-6492888158",
     "reuse_review": "Existing in-repository action-tuple, identity-binding and resource-binding contracts reused; no third-party source, algorithm, model, dependency, external account or product network access used.",
     "scope": "Deterministic exact-evidence verification that accepted recorded action-tuple, identity and resource bindings recompute successfully and refer to one bounded delegation chain.",
     "limitations": "Synthetic recorded metadata only; no live action, authentication, authorization, delegation, revocation, execution, raw-content or secret access, resource enforcement, sandboxing or OS-isolation claim."
+  },
+  "demo_offline_crash_test_candidate": {
+    "status": "LOCAL_SOURCE_CANDIDATE",
+    "base_main_sha": "1a2ee06167f8af101006e4844c2aca4a0f4e589d",
+    "branch": "work/demo-offline-crash-test",
+    "writer": "DEMO-OFFLINE-CRASH-TEST-20261031",
+    "python": "3.11.17",
+    "focused_tests": 59,
+    "portable_tests_passed": 737,
+    "unrestricted_local_failures": "2 established container-specific descendant-observation failures; authoritative clean CI required",
+    "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
+    "dependency_check": "passed",
+    "compile_json_diff_checks": "passed",
+    "demo_report_hash": "528b43dcd83bde83007644709041fe747807d2bd1048e9ab914db2076558f59c",
+    "demo_result": "2 recorded-call expectations and 2 injection-probe expectations matched; repeated CLI output was byte-identical and redacted.",
+    "reuse_review": "Existing in-repository replay, bounded JSON, prompt-injection and evidence contracts reused; no third-party source, translated algorithm, model, dependency, download, account or product network access used.",
+    "competitive_review": "Official LangSmith, Promptfoo and Inspect documentation reviewed on 2026-10-31. The bounded demonstrated gap is offline model-free content-addressed verification, not a claim to replace their broader evaluation, red-team or sandbox capabilities.",
+    "scope": "One local JSON manifest enters the public CLI and produces an observable deterministic redacted report over recorded calls and inert injection probes.",
+    "limitations": "Synthetic recorded data only; no agent/model/tool/command execution, authorization, external account, network, secret access, sandboxing or OS-isolation claim."
   }
 }

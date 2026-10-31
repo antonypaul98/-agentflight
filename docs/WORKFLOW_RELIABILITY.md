@@ -1087,6 +1087,33 @@ content or secrets, and makes no resource-enforcement or OS-isolation claim.
 Independent canonical records and their exact PR/final-main CI remain required
 before writer release. AF-29 remains in progress at 6/12.
 
+## AF-29 action-envelope release and demo-first candidate (2026-10-31)
+
+Action-envelope records PR #108 exact head
+`7b84c2f8e8af99b5fc95327d01953a21870dfcd6` passed exact-head Python
+3.11.17 CI 40848865573 with 731 product tests and zero product skips. Its
+expected-head merge produced final main
+`1a2ee06167f8af101006e4844c2aca4a0f4e589d`; push CI 40849008747 passed
+the same suite. Writer `AF29-DELEGATION-ACTION-ENVELOPE-20261028` was
+explicitly released on PR #108. AF-29 remains in progress at 6/12.
+
+The demo-first source candidate adds one data-only CLI that combines existing
+recorded-call replay and bounded prompt-injection inspection. A checked-in
+customer-support example produces two matching call verdicts and two matching
+injection verdicts with deterministic report hash
+`528b43dcd83bde83007644709041fe747807d2bd1048e9ab914db2076558f59c`.
+Repeated local output was byte-identical and omitted prompt text, tool arguments
+and results. Focused Python 3.11.17 validation passed 59 tests.
+
+Reuse-first review found all required contracts in this repository. Official
+LangSmith, Promptfoo and Inspect documentation was reviewed for the bounded
+comparison recorded in `docs/DEMO.md`; no external code, algorithm, model,
+package, account or product network access was introduced. This is a synthetic
+recorded-data demo only. It grants no permission and performs no agent, model,
+tool or command execution, external action, credential access, sandboxing or OS
+isolation. Exact source PR and merged-main CI plus independent records remain
+required before demo acceptance.
+
 ## AF-29 action-coherence release and action-tuple candidate (2026-10-28)
 
 Action-coherence source/records PRs #103/#104 are verified through final main
