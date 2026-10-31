@@ -1114,6 +1114,26 @@ tool or command execution, external action, credential access, sandboxing or OS
 isolation. Exact source PR and merged-main CI plus independent records remain
 required before demo acceptance.
 
+## Offline crash-test demo source receipt (2026-10-31)
+
+Source PR #109 exact head
+`ec4a5184be48e07c67434003f39c7b65e3932863`, tree
+`c73eeda75aae0e23a6bcfbaf63c74532d610f8cf`, passed exact-head CI
+41184886556 on Python 3.11.17 with 739 product tests, zero failures and zero
+product skips. Expected-head guarded merge
+`22cbac69cde051440fe81ea5be5169dde200c820` passed exact main-push CI
+41184950050 with the same product result. Both runs executed all 18
+infrastructure guards: 17 passed and the established Memory-only case skipped.
+
+The checked-in manifest enters the public CLI as real local JSON and produces a
+deterministic redacted report with two matching recorded-call verdicts, two
+matching injection-probe verdicts and report hash
+`528b43dcd83bde83007644709041fe747807d2bd1048e9ab914db2076558f59c`.
+This remains a synthetic recorded-data demo: it invokes no agent, model, tool,
+command, project, network or external account and grants no authorization.
+Independent canonical records and exact records/final-main CI remain required
+before writer release and bounded demo acceptance.
+
 ## AF-29 action-coherence release and action-tuple candidate (2026-10-28)
 
 Action-coherence source/records PRs #103/#104 are verified through final main
