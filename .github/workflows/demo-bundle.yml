@@ -1,0 +1,88 @@
+name: Offline demo bundle
+
+on:
+  push:
+    branches:
+      - main
+      - "work/**"
+    paths:
+      - ".github/workflows/demo-bundle.yml"
+      - "scripts/package_offline_demo.py"
+      - "src/agentflight/**"
+      - "examples/offline-crash-test-demo.json"
+      - "docs/DEMO.md"
+      - "pyproject.toml"
+  pull_request:
+    paths:
+      - ".github/workflows/demo-bundle.yml"
+      - "scripts/package_offline_demo.py"
+      - "src/agentflight/**"
+      - "examples/offline-crash-test-demo.json"
+      - "docs/DEMO.md"
+      - "pyproject.toml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: offline-demo-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run infrastructure guards
+        run: python -m unittest discover -s scripts/tests -p 'test_*.py'
+      - name: Install for accepted baseline tests
+        run: python -m pip install -U pip pytest && python -m pip install -e .
+      - name: Run complete accepted test suite
+        run: python -m pytest
+      - name: Package and verify extracted bundle in clean venv
+        run: python scripts/package_offline_demo.py --output-dir dist
+      - name: Upload retained PR/main demo bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentflight-demo-${{ github.event.pull_request.head.sha || github.sha }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 90
+
+  publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: bundle
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    timeout-minutes: 10
+    steps:
+      - name: Download exact-head verified bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: agentflight-demo-${{ github.sha }}
+          path: dist
+      - name: Publish immutable SHA-tagged release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          tag="offline-demo-${GITHUB_SHA:0:12}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Existing release retained; no assets overwritten: $tag"
+            exit 0
+          fi
+          (cd dist && sha256sum -c SHA256SUMS)
+          gh release create "$tag" dist/*.tar.gz dist/SHA256SUMS \
+            --target "$GITHUB_SHA" \
+            --title "AgentFlight offline demo ${GITHUB_SHA:0:12}" \
+            --notes "Source SHA: $GITHUB_SHA. Bounded recorded-only, model-free offline demo. See bundled BUNDLE_README.md, SMOKE_RECEIPT.json, BUNDLE_MANIFEST.json, and SHA256SUMS. No live agent execution or sandbox claim."
