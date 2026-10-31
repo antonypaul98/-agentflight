@@ -6,7 +6,7 @@
   "active_branch": "main",
   "verified_main_sha": "db9b4754540a181c8cd126e5e795780431ec1805",
   "observed_feature_sha": "ec4a5184be48e07c67434003f39c7b65e3932863",
-  "current_repository_sha": "22cbac69cde051440fe81ea5be5169dde200c820",
+  "current_repository_sha": "db9b4754540a181c8cd126e5e795780431ec1805",
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
   "branch_remote_status": "Offline demo source PR #109 merged at 22cbac69cde051440fe81ea5be5169dde200c820 (main CI 41184950050 SUCCESS). Independent records PR #110 merged at db9b4754540a181c8cd126e5e795780431ec1805 (exact-head CI 41185079266 SUCCESS; merged-main CI 41185129074 SUCCESS). Writer explicitly released on PR #110. AF-29 remains in progress, roadmap 6/12.",
