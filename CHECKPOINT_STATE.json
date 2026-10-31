@@ -2,16 +2,16 @@
   "schema_version": 2,
   "repository": "antonypaul98/-agentflight",
   "current_checkpoint": "Demo-first offline crash-test workflow (AF-29 remains in progress)",
-  "checkpoint_status": "DEMO_OFFLINE_CRASH_TEST_RECORDS_CANDIDATE",
-  "active_branch": "records/demo-offline-crash-test",
-  "verified_main_sha": "22cbac69cde051440fe81ea5be5169dde200c820",
+  "checkpoint_status": "DEMO_OFFLINE_CRASH_TEST_RECORDS_MERGED_VERIFIED",
+  "active_branch": "main",
+  "verified_main_sha": "db9b4754540a181c8cd126e5e795780431ec1805",
   "observed_feature_sha": "ec4a5184be48e07c67434003f39c7b65e3932863",
   "current_repository_sha": "22cbac69cde051440fe81ea5be5169dde200c820",
   "current_repository_sha_command": "git rev-parse HEAD",
   "sha_semantics": "Observed SHAs are pre-edit observations. Resolve current checkout and remote head afresh. CI receipts apply only to the exact SHA recorded.",
-  "branch_remote_status": "Demo source PR #109 head ec4a5184be48e07c67434003f39c7b65e3932863 passed exact-head Python 3.11.17 CI 41184886556; expected-head merge 22cbac69cde051440fe81ea5be5169dde200c820 passed main-push CI 41184950050. Independent records candidate is local and unpublished; writer DEMO-OFFLINE-CRASH-TEST-20261031 remains claimed.",
-  "pr_number": 109,
-  "pr_state": "source_merged_records_not_created",
+  "branch_remote_status": "Offline demo source PR #109 merged at 22cbac69cde051440fe81ea5be5169dde200c820 (main CI 41184950050 SUCCESS). Independent records PR #110 merged at db9b4754540a181c8cd126e5e795780431ec1805 (exact-head CI 41185079266 SUCCESS; merged-main CI 41185129074 SUCCESS). Writer explicitly released on PR #110. AF-29 remains in progress, roadmap 6/12.",
+  "pr_number": 110,
+  "pr_state": "records_merged_final_main_verified",
   "ci_state": {
     "demo_offline_crash_test_source_pr_run": {
       "id": 41184886556,
@@ -1659,12 +1659,36 @@
       "product_skips": 0,
       "infrastructure": "18 executed: 17 passed, 1 baseline Memory-only skip",
       "diagnostics": "passed"
+    },
+    "demo_offline_crash_test_records_pr_run": {
+      "id": 41185079266,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/41185079266",
+      "head_sha": "98818da271d2515387546486c435476b104662b2",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 739,
+      "product_failures": 0,
+      "product_skips": 0
+    },
+    "demo_offline_crash_test_records_final_main_run": {
+      "id": 41185129074,
+      "url": "https://github.com/antonypaul98/-agentflight/actions/runs/41185129074",
+      "head_sha": "db9b4754540a181c8cd126e5e795780431ec1805",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "python": "3.11.17",
+      "product_tests": 739,
+      "product_failures": 0,
+      "product_skips": 0
     }
   },
   "local_test_status": "Python 3.11.17 demo source passed exact PR and merged-main CI with 739 product tests and zero product skips. Local validation passed 59 focused and 737 portable tests; infrastructure executed 18 guards with 17 passed and one baseline Memory-only skip; dependency, import, diagnostics, compile, JSON and diff checks passed.",
-  "merge_status": "DEMO_OFFLINE_CRASH_TEST_SOURCE_MERGED_VERIFIED_RECORDS_LOCAL",
+  "merge_status": "DEMO_OFFLINE_CRASH_TEST_SOURCE_AND_RECORDS_MERGED_VERIFIED",
   "known_blocker": null,
-  "next_action": "Publish the independent demo records candidate, require exact-head Python 3.11 CI, guard the expected-head merge, verify final-main CI, then explicitly release the writer.",
+  "next_action": "Preserve the accepted bounded offline demo and released writer. AF-29 roadmap remains in progress at 6/12; review docs/COMPETITIVE_ROADMAP.md and accepted AF-29 evidence to define the next bounded, testable gap before any new source work. No live agent/tool execution or production authority.",
   "feature_checkpoint_advanced": false,
   "roadmap_expansion": {
     "authorized_at": "2026-10-12",
@@ -1958,9 +1982,9 @@
   "last_session_exit": {
     "BLOCKED_LAYER": null,
     "BLOCKER": null,
-    "SAFE_WORK_COMPLETED": "Demo source PR #109 and its expected-head merge passed exact Python 3.11.17 CI with 739 product tests and zero product skips. Independent canonical records are prepared from exact merge 22cbac69cde051440fe81ea5be5169dde200c820.",
-    "REMOTE_SHA": "22cbac69cde051440fe81ea5be5169dde200c820",
-    "NEXT_ACTION": "Publish and validate the independent demo records candidate, verify final-main CI, then explicitly release its writer."
+    "SAFE_WORK_COMPLETED": "Offline demo source PR #109 and independent records PR #110 both merged; exact-head and merged-main Python 3.11.17 CI succeeded at each gate (739 product tests, zero product skips; 17 infrastructure passed, one established Memory-only skip). Explicit writer release recorded on PR #110.",
+    "REMOTE_SHA": "db9b4754540a181c8cd126e5e795780431ec1805",
+    "NEXT_ACTION": "Preserve the accepted bounded offline demo and released writer. AF-29 roadmap remains in progress at 6/12; review docs/COMPETITIVE_ROADMAP.md and accepted AF-29 evidence to define the next bounded, testable gap before any new source work. No live agent/tool execution or production authority."
   },
   "diagnostic_import": "agentflight",
   "diagnostic_postgres_variables": [],
@@ -3196,7 +3220,7 @@
     "limitations": "Synthetic recorded metadata only; no live action, authentication, authorization, delegation, revocation, execution, raw-content or secret access, resource enforcement, sandboxing or OS-isolation claim."
   },
   "demo_offline_crash_test_candidate": {
-    "status": "SOURCE_MERGED_VERIFIED_RECORDS_LOCAL",
+    "status": "BOUNDED_OFFLINE_DEMO_SOURCE_AND_RECORDS_ACCEPTED",
     "base_main_sha": "1a2ee06167f8af101006e4844c2aca4a0f4e589d",
     "branch": "work/demo-offline-crash-test",
     "writer": "DEMO-OFFLINE-CRASH-TEST-20261031",
@@ -3221,6 +3245,21 @@
     "reuse_review": "Existing in-repository replay, bounded JSON, prompt-injection and evidence contracts reused; no third-party source, translated algorithm, model, dependency, download, account or product network access used.",
     "competitive_review": "Official LangSmith, Promptfoo and Inspect documentation reviewed on 2026-10-31. The bounded demonstrated gap is offline model-free content-addressed verification, not a claim to replace their broader evaluation, red-team or sandbox capabilities.",
     "scope": "One local JSON manifest enters the public CLI and produces an observable deterministic redacted report over recorded calls and inert injection probes.",
-    "limitations": "Synthetic recorded data only; no agent/model/tool/command execution, authorization, external account, network, secret access, sandboxing or OS-isolation claim."
+    "limitations": "Synthetic recorded data only; no agent/model/tool/command execution, authorization, external account, network, secret access, sandboxing or OS-isolation claim.",
+    "records_pr": 110,
+    "records_head_sha": "98818da271d2515387546486c435476b104662b2",
+    "records_pr_ci_run": 41185079266,
+    "records_merge_sha": "db9b4754540a181c8cd126e5e795780431ec1805",
+    "records_final_main_ci_run": 41185129074,
+    "writer_release": "Explicit release recorded in PR #110 conversation after successful final-main CI",
+    "roadmap_af29_complete": false
+  },
+  "demo_offline_crash_test_writer_handoff": {
+    "writer": "DEMO-OFFLINE-CRASH-TEST-20261031",
+    "status": "RELEASED",
+    "release_receipt": "https://github.com/antonypaul98/-agentflight/pull/110",
+    "accepted_main_sha": "db9b4754540a181c8cd126e5e795780431ec1805",
+    "scope": "bounded deterministic offline recorded-call and inert injection-probe demo only; no live execution",
+    "next_owner": "unclaimed until next bounded checkpoint"
   }
 }
