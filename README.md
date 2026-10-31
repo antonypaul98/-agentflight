@@ -1,6 +1,16 @@
 # -agentflight
 AI-agent reliability and crash-test lab
 
+Run the bounded end-to-end offline demo:
+
+```sh
+python -m agentflight.demo examples/offline-crash-test-demo.json
+```
+
+It validates pre-recorded tool calls and inert prompt-injection probes, then
+prints a deterministic redacted report. It never invokes an agent, model, tool,
+command, network, or external account. See [the demo contract](docs/DEMO.md).
+
 Run a synthetic recorded-call suite with Python 3.11:
 
 ```sh
